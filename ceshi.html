@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 攻坚小组学习总结汇报 · 2026.06.30</title>
+<style>
+  :root {
+    --bg: #0b0d14;
+    --surface: #11141f;
+    --surface2: #181c2a;
+    --surface3: #1e2235;
+    --border: #262b3d;
+    --border-light: #313752;
+    --text: #e2e6f0;
+    --text2: #959cb5;
+    --text3: #6b718a;
+    --accent: #5b8af7;
+    --accent-glow: rgba(91,138,247,0.12);
+    --green: #34d399;
+    --green-bg: rgba(52,211,153,0.08);
+    --amber: #fbbf24;
+    --amber-bg: rgba(251,191,36,0.08);
+    --red: #f87171;
+    --red-bg: rgba(248,113,113,0.08);
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 1px 3px rgba(0,0,0,.4);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.72;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header ── */
+  .hero {
+    background: linear-gradient(160deg, #0f1322 0%, #141a30 40%, #0f1425 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 64px 24px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -120px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .hero .meta {
+    display: flex; gap: 28px;
+    justify-content: center; flex-wrap: wrap;
+    color: var(--text2);
+    font-size: 15px;
+    position: relative;
+  }
+  .hero .meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .hero .meta .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; opacity: 0.7; }
+
+  /* ── Container ── */
+  .container { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ── Sections ── */
+  section { margin-bottom: 56px; }
+  section:last-child { margin-bottom: 0; }
+
+  h2 {
+    font-size: 24px; font-weight: 700;
+    color: #fff;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  h2::after {
+    content: "";
+    position: absolute; bottom: -1px; left: 0;
+    width: 48px; height: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  h3 {
+    font-size: 19px; font-weight: 650;
+    color: #e8ebf3;
+    margin: 32px 0 12px;
+  }
+
+  h4 {
+    font-size: 16px; font-weight: 600;
+    color: var(--text);
+    margin: 24px 0 8px;
+  }
+
+  p { margin-bottom: 12px; color: var(--text2); font-size: 15px; }
+
+  strong { color: var(--text); font-weight: 650; }
+
+  /* ── Tables ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 600px;
+  }
+  th {
+    background: var(--surface2);
+    color: var(--text2);
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+    white-space: nowrap;
+  }
+  td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface3); }
+  td:first-child, th:first-child { font-weight: 600; color: var(--text); }
+
+  /* ── Blockquotes / Callouts ── */
+  blockquote {
+    margin: 16px 0 24px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 14.5px;
+    color: var(--text2);
+  }
+  blockquote strong:first-child {
+    color: var(--accent);
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* ── Ordered Lists ── */
+  ol, ul { margin: 8px 0 16px 22px; color: var(--text2); font-size: 15px; }
+  ol li, ul li { margin-bottom: 7px; }
+  ol li::marker { color: var(--accent); font-weight: 600; }
+
+  /* ── Stats row ── */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-size: 28px; font-weight: 700;
+    color: #fff;
+    display: block;
+  }
+  .stat-card .label {
+    font-size: 13px; color: var(--text3);
+    margin-top: 4px;
+  }
+
+  /* ── Divider ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    color: var(--text3);
+    font-size: 13px;
+    padding: 32px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero { padding: 40px 16px 32px; }
+    .hero h1 { font-size: 24px; }
+    .container { padding: 32px 16px 48px; }
+    h2 { font-size: 20px; }
+    table { font-size: 13px; }
+    th, td { padding: 8px 12px; }
+  }
+
+  /* ── Print ── */
+  @media print {
+    :root { --bg: #fff; --surface: #f9fafb; --surface2: #f3f4f6; --surface3: #eee; --border: #ddd; --border-light: #ddd; --text: #111; --text2: #444; --text3: #888; }
+    .hero { padding: 20px 0; }
+    body { font-size: 13px; }
+    .container { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════ Hero ══════ -->
+<header class="hero">
+  <h1>AI 攻坚小组学习总结汇报</h1>
+  <div class="meta">
+    <span><span class="dot"></span>汇报人：网景 AI 攻坚小组</span>
+    <span><span class="dot"></span>2026 年 6 月 30 日</span>
+    <span><span class="dot"></span>周期 2026.05.11 — 2026.06.26</span>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ══════ 一、学习总览 ══════ -->
+<section>
+  <h2>一、学习总览：我们这段时间做了什么</h2>
+  <p>围绕"AI 赋能业务"这一核心目标，团队在约 <strong>7 周</strong>内完成了<strong>理论学习 → 工具试用 → 项目落地 → 产品规划</strong>的闭环：</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>维度</th><th>关键动作</th><th>成果形态</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>模型接入</td><td>系统梳理 9 种大模型接入方式、对比成本/可控性/稳定性</td><td>会议纪要 + 选型策略</td></tr>
+        <tr><td>工具链实战</td><td>深度试用 Trae、Stitch、Kimi、豆包、即梦、LibTV 等 10+ 工具</td><td>内刊/海报/视频素材</td></tr>
+        <tr><td>Agent / 数字员工</td><td>搭建测试龙虾、产品龙虾，制定数字员工平台架构</td><td>原型 + 架构方案</td></tr>
+        <tr><td>安全巡检</td><td>启动 SupplyGuard 第三方组件安全巡检项目，完成完整 UI 设计</td><td>6 页 HTML 高保真原型</td></tr>
+        <tr><td>内容运营</td><td>建立《EastAI 丨视界》企业内刊，输出 6 期</td><td>6 期 HTML/图片内刊</td></tr>
+        <tr><td>竞品调研</td><td>评测 WorkBuddy、二元 AI、腾讯乐享等数字员工/Agent 产品</td><td>调研报告</td></tr>
+        <tr><td>项目落地</td><td>客户项目 AI 辅助创意素材生成展示、动效预览、项目小样汇报等</td><td>HTML/高保真图片</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr>
+
+<!-- ══════ 二、核心学习内容 ══════ -->
+<section>
+  <h2>二、核心学习内容：学到什么、关键结论是什么</h2>
+
+  <!-- 1. 大模型接入 -->
+  <h3>1. 大模型接入：不是"接 GPT"这么简单</h3>
+
+  <h4>1.1 9 种接入方式全景</h4>
+  <p>团队按"控制力—成本—上手难度"三维度，将主流接入方式划分为 9 类：</p>
+  <ol>
+    <li><strong>官方原厂直连</strong>：链路最清晰、模型真实性最高，适合正式生产与核心系统。</li>
+    <li><strong>云厂商托管</strong>（Azure OpenAI、Claude on Vertex AI）：账单/IAM/网络统一走云平台，适合已有云生态的企业。</li>
+    <li><strong>MaaS 平台</strong>（Amazon Bedrock、Gemini Enterprise Agent）：模型超市 + 统一鉴权 + 评测，适合多模型试点。</li>
+    <li><strong>聚合/中转平台</strong>：接入灵活、支付方便，但 SLA/透明度风险集中。</li>
+    <li><strong>企业自建 AI 网关/模型中台</strong>：统一认证、路由、审计、限流、成本归集，是规模化必经之路。</li>
+    <li><strong>开源模型自部署</strong>（vLLM、TGI、Ollama）：数据自主可控，但算力/运维门槛高。</li>
+    <li><strong>本地/边缘部署</strong>：适合离线、隐私、终端智能场景。</li>
+    <li><strong>私有化一体机</strong>：政企/金融/能源等高敏感场景首选。</li>
+    <li><strong>网页/SaaS 使用 & 工作流/RPA 接入</strong>：适合非技术人员体验与业务快速试点。</li>
+  </ol>
+
+  <blockquote>
+    <strong>关键结论</strong>
+    接入方式选择的核心不是"哪个模型最强"，而是"数据边界、成本可控、系统耦合度"三者平衡。生产环境优先原厂/云厂商；规模化必须建 AI 网关；试点阶段可用 MaaS/中转快速验证。
+  </blockquote>
+
+  <h4>1.2 模型选型与成本策略</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>梯队</th><th>代表模型</th><th>适用场景</th><th>成本/效果定位</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>顶级模型</td><td>Claude、GPT-4o、Gemini</td><td>复杂逻辑推理、代码生成、高质量文案</td><td>效果领先，订阅门槛高</td></tr>
+        <tr><td>性价比之选</td><td>DeepSeek、Mimo</td><td>高频日常任务、代码生成、长文本处理</td><td>降价后性价比极高</td></tr>
+        <tr><td>中文长文档</td><td>Kimi 2.5</td><td>论文/合同/长报告阅读</td><td>中文长文档解析优势明显</td></tr>
+        <tr><td>谨慎使用</td><td>智谱 GLM</td><td>—</td><td>Token 价格高且难抢，不作为首选</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>关键结论</strong>
+    日常任务用 DeepSeek/Mimo；复杂推理/代码用 Claude/Gemini；中文长文档用 Kimi。建立"模型网关 + 分层调度"是控制成本的关键。
+  </blockquote>
+
+  <h4>1.3 Token 成本控制经验</h4>
+  <ul>
+    <li><strong>缓存命中</strong>：将固定内容前置、批量处理时保持上下文一致，可显著降低 Token 消耗。</li>
+    <li><strong>多轮对话代价</strong>：龙虾/Agent 出现后，Token 消耗呈指数级爆发，需建立用量审计。</li>
+    <li><strong>价格差异</strong>：DeepSeek V4-Pro 输入缓存命中低至 0.025 元/百万 tokens，已开启"分钱时代"。</li>
+  </ul>
+
+  <!-- 2. AI 工具链 -->
+  <h3>2. AI 工具链：从"会聊天"到"能交付"</h3>
+
+  <h4>2.1 氛围编程 / Vibe Coding</h4>
+  <p>团队已经形成<strong>"先出 Demo → 再反推 PRD → 再迭代交付"</strong>的新工作流：</p>
+  <ol>
+    <li><strong>Trae AI IDE</strong>：输入自然语言需求，自动生成完整代码，支持实时预览与对话修改。</li>
+    <li><strong>Google Stitch</strong>：一句话/一张图/语音生成高保真 UI，导出 Figma 或 HTML/CSS。</li>
+    <li><strong>SVG 优先</strong>：生成设计稿优先用 SVG（本质是代码），开发可直接复用。</li>
+  </ol>
+
+  <blockquote>
+    <strong>关键结论</strong>
+    AI 工具已经把"写需求 → 画原型 → 写代码"的线性流程压缩成"对话 → 可运行原型 → 迭代"的闭环。产品经理和设计师的工作重心从"动手做"转向"判断与验收"。
+  </blockquote>
+
+  <h4>2.2 视觉与视频生产</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>工具</th><th>用途</th><th>落地情况</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>即梦 / 通义万相 / LibTV</td><td>图片、海报、插画、视频生成</td><td>内刊插画、海报、Banner 已实际使用</td></tr>
+        <tr><td>Flow + Runway ML</td><td>静态 Banner 转循环动态视频</td><td>解决视频动态效果生硬问题</td></tr>
+        <tr><td>万镜一刻</td><td>输入剧本自动生成分镜、角色、成片</td><td>短剧/营销视频量产效率提升 80%</td></tr>
+        <tr><td>AE / 剪映</td><td>后期精修、序列帧导出</td><td>与 AI 生成结合形成完整工作流</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>关键结论</strong>
+    AI 视觉已经从"尝鲜"变成"可交付"。核心转变是：放弃繁杂手绘/风格尝试/排版内耗，用 AI 做创意落地与风格统一，人工只做最后精修与品牌把关。
+  </blockquote>
+
+  <h4>2.3 工具使用安全边界</h4>
+  <ul>
+    <li><strong>VPN 节点</strong>：使用日本等低风控节点，避免频繁切换 IP；建议固定付费节点。</li>
+    <li><strong>账号策略</strong>：推荐谷歌邮箱注册成品账号或海外虚拟信用卡，降低封禁风险。</li>
+    <li><strong>数据安全</strong>：严禁将公司机密、客户隐私、未公开方案输入公共 AI 工具；所有 AI 输出必须人工复核。</li>
+  </ul>
+
+  <!-- 3. Agent / 数字员工 -->
+  <h3>3. Agent / 数字员工：从"玩具"到"工具"的落地探索</h3>
+
+  <h4>3.1 龙虾（QClaw / OpenClaw）试用结论</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>能力</th><th>表现</th><th>适用场景</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>文件/命令/API 操作</td><td>可执行，但稳定性不高，需人工兜底</td><td>个人助理、重复办公自动化</td></tr>
+        <tr><td>新闻汇总/文档处理/会议纪要</td><td>可快速落地，降低上手门槛</td><td>行政/运营高频任务</td></tr>
+        <tr><td>原型设计/复杂逻辑</td><td>能力不足，存在明显幻觉</td><td>不建议单独使用</td></tr>
+        <tr><td>记忆能力</td><td>三层记忆（短期/日记录/高价值提取）</td><td>个人工作流养成</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>关键结论</strong>
+    当前龙虾更适合"个人数字助理"场景，用于处理重复性、规则明确的工作；涉及复杂决策、精细逻辑、对外交付的任务仍需人工介入。
+  </blockquote>
+
+  <h4>3.2 数字员工平台架构（6.26 研讨会）</h4>
+  <p>团队提出"Agent + 工具"作为最小执行单元，数字员工平台需包含：</p>
+  <ul>
+    <li>角色画像 + 提示词工程</li>
+    <li>RAG 知识库 + Memory 记忆</li>
+    <li>Skill 技能目录 + MCP 标准协议</li>
+    <li>模型网关 + 成本治理 + 可观测性</li>
+  </ul>
+
+  <p style="margin-top:16px;"><strong>落地路线图：</strong></p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>阶段</th><th>周期</th><th>目标</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>第一阶段</td><td>4 个月</td><td>单员工闭环：注册/套餐/创建/部署/任务执行，输出可演示 Demo</td></tr>
+        <tr><td>第二阶段</td><td>6-8 个月</td><td>商用试点：渠道接入、知识库、审批流、用量统计、后台运营</td></tr>
+        <tr><td>第三阶段</td><td>9-11 个月</td><td>完整增强：模型网关、API 网关、A2A 多智能体协作、成本治理</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>关键结论</strong>
+    不建议复刻腾讯 WorkBuddy 的"人海战术 + 全场景覆盖"，应聚焦细分赛道，通过"引擎 + 垂直场景"建立壁垒。
+  </blockquote>
+
+  <h4>3.3 竞品评测关键结论</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>产品</th><th>优势</th><th>劣势/风险</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>WorkBuddy</strong></td><td>多角色、提示词工程较深</td><td>功能同质化，缺乏 PC 端，体验一般</td></tr>
+        <tr><td><strong>二元 AI</strong></td><td>数字分身、个人知识库</td><td>7 天无理由、客单价高，功能未必超出通用模型</td></tr>
+        <tr><td><strong>腾讯乐享</strong></td><td>企业知识库、内容协同</td><td>偏向内容管理，Agent 执行能力弱</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>关键结论</strong>
+    数字员工赛道的核心门槛不在"有没有大模型"，而在<strong>数据沉淀、提示词工程、执行闭环、成本治理</strong>四件事。我们要做的不是另一个 Chatbot，而是"能执行任务的数字员工"。
+  </blockquote>
+
+  <!-- 4. SupplyGuard -->
+  <h3>4. SupplyGuard：第三方组件安全巡检 Agent</h3>
+
+  <h4>4.1 项目背景</h4>
+  <p>客户网站引用的第三方插件（如 BShare、问卷星、社交分享按钮）可能因域名过期/被劫持导致跳转赌博、钓鱼网站。传统人工巡检无法覆盖海量页面与动态加载内容。</p>
+
+  <h4>4.2 核心能力</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>检测类型</th><th>说明</th><th>典型风险</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>篡改检测</td><td>SHA256 hash diff 实时对比</td><td>脚本被替换为恶意跳转代码</td></tr>
+        <tr><td>断供检测</td><td>服务商状态追踪 + DNS 变更告警</td><td>公司倒闭后域名被接管</td></tr>
+        <tr><td>失活检测</td><td>SSL 证书过期 / HTTP 异常</td><td>证书过期导致 HTTPS 加载失败</td></tr>
+        <tr><td>漏洞检测</td><td>已知 CVE 安全漏洞</td><td>使用存在漏洞的组件版本</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>4.3 设计成果</h4>
+  <p>已完成 6 页高保真 HTML 原型：</p>
+  <ol>
+    <li>安全总览仪表盘（风险评分 + 4 维指标 + 告警流）</li>
+    <li>组件资产清单（全量脚本管理 + 筛选/排序/导出）</li>
+    <li>威胁详情分析（代码 Diff + 影响页面 + 4 步修复向导）</li>
+    <li>巡检策略配置（扫描频率 / 告警规则 / Webhook / 白名单）</li>
+    <li>站点管理（多站点管理）</li>
+    <li>巡检报告（导出/统计）</li>
+  </ol>
+
+  <blockquote>
+    <strong>关键结论</strong>
+    SupplyGuard 已经从"需求讨论"进入"可演示原型"阶段，可直接作为安全产品线孵化，或封装成 SaaS 服务对外销售。
+  </blockquote>
+
+  <!-- 5. 企业内刊 -->
+  <h3>5. 企业内刊《EastAI 丨视界》：AI 文化建设与内容运营</h3>
+
+  <h4>5.1 内刊体系</h4>
+  <ul>
+    <li><strong>定位</strong>：轻量化、碎片化、全员可读的 AI 资讯科普</li>
+    <li><strong>周期</strong>：每周一期</li>
+    <li><strong>固定板块</strong>：刊首小语、本周 AI 速报、实用 AI 工具、AI 避坑小课堂、互动小结</li>
+    <li><strong>已产出</strong>：6 期（01-06 期），覆盖 HTML 网页版、长图海报版、微信公众号版</li>
+  </ul>
+
+  <h4>5.2 内容进化</h4>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>期数</th><th>亮点</th><th>形式</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>01 期</td><td>Trae 极简入门、本周 AI 速报</td><td>基础网页</td></tr>
+        <tr><td>02 期</td><td>DeepSeek 降价、豆包付费、实用工具分享【Kimi 2.5、通义万相】</td><td>轻量 Markdown</td></tr>
+        <tr><td>03 期</td><td>讲述程序员从接触各类 AI 工具，沉迷 Vibe Coding，充值消耗 Token，重度依赖 Claude 等高阶 AI</td><td>标准 HTML</td></tr>
+        <tr><td>04 期</td><td>围绕 GPT-5.6 即将发布、国产 AI 调用量登顶、AI 自主办公时代来临三大行业热点，推荐了四款免费国产 AI 工具</td><td>图片素材</td></tr>
+        <tr><td>05 期</td><td>"景小艾"AI 机器人日常故事，12 张连续插画</td><td>创意故事长图</td></tr>
+        <tr><td>06 期</td><td>研发硬核输出：Git Commit 规范 + 自动日报 Skill</td><td>数据海报 + 流程图</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <blockquote>
+    <strong>关键结论</strong>
+    内刊不仅是信息发布，更是团队 AI 文化的载体。从"资讯播报"进化到"故事化表达 + 数据化展示"，内容运营能力在持续升级。
+  </blockquote>
+
+  <!-- 6. 其他关键探索 -->
+  <h3>6. 其他关键探索</h3>
+
+  <h4>6.1 邮件知识库自研计划【邮件归档 + AI 赋能】</h4>
+  <ul>
+    <li>将传统邮件归档从"简单备份"升级为"企业知识库"，支持语义搜索与智能问答。</li>
+    <li>结合国密加密、本地化部署，满足金融/政府客户强监管需求。</li>
+    <li>核心 MVP：周报自动生成、附件智能提取分类、基于邮件内容的审计报告生成。</li>
+  </ul>
+
+  <h4>6.2 轻量级 OA 代办提醒 Agent【方案推荐千代福】</h4>
+  <ul>
+    <li>解决领导遗忘审批、员工不参会等"人为疏忽"问题。</li>
+    <li>定时扫描钉钉/OA 未读消息、未审批流程，通过微信服务号/个人号推送强提醒。</li>
+  </ul>
+
+</section>
+
+<hr>
+
+<!-- ══════ 三、关键产出 ══════ -->
+<section>
+  <h2>三、关键产出与落地成果</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>成果</th><th>形态</th><th>价值</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>AI 模型接入策略</td><td>会议纪要</td><td>为公司后续 AI 选型提供决策依据</td></tr>
+        <tr><td>数字员工平台架构方案</td><td>会议纪要 + 规划</td><td>明确自研方向，避免盲目投入</td></tr>
+        <tr><td>SupplyGuard 原型</td><td>6 页 HTML + 设计规范</td><td>可直接用于产品孵化或客户演示</td></tr>
+        <tr><td>《EastAI 丨视界》6 期</td><td>HTML/海报/长图</td><td>内部 AI 文化建设 + 外部品牌传播素材</td></tr>
+        <tr><td>二元 AI / WorkBuddy 竞品报告</td><td>调研报告</td><td>支撑自研产品差异化定位</td></tr>
+        <tr><td>测试龙虾 / 产品龙虾</td><td>实践原型</td><td>验证办公自动化可行性</td></tr>
+        <tr><td>客户项目 AI 辅助原型</td><td>签证服务中心、景云等</td><td>真实业务中验证 AI 工作流</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr>
+
+<!-- ══════ 四、经验与反思 ══════ -->
+<section>
+  <h2>四、经验与反思：踩过的坑、验证过的结论</h2>
+
+  <h3>4.1 已经验证有效的做法</h3>
+  <ol>
+    <li><strong>"先 Demo 后 PRD"</strong>：用 AI 生成可运行原型再反向推导需求文档，比人工写 PRD 更细致、更全面。</li>
+    <li><strong>SVG 优先交付</strong>：设计稿直接生成 SVG/代码，开发无需重新还原，减少沟通损耗。</li>
+    <li><strong>定时任务优于对话</strong>：在长流程、多步骤自动化任务中，定时任务比对话交互更稳定。</li>
+    <li><strong>国产模型 + 国际模型分层调用</strong>：低成本任务用国产，复杂推理用国际，成本与效果兼顾。</li>
+    <li><strong>内刊故事化</strong>：用"景小艾"IP 讲故事，比单纯资讯更容易被团队接受和传播。</li>
+  </ol>
+
+  <h3>4.2 需要警惕的问题</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>问题</th><th>应对</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><strong>AI 幻觉</strong></td><td>编造数据、伪造文献、虚构案例频发，所有输出必须人工复核。</td></tr>
+        <tr><td>2</td><td><strong>数据安全</strong></td><td>不能把公司机密/客户隐私输入公共 AI 工具，必须本地化/私有化部署。</td></tr>
+        <tr><td>3</td><td><strong>工具稳定性</strong></td><td>龙虾/Agent 在复杂逻辑和精细任务上仍不稳定，需设置人工兜底。</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr>
+
+<!-- ══════ 五、下一步计划 ══════ -->
+<section>
+  <h2>五、下一步计划与建议</h2>
+
+  <h3>5.1 短期（1-2 个月）</h3>
+  <ol>
+    <li><strong>推进 SupplyGuard 原型到 Demo 可用</strong>：完成核心爬虫 + 告警 + 后台，争取客户试点。</li>
+    <li><strong>持续输出内刊</strong>：保持每周一期，探索更多内容形式（视频、互动 H5）。</li>
+    <li><strong>完善竞品报告</strong>：针对二元 AI、WorkBuddy 补充最终版分析报告。</li>
+  </ol>
+
+  <h3>5.2 中期（3-6 个月）</h3>
+  <ol>
+    <li><strong>启动数字员工平台第一阶段</strong>：完成单员工闭环 Demo（注册/套餐/创建/部署/执行）。</li>
+    <li><strong>建立模型网关与成本治理体系</strong>：统一接入、用量监控、分层调度。</li>
+    <li><strong>沉淀内部知识库</strong>：用 RAG 技术将会议纪要、文档、邮件转化为可检索知识库。</li>
+    <li><strong>拓展安全巡检产品化</strong>：将 SupplyGuard 从项目需求沉淀为标准产品能力。</li>
+  </ol>
+
+  <h3>5.3 长期（6-12 个月）</h3>
+  <ol>
+    <li><strong>聚焦垂直赛道</strong>：选择 1-2 个细分行业/场景（如邮件归档、安全巡检、政务 OA）做深做透。</li>
+    <li><strong>构建 A2A 多智能体协作能力</strong>：从单 Agent 走向多 Agent 协同，处理复杂业务流程。</li>
+    <li><strong>形成可对外输出的 AI 产品矩阵</strong>：内部孵化项目转化为商业化产品。</li>
+  </ol>
+</section>
+
+<hr>
+
+<!-- ══════ 六、阶段性小结 ══════ -->
+<section>
+  <h2>六、阶段性小结</h2>
+  <p>过去 7 周，团队完成了从<strong>"AI 工具尝鲜"到"AI 项目落地"</strong>的关键跨越。核心收获不是某个工具用得有多熟练，而是建立了<strong>"模型接入选型 → 工具链工作流 → Agent 平台架构 → 安全/办公场景落地 → 内容运营"</strong>的完整认知体系。</p>
+  <p>下一步，建议明确 <strong>1-2 个重点方向</strong>加大投入（SupplyGuard 安全巡检、邮件归档 AI 赋能、数字员工平台），避免力量分散，尽快跑出第一个可商业化的 AI 产品。</p>
+</section>
+
+</div>
+
+</body>
+</html>
