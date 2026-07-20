@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企内刊【2026】第10期 · AI工作台选型指南</title>
+<style>
+  :root{
+    --teal:#0fb6a8;
+    --teal-dark:#0a8f84;
+    --blue:#2f7df6;
+    --blue-dark:#1f5fcc;
+    --ink:#1f2a37;
+    --ink-soft:#5a6675;
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --line:#e6ecf3;
+    --accent:#fff4e0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:0 16px 60px;}
+
+  /* ===== 刊头 ===== */
+  .masthead{
+    background:linear-gradient(135deg,var(--teal) 0%,var(--blue) 100%);
+    color:#fff;
+    border-radius:0 0 28px 28px;
+    padding:40px 28px 34px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(47,125,246,.18);
+    position:relative;
+    overflow:hidden;
+  }
+  .masthead::after{
+    content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;
+    background:rgba(255,255,255,.12);border-radius:50%;
+  }
+  .masthead::before{
+    content:"";position:absolute;left:-30px;bottom:-50px;width:140px;height:140px;
+    background:rgba(255,255,255,.10);border-radius:50%;
+  }
+  .brand{font-size:14px;letter-spacing:6px;opacity:.92;font-weight:600;}
+  .issue-no{
+    font-size:46px;font-weight:800;letter-spacing:2px;margin:8px 0 4px;
+    text-shadow:0 2px 8px rgba(0,0,0,.12);
+  }
+  .issue-no small{font-size:20px;font-weight:600;opacity:.9;}
+  .theme{
+    display:inline-block;margin-top:10px;padding:6px 18px;
+    background:rgba(255,255,255,.18);border-radius:999px;
+    font-size:15px;font-weight:600;backdrop-filter:blur(2px);
+  }
+  .meta{
+    margin-top:18px;font-size:13px;opacity:.9;
+    display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  }
+  .meta span{white-space:nowrap;}
+
+  /* ===== 导读 ===== */
+  .lead{
+    background:var(--card);border-radius:18px;padding:22px 24px;margin:22px 0 6px;
+    border:1px solid var(--line);box-shadow:0 6px 18px rgba(31,42,55,.04);
+    font-size:15px;color:var(--ink-soft);
+  }
+  .lead b{color:var(--teal-dark);}
+
+  /* ===== 文章区块 ===== */
+  .article{padding-top:14px;}
+  .sec{
+    background:var(--card);border-radius:18px;padding:26px 24px 28px;margin:22px 0;
+    border:1px solid var(--line);box-shadow:0 6px 18px rgba(31,42,55,.05);
+  }
+  .sec-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+  .badge{
+    flex:0 0 auto;width:42px;height:42px;border-radius:12px;
+    background:linear-gradient(135deg,var(--teal),var(--blue));
+    color:#fff;font-weight:800;font-size:18px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(47,125,246,.28);
+  }
+  .sec-head h2{font-size:21px;line-height:1.4;color:var(--ink);}
+  .sec-head .sub{font-size:13px;color:var(--ink-soft);font-weight:400;display:block;margin-top:2px;}
+  .sec img{
+    width:100%;height:auto;border-radius:14px;display:block;margin:6px 0 18px;
+    border:1px solid var(--line);
+  }
+  .sec p{font-size:16px;color:var(--ink);margin:12px 0;}
+  .sec p.tip{
+    background:var(--accent);border-left:4px solid #ffb347;border-radius:0 10px 10px 0;
+    padding:12px 16px;font-size:14.5px;color:#7a5a18;margin:16px 0;
+  }
+  ul.list{list-style:none;margin:14px 0;display:grid;gap:10px;}
+  ul.list li{
+    background:#f6fafe;border:1px solid var(--line);border-radius:12px;
+    padding:12px 16px;font-size:15.5px;position:relative;padding-left:44px;
+  }
+  ul.list li::before{
+    content:attr(data-ico);position:absolute;left:12px;top:50%;transform:translateY(-50%);
+    width:24px;height:24px;border-radius:7px;background:var(--teal);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+  }
+  .quote{
+    background:linear-gradient(135deg,#e8fbf8,#eaf1fe);
+    border-radius:14px;padding:18px 20px;margin:18px 0;font-size:16px;color:var(--ink);
+  }
+  .quote .row{display:flex;gap:10px;align-items:flex-start;padding:6px 0;}
+  .quote .row b{color:var(--blue-dark);flex:0 0 auto;}
+  .tag{
+    display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px;
+    background:#e6f7f5;color:var(--teal-dark);margin-right:6px;
+  }
+
+  /* ===== 页脚 ===== */
+  .foot{
+    text-align:center;margin-top:34px;color:var(--ink-soft);font-size:13px;
+    border-top:1px dashed var(--line);padding-top:20px;
+  }
+  .foot .slogan{font-size:15px;color:var(--teal-dark);font-weight:700;margin-bottom:6px;}
+
+  @media(max-width:560px){
+    .issue-no{font-size:38px;}
+    .sec-head h2{font-size:18px;}
+    .sec p{font-size:15px;}
+    .masthead{padding:32px 18px 28px;border-radius:0 0 22px 22px;}
+  }
+</style>
+</head>
+<body>
+  <!-- 刊头 -->
+  <header class="masthead">
+    <div class="brand">企 业 内 刊</div>
+    <div class="issue-no">【2026】<small>第 10 期</small></div>
+    <div class="theme">🤖 AI 工作台选型指南：咱团队该 pick 哪一款？</div>
+    <div class="meta">
+      <span>📅 2026年7月20日</span>
+      <span>🏢 内部交流 · 请勿外传</span>
+      <span>✍️ 编辑部出品</span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- 导读 -->
+    <section class="lead">
+      最近 AI 圈子里冒出三位"打工人救星"——字节的 <b>TRAE Work</b>、腾讯的 <b>WorkBuddy</b>、阿里的 <b>QoderWork</b>。它们都喊着"帮你把活儿干完"的口号，但<b>性格完全不同</b>。本期咱们不整虚的，用大白话聊聊：这三款到底有啥区别，咱公司的小伙伴又该 pick 谁？
+    </section>
+
+    <article class="article">
+
+      <!-- 1. 三大选手登场 -->
+      <section class="sec">
+        <div class="sec-head">
+          <div class="badge">01</div>
+          <div>
+            <h2>三大选手，闪亮登场</h2>
+            <span class="sub">出厂设定，就不太一样</span>
+          </div>
+        </div>
+        <img src="images/Three_friendly_cartoon_robot_c_2026-07-20T08-26-55.png" alt="三位AI工作台机器人选手">
+        <p>先把三位选手认个脸熟。一句话总结它们的"人设"：</p>
+        <ul class="list">
+          <li data-ico="码"><b>TRAE Work</b>：程序员的亲儿子，先把写代码这摊事做透，再顺手兼顾点文档、PPT。</li>
+          <li data-ico="办"><b>WorkBuddy</b>：给不会写代码的同事准备的"电脑操作小蜜"，一句话就能让它在你电脑上把活办了。</li>
+          <li data-ico="设"><b>QoderWork</b>：从设计出发的"创意外挂"，产出物能直接交付，设计师和前端看了都直呼内行。</li>
+        </ul>
+        <p>说白了，一个偏"工程"、一个偏"办公"、一个偏"创意"。接下来挨个拆解。</p>
+      </section>
+
+      <!-- 2. TRAE Work -->
+      <section class="sec">
+        <div class="sec-head">
+          <div class="badge">02</div>
+          <div>
+            <h2>TRAE Work —— 程序员的"主战场"</h2>
+            <span class="sub">代码是它的底座，不是附加功能</span>
+          </div>
+        </div>
+        <img src="images/A_happy_software_developer_typ_2026-07-20T08-26-55.png" alt="开发者专注写代码">
+        <p>如果你日常就是跟代码死磕，那 TRAE Work 大概率最对你的胃口。它保留了完整的 IDE 能力：代码库管理、Git 工作流、多文件编辑、终端调试，样样是原生的；文档、数据分析那些，是长在它上面的"第二层"。</p>
+        <p>咱公司做定制开发的兄弟们最懂——项目经常要在好几个仓库、好几个分支之间来回切，TRAE 这种"工程底座"思路，干起活来更顺手、更少踩坑。</p>
+        <p class="tip">⚠️ 小提醒：它跟腾讯 / 阿里的办公生态不是天然打通的。如果你习惯用企微、腾讯文档，得先算算对接成本；另外它的部分功能跑在云端沙箱里，敏感代码要留个心眼。</p>
+      </section>
+
+      <!-- 3. WorkBuddy -->
+      <section class="sec">
+        <div class="sec-head">
+          <div class="badge">03</div>
+          <div>
+            <h2>WorkBuddy —— 职场人的"操作小蜜"</h2>
+            <span class="sub">一句话，让 AI 在本地把事办了</span>
+          </div>
+        </div>
+        <img src="images/An_office_worker_sitting_back__2026-07-20T08-26-55.png" alt="办公族让AI自动处理文档">
+        <p>咱们公司不只有写代码的，还有行政、HR、财务、市场、售前……这些同学最怕的就是"一堆重复活儿"。WorkBuddy 就是给这群人设计的：一句话生成 PPT、自动填表、批量处理文件、写调研报告，全在本地把事办了。</p>
+        <p>它重本地授权、能接企微 / QQ / 飞书 / 钉钉远程遥控，对"数据不想全上云"的诉求很友好——这点对咱做客户项目的团队尤其重要。</p>
+        <p class="tip">⚠️ 小提醒：它的编程能力"够用"，但不是主业。要是你是研发团队、需要深度代码协作，它不如 TRAE 顺手。</p>
+      </section>
+
+      <!-- 4. QoderWork -->
+      <section class="sec">
+        <div class="sec-head">
+          <div class="badge">04</div>
+          <div>
+            <h2>QoderWork —— 创意党的"设计外挂"</h2>
+            <span class="sub">从设计出发，产出物直接能交付</span>
+          </div>
+        </div>
+        <img src="images/A_creative_designer_drawing_co_2026-07-20T08-26-55.png" alt="设计师用AI创作视觉">
+        <p>做设计、做内容、做市场的同学看过来。QoderWork 从"设计"出发，语音描述、结构化追问、设计计划、参数微调，整个流程就是围着创意生产转的。它产出的不是草稿，是能直接塞进工作流的成品：HTML、PPT、PDF、高保真原型。</p>
+        <p>咱公司给客户做定制方案时，常要快速出原型、出视觉稿。QoderWork 这种"设计优先"的思路，前端和设计师能无缝接力，改起来也快。</p>
+        <p class="tip">⚠️ 小提醒：它强调人机协作，讲究一步步把想法结构化。如果你想"一句话全自动跑完复杂任务"，它的流程会比前两款重一点。</p>
+      </section>
+
+      <!-- 5. 选型三问 -->
+      <section class="sec">
+        <div class="sec-head">
+          <div class="badge">05</div>
+          <div>
+            <h2>选型三问：你是哪种人？</h2>
+            <span class="sub">一张图，对号入座</span>
+          </div>
+        </div>
+        <img src="images/A_person_standing_at_a_fork_in_2026-07-20T08-26-55.png" alt="站在岔路口选择三条路">
+        <p>说了这么多，到底怎么选？送大家一句口诀 👇</p>
+        <div class="quote">
+          <div class="row"><span class="tag">写代码多</span><b>→ TRAE Work</b>：工程底座稳，切仓库不慌。</div>
+          <div class="row"><span class="tag">办公自动化多</span><b>→ WorkBuddy</b>：本地操作溜，重复活全甩。</div>
+          <div class="row"><span class="tag">做设计/内容多</span><b>→ QoderWork</b>：创意交付快，原型直接甩。</div>
+        </div>
+        <p>再补一刀：要是你已经在用某家生态（比如腾讯文档 + 企微，或钉钉 + 阿里云），<b>顺着生态走，落地摩擦最小</b>。一个新工具能不能用起来，往往就看它能不能接进你现在的文件、群聊和审批流。</p>
+      </section>
+
+      <!-- 6. 落到公司 -->
+      <section class="sec">
+        <div class="sec-head">
+          <div class="badge">06</div>
+          <div>
+            <h2>落到咱公司：怎么用才香？</h2>
+            <span class="sub">定制开发，正好三款都能搭上</span>
+          </div>
+        </div>
+        <img src="images/A_custom_software_development__2026-07-20T08-26-56.png" alt="软件定制开发团队协作">
+        <p>作为一家互联网软件定制开发公司，咱们的日常就是"需求千变万化、交付又快又稳"。这三款工具，其实能在不同环节都帮上忙：</p>
+        <ul class="list">
+          <li data-ico="研"><b>研发同学</b>用 TRAE Work 管工程、撸代码，多分支切换不头晕；</li>
+          <li data-ico="前"><b>售前 / 市场</b>用 WorkBuddy 秒出方案、自动整理客户资料，省下跑腿时间；</li>
+          <li data-ico="设"><b>设计 / UI</b>用 QoderWork 快速出高保真原型，给客户过目更高效。</li>
+        </ul>
+        <p>工具没有"最好"，只有"最合适"。建议大家先在自己岗位上<b>试一周</b>，看看哪款真帮你省了时间，再在团队里推广，别一上来就全员铺开。</p>
+      </section>
+
+      <!-- 7. 互动 -->
+      <section class="sec">
+        <div class="sec-head">
+          <div class="badge">07</div>
+          <div>
+            <h2>本期互动：来唠两句</h2>
+            <span class="sub">互相种草，也互相避坑</span>
+          </div>
+        </div>
+        <img src="images/Two_coworkers_chatting_with_fl_2026-07-20T08-26-55.png" alt="同事间交流讨论">
+        <p>这三款你用过哪款？最喜欢哪一个？或者你心里还藏着别的"效率神器"？欢迎在评论区 / 群里唠唠——咱们互相种草、也互相避坑 🌱</p>
+        <p>下期想看什么主题，也欢迎留言点单！说不定下期的封面就是你提的 idea～</p>
+      </section>
+
+    </article>
+
+    <!-- 页脚 -->
+    <footer class="foot">
+      <div class="slogan">把重复活交给 AI，把创造力留给自己 🚀</div>
+      <div>企内刊【2026】第 10 期 · 内部交流资料 · 编辑部出品</div>
+      <div style="margin-top:6px;opacity:.7;">本文基于公开测评内容改编，仅供内部参考，不构成采购建议</div>
+    </footer>
+  </div>
+</body>
+</html>
