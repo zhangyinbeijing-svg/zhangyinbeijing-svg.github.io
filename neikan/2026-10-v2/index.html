@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企内刊 · AI工作台选型指南</title>
+<style>
+  /* ========== 基础重置 & 变量 ========== */
+  :root{
+    --pri:#1a73e8;       /* 主蓝 */
+    --pri-dark:#1557b0;
+    --pri-light:#e8f0fe;
+    --green:#00c853;
+    --green-bg:#e8f5e9;
+    --black-ink:#1f2937;
+    --gray-6:#374151;
+    --gray-4:#9ca3af;
+    --gray-3:#d1d5db;
+    --bg:#f0f2f5;
+    --card:#fff;
+    --shadow:0 2px 12px rgba(26,115,232,.08);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI","Noto Sans SC",sans-serif;
+    background:var(--bg);color:var(--black-ink);line-height:1.85;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ========== 头部 Banner（图片为主）========== */
+  .hero{
+    position:relative;width:100%;min-height:320px;display:flex;align-items:flex-end;
+    overflow:hidden;border-radius:0 0 24px 24px;
+  }
+  .hero img{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    object-fit:cover;z-index:1;
+  }
+  .hero::after{
+    content:"";position:absolute;bottom:0;left:0;right:0;height:60%;
+    background:linear-gradient(transparent,rgba(15,23,42,.82));z-index:2;
+  }
+  .hero-inner{
+    position:relative;z-index:3;width:100%;max-width:840px;margin:0 auto;padding:28px 20px 32px;
+    color:#fff;
+  }
+  .hero-top{
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+    margin-bottom:10px;
+  }
+  .issue-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.16);backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.25);border-radius:999px;
+    padding:4px 14px;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.9);
+    letter-spacing:.5px;
+  }
+  .issue-badge .dot{width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;}
+  .date-tag{
+    font-size:12.5px;color:rgba(255,255,255,.75);font-weight:500;
+  }
+  .hero h1{
+    font-size:clamp(22px,5vw,34px);font-weight:800;line-height:1.25;
+    letter-spacing:-.3px;text-shadow:0 2px 14px rgba(0,0,0,.35);
+  }
+  .hero h1 span{display:block;font-size:clamp(13px,2.8vw,17px);font-weight:500;
+    opacity:.88;margin-top:6px;letter-spacing:.2px;}
+
+  /* ========== 导读条 ========== */
+  .lead-bar{
+    max-width:840px;margin:-18px auto 0;position:relative;z-index:5;
+    background:var(--card);border-radius:var(--radius);
+    border:1px solid var(--gray-3);box-shadow:0 8px 30px rgba(26,115,232,.1);
+    padding:18px 22px;font-size:15px;color:var(--gray-6);
+    display:flex;align-items:flex-start;gap:14px;
+  }
+  .lead-icon{
+    flex:0 0 auto;width:36px;height:36px;border-radius:10px;
+    background:linear-gradient(135deg,var(--pri),#6366f1);
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    font-size:18px;font-weight:700;box-shadow:0 4px 12px rgba(26,115,232,.25);
+  }
+  .lead-bar b{color:var(--pri);}
+
+  /* ========== 内容区 ========== */
+  .wrap{max-width:840px;margin:0 auto;padding:8px 16px 50px;}
+
+  .card{
+    background:var(--card);border-radius:var(--radius);
+    border:1px solid var(--gray-3);box-shadow:var(--shadow);
+    overflow:hidden;margin:20px 0;transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(26,115,232,.14);}
+  .card-img{width:100%;height:auto;display:block;}
+
+  .card-body{padding:22px 24px 26px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .num{
+    flex:0 0 auto;width:38px;height:38px;border-radius:11px;
+    background:linear-gradient(135deg,var(--pri),#6366f1);
+    color:#fff;font-weight:800;font-size:16px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 3px 10px rgba(26,115,232,.3);
+  }
+  .card-title{font-size:19px;line-height:1.35;font-weight:700;color:var(--black-ink);}
+  .card-sub{font-size:12.5px;color:var(--gray-4);margin-top:2px;font-weight:400;}
+
+  .card-body p{font-size:15.5px;color:var(--gray-6);margin:10px 0;line-height:1.9;}
+  .card-body p:last-child{margin-bottom:0;}
+
+  /* 提示框 */
+  .tip-box{
+    background:linear-gradient(135deg,#fef9ec,#fff7e0);
+    border-left:4px solid #f59e0b;border-radius:0 12px 12px 0;
+    padding:13px 16px;margin:14px 0;font-size:14.2px;color:#92400e;
+    line-height:1.75;
+  }
+
+  /* 列表 */
+  .list-item{
+    background:#f8faff;border:1px solid var(--pri-light);border-radius:12px;
+    padding:13px 16px 13px 48px;margin:9px 0;font-size:15px;color:var(--gray-6);
+    position:relative;line-height:1.7;
+  }
+  .list-item::before{
+    content:attr(data-ico);position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--pri),#6366f1);
+    color:#fff;font-size:13px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* 口诀卡 */
+  .formula-card{
+    background:linear-gradient(135deg,#eff6ff,#eef2ff);
+    border-radius:14px;padding:18px 20px;margin:16px 0;
+    border:1px solid var(--pri-light);
+  }
+  .formula-row{
+    display:flex;align-items:center;gap:10px;padding:8px 0;
+    font-size:15.5px;color:var(--gray-6);
+  }
+  .formula-tag{
+    flex:0 0 auto;font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px;
+    background:var(--pri);color:#fff;
+  }
+  .formula-tag.green{background:var(--green);}
+  .formula-tag.purple{background:#8b5cf6;}
+  .formula-arrow{flex:0 0 auto;color:var(--pri);font-weight:700;font-size:16px;}
+  .formula-val{color:var(--pri-dark);font-weight:700;}
+
+  /* ========== 页脚 ========== */
+  footer{
+    text-align:center;padding:28px 16px 40px;color:var(--gray-4);font-size:13px;
+  }
+  footer .slogan{font-size:16px;font-weight:700;color:var(--pri);margin-bottom:8px;}
+  footer hr{max-width:120px;margin:14px auto;border:none;border-top:2px dashed var(--gray-3);}
+
+  /* ========== 响应式 ========== */
+  @media(max-width:560px){
+    .hero{min-height:240px;border-radius:0 0 18px 18px;}
+    .hero-inner{padding:20px 16px 26px;}
+    .lead-bar{margin:-14px 12px 0;border-radius:14px;padding:14px 16px;}
+    .wrap{padding:4px 12px 40px;}
+    .card{margin:14px 0;border-radius:14px;}
+    .card-body{padding:18px 18px 22px;}
+    .card-title{font-size:17px;}
+    .card-body p{font-size:14.5px;}
+    .list-item{padding:11px 14px 11px 44px;font-size:14px;}
+    .formula-row{font-size:14px;}
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ====== 头部 Banner ====== -->
+<header class="hero">
+  <img src="images/A_wide_banner_header_image_for_2026-07-20T08-52-53.png"
+       alt="三大AI工作台对比banner">
+  <div class="hero-inner">
+    <div class="hero-top">
+      <span class="issue-badge"><span class="dot"></span> 企内刊 · 2026年第10期</span>
+      <span class="date-tag">📅 2026.07.20 · 内部交流</span>
+    </div>
+    <h1>TRAE Work VS WorkBuddy VS QoderWork
+      <span>三大厂商AI智能体工作台，咱们团队该 pick 谁？</span></h1>
+  </div>
+</header>
+
+<!-- ====== 导读 ====== -->
+<div class="wrap">
+  <div class="lead-bar">
+    <div class="lead-icon">🤖</div>
+    <div>
+      最近 AI 圈子里冒出三位"打工人救星"——字节的 <b>TRAE Work</b>、腾讯的 <b>WorkBuddy</b>、阿里的 <b>QoderWork</b>。它们都喊着帮你把活儿干完，但<b>性格完全不同</b>。本期不整虚的，用大白话聊聊：这三款到底有啥区别，咱公司的小伙伴又该 pick 谁？
+    </div>
+  </div>
+
+
+  <!-- ====== 01 三大选手登场 ====== -->
+  <article class="card">
+    <img class="card-img"
+         src="images/Three_cute_3D_cartoon_robot_ma_2026-07-20T08-54-44.png"
+         alt="三大AI工作台选手">
+    <div class="card-body">
+      <div class="card-head">
+        <div class="num">01</div>
+        <div>
+          <div class="card-title">三大选手，闪亮登场</div>
+          <div class="card-sub">出厂设定，就不太一样</div>
+        </div>
+      </div>
+      <p>先把三位选手认个脸熟。一句话总结它们的"人设"：</p>
+      <div class="list-item" data-ico="码"><b>TRAE Work</b> —— 程序员的亲儿子。先把写代码这摊事做透，再顺手兼顾点文档和 PPT。</div>
+      <div class="list-item" data-ico="办"><b>WorkBuddy</b> —— 给不会写代码的同事准备的"电脑操作小蜜"。一句话就能让它在你电脑上把活办了。</div>
+      <div class="list-item" data-ico="设"><b>QoderWork</b> —— 从设计出发的"创意外挂"。产出物能直接交付，设计师和前端看了都直呼内行。</div>
+      <p>说白了：一个偏<strong>工程</strong>，一个偏<strong>办公</strong>，一个偏<strong>创意</strong>。接下来挨个拆解 👇</p>
+    </div>
+  </article>
+
+
+  <!-- ====== 02 TRAE Work ====== -->
+  <article class="card">
+    <img class="card-img"
+         src="images/A_happy_young_software_develop_2026-07-20T08-55-49.png"
+         alt="开发者专注写代码">
+    <div class="card-body">
+      <div class="card-head">
+        <div class="num">02</div>
+        <div>
+          <div class="card-title">TRAE Work —— 程序员的"主战场"</div>
+          <div class="card-sub">代码是它的底座，不是附加功能</div>
+        </div>
+      </div>
+      <p>如果你日常就是跟代码死磕，那 TRAE Work 大概率最对你的胃口。它保留了完整的 IDE 能力：<strong>代码库管理、Git 工作流、多文件编辑、终端调试</strong>，样样是原生的；文档、数据分析那些，是长在它上面的"第二层"。</p>
+      <p>咱公司做定制开发的兄弟们最懂——项目经常要在好几个仓库、好几个分支之间来回切，TRAE 这种<strong>"工程底座"</strong>思路，干起活来更顺手、更少踩坑。</p>
+      <div class="tip-box">⚠️ 小提醒：它跟腾讯 / 阿里的办公生态不是天然打通的。如果你习惯用企微、腾讯文档，得先算算对接成本；另外它的部分功能跑在云端沙箱里，敏感代码要留个心眼。</div>
+    </div>
+  </article>
+
+
+  <!-- ====== 03 WorkBuddy ====== -->
+  <article class="card">
+    <img class="card-img"
+         src="images/An_office_worker_sitting_relax_2026-07-20T08-56-57.png"
+         alt="办公族让AI自动处理文档">
+    <div class="card-body">
+      <div class="card-head">
+        <div class="num">03</div>
+        <div>
+          <div class="card-title">WorkBuddy —— 职场人的"操作小蜜"</div>
+          <div class="card-sub">一句话，让 AI 在本地把事办了</div>
+        </div>
+      </div>
+      <p>咱们公司不只有写代码的，还有行政、HR、财务、市场、售前……这些同学最怕的就是"一堆重复活儿"。WorkBuddy 就是给这群人设计的：<strong>一句话生成 PPT、自动填表、批量处理文件、写调研报告</strong>，全在本地把事办了。</p>
+      <p>它重本地授权、能接企微 / QQ / 飞书 / 钉钉远程遥控，对"数据不想全上云"的诉求很友好——<strong>这点对咱做客户项目的团队尤其重要</strong>。</p>
+      <div class="tip-box">⚠️ 小提醒：它的编程能力"够用"，但不是主业。要是你是研发团队、需要深度代码协作，它不如 TRAE 顺手。</div>
+    </div>
+  </article>
+
+
+  <!-- ====== 04 QoderWork ====== -->
+  <article class="card">
+    <img class="card-img"
+         src="images/A_creative_designer_drawing_co_2026-07-20T08-57-49.png"
+         alt="设计师用AI创作视觉">
+    <div class="card-body">
+      <div class="card-head">
+        <div class="num">04</div>
+        <div>
+          <div class="card-title">QoderWork —— 创意党的"设计外挂"</div>
+          <div class="card-sub">从设计出发，产出物直接能交付</div>
+        </div>
+      </div>
+      <p>做设计、做内容、做市场的同学看过来。QoderWork 从"设计"出发，<strong>语音描述、结构化追问、设计计划、参数微调</strong>，整个流程就是围着创意生产转的。</p>
+      <p>它产出的不是草稿，是能直接塞进工作流的成品：<strong>HTML、PPT、PDF、高保真原型</strong>。咱公司给客户做定制方案时，常要快速出原型、出视觉稿。QoderWork 这种"设计优先"的思路，前端和设计师能无缝接力，改起来也快。</p>
+      <div class="tip-box">⚠️ 小提醒：它强调人机协作，讲究一步步把想法结构化。如果你想"一句话全自动跑完复杂任务"，它的流程会比前两款重一点。</div>
+    </div>
+  </article>
+
+
+  <!-- ====== 05 选型口诀 ====== -->
+  <article class="card">
+    <img class="card-img"
+         src="images/A_person_standing_at_a_futuris_2026-07-20T09-02-28.png"
+         alt="站在岔路口选择三条路">
+    <div class="card-body">
+      <div class="card-head">
+        <div class="num">05</div>
+        <div>
+          <div class="card-title">选型三问：你是哪种人？</div>
+          <div class="card-sub">一张图，对号入座</div>
+        </div>
+      </div>
+      <p>说了这么多，到底怎么选？送大家一句口诀 👇</p>
+      <div class="formula-card">
+        <div class="formula-row">
+          <span class="formula-tag green">写代码多</span>
+          <span class="formula-arrow">→</span>
+          <span class="formula-val">TRAE Work</span>
+          <span style="color:var(--gray-4);font-size:14px;">工程底座稳，切仓库不慌</span>
+        </div>
+        <div class="formula-row">
+          <span class="formula-tag">办公自动化多</span>
+          <span class="formula-arrow">→</span>
+          <span class="formula-val">WorkBuddy</span>
+          <span style="color:var(--gray-4);font-size:14px;">本地操作溜，重复活全甩</span>
+        </div>
+        <div class="formula-row">
+          <span class="formula-tag purple">做设计 / 内容多</span>
+          <span class="formula-arrow">→</span>
+          <span class="formula-val">QoderWork</span>
+          <span style="color:var(--gray-4);font-size:14px;">创意交付快，原型直接甩</span>
+        </div>
+      </div>
+      <p>再补一刀：要是你已经在用某家生态（比如腾讯文档 + 企微，或钉钉 + 阿里云），<strong>顺着生态走，落地摩擦最小</strong>。一个新工具能不能用起来，往往就看它能不能接进你现在的文件、群聊和审批流。</p>
+    </div>
+  </article>
+
+
+  <!-- ====== 06 落到公司 ====== -->
+  <article class="card">
+    <img class="card-img"
+         src="images/A_diverse_software_development_2026-07-20T09-00-45.png"
+         alt="软件定制开发团队协作">
+    <div class="card-body">
+      <div class="card-head">
+        <div class="num">06</div>
+        <div>
+          <div class="card-title">落到咱公司：怎么用才香？</div>
+          <div class="card-sub">定制开发，正好三款都能搭上</div>
+        </div>
+      </div>
+      <p>作为一家互联网软件定制开发公司，咱们的日常就是"<strong>需求千变万化、交付又快又稳</strong>"。这三款工具，其实能在不同环节都帮上忙：</p>
+      <div class="list-item" data-ico="研"><b>研发同学</b>用 TRAE Work 管工程、撸代码，多分支切换不头晕；</div>
+      <div class="list-item" data-ico="前"><b>售前 / 市场</b>用 WorkBuddy 秒出方案、自动整理客户资料，省下跑腿时间；</div>
+      <div class="list-item" data-ico="设"><b>设计 / UI</b>用 QoderWork 快速出高保真原型，给客户过目更高效。</div>
+      <p>工具没有"最好"，只有"最合适"。建议大家先在自己岗位上<b>试一周</b>，看看哪款真帮你省了时间，再在团队里推广，别一上来就全员铺开。</p>
+    </div>
+  </article>
+
+
+  <!-- ====== 07 互动 ====== -->
+  <article class="card">
+    <img class="card-img"
+         src="images/Two_friendly_coworkers_in_a_br_2026-07-20T09-02-28.png"
+         alt="同事间交流讨论">
+    <div class="card-body">
+      <div class="card-head">
+        <div class="num">07</div>
+        <div>
+          <div class="card-title">本期互动：来唠两句</div>
+          <div class="card-sub">互相种草，也互相避坑</div>
+        </div>
+      </div>
+      <p>这三款你用过哪款？最喜欢哪一个？或者你心里还藏着别的"效率神器"？欢迎在评论区 / 群里唠唠——咱们互相种草、也互相避坑 🌱</p>
+      <p>下期想看什么主题，也欢迎留言点单！说不定下期的封面就是你提的 idea～</p>
+    </div>
+  </article>
+
+
+  <!-- ====== 页脚 ====== -->
+  <footer>
+    <div class="slogan">把重复活交给 AI · 把创造力留给自己 🚀</div>
+    <hr>
+    <div>企内刊 · 2026年第10期 · 编辑部出品 · 内部交流请勿外传</div>
+    <div style="margin-top:6px;opacity:.65;font-size:12px;">
+      本文基于公开测评内容改编，仅供内部参考，不构成采购建议
+    </div>
+  </footer>
+
+</div><!-- /.wrap -->
+
+</body>
+</html>
