@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>数据源管理 - AI 寻标系统</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.subtabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
+.subtabs a{padding:10px 18px;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.subtabs a.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.subtabs a:hover{color:var(--primary)}
+.flow{display:flex;align-items:center;gap:10px;font-size:13px;flex-wrap:wrap}
+.flow .stp{background:var(--primary-light);color:var(--primary);border-radius:8px;padding:7px 16px;font-weight:600}
+.flow .arr{color:var(--text-3)}
+.spark{display:inline-block;vertical-align:middle}
+.redline-li{font-size:13px;color:var(--text-2);padding:6px 0;border-bottom:1px dashed var(--border);display:flex;gap:8px}
+.redline-li:last-child{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark">寻</div><div class="name">AI 寻标<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">标书中心</div>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item active" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">孙</div><span>孙配置 · 管理员</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">系统管理 / <b>数据源管理</b></div>
+      <div class="page-title">数据源管理 <span class="note">双通道并行：通道 A 公开合规采集 · 通道 B 授权 API 接入 · 未过合规审查不得接入</span> <span style="flex:1"></span></div>
+
+      <div class="subtabs">
+        <a href="admin.html">成员与角色</a>
+        <a class="on" href="datasources.html">数据源管理</a>
+        <a href="rules.html">匹配规则库</a>
+        <a href="admin.html#tpl">模板库</a>
+        <a href="admin.html#audit">审计日志</a>
+      </div>
+
+      <!-- 概览指标 -->
+      <div class="grid g4">
+        <div class="stat"><div class="lbl">已接入数据源</div><div class="val num blue">9</div><div class="sub">通道 A 7 个 · 通道 B 2 个 · 待审 1 个</div></div>
+        <div class="stat"><div class="lbl">今日采集成功率</div><div class="val num green">99.4%</div><div class="sub">目标 ≥ 99% · 失败 2 次已自动重试恢复</div></div>
+        <div class="stat"><div class="lbl">L1 源时效（P95）</div><div class="val num">42 <span style="font-size:14px">分钟</span></div><div class="sub">SLA ≤ 60 分钟 ✓</div></div>
+        <div class="stat"><div class="lbl">合规告警</div><div class="val num orange">1</div><div class="sub">1 个源站条款变更，已自动停用待重评</div></div>
+      </div>
+
+      <!-- 准入流程 -->
+      <div class="card" style="margin-top:16px">
+        <h3>数据源准入流程 <span class="more">✚ 申请接入新数据源</span></h3>
+        <div class="flow">
+          <span class="stp">① 提交申请</span><span class="arr">→</span>
+          <span class="stp">② 法务/合规审查（授权依据）</span><span class="arr">→</span>
+          <span class="stp">③ 技术接入</span><span class="arr">→</span>
+          <span class="stp">④ 上线采集</span>
+          <span class="note" style="margin-left:auto">存量源每月合规抽查复审 · 源站条款变更即时停用重评</span>
+        </div>
+      </div>
+
+      <!-- 数据源列表 -->
+      <div class="card">
+        <h3>数据源清单 <span class="note">每个源登记：通道类型 / 授权依据 / 合规审查结论与日期</span></h3>
+        <table class="tbl">
+          <thead><tr>
+            <th>数据源</th><th>分级</th><th>通道</th><th>授权依据</th><th>合规审查</th><th>采集频率</th><th>时效 SLA</th><th>成功率（7 日）</th><th>状态</th><th>操作</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><b>中国政府采购网</b><div class="note">政府采购</div></td>
+              <td><span class="badge badge-high">L1 核心</span></td>
+              <td><span class="tag">A 公开采集</span></td>
+              <td class="note">公开信息，无需授权</td>
+              <td><span class="badge badge-ok">通过</span> <span class="note">2026-05-10</span></td>
+              <td class="note">工作时段 15–30min<br>非工作 60min</td>
+              <td class="note">P95 ≤ 1h ✓</td>
+              <td>
+                <svg class="spark" width="64" height="18" viewBox="0 0 64 18"><polyline points="0,6 9,5 18,7 27,4 36,5 45,3 54,4 63,3" fill="none" stroke="var(--success)" stroke-width="2"/></svg>
+                <span class="num" style="color:var(--success)">99.9%</span></td>
+              <td><span class="badge badge-ok">采集中</span></td>
+              <td><span class="link">配置</span> · <span class="link">暂停</span></td>
+            </tr>
+            <tr>
+              <td><b>全国公共资源交易平台</b><div class="note">公共资源交易</div></td>
+              <td><span class="badge badge-high">L1 核心</span></td>
+              <td><span class="tag">A 公开采集</span></td>
+              <td class="note">公开信息，无需授权</td>
+              <td><span class="badge badge-ok">通过</span> <span class="note">2026-05-10</span></td>
+              <td class="note">工作时段 15–30min<br>非工作 60min</td>
+              <td class="note">P95 ≤ 1h ✓</td>
+              <td>
+                <svg class="spark" width="64" height="18" viewBox="0 0 64 18"><polyline points="0,5 9,6 18,5 27,6 36,4 45,5 54,6 63,4" fill="none" stroke="var(--success)" stroke-width="2"/></svg>
+                <span class="num" style="color:var(--success)">99.6%</span></td>
+              <td><span class="badge badge-ok">采集中</span></td>
+              <td><span class="link">配置</span> · <span class="link">暂停</span></td>
+            </tr>
+            <tr>
+              <td><b>省级政采/交易平台（31 省批次）</b><div class="note">已接入 12 省，其余排期</div></td>
+              <td><span class="badge badge-high">L1</span> <span class="badge badge-mid">L2</span></td>
+              <td><span class="tag">A 公开采集</span></td>
+              <td class="note">公开信息，无需授权</td>
+              <td><span class="badge badge-ok">通过</span> <span class="note">分批审查</span></td>
+              <td class="note">L1 省 30min<br>L2 省 60min</td>
+              <td class="note">P95 ≤ 1–2h ✓</td>
+              <td>
+                <svg class="spark" width="64" height="18" viewBox="0 0 64 18"><polyline points="0,6 9,8 18,5 27,7 36,6 45,8 54,5 63,6" fill="none" stroke="var(--success)" stroke-width="2"/></svg>
+                <span class="num" style="color:var(--success)">98.8%</span></td>
+              <td><span class="badge badge-ok">采集中</span></td>
+              <td><span class="link">配置</span> · <span class="link">批次进度</span></td>
+            </tr>
+            <tr>
+              <td><b>中国招标投标公共服务平台</b><div class="note">招标投标公共服务</div></td>
+              <td><span class="badge badge-mid">L2 重要</span></td>
+              <td><span class="tag">A 公开采集</span></td>
+              <td class="note">公开信息，无需授权</td>
+              <td><span class="badge badge-ok">通过</span> <span class="note">2026-06-02</span></td>
+              <td class="note">每 60min</td>
+              <td class="note">P95 ≤ 2h ✓</td>
+              <td>
+                <svg class="spark" width="64" height="18" viewBox="0 0 64 18"><polyline points="0,5 9,4 18,6 27,5 36,7 45,5 54,4 63,5" fill="none" stroke="var(--success)" stroke-width="2"/></svg>
+                <span class="num" style="color:var(--success)">99.2%</span></td>
+              <td><span class="badge badge-ok">采集中</span></td>
+              <td><span class="link">配置</span> · <span class="link">暂停</span></td>
+            </tr>
+            <tr>
+              <td><b>千里马招标大数据 API</b><div class="note">第三方聚合 · 补长尾覆盖</div></td>
+              <td><span class="badge badge-low">L3 长尾</span></td>
+              <td><span class="tag" style="color:var(--ai);border-color:#D9CCFA">B 授权 API</span></td>
+              <td class="note">商务合同 QL-2026-088<br>授权范围：内部匹配与报告</td>
+              <td><span class="badge badge-ok">通过</span> <span class="note">2026-06-20</span></td>
+              <td class="note">API 实时推送</td>
+              <td class="note">≤ 30min ✓</td>
+              <td>
+                <svg class="spark" width="64" height="18" viewBox="0 0 64 18"><polyline points="0,4 9,4 18,4 27,5 36,4 45,4 54,5 63,4" fill="none" stroke="var(--success)" stroke-width="2"/></svg>
+                <span class="num" style="color:var(--success)">99.9%</span></td>
+              <td><span class="badge badge-ok">采集中</span></td>
+              <td><span class="link">配置</span> · <span class="link">用量</span></td>
+            </tr>
+            <tr style="background:#FFFDF5">
+              <td><b>国网电子商务平台</b><div class="note">央企采购 · V1.1 批次</div></td>
+              <td><span class="badge badge-mid">L2 重要</span></td>
+              <td><span class="tag">A 公开采集</span></td>
+              <td class="note">公开公告可采，平台条款逐一审视中</td>
+              <td><span class="badge badge-warn">审查中</span> <span class="note">法务复核条款第 7 条</span></td>
+              <td class="note">—</td>
+              <td class="note">目标 P95 ≤ 2h</td>
+              <td><span class="note">—</span></td>
+              <td><span class="badge badge-warn">待审查</span></td>
+              <td><span class="link">审查详情</span></td>
+            </tr>
+            <tr style="background:#FDF6F5">
+              <td><b>某地市交易中心</b><div class="note">源站服务条款变更</div></td>
+              <td><span class="badge badge-mid">L2 重要</span></td>
+              <td><span class="tag">A 公开采集</span></td>
+              <td class="note">原审查结论已失效</td>
+              <td><span class="badge badge-no">停用重评</span> <span class="note">2026-08-11 触发</span></td>
+              <td class="note">已停止</td>
+              <td class="note">—</td>
+              <td><span class="note">—</span></td>
+              <td><span class="badge badge-no">已停用</span></td>
+              <td><span class="link">发起重评</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note" style="margin-top:8px">双通道协同：同一项目按「招标编号 + 项目名称 + 招标方」统一去重，保留来源通道标记与授权依据；军队武器采购网等特殊源一期不纳入。</div>
+      </div>
+
+      <!-- 合规红线 -->
+      <div class="grid g2">
+        <div class="card" style="margin-bottom:0">
+          <h3>通道 A 采集合规红线 <span class="note">任一违反即停用该源并上报</span></h3>
+          <div class="redline-li">🚫 仅采集公开发布的公告；不采集需登录 / 付费 / 账号权限才能访问的内容</div>
+          <div class="redline-li">🚫 不绕过、不破坏反爬、验证码、IP 封禁等技术保护措施</div>
+          <div class="redline-li">🚫 遵守 robots.txt 与站点条款；条款禁止采集的转通道 B 或放弃</div>
+          <div class="redline-li">⏱ 限速采集：单站 ≤ 2 请求/秒，错峰执行，不影响源站运行</div>
+          <div class="redline-li">🔒 联系人姓名/电话、评标专家个人信息默认脱敏或不存储</div>
+          <div class="redline-li">🔗 展示保留原文链接与来源标注，不歪曲篡改</div>
+        </div>
+        <div class="card" style="margin-bottom:0">
+          <h3>通道 B 授权要求</h3>
+          <div class="redline-li">📄 第三方数据服务与官方 API 须签合同后接入，合同明确授权范围（使用方式 / 衍生加工 / 转分发限制）</div>
+          <div class="redline-li">🚫 付费数据不得原样对外转分发，仅限内部匹配、衍生与报告生成</div>
+          <div class="redline-li">📄 合同明确数据权属、违约责任与服务中断处置预案</div>
+          <div class="note" style="margin-top:12px">当前 B 通道合同：QL-2026-088（千里马，有效期至 2027-06-19）· 合同到期前 60 天自动提醒续签。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

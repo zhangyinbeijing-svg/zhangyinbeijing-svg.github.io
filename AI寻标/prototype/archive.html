@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>归档标的 - AI 寻标系统</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="layout">
+  <!-- 左侧导航 -->
+  <aside class="sidebar">
+    <div class="logo"><div class="mark">寻</div><div class="name">AI 寻标<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item active" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">标书中心</div>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">招标信息 / <b>归档标的</b></div>
+      <div class="page-title">归档标的 <span class="note">投标决策选择「不投标 · 归档」后自动转入本列表</span></div>
+
+      <!-- 指标卡 -->
+      <div class="grid g4">
+        <div class="stat"><div class="lbl">累计归档</div><div class="val num blue">12</div><div class="sub">本季度 7 · 上季度 5</div></div>
+        <div class="stat"><div class="lbl">本月归档</div><div class="val num orange">4</div><div class="sub">最近：今日 10:24</div></div>
+        <div class="stat"><div class="lbl">高匹配仍放弃</div><div class="val num red">2</div><div class="sub">已沉淀原因供策略复盘</div></div>
+        <div class="stat"><div class="lbl">已恢复</div><div class="val num green">1</div><div class="sub">90 天内可申请恢复</div></div>
+      </div>
+
+      <!-- 归档机制说明 -->
+      <div class="card" style="margin-top:16px;border-left:3px solid var(--primary)">
+        <div style="font-size:13px;color:var(--text);line-height:1.9">
+          <b>归档机制说明</b>：在投标建议页做出「不投标 · 归档」决策时，归档原因为必填项；项目连同匹配快照、决策书（NO-GO）与决策记录一并归档，作为推荐率统计与策略迭代的闭环输入（F5-4）。归档后 <b>90 天内</b>可申请恢复至拟投标的；超过截止时间的标的不再支持恢复。
+        </div>
+      </div>
+
+      <!-- 筛选与列表 -->
+      <div class="card">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <span class="chip on">全部（12）</span>
+          <span class="chip">资质/业绩缺口（4）</span>
+          <span class="chip">价格不具备竞争力（3）</span>
+          <span class="chip">时间不足（2）</span>
+          <span class="chip">战略放弃（2）</span>
+          <span class="chip">其他（1）</span>
+          <div style="flex:1"></div>
+          <input class="mini" placeholder="搜索项目名称…" style="padding:7px 10px;width:180px">
+        </div>
+
+        <table class="tbl" style="margin-top:12px">
+          <thead>
+            <tr><th>项目</th><th class="c">匹配分</th><th>归档原因（必填）</th><th>决策结论</th><th>归档时间 / 操作人</th><th>操作</th></tr>
+          </thead>
+          <tr>
+            <td><a class="link" onclick="showToast('打开决策时点匹配快照（只读存档）')">区教育局多媒体教室升级改造项目</a><div class="note">山东·滨州 · 教育 · 预算 230 万</div></td>
+            <td class="c"><span class="badge badge-mid">63</span></td>
+            <td><span class="badge badge-no">时间不足</span><div class="note">决策时距截止 48h，资质文件调取周期不足</div></td>
+            <td><span class="badge badge-no">NO-GO</span></td>
+            <td>今日 10:24<div class="note">李商务</div></td>
+            <td><button class="btn sm" onclick="showToast('打开决策记录：NO-GO 决策书 + 匹配快照 + 决策留痕')">决策记录</button> <button class="btn sm" onclick="showToast('恢复申请已提交，需管理员确认')">恢复</button></td>
+          </tr>
+          <tr>
+            <td><a class="link" href="match.html">高新区智慧停车管理平台建设项目</a><div class="note">高新区 · 交通 · 预算 660 万</div></td>
+            <td class="c"><span class="badge badge-mid">72</span></td>
+            <td><span class="badge badge-no">价格不具备竞争力</span><div class="note">预算低于成本基准线 b（成本+5%）</div></td>
+            <td><span class="badge badge-no">NO-GO</span></td>
+            <td>08-11 16:40<div class="note">李商务</div></td>
+            <td><button class="btn sm" onclick="showToast('打开决策记录：NO-GO 决策书 + 匹配快照 + 决策留痕')">决策记录</button> <button class="btn sm" onclick="showToast('恢复申请已提交，需管理员确认')">恢复</button></td>
+          </tr>
+          <tr>
+            <td><a class="link" href="match.html">县人民医院弱电智能化工程</a><div class="note">县本级 · 医疗 · 预算 380 万</div></td>
+            <td class="c"><span class="badge badge-mid">65</span></td>
+            <td><span class="badge badge-no">资质/业绩缺口</span><div class="note">要求医疗弱电业绩 ≥3 个，画像仅 1 个（硬性条件一票否决）</div></td>
+            <td><span class="badge badge-no">NO-GO</span></td>
+            <td>08-09 11:05<div class="note">李商务</div></td>
+            <td><button class="btn sm" onclick="showToast('打开决策记录：NO-GO 决策书 + 匹配快照 + 决策留痕')">决策记录</button> <button class="btn sm" onclick="showToast('恢复申请已提交，需管理员确认')">恢复</button></td>
+          </tr>
+          <tr>
+            <td><a class="link" href="match.html">某单位安防维保服务（涉密）</a><div class="note">市本级 · 安防 · 预算未公开</div></td>
+            <td class="c"><span class="badge badge-mid">70</span></td>
+            <td><span class="badge badge-no">战略放弃</span><div class="note">涉密项目需驻场封闭 6 个月，与在手项目资源冲突</div></td>
+            <td><span class="badge badge-no">NO-GO</span></td>
+            <td>08-06 09:18<div class="note">周管理</div></td>
+            <td><button class="btn sm" onclick="showToast('打开决策记录：NO-GO 决策书 + 匹配快照 + 决策留痕')">决策记录</button> <button class="btn sm" onclick="showToast('恢复申请已提交，需管理员确认')">恢复</button></td>
+          </tr>
+          <tr style="opacity:.65">
+            <td>城东片区雪亮工程补点建设<div class="note">市本级 · 安防 · 预算 950 万</div></td>
+            <td class="c"><span class="badge badge-low">58</span></td>
+            <td><span class="badge badge-no">战略放弃</span><div class="note">低于推荐下限 80，且主要竞争对手主场区域</div></td>
+            <td><span class="badge badge-no">NO-GO</span></td>
+            <td>07-28 15:32<div class="note">李商务</div></td>
+            <td><span class="note">已超截止时间，不可恢复</span></td>
+          </tr>
+        </table>
+
+        <!-- 分页 -->
+        <div class="pagination">
+          <span class="on">1</span><span>2</span><span>3</span><span>下一页 ›</span>
+        </div>
+      </div>
+
+      <!-- 数据用途 -->
+      <div class="card">
+        <h3>归档数据用途 <span class="note">归档不是终点，是策略优化的输入</span></h3>
+        <div class="grid g3">
+          <div class="stat" style="text-align:left"><div class="lbl">推荐率口径</div><div style="font-size:13px;color:var(--text);margin-top:6px;line-height:1.8">归档决策计入"推荐未采纳"，推荐率统计标注当期推荐下限值。</div></div>
+          <div class="stat" style="text-align:left"><div class="lbl">失分归因</div><div style="font-size:13px;color:var(--text);margin-top:6px;line-height:1.8">归档原因汇聚至数据看板"失分归因"，定位能力短板（如医疗业绩缺口）。</div></div>
+          <div class="stat" style="text-align:left"><div class="lbl">订阅调优</div><div style="font-size:13px;color:var(--text);margin-top:6px;line-height:1.8">连续归档同类方向时，系统提示调整订阅关键词或推荐下限。</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800);}
+</script>
+</body>
+</html>

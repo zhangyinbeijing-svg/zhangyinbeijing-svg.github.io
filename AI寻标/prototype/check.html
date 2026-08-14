@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>合规检查 - AI 寻标系统</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.ctx-bar{display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+.ctx-bar .proj{font-weight:700;font-size:15px}
+.redline{background:var(--danger-bg);border:1px solid #F0B9B4;border-left:5px solid var(--danger);border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;display:flex;gap:14px;align-items:flex-start}
+.redline .t{font-size:15px;font-weight:700;color:var(--danger)}
+.redline .d{font-size:13px;color:var(--text-2);margin-top:4px}
+.group-t{font-size:14px;font-weight:700;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.issue .body{flex:1;min-width:0}
+.issue .t{font-weight:600}
+.issue .d{font-size:12px;color:var(--text-2);margin-top:3px}
+.issue .acts{display:flex;gap:8px;flex-shrink:0;align-items:center}
+.bottom-bar{position:sticky;bottom:0;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:14px;margin-top:8px}
+.bottom-bar .sum{flex:1}
+.pass-pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;border-radius:999px;padding:3px 12px}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark">寻</div><div class="name">AI 寻标<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">标书中心</div>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">标书中心 / <a class="link" href="bidprojects.html">投标标的</a> / <b>合规检查</b></div>
+      <div class="ctx-bar">
+        <div style="flex:1">
+          <div class="page-title" style="margin-bottom:2px">合规检查 · 导出前最后闸口</div>
+          <div class="note">滨海新城智慧校园一体化建设项目（一期）· 版本 v3 · 检查时间 2026-08-13 10:26 · 检查规则集 2026.07（含等保三级内容审核项）</div>
+        </div>
+        <button class="btn">↻ 全部复检</button>
+        <a class="btn" href="editor.html">返回编辑器</a>
+        <a class="btn" href="bidprojects.html">返回项目列表</a>
+      </div>
+
+      <!-- 检查概览三卡片 -->
+      <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="check-card fail">
+          <div style="font-size:20px">🛡</div>
+          <div style="font-size:13px;color:var(--text-2);margin:4px 0">真实性校验</div>
+          <div class="n num">1 项问题</div>
+          <div class="note" style="color:var(--danger)">引用了企业画像中不存在的业绩/资质（红线）</div>
+        </div>
+        <div class="check-card fail">
+          <div style="font-size:20px">📐</div>
+          <div style="font-size:13px;color:var(--text-2);margin:4px 0">格式检查</div>
+          <div class="n num" style="color:var(--warning)">3 项问题</div>
+          <div class="note">对照招标要求样式基准（F7-6）</div>
+        </div>
+        <div class="check-card pass">
+          <div style="font-size:20px">🔍</div>
+          <div style="font-size:13px;color:var(--text-2);margin:4px 0">敏感信息检查</div>
+          <div class="n num">通过</div>
+          <div class="note">未检出涉密/敏感词/他人商业信息</div>
+        </div>
+      </div>
+
+      <!-- 真实性红线横幅（最高警示级别） -->
+      <div class="redline" style="margin-top:16px">
+        <div style="font-size:24px">⛔</div>
+        <div style="flex:1">
+          <div class="t">真实性红线问题：检测到 1 处与事实不符的内容，未处理前禁止导出</div>
+          <div class="d">标书内容必须真实可查。以下问题属于产品红线，无法通过人工确认豁免，必须修改原文后复检通过。</div>
+        </div>
+      </div>
+
+      <!-- 问题清单 -->
+      <div class="group-t">⛔ 真实性校验问题（1）<span class="badge badge-no">阻断导出</span></div>
+      <div class="issue high">
+        <div class="ic">⛔</div>
+        <div class="body">
+          <div class="t">第 2 章「业绩证明」引用了不存在的业绩：「东方港区智慧物流平台项目（2024 年，合同额 520 万元）」</div>
+          <div class="d">经与企业画像业绩库核对：该业绩未登记，疑似 AI 生成时由相似业绩「东方港区安防系统改造项目（210 万元）」错误扩写。虚假业绩属于投标重大违法风险。</div>
+        </div>
+        <div class="acts">
+          <a class="btn sm" href="editor.html">定位到正文</a>
+          <button class="btn sm primary">单项复检</button>
+        </div>
+      </div>
+
+      <div class="group-t">⚠ 格式检查问题（3）<span class="badge badge-warn">建议修正</span></div>
+      <div class="issue">
+        <div class="ic" style="color:var(--warning)">⚠</div>
+        <div class="body">
+          <div class="t">正文字体与招标要求不符：当前「宋体」，招标要求「仿宋_GB2312 小四」</div>
+          <div class="d">对照样式基准：招标文件第 12 页「投标文件编制要求」。可在导出样式配置中一键应用。</div>
+        </div>
+        <div class="acts">
+          <a class="btn sm" href="editor.html">定位到正文</a>
+          <button class="btn sm primary">单项复检</button>
+        </div>
+      </div>
+      <div class="issue">
+        <div class="ic" style="color:var(--warning)">⚠</div>
+        <div class="body">
+          <div class="t">目录缺少页码字段（3 处二级标题未生成页码）</div>
+          <div class="d">导出时将自动补全，建议先在编辑器中确认章节标题层级。</div>
+        </div>
+        <div class="acts">
+          <a class="btn sm" href="editor.html">定位到正文</a>
+          <button class="btn sm primary">单项复检</button>
+        </div>
+      </div>
+      <div class="issue">
+        <div class="ic" style="color:var(--warning)">⚠</div>
+        <div class="body">
+          <div class="t">红头文号格式不一致：正文「华信〔2026〕12 号」，样式配置「华信字〔2026〕12 号」</div>
+          <div class="d">请统一后在样式配置中更新。</div>
+        </div>
+        <div class="acts">
+          <a class="btn sm" href="editor.html">定位到正文</a>
+          <button class="btn sm primary">单项复检</button>
+        </div>
+      </div>
+
+      <div class="group-t">✓ 敏感信息检查（0）<span class="badge badge-ok">通过</span></div>
+      <div class="issue" style="border-style:dashed;background:#FAFBFC">
+        <div class="ic" style="color:var(--success)">✓</div>
+        <div class="body">
+          <div class="t" style="color:var(--text-2)">已扫描全文 28,460 字：未检出涉密关键词、内部敏感称谓及第三方商业机密内容</div>
+          <div class="note">规则集：敏感词库 2026.07 · 上次更新 2026-07-01</div>
+        </div>
+      </div>
+
+      <!-- 底部操作条：未通过时导出禁用 -->
+      <div class="bottom-bar">
+        <div class="sum">
+          <span class="pass-pill" style="background:var(--danger-bg);color:var(--danger)">⛔ 检查未通过 · 剩余 4 项问题（含 1 项真实性红线）</span>
+          <div class="note" style="margin-top:4px">全部问题修复并复检通过后，「导出」按钮将自动解锁。真实性问题不支持人工豁免。</div>
+        </div>
+        <button class="btn">⇩ 导出 <span class="note">（已禁用）</span></button>
+        <a class="btn disabled" style="pointer-events:none">导出并存档</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

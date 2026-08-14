@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>企业画像 - AI 寻标系统</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.pf-layout{display:grid;grid-template-columns:180px 1fr;gap:16px;align-items:start}
+.anchor{position:sticky;top:70px}
+.anchor a{display:block;padding:9px 14px;border-radius:8px;color:var(--text-2);font-size:13px;margin-bottom:2px}
+.anchor a.on{background:var(--primary-light);color:var(--primary);font-weight:600}
+.exp-banner{background:var(--warning-bg);border:1px solid #F0D9A6;border-radius:var(--radius);padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px}
+.cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cert{border:2px solid var(--success);border-radius:10px;padding:14px;background:#fff;position:relative}
+.cert.mid{border-color:var(--warning)} .cert.exp{border-color:var(--danger)}
+.cert .nm{font-weight:600;font-size:13px}
+.cert .no{font-size:11px;color:var(--text-3);margin:4px 0 8px}
+.cert .dt{font-size:12px;color:var(--text-2)}
+.cert .stat{position:absolute;top:12px;right:12px}
+.perf-att{color:var(--primary);font-size:12px;cursor:pointer}
+.person{border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;gap:12px;background:#fff}
+.person .ava{width:42px;height:42px;border-radius:50%;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:22px;text-align:center;color:var(--text-3);font-size:13px;cursor:pointer}
+.upload-zone:hover{border-color:var(--primary);color:var(--primary)}
+.ocr-step{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3)}
+.ocr-step b{color:var(--primary)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;font-size:13px}
+.form-grid .k{color:var(--text-3);width:86px;display:inline-block}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark">寻</div><div class="name">AI 寻标<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">标书中心</div>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item active" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">张</div><span>张资料 · 资料管理员</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">资产与洞察 / <b>企业画像</b></div>
+      <div class="page-title">华信智能科技有限公司 · 企业画像 <span class="badge badge-mid">完整度 86%</span> <span class="note">画像数据是匹配评分与标书引用的唯一事实来源，请保持最新</span></div>
+
+      <!-- 到期提醒横幅 -->
+      <div class="exp-banner">⏰ <b>60 天内有 1 本证照到期</b>：安防工程企业设计施工维护能力证书（2026-11-08 到期，剩 87 天已提前提醒）<span class="link" style="margin-left:auto">直达证照卡片 ›</span></div>
+
+      <div class="pf-layout">
+        <!-- 左侧锚点导航 -->
+        <nav class="anchor card" style="padding:10px;margin-bottom:0">
+          <a href="#base" class="on">基本信息</a>
+          <a href="#cert">资质证照（6）</a>
+          <a href="#perf">业绩案例（14）</a>
+          <a href="#team">团队人员（9）</a>
+        </nav>
+
+        <div>
+          <!-- 基本信息 -->
+          <div class="card" id="base">
+            <h3>基本信息 <span class="more">编辑</span></h3>
+            <div class="form-grid">
+              <div><span class="k">统一社会信用代码</span>913702XXXXXXXX12XK</div>
+              <div><span class="k">成立日期</span>2015-03-18</div>
+              <div><span class="k">注册资本</span>5,000 万元</div>
+              <div><span class="k">注册地址</span>山东省青岛市崂山区……</div>
+              <div style="grid-column:1/3"><span class="k">主营方向</span><span class="tag">智慧校园</span> <span class="tag">智慧城市</span> <span class="tag">安防工程</span> <span class="tag">信息化集成</span> <span class="note">标签用于匹配打分，支持增删</span></div>
+              <div style="grid-column:1/3"><span class="k">企业简介</span>专注教育与政务行业智能化建设 11 年，累计交付项目 120+……（218 字）</div>
+            </div>
+          </div>
+
+          <!-- 资质证照 -->
+          <div class="card" id="cert">
+            <h3>资质证照（6）<span class="note">边框颜色 = 有效期状态：绿 正常 / 橙 6 个月内到期 / 红 已过期或 1 个月内</span><span class="more">⤒ 上传证照</span></h3>
+            <div class="upload-zone" style="margin-bottom:14px">拖拽证照图片/PDF 到此处上传 · 上传后自动 OCR 解析<br>
+              <span class="ocr-step" style="margin-top:8px">流程：<b>① 解析中</b> → ② 解析结果预览（逐字段可修正）→ ③ 保存入库</span></div>
+            <div class="cert-grid">
+              <div class="cert">
+                <span class="stat badge badge-ok">正常</span>
+                <div class="nm">电子与智能化工程专业承包壹级</div>
+                <div class="no">证书编号：D237XXXXXX-01</div>
+                <div class="dt">有效期至 2028-06-30 · 剩 778 天</div>
+              </div>
+              <div class="cert">
+                <span class="stat badge badge-ok">正常</span>
+                <div class="nm">信息系统建设和服务能力 CS3</div>
+                <div class="no">证书编号：CS3-2025XXXX</div>
+                <div class="dt">有效期至 2027-12-15 · 剩 490 天</div>
+              </div>
+              <div class="cert mid">
+                <span class="stat badge badge-warn">临期</span>
+                <div class="nm">安防工程企业设计施工维护能力（壹级）</div>
+                <div class="no">证书编号：AF-2023XXXX</div>
+                <div class="dt">有效期至 2026-11-08 · 剩 87 天</div>
+              </div>
+              <div class="cert">
+                <span class="stat badge badge-ok">正常</span>
+                <div class="nm">ISO 9001 质量管理体系认证</div>
+                <div class="no">证书编号：02325QXXXX</div>
+                <div class="dt">有效期至 2027-09-01 · 剩 384 天</div>
+              </div>
+              <div class="cert">
+                <span class="stat badge badge-ok">正常</span>
+                <div class="nm">ISO 27001 信息安全管理体系认证</div>
+                <div class="no">证书编号：02325ISXXXX</div>
+                <div class="dt">有效期至 2027-09-01 · 剩 384 天</div>
+              </div>
+              <div class="cert">
+                <span class="stat badge badge-ok">正常</span>
+                <div class="nm">安全生产许可证</div>
+                <div class="no">证书编号：(鲁)JZ安许证字XXXX</div>
+                <div class="dt">有效期至 2028-01-20 · 剩 617 天</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 业绩案例 -->
+          <div class="card" id="perf">
+            <h3>业绩案例（14）<span class="note">标书引用业绩时仅可从本库选取（真实性红线）</span><span class="more">✚ 新增业绩</span></h3>
+            <table class="tbl">
+              <thead><tr><th>项目名称</th><th>合同金额</th><th>签约时间</th><th>甲方</th><th>证明材料</th><th>状态</th></tr></thead>
+              <tbody>
+                <tr><td>临川三小智慧校园建设项目</td><td class="num">¥ 486 万</td><td>2025-07</td><td>临川区教育局</td><td><span class="perf-att">📎 合同 + 验收报告</span></td><td><span class="badge badge-ok">已核验</span></td></tr>
+                <tr><td>东方港区安防系统改造项目</td><td class="num">¥ 210 万</td><td>2024-11</td><td>东方港务集团</td><td><span class="perf-att">📎 合同 + 中标通知书</span></td><td><span class="badge badge-ok">已核验</span></td></tr>
+                <tr><td>市北政务云平台运维服务（2024–2026）</td><td class="num">¥ 320 万/年</td><td>2024-03</td><td>市北区大数据局</td><td><span class="perf-att">📎 合同</span></td><td><span class="badge badge-ok">已核验</span></td></tr>
+                <tr><td>蓝湾中学多功能教室集成项目</td><td class="num">¥ 98 万</td><td>2023-08</td><td>蓝湾中学</td><td><span class="perf-att">⤒ 待上传验收报告</span></td><td><span class="badge badge-warn">待补材料</span></td></tr>
+              </tbody>
+            </table>
+            <div class="note" style="margin-top:8px">新增业绩需填写项目名称、金额、时间、甲方并上传证明材料附件；保存后进入匹配评分的"业绩"维度数据源。</div>
+          </div>
+
+          <!-- 团队人员 -->
+          <div class="card" id="team">
+            <h3>团队人员（9）<span class="more">✚ 新增人员</span></h3>
+            <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+              <div class="person">
+                <div class="ava">陈</div>
+                <div><div style="font-weight:600">陈建国 <span class="tag">一级建造师（机电）</span></div>
+                <div class="note" style="margin-top:4px">项目总监 · 高级工程师 · 12 年集成项目经验</div></div>
+              </div>
+              <div class="person">
+                <div class="ava">刘</div>
+                <div><div style="font-weight:600">刘明 <span class="tag">PMP</span></div>
+                <div class="note" style="margin-top:4px">项目经理 · 中级工程师 · 主导交付 20+ 教育行业项目</div></div>
+              </div>
+              <div class="person">
+                <div class="ava">赵</div>
+                <div><div style="font-weight:600">赵雪 <span class="tag">注册信息安全工程师</span></div>
+                <div class="note" style="margin-top:4px">技术负责人 · 高级工程师 · 网络与信息安全方向</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

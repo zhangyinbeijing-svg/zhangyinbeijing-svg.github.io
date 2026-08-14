@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>拟投标的 - AI 寻标系统</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="layout">
+  <!-- 左侧导航 -->
+  <aside class="sidebar">
+    <div class="logo"><div class="mark">寻</div><div class="name">AI 寻标<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item active" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">标书中心</div>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">招标信息 / <b>拟投标的</b></div>
+      <div class="page-title">拟投标的 <span class="note">在推送标的中「＋清单」加入 · 决策后自动流转</span></div>
+
+      <!-- 指标卡 -->
+      <div class="grid g4">
+        <div class="stat"><div class="lbl">清单项目</div><div class="val num blue">6</div><div class="sub">本月加入 9 · 移出 3</div></div>
+        <div class="stat"><div class="lbl">待决策</div><div class="val num orange">2</div><div class="sub">GO ×1 · GO 附条件 ×1 · 滨海仅剩 44h</div></div>
+        <div class="stat"><div class="lbl">持续观察（WATCH）</div><div class="val num" style="color:var(--warning)">1</div><div class="sub">待资质出证 / 更正公告触发</div></div>
+        <div class="stat"><div class="lbl">已决定投标</div><div class="val num green">3</div><div class="sub">含人工覆盖 NO-GO ×1 · 撰写中 2 · 已导出 1</div></div>
+      </div>
+
+      <!-- 筛选 -->
+      <div class="card" style="margin-top:16px">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <span class="note" style="margin-right:2px">决策状态：</span>
+          <span class="chip on">全部（6）</span>
+          <span class="chip">待决策（2）</span>
+          <span class="chip">持续观察（1）</span>
+          <span class="chip">已决定投标（3）</span>
+          <div style="flex:1"></div>
+          <select class="mini" style="padding:7px 10px"><option>按截止时间排序</option><option>按匹配分排序</option><option>按加入时间排序</option></select>
+        </div>
+
+        <table class="tbl" style="margin-top:12px">
+          <thead>
+            <tr><th>项目</th><th class="c">匹配分</th><th class="c">预算</th><th>截止时间</th><th>决策状态</th><th class="c">推荐决策</th><th>标书进度</th><th>操作</th></tr>
+          </thead>
+          <tr>
+            <td><a class="link" href="match.html#cond">滨海新城智慧校园一体化建设项目（一期）</a><div class="note">山东·滨州 · 教育 · 今日 09:12 加入</div></td>
+            <td class="c"><span class="badge badge-high">87</span></td>
+            <td class="c">1,280 万</td>
+            <td>2026-08-15 09:30<div class="note" style="color:var(--high)">剩 44 小时</div></td>
+            <td><span class="badge badge-warn">待决策</span></td>
+            <td class="c"><a href="suggestion.html#cond" title="查看投标建议（附 3 项前提条件）"><span class="badge badge-mid">GO 附条件</span></a></td>
+            <td class="c">—</td>
+            <td><a class="btn sm primary" href="suggestion.html#cond">投标建议</a> <button class="btn sm" onclick="showToast('已从清单移出并归档')">移出</button></td>
+          </tr>
+          <tr>
+            <td><a class="link" href="match.html#go">市第一人民医院信息化运维服务采购</a><div class="note">山东·滨州 · 医疗 · 昨日加入</div></td>
+            <td class="c"><span class="badge badge-high">92</span></td>
+            <td class="c">860 万</td>
+            <td>2026-08-19 10:00<div class="note">剩 6 天</div></td>
+            <td><span class="badge badge-warn">待决策</span></td>
+            <td class="c"><a href="suggestion.html#go" title="查看投标建议（无前提条件）"><span class="badge badge-ok">GO</span></a></td>
+            <td class="c">—</td>
+            <td><a class="btn sm primary" href="suggestion.html#go">投标建议</a> <button class="btn sm" onclick="showToast('已从清单移出并归档')">移出</button></td>
+          </tr>
+          <tr>
+            <td><a class="link" onclick="showToast('打开决策时点匹配快照（只读存档）')">区政务服务中心一网通办平台建设项目</a><div class="note">山东·滨州 · 政务 · 3 天前加入</div></td>
+            <td class="c"><span class="badge badge-high">81</span></td>
+            <td class="c">150 万</td>
+            <td>2026-08-16 14:00<div class="note" style="color:var(--high)">剩 3 天</div></td>
+            <td><span class="badge badge-ok">已决定投标</span></td>
+            <td class="c"><span class="badge badge-ok" title="系统推荐投标，已采纳">GO · 已采纳</span></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:#EEF1F5;border-radius:3px;min-width:70px"><div style="width:62%;height:6px;background:var(--ai);border-radius:3px"></div></div><span class="note">62%</span></div>
+            </td>
+            <td><a class="btn sm primary" href="editor.html">撰写</a> <a class="btn sm" href="bidprojects.html">进度</a></td>
+          </tr>
+          <tr>
+            <td><a class="link" href="match.html#watch">省政务云平台安全运营服务采购项目</a><div class="note">山东·济南 · 政务 · 2 天前加入</div></td>
+            <td class="c"><span class="badge badge-mid">74</span></td>
+            <td class="c">2,100 万</td>
+            <td>2026-08-22 09:30<div class="note">剩 9 天</div></td>
+            <td><span class="badge badge-mid">持续观察</span><div class="note">触发条件已登记</div></td>
+            <td class="c"><a href="suggestion.html#watch" title="查看投标建议（建议观望）"><span class="badge badge-warn">WATCH</span></a></td>
+            <td class="c">—</td>
+            <td><a class="btn sm primary" href="suggestion.html#watch">投标建议</a> <button class="btn sm" onclick="showToast('已从清单移出并归档')">移出</button></td>
+          </tr>
+          <tr>
+            <td><a class="link" onclick="showToast('打开决策时点匹配快照（只读存档）')">水务集团 SCADA 系统采购项目 <span class="tag correction">更</span></a><div class="note">山东·滨州 · 水务 · 更正公告：开标变更为 08-20 · 5 天前加入</div></td>
+            <td class="c"><span class="badge badge-mid">71</span></td>
+            <td class="c">620 万</td>
+            <td>2026-08-20 09:30<div class="note" style="color:var(--warning)">更正后剩 7 天</div></td>
+            <td><span class="badge badge-ok">已决定投标</span></td>
+            <td class="c"><span class="badge badge-low" title="匹配分 71 低于推荐下限 80，人工决定投标">低于下限 · 人工投标</span></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:#EEF1F5;border-radius:3px;min-width:70px"><div style="width:100%;height:6px;background:var(--success);border-radius:3px"></div></div><span class="note">已导出</span></div>
+            </td>
+            <td><a class="btn sm primary" href="check.html">合规报告</a> <a class="btn sm" href="bidprojects.html">进度</a></td>
+          </tr>
+          <tr>
+            <td><a class="link" href="match.html#nogo">城市轨道交通视频监控系统升级项目</a><div class="note">广东·广州 · 交通 · 预算未载明 · 1 周前加入</div></td>
+            <td class="c"><span class="badge badge-mid">66</span></td>
+            <td class="c"><span style="color:var(--text-3)">—</span></td>
+            <td>2026-08-25 10:00<div class="note">剩 12 天</div></td>
+            <td><span class="badge badge-ok">已决定投标</span><div class="note">人工覆盖 · 理由已记录（F5-4）</div></td>
+            <td class="c"><a href="suggestion.html#nogo" title="查看投标建议（建议放弃）"><span class="badge badge-no">NO-GO</span></a></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:#EEF1F5;border-radius:3px;min-width:70px"><div style="width:18%;height:6px;background:var(--ai);border-radius:3px"></div></div><span class="note">18%</span></div>
+            </td>
+            <td><a class="btn sm primary" href="suggestion.html#nogo">投标建议</a> <a class="btn sm" href="bidprojects.html">进度</a></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- 流转规则说明 -->
+      <div class="card">
+        <h3>清单流转规则 <span class="note">决策结果驱动，无需人工维护</span></h3>
+        <div class="grid g3">
+          <div class="stat" style="text-align:left"><div class="lbl">入口</div><div style="font-size:13px;color:var(--text);margin-top:6px;line-height:1.8">推送标的「＋清单」加入；订阅推送中标记"考虑中"自动加入。</div></div>
+          <div class="stat" style="text-align:left"><div class="lbl">决定投标</div><div style="font-size:13px;color:var(--text);margin-top:6px;line-height:1.8">在投标建议页选择「投标」后，项目保留在清单并进入标书撰写进度跟踪。</div></div>
+          <div class="stat" style="text-align:left"><div class="lbl">不投标归档</div><div style="font-size:13px;color:var(--text);margin-top:6px;line-height:1.8">在投标建议页选择「不投标 · 归档」（原因必填）后，项目自动移出本清单，转入<a class="link" href="archive.html">归档标的</a>。</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800);}
+</script>
+</body>
+</html>

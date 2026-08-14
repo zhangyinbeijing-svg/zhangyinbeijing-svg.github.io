@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>推送标的 - AI 寻标系统</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ===== 订阅推送弹层 ===== */
+.modal-mask{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:60;align-items:flex-start;justify-content:center;padding:44px 16px}
+.modal-mask.open{display:flex}
+.modal{background:#fff;border-radius:12px;width:100%;max-width:880px;max-height:calc(100vh - 88px);display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(15,23,42,.22)}
+.modal-head{display:flex;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid var(--border)}
+.modal-head .t{font-size:16px;font-weight:700;flex:1}
+.modal-head .x{border:none;background:none;font-size:18px;color:var(--text-2);cursor:pointer}
+.modal-body{padding:18px 22px;overflow-y:auto}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.f-label{font-size:13px;font-weight:600;color:var(--text);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.f-label .req{color:var(--danger)}
+.f-label .note{font-weight:400}
+.opt{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:12.5px;color:var(--text-2);cursor:pointer;margin:0 8px 8px 0;background:#fff;user-select:none}
+.opt.on{border-color:var(--primary);color:var(--primary);background:var(--primary-light);font-weight:600}
+.sub-row{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:8px;padding:9px 12px;margin-bottom:8px;background:#FAFBFC;font-size:13px}
+.sub-row .nm{font-weight:600}
+.sub-row .cds{font-size:12px;color:var(--text-2);flex:1;min-width:0}
+.sub-row .lnk{font-size:12px;color:var(--primary);cursor:pointer;white-space:nowrap}
+.sw{position:relative;display:inline-block;width:34px;height:19px;flex-shrink:0}
+.sw input{display:none}
+.sw i{position:absolute;inset:0;background:#CDD4DE;border-radius:999px;transition:.2s;cursor:pointer}
+.sw i::after{content:'';position:absolute;left:2px;top:2px;width:15px;height:15px;background:#fff;border-radius:50%;transition:.2s}
+.sw input:checked + i{background:var(--success)}
+.sw input:checked + i::after{left:17px}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark">寻</div><div class="name">AI 寻标<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group"><a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a></div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item active" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">标书中心</div>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">招标信息 / <b>推送标的</b></div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="page-title" style="flex:1;margin:0">推送标的 <span class="note">共 2,416 条 · 默认按匹配分排序</span></div>
+        <button class="btn primary" onclick="openModal('subModal')">📡 订阅推送</button>
+      </div>
+      <div class="note" style="margin-top:6px">已启用 3 个订阅方向（智慧校园 / 医疗信息化 / 政务平台）· 命中后入库 ≤30 分钟推送</div>
+      <div class="note" style="margin-top:4px">推荐决策四档：<b style="color:var(--success)">GO</b> / <b style="color:var(--primary)">GO 附条件</b> / <b style="color:var(--warning)">WATCH</b> / <b style="color:var(--danger)">NO-GO</b> · 点击决策徽标进入对应投标建议页，匹配与建议页数据均按项目实际情况生成</div>
+
+      <!-- 检索栏：关键词 / 语义切换 -->
+      <div class="card" style="padding:16px 20px">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="search-mode">
+            <span class="on" onclick="setMode(this,'kw')">关键词检索</span>
+            <span class="" onclick="setMode(this,'ai')">✦ AI 语义检索</span>
+          </div>
+          <div class="searchbox">
+            <span id="sicon">🔍</span>
+            <input id="kw" placeholder="输入关键词，如：智慧校园 集成" value="智慧校园">
+          </div>
+          <button class="btn primary">检索</button>
+          <button class="btn" onclick="openModal('subModal')">保存为订阅</button>
+        </div>
+        <div id="aihint" class="note" style="display:none;margin-top:8px;color:var(--ai)">✦ 语义模式支持自然语言，例如："山东 千万级 智慧校园 集成项目，要求信息系统建设资质"</div>
+      </div>
+
+      <!-- 筛选器 -->
+      <div class="filter-bar">
+        <button class="btn sm">地区：全部 ▾</button>
+        <button class="btn sm">金额：全部 ▾</button>
+        <button class="btn sm">公告类型：全部 ▾</button>
+        <button class="btn sm">发布时间：近 7 天 ▾</button>
+        <span class="chip on">仅看高匹配（≥80）</span>
+        <span class="chip">我收藏的</span>
+        <span class="chip">拟投标的</span>
+        <span style="flex:1"></span>
+        <span class="note">排序：匹配分 ▾</span>
+      </div>
+
+      <!-- 结果表格 -->
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <tr>
+            <th style="width:28px"><input type="checkbox"></th>
+            <th>项目名称</th><th>地区</th><th class="r">预算金额</th><th>投标截止</th><th>公告类型</th><th class="c">匹配分</th><th class="c" style="width:118px">推荐决策</th><th style="width:190px">操作</th>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>滨海新城智慧校园一体化建设项目（一期）</b></a><div class="note">编号 BHZB-2026-0812 · 滨海新城教育局 · 山东省公共资源交易平台</div></td>
+            <td>山东·滨州</td><td class="r num">1,280 万</td>
+            <td><span class="cd warn">剩 44 小时<span class="sub">08-15 09:30 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-high">87 高</span></td>
+            <td class="c"><a href="suggestion.html#cond" title="进入投标建议页（附 3 项前提条件）"><span class="badge badge-mid">GO 附条件</span></a></td>
+            <td><a class="btn sm" href="match.html#cond">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="showToast('已加入拟投标的')">＋清单</button></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>市第一人民医院信息化运维服务采购</b></a><div class="note">编号 SYZB-2026-0731 · 市第一人民医院 · 市公共资源交易中心</div></td>
+            <td>山东·滨州</td><td class="r num">860 万</td>
+            <td><span class="cd">剩 6 天<span class="sub">08-19 10:00 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-high">92 高</span></td>
+            <td class="c"><a href="suggestion.html#go" title="进入投标建议页（无前提条件）"><span class="badge badge-ok">GO</span></a></td>
+            <td><a class="btn sm" href="match.html#go">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="showToast('已加入拟投标的')">＋清单</button></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>区政务服务中心一网通办平台建设项目</b></a><div class="note">编号 QZZC-2026-0219 · 区行政审批服务局 · 省政府采购网</div></td>
+            <td>山东·滨州</td><td class="r num">150 万</td>
+            <td><span class="cd warn">剩 3 天<span class="sub">08-16 14:00 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-high">81 高</span></td>
+            <td class="c"><a href="bidprojects.html" title="已完成决策，进入投标标的"><span class="badge badge-ok">✓ 已决定投标</span></a></td>
+            <td><a class="btn sm" href="match.html">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="showToast('已加入拟投标的')">＋清单</button></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>省政务云平台安全运营服务采购项目</b></a><div class="note">编号 SZC-2026-1102 · 省大数据局 · 省政府采购网</div></td>
+            <td>山东·济南</td><td class="r num">2,100 万</td>
+            <td><span class="cd">剩 9 天<span class="sub">08-22 09:30 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-mid">74 中</span></td>
+            <td class="c"><a href="suggestion.html#watch" title="进入投标建议页（建议观望）"><span class="badge badge-warn">WATCH</span></a></td>
+            <td><a class="btn sm" href="match.html#watch">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="showToast('已加入拟投标的')">＋清单</button></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>水务集团 SCADA 系统采购项目</b> <span class="tag correction">更</span></a><div class="note">编号 SWJT-2026-0088 · 更正公告：开标时间变更为 08-20 · 市公共资源交易中心</div></td>
+            <td>山东·滨州</td><td class="r num">620 万</td>
+            <td><span class="cd">剩 7 天<span class="sub">08-20 09:30 开标</span></span></td>
+            <td><span class="tag correction">更正</span></td>
+            <td class="c"><span class="badge badge-mid">71 中</span></td>
+            <td class="c"><a href="bidprojects.html" title="已完成决策（合规已通过，可导出）"><span class="badge badge-ok">✓ 已决定投标</span></a></td>
+            <td><a class="btn sm" href="match.html">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">★</button> <button class="btn sm" onclick="showToast('已加入拟投标的')">＋清单</button></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>城市轨道交通视频监控系统升级项目</b></a><div class="note">编号 GDJT-2026-0455 · 预算金额字段缺失 <span title="字段缺失明示，不参与依赖该字段的匹配计分" style="color:var(--warning)">ⓘ</span> · 中国招标投标公共服务平台</div></td>
+            <td>广东·广州</td><td class="r num" style="color:var(--text-3)">—</td>
+            <td><span class="cd">剩 12 天<span class="sub">08-25 10:00 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-mid">66 中</span></td>
+            <td class="c"><a href="suggestion.html#nogo" title="进入投标建议页（建议放弃）"><span class="badge badge-no">NO-GO</span></a></td>
+            <td><a class="btn sm" href="match.html#nogo">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="showToast('已加入拟投标的')">＋清单</button></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>大学图书馆数字化资源建设项目</b></a><div class="note">编号 DXSG-2026-0317 · 某大学 · 中国政府采购网</div></td>
+            <td>北京</td><td class="r num">380 万</td>
+            <td><span class="cd">剩 8 天<span class="sub">08-21 09:00 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-low">58 低</span></td>
+            <td class="c"><span class="badge badge-low" title="匹配分低于推荐下限 80，未进入推荐列表">未达下限</span></td>
+            <td><a class="btn sm" href="match.html">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="showToast('已加入拟投标的')">＋清单</button></td>
+          </tr>
+        </table>
+        <div style="display:flex;align-items:center;padding:12px 16px">
+          <button class="btn sm" onclick="showToast('已批量加入拟投标的')">批量加入清单</button>
+          <div class="pagination" style="flex:1;margin:0">
+            <span>‹</span><span class="on">1</span><span>2</span><span>3</span><span>…</span><span>47</span><span>›</span>
+          </div>
+        </div>
+      </div>
+      <div class="note">匹配分说明：高 ≥80（红）· 中 60–79（蓝）· 低 &lt;60（灰）；硬性条件不满足时无论总分高低均不得标高匹配。</div>
+    </div>
+  </div>
+</div>
+<!-- ===== 订阅推送定义弹层 ===== -->
+<div class="modal-mask" id="subModal" onclick="if(event.target===this)closeModal('subModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <span style="font-size:19px">📡</span>
+      <div class="t">订阅推送管理 <span class="note" style="font-weight:400">定义关注的关键词与标的类型，命中后入库 ≤30 分钟推送（F4）</span></div>
+      <button class="x" onclick="closeModal('subModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- 我的订阅 -->
+      <div class="f-label" style="margin-top:0">我的订阅（3 / 上限 10 个）</div>
+      <div class="sub-row">
+        <span class="nm">智慧校园方向</span>
+        <span class="cds">关键词：智慧校园、教育信息化 · 类型：系统集成 · 山东 · ≥300 万 · 实时推送</span>
+        <span class="lnk" onclick="showToast('已载入该订阅配置进行编辑')">编辑</span>
+        <label class="sw" title="启用/停用"><input type="checkbox" checked><i></i></label>
+        <span class="lnk" style="color:var(--danger)" onclick="showToast('删除前需二次确认，历史推送记录保留')">删除</span>
+      </div>
+      <div class="sub-row">
+        <span class="nm">医疗信息化方向</span>
+        <span class="cds">关键词：医院信息化、运维服务 · 类型：运维服务 · 山东 · 不限金额 · 实时推送</span>
+        <span class="lnk" onclick="showToast('已载入该订阅配置进行编辑')">编辑</span>
+        <label class="sw" title="启用/停用"><input type="checkbox" checked><i></i></label>
+        <span class="lnk" style="color:var(--danger)" onclick="showToast('删除前需二次确认，历史推送记录保留')">删除</span>
+      </div>
+      <div class="sub-row" style="opacity:.7">
+        <span class="nm">安防维保方向</span>
+        <span class="cds">关键词：安防、维保 · 类型：运维服务 · 已停用 · 连续 30 天无命中，系统建议优化关键词</span>
+        <span class="lnk" onclick="showToast('已载入该订阅配置进行编辑')">编辑</span>
+        <label class="sw" title="启用/停用"><input type="checkbox"><i></i></label>
+        <span class="lnk" style="color:var(--danger)" onclick="showToast('删除前需二次确认，历史推送记录保留')">删除</span>
+      </div>
+
+      <!-- 新建订阅表单 -->
+      <div class="f-label" style="margin-top:20px">➕ 新建订阅（或编辑所选订阅）</div>
+
+      <div class="f-label"><span class="req">*</span> 订阅名称</div>
+      <input class="mini" style="width:280px;padding:8px 10px" placeholder="如：智慧校园方向" value="智慧校园方向">
+
+      <div class="f-label"><span class="req">*</span> 关注关键词 <span class="note">命中任一关键词即视为命中；支持企业画像推荐词</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">智慧校园</span><span class="opt on" onclick="tgl(this)">教育信息化</span><span class="opt on" onclick="tgl(this)">系统集成</span><span class="opt" onclick="tgl(this)">弱电智能化</span><span class="opt" onclick="tgl(this)">雪亮工程</span><span class="opt" onclick="tgl(this)">安防</span><span class="opt" onclick="tgl(this)">运维服务</span><span class="opt" onclick="tgl(this)">数据中台</span><span class="opt" onclick="tgl(this)">一网通办</span>
+        <span style="display:inline-flex;gap:6px;vertical-align:middle"><input class="mini" id="kwAdd" placeholder="自定义关键词…" style="width:140px;padding:6px 10px"><button class="btn sm" onclick="addKw()">＋ 添加</button></span>
+      </div>
+
+      <div class="f-label">标的类型（采购内容分类） <span class="note">多选 · 不限则留空</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">系统集成</span><span class="opt on" onclick="tgl(this)">运维服务</span><span class="opt" onclick="tgl(this)">设备采购</span><span class="opt" onclick="tgl(this)">软件开发</span><span class="opt" onclick="tgl(this)">工程施工</span><span class="opt" onclick="tgl(this)">咨询设计</span><span class="opt" onclick="tgl(this)">货物类</span><span class="opt" onclick="tgl(this)">服务类</span>
+      </div>
+
+      <div class="f-label">公告类型 <span class="note">更正/中标结果推送用于跟踪已关注项目</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">招标公告</span><span class="opt on" onclick="tgl(this)">更正公告</span><span class="opt" onclick="tgl(this)">中标结果</span><span class="opt" onclick="tgl(this)">废标公告</span><span class="opt" onclick="tgl(this)">采购意向</span>
+      </div>
+
+      <div class="f-label">关注地区 <span class="note">多选 · 默认全国</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">山东</span><span class="opt" onclick="tgl(this)">河北</span><span class="opt" onclick="tgl(this)">江苏</span><span class="opt" onclick="tgl(this)">北京</span><span class="opt" onclick="tgl(this)">天津</span><span class="opt" onclick="tgl(this)">河南</span><span class="opt" onclick="tgl(this)">全国（不限）</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 26px">
+        <div>
+          <div class="f-label">预算金额区间 <span class="note">留空不限</span></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input class="mini" style="width:96px;padding:8px 10px" value="300"><span class="note">万 至</span>
+            <input class="mini" style="width:96px;padding:8px 10px" placeholder="不限">
+            <span class="note">万</span>
+          </div>
+        </div>
+        <div>
+          <div class="f-label">推送门槛（防打扰）</div>
+          <select class="mini" style="width:100%;padding:8px 10px">
+            <option>仅推送匹配分 ≥ 我的推荐下限（当前 80）的项目（推荐）</option>
+            <option>推送匹配分 ≥ 60（中匹配及以上）的项目</option>
+            <option>命中关键词即推送（不限匹配分）</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 26px">
+        <div>
+          <div class="f-label">推送渠道</div>
+          <div>
+            <span class="opt on" onclick="tgl(this)">站内信</span><span class="opt on" onclick="tgl(this)">邮件</span><span class="opt" onclick="tgl(this)" title="V1.1 规划中">企业微信（V1.1）</span>
+          </div>
+        </div>
+        <div>
+          <div class="f-label">推送频率</div>
+          <div>
+            <span class="opt on" onclick="tgl(this)">实时（入库后 ≤30 分钟）</span><span class="opt" onclick="tgl(this)">每日汇总（09:00）</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="f-label">接收人 <span class="note">由 RBAC 控制：商务市场/标书撰写默认可接收，观察者不可接收</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">李商务</span><span class="opt" onclick="tgl(this)">王标书</span><span class="opt" onclick="tgl(this)">张资料</span>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span class="note">保存后即刻生效；命中推送可在 <a class="link" href="messages.html">消息中心</a> 查看，订阅效果可在 <a class="link" href="collectboard.html">数据采集看板</a> 复盘。</span>
+      <span style="flex:1"></span>
+      <button class="btn" onclick="closeModal('subModal')">取消</button>
+      <button class="btn primary" onclick="closeModal('subModal');showToast('订阅「智慧校园方向」已保存并生效')">保存订阅</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800);}
+function setMode(el,mode){
+  document.querySelectorAll('.search-mode span').forEach(s=>s.className='');
+  el.className = mode==='ai' ? 'on-ai' : 'on';
+  document.getElementById('aihint').style.display = mode==='ai' ? 'block' : 'none';
+  document.getElementById('kw').placeholder = mode==='ai' ? '用自然语言描述你想找的项目…' : '输入关键词，如：智慧校园 集成';
+  document.getElementById('sicon').textContent = mode==='ai' ? '✦' : '🔍';
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function tgl(el){el.classList.toggle('on');}
+function addKw(){
+  const i=document.getElementById('kwAdd');const v=i.value.trim();if(!v)return;
+  const s=document.createElement('span');s.className='opt on';s.textContent=v;s.onclick=function(){tgl(this);};
+  i.parentElement.parentElement.insertBefore(s,i.parentElement);
+  i.value='';showToast('关键词已添加：'+v);
+}
+if(location.hash==='#sub'){openModal('subModal');}
+</script>
+</body>
+</html>

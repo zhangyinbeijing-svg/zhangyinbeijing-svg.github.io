@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>标书编辑 - AI 寻标系统</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.ed-head{display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap}
+.ed-head .proj{font-size:16px;font-weight:700}
+.ed-head .meta{font-size:12px;color:var(--text-3)}
+.ver-select{border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;background:#fff}
+.autosave{font-size:12px;color:var(--success);display:flex;align-items:center;gap:5px}
+.toolbar-sep{width:1px;height:18px;background:var(--border)}
+.fmt-btn{border:1px solid var(--border);background:#fff;border-radius:6px;min-width:30px;height:28px;padding:0 8px;cursor:pointer;font-size:13px;color:var(--text-2)}
+.fmt-btn:hover{border-color:var(--primary);color:var(--primary)}
+.para{position:relative}
+.para:hover .p-ai{opacity:1}
+.p-ai{position:absolute;right:-12px;top:2px;opacity:0;transition:.15s;display:flex;gap:4px}
+.p-ai button{border:1px solid #D9CCFA;background:#fff;color:var(--ai);border-radius:5px;font-size:11px;padding:2px 7px;cursor:pointer}
+.resp-sum{display:flex;gap:16px;padding:10px 12px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;font-size:12px;margin:12px 0}
+.resp-sum b{font-size:14px}
+.gen-item{border:1px solid var(--border);border-radius:8px;padding:9px 10px;margin-bottom:8px;font-size:12px;background:#fff}
+.gen-item .op{color:var(--ai);font-weight:600}
+.lock-bar{background:var(--warning-bg);border:1px solid #F0D9A6;color:#8A5A06;border-radius:8px;padding:8px 14px;font-size:12px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark">寻</div><div class="name">AI 寻标<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">标书中心</div>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">标书中心 / <a class="link" href="bidprojects.html">投标标的</a> / <b>标书编辑</b></div>
+      <!-- 页头：项目 + 版本 + 主操作 -->
+      <div class="ed-head">
+        <div style="flex:1;min-width:0">
+          <div class="proj">滨海新城智慧校园一体化建设项目（一期）· 投标文件</div>
+          <div class="meta">标书任务 #BS-2026-0813 · 撰写人：王标书 · 截止 2026-08-15 09:30（剩 44 小时）</div>
+        </div>
+        <span class="autosave">● 已自动保存 10:24:30（每 30s）</span>
+        <select class="ver-select"><option>当前版本：v3（编辑中）</option><option>v2 · 08-12 17:40</option><option>v1 · 08-12 09:15 初稿</option></select>
+        <button class="btn sm">⇆ 版本对比</button>
+        <button class="btn sm">⏱ 版本历史</button>
+        <button class="btn sm primary">提交审核</button>
+      </div>
+
+      <!-- 合规检查状态条：标识 + 再次提交 + 导出入口 -->
+      <div class="lock-bar" style="background:var(--danger-bg);border-color:#F3C1BE;color:#8B2C24">
+        <span class="badge badge-no" style="flex-shrink:0">合规检查：未通过</span>
+        <span>最近检查 08-13 16:20 · 真实性红线问题 1 处 · 格式问题 3 处，未处理前禁止导出</span>
+        <span style="margin-left:auto;display:flex;gap:8px">
+          <a class="btn sm" href="check.html" style="background:#fff">⌕ 查看检查报告</a>
+          <a class="btn sm" href="check.html" style="background:#fff">↻ 再次提交合规检查</a>
+          <button class="btn sm" style="opacity:.5;cursor:not-allowed" title="合规检查未通过（真实性红线），禁止导出且不可人工豁免">⇩ 导出标书</button>
+        </span>
+      </div>
+
+      <!-- 响应点遗漏汇总条 -->
+      <div class="miss-bar">⚠ 招标文件要求 23 个响应点，当前 <b>&nbsp;2 项遗漏&nbsp;</b>（3.4 售后服务响应时限、5.2 培训方案），遗漏将直接影响评审得分 <span class="link" style="margin-left:auto;color:var(--danger)">定位到遗漏点 ›</span></div>
+
+      <div class="editor-layout">
+        <!-- 左栏：目录树 + 响应点清单 -->
+        <div class="tree">
+          <div class="grp">📄 投标文件目录</div>
+          <div class="leaf"><span>1 投标函及商务文件</span><span class="st ok"></span></div>
+          <div class="leaf"><span>2 法定资格证明文件</span><span class="st ok"></span></div>
+          <div class="leaf"><span>3 技术方案</span><span class="st ok"></span></div>
+          <div class="leaf" style="padding-left:22px"><span>3.1 总体架构设计</span><span class="st ok"></span></div>
+          <div class="leaf" style="padding-left:22px"><span>3.2 网络与综合布线</span><span class="st ok"></span></div>
+          <div class="leaf active" style="padding-left:22px"><span>3.3 实施进度计划</span><span class="st ok"></span></div>
+          <div class="leaf" style="padding-left:22px"><span>3.4 售后服务方案</span><span class="st miss"></span></div>
+          <div class="leaf"><span>4 商务报价</span><span class="st none"></span></div>
+          <div class="leaf"><span>5 培训与增值服务</span><span class="st miss"></span></div>
+          <div class="legend" style="margin:14px 4px 10px;font-size:11px;color:var(--text-3);display:flex;gap:10px">
+            <span><span class="st ok" style="display:inline-block;vertical-align:middle"></span> 已应答</span>
+            <span><span class="st none" style="display:inline-block;vertical-align:middle"></span> 未开始</span>
+            <span><span class="st miss" style="display:inline-block;vertical-align:middle"></span> 遗漏</span>
+          </div>
+
+          <div class="grp" style="margin-top:6px">🎯 响应点清单对照</div>
+          <div class="resp-sum" style="flex-direction:column;gap:4px">
+            <span>招标要求响应点 <b class="num">23</b> 项</span>
+            <span style="color:var(--success)">已应答 <b class="num">21</b></span>
+            <span style="color:var(--danger)">遗漏 <b class="num">2</b></span>
+          </div>
+          <div class="leaf"><span>R21 实施进度安排</span><span class="st ok"></span></div>
+          <div class="leaf"><span>R22 售后响应时限承诺</span><span class="st miss"></span></div>
+          <div class="leaf"><span>R23 培训方案</span><span class="st miss"></span></div>
+        </div>
+
+        <!-- 中栏：编辑区 -->
+        <div class="doc-area">
+          <div class="doc-toolbar">
+            <button class="fmt-btn"><b>B</b></button>
+            <button class="fmt-btn"><i>I</i></button>
+            <button class="fmt-btn">T̲</button>
+            <span class="toolbar-sep"></span>
+            <button class="fmt-btn">H1</button>
+            <button class="fmt-btn">H2</button>
+            <button class="fmt-btn">☰</button>
+            <button class="fmt-btn">▦</button>
+            <span class="toolbar-sep"></span>
+            <button class="fmt-btn">⤺ 撤销</button>
+            <button class="fmt-btn">⤻ 重做</button>
+            <span style="flex:1"></span>
+            <span class="note">当前章节：3.3 实施进度计划</span>
+          </div>
+          <div class="doc-body">
+            <h2>3.3 实施进度计划</h2>
+            <p>本项目实施周期为 120 个日历天，自合同签订之日起计算。我司将组建由项目经理牵头、12 人组成的专项实施团队，按「深化设计—设备进场—安装调试—试运行—验收交付」五阶段推进，确保在 2026 年寒假前完成全部部署。</p>
+            <p class="para"><span class="ai-mark">针对智慧校园场景的多校区并行施工安排：本项目覆盖滨海新城 6 所学校，我司将采用「样板校先行 + 分批复制」策略，首批选取滨海一中作为样板校，完成全量部署与联调后，其余 5 所学校按每周 2 所的节奏并行推进，关键工序（机房建设、主干网络割接）安排在周末及假期进行，确保不影响正常教学秩序。</span><span class="ai-tag">✦ AI 生成</span>
+              <span class="p-ai"><button>✓ 采纳</button><button>✕ 弃用</button><button>⌕ 查看依据</button></span>
+            </p>
+            <p class="para"><span class="ai-mark">关键里程碑节点：① 合同签订后 15 日内完成深化设计与图纸会审；② 第 45 日完成样板校全部设备安装与单体调试；③ 第 90 日完成全部 6 所学校部署；④ 第 105 日完成系统联调与试运行；⑤ 第 120 日完成初验与交付。</span><span class="ai-tag">✦ AI 生成</span>
+              <span class="p-ai"><button>✓ 采纳</button><button>✕ 弃用</button><button>⌕ 查看依据</button></span>
+            </p>
+            <p>项目团队承诺：所有进场人员均持有有效资格证书，高空作业与电气作业人员 100% 持证上岗；每日提交施工日志，每周召开进度例会并向招标方提交进度报告。</p>
+            <h2 style="color:var(--danger)">3.4 售后服务方案 <span style="font-size:12px;background:var(--danger-bg);border-radius:4px;padding:2px 8px;font-weight:500">响应点 R22 遗漏 · 待补充</span></h2>
+            <p style="color:var(--text-3);border:1px dashed var(--border);border-radius:8px;padding:18px;text-align:center">本章节尚未撰写。招标要求：7×24 小时响应、2 小时到场、备机备件承诺。<br><button class="btn sm primary" style="margin-top:10px">✦ AI 生成整章（基于企业画像 · 售后承诺模板）</button></p>
+          </div>
+        </div>
+
+        <!-- 右栏：AI 助手面板 -->
+        <div class="ai-panel">
+          <h4>✦ AI 助手 <span class="note" style="font-weight:400">生成内容均带依据来源，可逐段采纳/弃用</span></h4>
+          <div class="ai-ops">
+            <div class="ai-op">✎ 整章生成</div>
+            <div class="ai-op">＋ 续写</div>
+            <div class="ai-op">↻ 改写</div>
+            <div class="ai-op">▣ 缩写</div>
+          </div>
+          <div class="note" style="margin-bottom:12px">整章生成将覆盖当前章节内容，操作前会弹出确认窗口，旧版本可在版本历史中找回。</div>
+
+          <div style="margin-bottom:6px;font-size:12px;color:var(--text-2)">生成所用模板</div>
+          <select class="mini" style="margin-bottom:6px"><option>企业模板：智慧校园投标方案模板 v2</option><option>内置模板：信息化集成通用模板</option><option>行业模板：教育行业模板</option></select>
+          <select class="mini" style="margin-bottom:14px"><option>语气风格：正式 · 承诺式</option><option>语气风格：描述式</option></select>
+
+          <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">生成记录（可追溯）</div>
+          <ul class="gen-log">
+            <li><span class="op">整章生成</span> · 3.3 实施进度计划<br><span class="note">10:21 · 王标书 · 依据：招标文件 R21 + 企业业绩「临川三小智慧校园项目」</span></li>
+            <li><span class="op">改写</span> · 3.2 网络设计第 2 段<br><span class="note">09:56 · 王标书 · 已采纳</span></li>
+            <li><span class="op">整章生成</span> · 3.1 总体架构<br><span class="note">昨日 16:40 · 王标书 · 依据：招标要点提取 12 项</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

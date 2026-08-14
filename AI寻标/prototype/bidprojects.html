@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>投标标的 - AI 寻标系统</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="layout">
+  <!-- 左侧导航 -->
+  <aside class="sidebar">
+    <div class="logo"><div class="mark">寻</div><div class="name">AI 寻标<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">标书中心</div>
+        <a class="nav-item active" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">王</div><span>王标书 · 标书撰写</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">标书中心 / <b>投标标的</b></div>
+      <div class="page-title">投标标的 <span class="note">投标决策为「投」后自动创建标书任务 · 标书编辑 / 合规检查 / 导出均从本页发起</span></div>
+
+      <!-- 指标卡 -->
+      <div class="grid g4">
+        <div class="stat"><div class="lbl">撰写中项目</div><div class="val num blue">4</div><div class="sub">其中 2 个临近截止（≤72h）</div></div>
+        <div class="stat"><div class="lbl">合规检查通过</div><div class="val num green">2</div><div class="sub">可安全导出</div></div>
+        <div class="stat"><div class="lbl">合规未通过 / 未提交</div><div class="val num red">2</div><div class="sub">未通过 1 · 未提交 1</div></div>
+        <div class="stat"><div class="lbl">本月导出标书</div><div class="val num green">4</div><div class="sub">较上月 +1 · 见下方导出记录</div></div>
+      </div>
+
+      <!-- 项目列表 -->
+      <div class="card" style="margin-top:16px">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+          <span class="chip on">全部（4）</span>
+          <span class="chip">撰写中（3）</span>
+          <span class="chip">待合规检查（2）</span>
+          <span class="chip">已导出（2）</span>
+          <div style="flex:1"></div>
+          <select class="mini" style="padding:7px 10px"><option>按截止时间排序</option><option>按撰写进度排序</option><option>按合规状态排序</option></select>
+        </div>
+
+        <table class="tbl">
+          <thead>
+            <tr><th>项目 / 标书任务</th><th class="c">匹配分</th><th>截止时间</th><th>撰写进度</th><th>合规检查状态</th><th>最近导出</th><th>操作</th></tr>
+          </thead>
+          <tr>
+            <td><b>滨海新城智慧校园一体化建设项目（一期）</b><div class="note">#BS-2026-0813 · GO 附条件推荐后预建 · 撰写人：王标书 · 响应点 21/23</div></td>
+            <td class="c"><span class="badge badge-high">87</span></td>
+            <td>2026-08-15 09:30<div class="note" style="color:var(--high)">剩 44 小时</div></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:#EEF1F5;border-radius:3px;min-width:70px"><div style="width:62%;height:6px;background:var(--ai);border-radius:3px"></div></div><span class="note">62%</span></div>
+            </td>
+            <td><span class="badge badge-no">未通过</span><div class="note">08-13 16:20 · 真实性 1 · 格式 3</div></td>
+            <td class="c"><span class="note">未导出</span></td>
+            <td>
+              <a class="btn sm primary" href="editor.html">标书编辑</a>
+              <a class="btn sm" href="check.html">合规检查</a>
+              <button class="btn sm" style="opacity:.5;cursor:not-allowed" title="合规检查未通过（真实性红线），禁止导出">导出</button>
+            </td>
+          </tr>
+          <tr>
+            <td><b>区政务服务中心一网通办平台建设项目</b><div class="note">#BS-2026-0810 · 撰写人：王标书 · 响应点 18/18</div></td>
+            <td class="c"><span class="badge badge-high">81</span></td>
+            <td>2026-08-16 14:00<div class="note" style="color:var(--high)">剩 3 天</div></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:#EEF1F5;border-radius:3px;min-width:70px"><div style="width:96%;height:6px;background:var(--ai);border-radius:3px"></div></div><span class="note">96%</span></div>
+            </td>
+            <td><span class="badge badge-ok">已通过</span><div class="note">08-12 15:40 · 0 问题</div></td>
+            <td>08-12 17:05<div class="note">docx · 套红头</div></td>
+            <td>
+              <a class="btn sm primary" href="editor.html">标书编辑</a>
+              <a class="btn sm" href="check.html">查看报告</a>
+              <button class="btn sm" onclick="showToast('导出任务已创建，完成后在下方导出记录查看')">导出</button>
+            </td>
+          </tr>
+          <tr>
+            <td><b>水务集团 SCADA 系统采购项目</b><div class="note">#BS-2026-0805 · 撰写人：李商务 · 响应点 15/15</div></td>
+            <td class="c"><span class="badge badge-mid">71</span></td>
+            <td>2026-08-20 09:30<div class="note" style="color:var(--warning)">更正：开标变更为 08-20</div></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:#EEF1F5;border-radius:3px;min-width:70px"><div style="width:100%;height:6px;background:var(--success);border-radius:3px"></div></div><span class="note">100%</span></div>
+            </td>
+            <td><span class="badge badge-ok">已通过</span><div class="note">08-09 10:20 · 0 问题</div></td>
+            <td>08-09 11:30<div class="note">docx · 企业标准样式</div></td>
+            <td>
+              <a class="btn sm primary" href="editor.html">标书编辑</a>
+              <a class="btn sm" href="check.html">查看报告</a>
+              <button class="btn sm" onclick="showToast('导出任务已创建，完成后在下方导出记录查看')">再次导出</button>
+            </td>
+          </tr>
+          <tr>
+            <td><b>城市轨道交通视频监控系统升级项目</b><div class="note">#BS-2026-0814 · 人工覆盖 NO-GO 建议（理由已记录 F5-4）· 撰写人：王标书 · 响应点 5/28</div></td>
+            <td class="c"><span class="badge badge-mid">66</span></td>
+            <td>2026-08-25 10:00<div class="note">剩 12 天</div></td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:6px;background:#EEF1F5;border-radius:3px;min-width:70px"><div style="width:18%;height:6px;background:var(--ai);border-radius:3px"></div></div><span class="note">18%</span></div>
+            </td>
+            <td><span class="badge badge-warn">未提交</span><div class="note">建议完成度 ≥80% 后提交</div></td>
+            <td class="c"><span class="note">未导出</span></td>
+            <td>
+              <a class="btn sm primary" href="editor.html">标书编辑</a>
+              <a class="btn sm" href="check.html">提交检查</a>
+              <button class="btn sm" style="opacity:.5;cursor:not-allowed" title="未通过合规检查前禁止导出">导出</button>
+            </td>
+          </tr>
+        </table>
+        <div class="note" style="margin-top:10px">导出规则：合规检查通过后方可导出；真实性红线问题未处理时导出按钮禁用且不可人工豁免（产品红线）。</div>
+      </div>
+
+      <!-- 导出记录（原导航“导出记录”能力收敛至此） -->
+      <div class="card" style="margin-bottom:0">
+        <h3>导出记录 <span class="note">只增不改 · 敏感操作留痕（审计日志同步记录）</span> <span class="more">导出前自动执行最终合规校验</span></h3>
+        <table class="tbl">
+          <thead>
+            <tr><th>导出时间</th><th>项目</th><th class="c">格式</th><th>排版样式</th><th class="c">操作人</th><th class="c">校验结果</th><th class="c">操作</th></tr>
+          </thead>
+          <tr>
+            <td>08-12 17:05</td><td>区政务服务中心一网通办平台建设项目</td><td class="c">docx</td><td>招标方模板 · 套红头（F7-6）</td><td class="c">王标书</td><td class="c"><span class="badge badge-ok">通过</span></td><td class="c"><a class="link" onclick="showToast('开始下载：区政务中心投标文件_v4.docx')">下载</a> <a class="link" onclick="showToast('打开导出快照与校验报告')">详情</a></td>
+          </tr>
+          <tr>
+            <td>08-09 11:30</td><td>水务集团 SCADA 系统采购项目</td><td class="c">docx</td><td>企业标准样式 v2</td><td class="c">李商务</td><td class="c"><span class="badge badge-ok">通过</span></td><td class="c"><a class="link" onclick="showToast('开始下载：水务SCADA投标文件_final.docx')">下载</a> <a class="link" onclick="showToast('打开导出快照与校验报告')">详情</a></td>
+          </tr>
+          <tr>
+            <td>08-06 14:20</td><td>市第一人民医院信息化运维服务采购（上期）</td><td class="c">docx</td><td>招标方模板 · 指定页边距</td><td class="c">王标书</td><td class="c"><span class="badge badge-ok">通过</span></td><td class="c"><a class="link" onclick="showToast('开始下载')">下载</a> <a class="link" onclick="showToast('打开导出快照与校验报告')">详情</a></td>
+          </tr>
+          <tr>
+            <td>08-02 10:15</td><td>滨海新城智慧校园一体化建设项目（一期）</td><td class="c">pdf</td><td>预览版（未套红头）</td><td class="c">王标书</td><td class="c"><span class="badge badge-warn">初稿校验</span></td><td class="c"><a class="link" onclick="showToast('开始下载')">下载</a> <a class="link" onclick="showToast('打开导出快照与校验报告')">详情</a></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800);}
+</script>
+</body>
+</html>
