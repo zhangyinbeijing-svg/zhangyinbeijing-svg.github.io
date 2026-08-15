@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>匹配规则库 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+.subtabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
+.subtabs a{padding:10px 18px;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.subtabs a.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.subtabs a:hover{color:var(--primary)}
+.w-row{display:grid;grid-template-columns:150px 1fr 84px 210px;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.w-row:last-child{border-bottom:none}
+.w-row input[type=range]{flex:1;accent-color:var(--primary);height:6px}
+.w-val{border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:13px;text-align:center;width:80px}
+.total-bar{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 16px;border-radius:8px;background:var(--success-bg);border:1px solid #BCE5D2;font-size:13px}
+.total-bar.err{background:var(--danger-bg);border-color:#F0B9B4;color:var(--danger)}
+.thr-box{display:flex;gap:14px;flex-wrap:wrap}
+.thr-item{flex:1;min-width:180px;border:1px solid var(--border);border-radius:10px;padding:14px}
+.thr-item input{border:1px solid var(--border);border-radius:6px;padding:6px 10px;width:80px;font-size:14px;text-align:center}
+.sw-toggle{display:inline-block;width:38px;height:20px;border-radius:999px;background:var(--success);position:relative;vertical-align:middle;cursor:pointer}
+.sw-toggle::after{content:"";position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:#fff}
+.sw-toggle.off{background:#D5DAE3}
+.sw-toggle.off::after{left:2px;right:auto}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item active" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">孙</div><span>孙配置 · 管理员</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">系统管理 / <b>匹配规则库</b></div>
+      <div class="page-title">匹配规则库 <span class="badge badge-mid">当前生效版本 v8 · 2026-08-12 生效</span> <span class="note">规则命中日志全量留存，评分可解释、可追溯</span></div>
+
+      <div class="subtabs">
+        <a href="admin.html">成员与角色</a>
+        <a href="datasources.html">数据源管理</a>
+        <a class="on" href="rules.html">匹配规则库</a>
+        <a href="admin.html#tpl">模板库</a>
+        <a href="admin.html#audit">审计日志</a>
+      </div>
+
+      <!-- 匹配分数线（系统级） -->
+      <div class="card">
+        <h3>匹配分数线（系统级 · 管展示档位与推送优先级）</h3>
+        <div class="thr-box">
+          <div class="thr-item" style="border-color:#F0B9B4">
+            <div style="font-weight:600;color:var(--high)">高匹配（标红 · 推送首档）</div>
+            <div style="margin:8px 0">总分 ≥ <input type="text" value="80"> 分</div>
+            <div class="note">订阅推送置顶/强提醒；推荐发起标书撰写</div>
+          </div>
+          <div class="thr-item">
+            <div style="font-weight:600;color:var(--primary)">中匹配</div>
+            <div style="margin:8px 0"><input type="text" value="60"> – <input type="text" value="79"> 分</div>
+            <div class="note">正常展示；按订阅规则推送</div>
+          </div>
+          <div class="thr-item">
+            <div style="font-weight:600;color:var(--low)">低匹配</div>
+            <div style="margin:8px 0">总分 &lt; <input type="text" value="60"> 分</div>
+            <div class="note">可检索但不主动推送</div>
+          </div>
+        </div>
+        <div class="note" style="margin-top:10px">职责边界：分数线是<b>系统级</b>展示规则；「推荐投标」动作以<b>用户级推荐下限</b>为准（默认 80，60–95 可调，入口在投标建议页），两者冲突时以后者为准。</div>
+      </div>
+
+      <!-- 六维权重 -->
+      <div class="card">
+        <h3>评分维度权重（六维加权 · 合计必须 = 100%）<span class="more">按行业/订阅方向设置独立权重方案 <span class="badge badge-low">P2 规划中</span></span></h3>
+        <div class="w-row">
+          <div><b>资质符合</b><div class="note">资质类别与等级满足度</div></div>
+          <input type="range" min="0" max="60" value="30">
+          <input class="w-val num" type="text" value="30%">
+          <div class="note">初始权重最高：资质是硬性门槛，直接决定废标风险</div>
+        </div>
+        <div class="w-row">
+          <div><b>业绩匹配</b><div class="note">同类项目数量与规模</div></div>
+          <input type="range" min="0" max="60" value="25">
+          <input class="w-val num" type="text" value="25%">
+          <div class="note">评标中业绩分占比通常较高</div>
+        </div>
+        <div class="w-row">
+          <div><b>地域因素</b><div class="note">地域准入与本地化优势</div></div>
+          <input type="range" min="0" max="60" value="15">
+          <input class="w-val num" type="text" value="15%">
+          <div class="note">含备案要求、本地服务半径</div>
+        </div>
+        <div class="w-row">
+          <div><b>商务条件</b><div class="note">保证金 / 付款 / 工期可承受度</div></div>
+          <input type="range" min="0" max="60" value="15">
+          <input class="w-val num" type="text" value="15%">
+          <div class="note">资金占用与条款风险</div>
+        </div>
+        <div class="w-row">
+          <div><b>技术契合</b><div class="note">技术方案能力与主营契合度</div></div>
+          <input type="range" min="0" max="60" value="10">
+          <input class="w-val num" type="text" value="10%">
+          <div class="note">语义评分（V1.1）上线后将提升解释力</div>
+        </div>
+        <div class="w-row">
+          <div><b>竞争态势</b><div class="note">对手活跃度与历史胜率</div></div>
+          <input type="range" min="0" max="60" value="5">
+          <input class="w-val num" type="text" value="5%">
+          <div class="note">初期数据少故权重低，随闭环数据积累逐步调高</div>
+        </div>
+        <div class="total-bar">✓ 权重合计：<b class="num" style="font-size:16px">100%</b> · 校验通过，可保存</div>
+      </div>
+
+      <!-- 硬性条件一票否决 -->
+      <div class="card">
+        <h3>硬性条件一票否决 <span class="note">任一不满足 → 无论总分多高，直接判「不建议投标 / 存在废标风险」，且不得标高匹配</span></h3>
+        <table class="tbl">
+          <thead><tr><th>硬性条件</th><th>核查规则</th><th class="c">启用</th></tr></thead>
+          <tbody>
+            <tr><td>资质门槛</td><td class="note">招标要求的资质类别/等级不在企业画像资质库内（或已过期）</td><td class="c"><span class="sw-toggle"></span></td></tr>
+            <tr><td>业绩数量</td><td class="note">要求「近 N 年同类业绩 ≥ M 个」而画像核验数量不足</td><td class="c"><span class="sw-toggle"></span></td></tr>
+            <tr><td>地域准入</td><td class="note">要求本地注册/本地备案且企业不满足</td><td class="c"><span class="sw-toggle"></span></td></tr>
+            <tr><td>失信记录</td><td class="note">被列入失信名单（对接公开信用数据后启用）</td><td class="c"><span class="sw-toggle off"></span> <span class="badge badge-low" style="font-weight:400">V1.1</span></td></tr>
+          </tbody>
+        </table>
+        <div class="note" style="margin-top:8px">设计目的：防止加权高分掩盖门槛缺陷，导致误推废标项目。</div>
+      </div>
+
+      <!-- 版本历史 -->
+      <div class="card">
+        <h3>权重版本历史 <span class="note">变更版本化留存，支持回滚（对应闭环优化-策略迭代）</span></h3>
+        <table class="tbl">
+          <thead><tr><th>版本</th><th>生效时间</th><th>变更内容</th><th>操作人</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td class="num">v8</td><td>2026-08-12 11:05</td><td>资质 25%→30%，技术 15%→10%</td><td>孙配置</td><td><span class="badge badge-ok">当前生效</span></td><td><span class="note">—</span></td></tr>
+            <tr><td class="num">v7</td><td>2026-07-01 09:00</td><td>初始权重上线（30/25/15/15/10/5 → 后微调为 25/25/15/15/15/5）</td><td>系统初始化</td><td><span class="badge badge-low">历史</span></td><td><span class="link">回滚到此版本</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 保存操作 -->
+      <div class="card" style="display:flex;align-items:center;gap:14px">
+        <button class="btn primary" style="padding:10px 30px">保存权重方案</button>
+        <div class="note">保存需二次确认弹窗：「权重变更将影响<b>后续新触发</b>的匹配计算；存量拟投标的项目可手动或定时重算（规则变更日志中留痕）。是否确认保存？」</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

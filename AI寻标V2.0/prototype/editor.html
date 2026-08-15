@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>标书编辑 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+.ed-head{display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.ed-head .proj{font-size:16px;font-weight:700;line-height:1.5}
+.ed-head .proj .badge{vertical-align:2px;margin-left:6px}
+.ed-head .meta{font-size:12px;color:var(--text-3);margin-top:3px}
+.ed-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ed-divider{width:1px;height:22px;background:var(--border);margin:0 2px}
+.ver-select{border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;background:#fff}
+.autosave{font-size:12px;color:var(--success);display:flex;align-items:center;gap:5px}
+.toolbar-sep{width:1px;height:18px;background:var(--border)}
+.fmt-btn{border:1px solid var(--border);background:#fff;border-radius:6px;min-width:30px;height:28px;padding:0 8px;cursor:pointer;font-size:13px;color:var(--text-2)}
+.fmt-btn:hover{border-color:var(--primary);color:var(--primary)}
+.para{position:relative}
+.para:hover .p-ai{opacity:1}
+.p-ai{position:absolute;right:-12px;top:2px;opacity:0;transition:.15s;display:flex;gap:4px}
+.p-ai button{border:1px solid #D9CCFA;background:#fff;color:var(--ai);border-radius:5px;font-size:11px;padding:2px 7px;cursor:pointer}
+.resp-sum{display:flex;gap:16px;padding:10px 12px;background:#FAFBFC;border:1px solid var(--border);border-radius:8px;font-size:12px;margin:12px 0}
+.resp-sum b{font-size:14px}
+.gen-item{border:1px solid var(--border);border-radius:8px;padding:9px 10px;margin-bottom:8px;font-size:12px;background:#fff}
+.gen-item .op{color:var(--ai);font-weight:600}
+.lock-bar{background:var(--warning-bg);border:1px solid #F0D9A6;color:#8A5A06;border-radius:8px;padding:8px 14px;font-size:12px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+/* 投标时间线弹层 */
+.modal-mask{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:60;align-items:flex-start;justify-content:center;padding:60px 16px}
+.modal-mask.open{display:flex}
+.modal{background:#fff;border-radius:12px;width:100%;max-width:560px;box-shadow:0 18px 50px rgba(15,23,42,.22)}
+.modal-head{display:flex;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid var(--border)}
+.modal-head .t{font-size:16px;font-weight:700;flex:1}
+.modal-head .x{border:none;background:none;font-size:18px;color:var(--text-2);cursor:pointer}
+.modal-body{padding:18px 22px}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+.tl-wrap{position:relative;padding-left:24px;margin-top:6px}
+.tl-wrap::before{content:"";position:absolute;left:6px;top:6px;bottom:12px;width:2px;background:var(--border)}
+.tl-it{position:relative;padding-bottom:16px}
+.tl-it:last-child{padding-bottom:2px}
+.tl-dot{position:absolute;left:-24px;top:2px;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--text-3)}
+.tl-it.sys .tl-dot{border-color:var(--ai)}
+.tl-it.usr .tl-dot{border-color:var(--primary)}
+.tl-it.ok .tl-dot{border-color:var(--success)}
+.tl-it.no .tl-dot{border-color:var(--danger)}
+.tl-it.cur .tl-dot{border-color:var(--warning);box-shadow:0 0 0 4px rgba(245,159,11,.18)}
+.tl-meta{font-size:12px;color:var(--text-3);margin-bottom:2px}
+.tl-it .tt{font-size:13px;font-weight:600}
+.tl-note{font-size:12px;color:var(--text-3);margin-top:2px;line-height:1.5}
+.tl-tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:6px;margin-left:6px;vertical-align:1px}
+.tl-tag.u{background:var(--primary-bg);color:var(--primary)}
+.tl-tag.s{background:#F1EEFF;color:var(--ai)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">招标信息 / <a class="link" href="bidprojects.html">投标标的</a> / <b>标书编辑</b></div>
+      <!-- 页头：左标题区（项目 + 状态 + 元信息）/ 右操作区（版本 + 时间线 + 主操作） -->
+      <div class="ed-head">
+        <div style="flex:1;min-width:300px">
+          <div class="proj" id="pName">滨海新城智慧校园一体化建设项目（一期）· 投标文件 <span class="badge badge-mid">撰写中</span></div>
+          <div class="meta" id="pMeta">标书任务 #BS-2026-0813 · 撰写人：王标书 · 截止 2026-08-15 09:30（剩 44 小时）</div>
+        </div>
+        <div class="ed-tools">
+          <span class="autosave">● 已自动保存 10:24:30（每 30s）</span>
+          <span class="ed-divider"></span>
+          <select class="ver-select"><option>当前版本：v3（编辑中）</option><option>v2 · 08-12 17:40</option><option>v1 · 08-12 09:15 初稿</option></select>
+          <button class="btn sm">⇆ 版本对比</button>
+          <button class="btn sm">⏱ 版本历史</button>
+          <button class="btn sm" onclick="openTL()" title="查看本标的完整历史轨迹">⏱ 投标时间线</button>
+          <span class="ed-divider"></span>
+          <span id="pActs" style="display:inline-flex;align-items:center;gap:8px">
+            <button class="btn sm primary" onclick="showToast('已提交审核：将通知合规审查人')">提交审核</button>
+            <button class="btn sm primary" style="opacity:.55" title="合规检查未通过（真实性红线）· 处理后方可确认投标" onclick="showToast('合规检查未通过（真实性红线），处理后方可确认投标')">✔ 确认投标</button>
+          </span>
+        </div>
+      </div>
+
+      <!-- 合规检查状态条：按标的动态渲染（bh 红/未通过；qz、sw、dsj、xl 绿/已通过；gj 黄/未提交） -->
+      <div id="checkBar">
+      <div class="lock-bar" style="background:var(--danger-bg);border-color:#F3C1BE;color:#8B2C24">
+        <span class="badge badge-no" style="flex-shrink:0">合规检查：未通过</span>
+        <span>最近检查 08-13 16:20 · 真实性红线问题 1 处 · 格式问题 3 处，未处理前禁止导出与确认投标</span>
+        <span style="margin-left:auto;display:flex;gap:8px">
+          <a class="btn sm" href="check.html" style="background:#fff">⌕ 查看检查报告</a>
+          <a class="btn sm" href="check.html" style="background:#fff">↻ 再次提交合规检查</a>
+          <button class="btn sm" style="opacity:.5;cursor:not-allowed" title="合规检查未通过（真实性红线），禁止导出且不可人工豁免" onclick="showToast('真实性红线未处理，导出禁用且不可人工豁免')">⇩ 导出标书</button>
+        </span>
+      </div>
+      </div>
+
+      <!-- 响应点状态条：按标的动态渲染 -->
+      <div id="missBar">
+      <div class="miss-bar">⚠ 招标文件要求 23 个响应点，当前 <b>&nbsp;2 项遗漏&nbsp;</b>（3.4 售后服务响应时限、5.2 培训方案），遗漏将直接影响评审得分 <span class="link" style="margin-left:auto;color:var(--danger)">定位到遗漏点 ›</span></div>
+      </div>
+
+      <div class="editor-layout">
+        <!-- 左栏：目录树 + 响应点清单 -->
+        <div class="tree">
+          <div class="grp">📄 投标文件目录</div>
+          <div class="leaf"><span>1 投标函及商务文件</span><span class="st ok"></span></div>
+          <div class="leaf"><span>2 法定资格证明文件</span><span class="st ok"></span></div>
+          <div class="leaf"><span>3 技术方案</span><span class="st ok"></span></div>
+          <div class="leaf" style="padding-left:22px"><span>3.1 总体架构设计</span><span class="st ok"></span></div>
+          <div class="leaf" style="padding-left:22px"><span>3.2 网络与综合布线</span><span class="st ok"></span></div>
+          <div class="leaf active" style="padding-left:22px"><span>3.3 实施进度计划</span><span class="st ok"></span></div>
+          <div class="leaf" style="padding-left:22px"><span>3.4 售后服务方案</span><span class="st miss"></span></div>
+          <div class="leaf"><span>4 商务报价</span><span class="st none"></span></div>
+          <div class="leaf"><span>5 培训与增值服务</span><span class="st miss"></span></div>
+          <div class="legend" style="margin:14px 4px 10px;font-size:11px;color:var(--text-3);display:flex;gap:10px">
+            <span><span class="st ok" style="display:inline-block;vertical-align:middle"></span> 已应答</span>
+            <span><span class="st none" style="display:inline-block;vertical-align:middle"></span> 未开始</span>
+            <span><span class="st miss" style="display:inline-block;vertical-align:middle"></span> 遗漏</span>
+          </div>
+
+          <div class="grp" style="margin-top:6px">🎯 响应点清单对照</div>
+          <div class="resp-sum" style="flex-direction:column;gap:4px" id="respSum">
+            <span>招标要求响应点 <b class="num">23</b> 项</span>
+            <span style="color:var(--success)">已应答 <b class="num">21</b></span>
+            <span style="color:var(--danger)">遗漏 <b class="num">2</b></span>
+          </div>
+          <div class="leaf"><span>R21 实施进度安排</span><span class="st ok"></span></div>
+          <div class="leaf"><span>R22 售后响应时限承诺</span><span class="st miss"></span></div>
+          <div class="leaf"><span>R23 培训方案</span><span class="st miss"></span></div>
+        </div>
+
+        <!-- 中栏：编辑区 -->
+        <div class="doc-area">
+          <div class="doc-toolbar">
+            <button class="fmt-btn"><b>B</b></button>
+            <button class="fmt-btn"><i>I</i></button>
+            <button class="fmt-btn">T̲</button>
+            <span class="toolbar-sep"></span>
+            <button class="fmt-btn">H1</button>
+            <button class="fmt-btn">H2</button>
+            <button class="fmt-btn">☰</button>
+            <button class="fmt-btn">▦</button>
+            <span class="toolbar-sep"></span>
+            <button class="fmt-btn">⤺ 撤销</button>
+            <button class="fmt-btn">⤻ 重做</button>
+            <span style="flex:1"></span>
+            <span class="note">当前章节：3.3 实施进度计划</span>
+          </div>
+          <div class="doc-body">
+            <h2>3.3 实施进度计划</h2>
+            <p>本项目实施周期为 120 个日历天，自合同签订之日起计算。我司将组建由项目经理牵头、12 人组成的专项实施团队，按「深化设计—设备进场—安装调试—试运行—验收交付」五阶段推进，确保在 2026 年寒假前完成全部部署。</p>
+            <p class="para"><span class="ai-mark">针对智慧校园场景的多校区并行施工安排：本项目覆盖滨海新城 6 所学校，我司将采用「样板校先行 + 分批复制」策略，首批选取滨海一中作为样板校，完成全量部署与联调后，其余 5 所学校按每周 2 所的节奏并行推进，关键工序（机房建设、主干网络割接）安排在周末及假期进行，确保不影响正常教学秩序。</span><span class="ai-tag">✦ AI 生成</span>
+              <span class="p-ai"><button>✓ 采纳</button><button>✕ 弃用</button><button>⌕ 查看依据</button></span>
+            </p>
+            <p class="para"><span class="ai-mark">关键里程碑节点：① 合同签订后 15 日内完成深化设计与图纸会审；② 第 45 日完成样板校全部设备安装与单体调试；③ 第 90 日完成全部 6 所学校部署；④ 第 105 日完成系统联调与试运行；⑤ 第 120 日完成初验与交付。</span><span class="ai-tag">✦ AI 生成</span>
+              <span class="p-ai"><button>✓ 采纳</button><button>✕ 弃用</button><button>⌕ 查看依据</button></span>
+            </p>
+            <p>项目团队承诺：所有进场人员均持有有效资格证书，高空作业与电气作业人员 100% 持证上岗；每日提交施工日志，每周召开进度例会并向招标方提交进度报告。</p>
+            <h2 style="color:var(--danger)">3.4 售后服务方案 <span style="font-size:12px;background:var(--danger-bg);border-radius:4px;padding:2px 8px;font-weight:500">响应点 R22 遗漏 · 待补充</span></h2>
+            <p style="color:var(--text-3);border:1px dashed var(--border);border-radius:8px;padding:18px;text-align:center">本章节尚未撰写。招标要求：7×24 小时响应、2 小时到场、备机备件承诺。<br><button class="btn sm primary" style="margin-top:10px">✦ AI 生成整章（基于企业画像 · 售后承诺模板）</button></p>
+          </div>
+        </div>
+
+        <!-- 右栏：AI 助手面板 -->
+        <div class="ai-panel">
+          <h4>✦ AI 助手 <span class="note" style="font-weight:400">生成内容均带依据来源，可逐段采纳/弃用</span></h4>
+          <div class="ai-ops">
+            <div class="ai-op">✎ 整章生成</div>
+            <div class="ai-op">＋ 续写</div>
+            <div class="ai-op">↻ 改写</div>
+            <div class="ai-op">▣ 缩写</div>
+          </div>
+          <div class="note" style="margin-bottom:12px">整章生成将覆盖当前章节内容，操作前会弹出确认窗口，旧版本可在版本历史中找回。</div>
+
+          <div style="margin-bottom:6px;font-size:12px;color:var(--text-2)">生成所用模板</div>
+          <select class="mini" style="margin-bottom:6px" id="tplSel"><option>企业模板：智慧校园投标方案模板 v2</option><option>内置模板：信息化集成通用模板</option><option>行业模板：教育行业模板</option></select>
+          <select class="mini" style="margin-bottom:14px"><option>语气风格：正式 · 承诺式</option><option>语气风格：描述式</option></select>
+
+          <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">生成记录（可追溯）</div>
+          <ul class="gen-log">
+            <li><span class="op">整章生成</span> · 3.3 实施进度计划<br><span class="note">10:21 · 王标书 · 依据：招标文件 R21 + 企业业绩「临川三小智慧校园项目」</span></li>
+            <li><span class="op">改写</span> · 3.2 网络设计第 2 段<br><span class="note">09:56 · 王标书 · 已采纳</span></li>
+            <li><span class="op">整章生成</span> · 3.1 总体架构<br><span class="note">昨日 16:40 · 王标书 · 依据：招标要点提取 12 项</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<!-- ===== 投标时间线弹层：本标的全轨迹 ===== -->
+<div class="modal-mask" id="tlModal" onclick="if(event.target===this)closeTL()">
+  <div class="modal">
+    <div class="modal-head">
+      <span style="font-size:18px">⏱</span>
+      <div class="t">投标时间线 <span class="note" style="font-weight:400" id="tlName">· 滨海新城智慧校园一体化建设项目（一期）</span></div>
+      <button class="x" onclick="closeTL()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="note" style="margin-bottom:10px" id="tlMeta">公告编号 BHZB-2026-0812 · 标书任务 #BS-2026-0813 · 系统事件自动记录，人工操作记录到人</div>
+      <div style="max-height:52vh;overflow:auto" id="tlBody">
+        <div class="tl-wrap">
+          <div class="tl-it sys"><span class="tl-dot"></span><div class="tl-meta">2026-08-12 09:12 · 系统 <span class="tl-tag s">自动留痕</span></div><div class="tt">公告采集入库</div><div class="tl-note">来源：滨海公共资源交易中心 · L1 官方数据源</div></div>
+          <div class="tl-it sys"><span class="tl-dot"></span><div class="tl-meta">2026-08-12 09:15 · 系统 <span class="tl-tag s">自动留痕</span></div><div class="tt">订阅命中并推送</div><div class="tl-note">命中订阅「智慧校园方向」· 消息中心 + 邮件</div></div>
+          <div class="tl-it sys"><span class="tl-dot"></span><div class="tl-meta">2026-08-12 09:20 · 系统 <span class="tl-tag s">自动留痕</span></div><div class="tt">匹配计算完成</div><div class="tl-note">87 分（高度匹配）· 推荐决策 GO 附条件（3 项前提条件）</div></div>
+          <div class="tl-it usr"><span class="tl-dot"></span><div class="tl-meta">2026-08-12 09:40 · 李商务 <span class="tl-tag u">人工操作</span></div><div class="tt">加入拟投标的</div><div class="tl-note">来源：推送消息 #M-0812-031</div></div>
+          <div class="tl-it usr"><span class="tl-dot"></span><div class="tl-meta">2026-08-12 10:30 · 李商务 <span class="tl-tag u">人工操作</span></div><div class="tt">查看投标建议</div><div class="tl-note">GO 附条件 · 前提条件已逐项确认 · 决定投标</div></div>
+          <div class="tl-it sys"><span class="tl-dot"></span><div class="tl-meta">2026-08-12 14:00 · 系统 <span class="tl-tag s">自动留痕</span></div><div class="tt">标书任务创建</div><div class="tl-note">#BS-2026-0813 · 撰写人：王标书</div></div>
+          <div class="tl-it usr"><span class="tl-dot"></span><div class="tl-meta">2026-08-13 10:24 · 王标书 <span class="tl-tag u">人工操作</span></div><div class="tt">标书撰写中 62%</div><div class="tl-note">AI 生成 ×3 已采纳 · 响应点 21/23</div></div>
+          <div class="tl-it no"><span class="tl-dot"></span><div class="tl-meta">2026-08-13 16:20 · 系统 <span class="tl-tag s">自动留痕</span></div><div class="tt">合规检查未通过</div><div class="tl-note">真实性红线 ×1 · 格式 ×3 · 导出与确认投标已阻断</div></div>
+          <div class="tl-it cur"><span class="tl-dot"></span><div class="tl-meta">当前 · —</div><div class="tt">撰写中 · 待红线处理</div><div class="tl-note">红线处理 → 确认投标 → 08-15 09:30 开标</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeTL()">关闭</button>
+      <button class="btn primary" onclick="showToast('已导出时间线（PDF · 审计留痕，只增不改）')">导出轨迹</button>
+    </div>
+  </div>
+</div>
+<script>
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(function(){t.style.display='none';},2200);}
+
+/* ===== 标书编辑页按标的参数化：editor.html#bh / #qz / #sw / #gj / #dsj / #xl，默认 bh ===== */
+var PROJ={
+bh:{name:'滨海新城智慧校园一体化建设项目（一期）',task:'#BS-2026-0813',author:'王标书',dl:'截止 2026-08-15 09:30（剩 44 小时）',
+ badge:'<span class="badge badge-mid">撰写中</span>',
+ acts:'<button class="btn sm primary" onclick="showToast(\'已提交审核：将通知合规审查人\')">提交审核</button><button class="btn sm primary" style="opacity:.55" title="合规检查未通过（真实性红线）· 处理后方可确认投标" onclick="showToast(\'合规检查未通过（真实性红线），处理后方可确认投标\')">✔ 确认投标</button>',
+ chk:'<div class="lock-bar" style="background:var(--danger-bg);border-color:#F3C1BE;color:#8B2C24"><span class="badge badge-no" style="flex-shrink:0">合规检查：未通过</span><span>最近检查 08-13 16:20 · 真实性红线问题 1 处 · 格式问题 3 处，未处理前禁止导出与确认投标</span><span style="margin-left:auto;display:flex;gap:8px"><a class="btn sm" href="check.html" style="background:#fff">⌕ 查看检查报告</a><a class="btn sm" href="check.html" style="background:#fff">↻ 再次提交合规检查</a><button class="btn sm" style="opacity:.5;cursor:not-allowed" title="真实性红线未处理，禁止导出且不可人工豁免" onclick="showToast(\'真实性红线未处理，导出禁用且不可人工豁免\')">⇩ 导出标书</button></span></div>',
+ miss:'<div class="miss-bar">⚠ 招标文件要求 23 个响应点，当前 <b>&nbsp;2 项遗漏&nbsp;</b>（3.4 售后服务响应时限、5.2 培训方案），遗漏将直接影响评审得分 <span class="link" style="margin-left:auto;color:var(--danger)">定位到遗漏点 ›</span></div>',
+ respH:'<span>招标要求响应点 <b class="num">23</b> 项</span><span style="color:var(--success)">已应答 <b class="num">21</b></span><span style="color:var(--danger)">遗漏 <b class="num">2</b></span>',
+ tpl:'企业模板：智慧校园投标方案模板 v2',meta:'公告编号 BHZB-2026-0812 · 标书任务 #BS-2026-0813',
+ tl:[['08-12 09:12','系统','公告采集入库','来源：滨海公共资源交易中心 · L1 官方数据源','sys'],
+  ['08-12 09:15','系统','订阅命中并推送','命中订阅「智慧校园方向」· 消息中心 + 邮件','sys'],
+  ['08-12 09:20','系统','匹配计算完成','87 分（高度匹配）· 推荐决策 GO 附条件','sys'],
+  ['08-12 09:40','李商务','加入拟投标的','来源：推送消息 #M-0812-031','usr'],
+  ['08-12 10:30','李商务','查看投标建议','GO 附条件 · 前提条件已逐项确认 · 决定投标','usr'],
+  ['08-12 14:00','系统','标书任务创建','#BS-2026-0813 · 撰写人：王标书','sys'],
+  ['08-13 10:24','王标书','标书撰写中 62%','AI 生成 ×3 已采纳 · 响应点 21/23','usr'],
+  ['08-13 16:20','系统','合规检查未通过','真实性红线 ×1 · 格式 ×3 · 导出与确认投标已阻断','no'],
+  ['当前','—','撰写中 · 待红线处理','红线处理 → 确认投标 → 08-15 09:30 开标','cur']]},
+qz:{name:'区政务服务中心一网通办平台建设项目',task:'#BS-2026-0810',author:'王标书',dl:'截止 2026-08-16 14:00（剩 3 天）· 已投标',
+ badge:'<span class="badge badge-mid">已投标</span>',
+ acts:'<span class="badge badge-mid" style="font-size:12px;padding:6px 10px">已投标 · 待开标</span><span class="note">08-13 09:40 提交 · 开标后请标记结果</span>',
+ chk:'<div class="lock-bar" style="background:var(--success-bg);border-color:#BFE6D2;color:#1D6B47"><span class="badge badge-ok" style="flex-shrink:0">合规检查：已通过</span><span>最近检查 08-12 15:40 · 红线 0 · 格式 0 · 标书已导出（08-12 17:05）并确认投标（08-13 09:40）</span><span style="margin-left:auto;display:flex;gap:8px"><a class="btn sm" href="check.html" style="background:#fff">⌕ 查看检查报告</a><button class="btn sm" style="background:#fff" onclick="showToast(\'重新导出：导出前自动执行最终合规校验\')">⇩ 重新导出</button></span></div>',
+ miss:'<div class="miss-bar" style="background:var(--success-bg);border-color:#BFE6D2;color:#1D6B47">✓ 18 个响应点全部应答，无遗漏，符合提交要求</div>',
+ respH:'<span>招标要求响应点 <b class="num">18</b> 项</span><span style="color:var(--success)">已应答 <b class="num">18</b></span><span style="color:var(--success)">遗漏 <b class="num">0</b></span>',
+ tpl:'企业模板：一网通办平台建设模板 v1',meta:'公告编号 QZZC-2026-0219 · 标书任务 #BS-2026-0810',
+ tl:[['08-08 11:02','系统','公告采集入库','来源：区公共资源交易中心 · L1 官方数据源','sys'],
+  ['08-08 11:20','李商务','加入拟投标的','来源：推送消息','usr'],
+  ['08-08 15:30','李商务','投标决策：GO 已采纳','创建标书任务 #BS-2026-0810','usr'],
+  ['08-10 17:40','王标书','标书撰写完成 100%','响应点 18/18 · AI 生成 ×4 已采纳','usr'],
+  ['08-12 15:40','系统','合规检查通过','红线 0 · 格式 0 · 资质 0','ok'],
+  ['08-12 17:05','王标书','标书导出','docx · 招标方模板套红头 · 校验通过','usr'],
+  ['08-13 09:40','李商务','确认投标','投标文件提交成功 · 状态变更为已投标','ok'],
+  ['当前','—','已投标 · 待开标','08-16 14:00 开标 → 请标记投标结果','cur']]},
+sw:{name:'水务集团 SCADA 系统采购项目',task:'#BS-2026-0805',author:'李商务',dl:'截止 2026-08-20 09:30（更正后剩 7 天）· 已投标',
+ badge:'<span class="badge badge-mid">已投标</span>',
+ acts:'<span class="badge badge-mid" style="font-size:12px;padding:6px 10px">已投标 · 待开标</span><span class="note">08-12 10:00 提交 · 更正后 08-20 开标</span>',
+ chk:'<div class="lock-bar" style="background:var(--success-bg);border-color:#BFE6D2;color:#1D6B47"><span class="badge badge-ok" style="flex-shrink:0">合规检查：已通过</span><span>最近检查 08-09 10:20 · 红线 0 · 格式 0 · 标书已导出定稿（08-09 11:30）并确认投标（08-12 10:00）</span><span style="margin-left:auto;display:flex;gap:8px"><a class="btn sm" href="check.html" style="background:#fff">⌕ 查看检查报告</a><button class="btn sm" style="background:#fff" onclick="showToast(\'重新导出：导出前自动执行最终合规校验\')">⇩ 重新导出</button></span></div>',
+ miss:'<div class="miss-bar" style="background:var(--success-bg);border-color:#BFE6D2;color:#1D6B47">✓ 15 个响应点全部应答，无遗漏，符合提交要求</div>',
+ respH:'<span>招标要求响应点 <b class="num">15</b> 项</span><span style="color:var(--success)">已应答 <b class="num">15</b></span><span style="color:var(--success)">遗漏 <b class="num">0</b></span>',
+ tpl:'企业模板：SCADA 系统投标模板 v1',meta:'公告编号 SWJT-2026-0088 · 标书任务 #BS-2026-0805',
+ tl:[['08-02 09:30','系统','公告采集入库','来源：水务集团采购平台 · L1 官方数据源','sys'],
+  ['08-02 10:15','李商务','加入拟投标的','来源：推送消息','usr'],
+  ['08-03 09:00','李商务','投标决策：人工决定投标','匹配分 71 低于推荐下限 80 · 原因已记录留痕','usr'],
+  ['08-03 09:05','系统','标书任务创建','#BS-2026-0805','sys'],
+  ['08-09 10:20','系统','合规检查通过','红线 0 · 格式 0','ok'],
+  ['08-09 11:30','李商务','标书导出定稿','docx · 企业标准样式 v2','usr'],
+  ['08-11 14:00','系统','更正公告检测','开标时间变更 08-13 → 08-20 · 时间线已重算并通知相关人','sys'],
+  ['08-12 10:00','李商务','确认投标','投标文件提交成功 · 状态变更为已投标','ok'],
+  ['当前','—','已投标 · 待开标','更正后 08-20 09:30 开标 → 请标记投标结果','cur']]},
+gj:{name:'城市轨道交通视频监控系统升级项目',task:'#BS-2026-0814',author:'王标书',dl:'截止 2026-08-25 10:00（剩 12 天）',
+ badge:'<span class="badge badge-mid">撰写中</span>',
+ acts:'<button class="btn sm primary" onclick="showToast(\'已提交审核：将通知合规审查人\')">提交审核</button><button class="btn sm primary" onclick="showToast(\'已确认投标：状态变更为已投标，08-25 10:00 开标\')">✔ 确认投标</button>',
+ chk:'<div class="lock-bar"><span class="badge badge-warn" style="flex-shrink:0">合规检查：未提交</span><span>建议完成度 ≥80% 后提交合规检查；确认投标前须完成检查</span><span style="margin-left:auto;display:flex;gap:8px"><a class="btn sm" href="check.html" style="background:#fff">⇪ 提交合规检查</a><button class="btn sm" style="opacity:.5;cursor:not-allowed;background:#fff" title="请先完成合规检查" onclick="showToast(\'请先完成合规检查，再导出标书\')">⇩ 导出标书</button></span></div>',
+ miss:'<div class="miss-bar" style="background:var(--warning-bg);border-color:#F0D9A6;color:#8A5A06">✎ 完成度 18% · 共 28 个响应点，已应答 5 项，待撰写 23 项 <span class="link" style="margin-left:auto">查看响应点清单 ›</span></div>',
+ respH:'<span>招标要求响应点 <b class="num">28</b> 项</span><span style="color:var(--success)">已应答 <b class="num">5</b></span><span style="color:var(--warning)">待撰写 <b class="num">23</b></span>',
+ tpl:'企业模板：视频监控类投标模板 v1',meta:'公告编号 GDJT-2026-0455 · 标书任务 #BS-2026-0814',
+ tl:[['08-10 16:20','系统','公告采集入库','来源：广州公共资源交易中心 · L1 官方数据源 · 预算未载明','sys'],
+  ['08-10 16:40','系统','匹配计算完成','66 分 · 触发必备否决项 · 推荐决策 NO-GO','sys'],
+  ['08-11 09:30','李商务','加入拟投标的','来源：推送消息','usr'],
+  ['08-11 11:20','李商务','投标决策：人工覆盖 NO-GO','理由已记录 · 强制四问 · 复盘留痕（F5-4）','usr'],
+  ['08-11 11:25','系统','标书任务创建','#BS-2026-0814 · 撰写人：王标书','sys'],
+  ['08-13 09:00','王标书','标书撰写中 18%','响应点 5/28 · 合规检查未提交','usr'],
+  ['当前','—','撰写中 · 可确认投标','确认投标 → 08-25 10:00 开标','cur']]},
+dsj:{name:'区大数据局数据共享交换平台运维项目',task:'#BS-2026-0721',author:'王标书',dl:'开标 2026-07-28 09:30 · 结果 08-05 公示',
+ badge:'<span class="badge badge-ok">已中标</span>',
+ acts:'<span class="badge badge-ok" style="font-size:12px;padding:6px 10px">已中标 · 只读存档</span><span class="note">中标价 168 万 · 可归档至归档标的</span>',
+ chk:'<div class="lock-bar" style="background:var(--success-bg);border-color:#BFE6D2;color:#1D6B47"><span class="badge badge-ok" style="flex-shrink:0">合规检查：已通过</span><span>07-24 11:00 · 红线 0 · 格式 0 · 已中标（08-05 标记，中标价 168 万），标书归档可查</span><span style="margin-left:auto;display:flex;gap:8px"><a class="btn sm" href="check.html" style="background:#fff">⌕ 查看检查报告</a></span></div>',
+ miss:'<div class="miss-bar" style="background:var(--success-bg);border-color:#BFE6D2;color:#1D6B47">✓ 12 个响应点全部应答，无遗漏</div>',
+ respH:'<span>招标要求响应点 <b class="num">12</b> 项</span><span style="color:var(--success)">已应答 <b class="num">12</b></span><span style="color:var(--success)">遗漏 <b class="num">0</b></span>',
+ tpl:'企业模板：运维服务类投标模板 v2',meta:'标书任务 #BS-2026-0721 · 已中标',
+ tl:[['07-10 09:00','系统','公告采集入库','来源：区公共资源交易中心 · L1 官方数据源','sys'],
+  ['07-10 10:30','王标书','加入拟投标的','来源：推送消息','usr'],
+  ['07-11 09:20','李商务','投标决策：GO 已采纳','创建标书任务 #BS-2026-0721','usr'],
+  ['07-24 11:00','系统','合规检查通过','红线 0 · 格式 0','ok'],
+  ['07-25 09:30','王标书','标书导出','docx · 校验通过','usr'],
+  ['07-26 10:00','李商务','确认投标','投标文件提交成功','ok'],
+  ['07-28 09:30','系统','开标','现场开标 · 结果待公示','sys'],
+  ['08-05 10:15','李商务','标记结果：已中标','中标价 168 万 · 中标通知书已上传','ok'],
+  ['当前','—','已中标 · 可归档','归档后进入「历史标的 / 归档标的」','cur']]},
+xl:{name:'高新区雪亮工程三期建设项目',task:'#BS-2026-0708',author:'李商务',dl:'开标 2026-07-20 10:00 · 结果 07-25 公示',
+ badge:'<span class="badge badge-no">未中标</span>',
+ acts:'<span class="badge badge-no" style="font-size:12px;padding:6px 10px">未中标 · 只读存档</span><span class="note">原因：价格竞争力不足 · 可归档至归档标的</span>',
+ chk:'<div class="lock-bar" style="background:var(--success-bg);border-color:#BFE6D2;color:#1D6B47"><span class="badge badge-ok" style="flex-shrink:0">合规检查：已通过</span><span>07-16 09:30 · 红线 0 · 格式 0 · 未中标（07-25 标记，原因：价格竞争力不足），标书归档可查</span><span style="margin-left:auto;display:flex;gap:8px"><a class="btn sm" href="check.html" style="background:#fff">⌕ 查看检查报告</a></span></div>',
+ miss:'<div class="miss-bar" style="background:var(--success-bg);border-color:#BFE6D2;color:#1D6B47">✓ 20 个响应点全部应答，无遗漏</div>',
+ respH:'<span>招标要求响应点 <b class="num">20</b> 项</span><span style="color:var(--success)">已应答 <b class="num">20</b></span><span style="color:var(--success)">遗漏 <b class="num">0</b></span>',
+ tpl:'企业模板：雪亮工程安防模板 v1',meta:'标书任务 #BS-2026-0708 · 未中标',
+ tl:[['07-05 09:30','系统','公告采集入库','来源：高新区公共资源交易中心 · L1 官方数据源','sys'],
+  ['07-05 11:00','李商务','加入拟投标的','来源：推送消息','usr'],
+  ['07-06 14:30','李商务','投标决策：GO 已采纳','创建标书任务 #BS-2026-0708','usr'],
+  ['07-16 09:30','系统','合规检查通过','红线 0 · 格式 0','ok'],
+  ['07-17 15:20','李商务','确认投标','投标文件提交成功','ok'],
+  ['07-20 10:00','系统','开标','现场开标 · 结果待公示','sys'],
+  ['07-25 09:40','李商务','标记结果：未中标','原因：价格竞争力不足 · 已回流失分归因（F5-4）','no'],
+  ['当前','—','未中标 · 可归档','归档后进入「历史标的 / 归档标的」','cur']]}
+};
+var KEY=(location.hash||'#bh').slice(1);var P=PROJ[KEY]||PROJ.bh;
+(function(){
+  document.getElementById('pName').innerHTML=P.name+' · 投标文件 '+P.badge;
+  document.getElementById('pMeta').textContent='标书任务 '+P.task+' · 撰写人：'+P.author+' · '+P.dl;
+  document.getElementById('pActs').innerHTML=P.acts;
+  document.getElementById('checkBar').innerHTML=P.chk;
+  document.getElementById('missBar').innerHTML=P.miss;
+  document.getElementById('respSum').innerHTML=P.respH;
+  document.getElementById('tplSel').options[0].text=P.tpl;
+})();
+function openTL(){var h='<div class="tl-wrap">';
+  for(var i=0;i<P.tl.length;i++){var it=P.tl[i];
+    h+='<div class="tl-it '+it[4]+'"><span class="tl-dot"></span>'
+      +'<div class="tl-meta">'+(it[0]==='当前'?'当前':'2026-'+it[0])+' · '+it[1]+'<span class="tl-tag '+(it[1]==='系统'?'s':'u')+'">'+(it[1]==='系统'?'自动留痕':'人工操作')+'</span></div>'
+      +'<div class="tt">'+it[2]+'</div>'+(it[3]?'<div class="tl-note">'+it[3]+'</div>':'')+'</div>';}
+  h+='</div>';
+  document.getElementById('tlName').textContent='· '+P.name;
+  document.getElementById('tlMeta').textContent=P.meta+' · 共 '+P.tl.length+' 个节点 · 系统事件自动记录，人工操作记录到人';
+  document.getElementById('tlBody').innerHTML=h;
+  document.getElementById('tlModal').classList.add('open');}
+function closeTL(){document.getElementById('tlModal').classList.remove('open');}
+</script>
+</body>
+</html>

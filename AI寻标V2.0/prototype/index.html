@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>工作台 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="layout">
+  <!-- 左侧导航 -->
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item active" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">首页 / <b>工作台</b></div>
+      <div class="page-title">早上好，李商务 <span class="note">2026-08-13 周四 · 今日有 3 个高匹配项目等待决策</span></div>
+
+      <!-- 指标卡 -->
+      <div class="grid g4">
+        <div class="stat"><div class="lbl">今日新增推送</div><div class="val num blue">12</div><div class="sub">来自 4 个订阅</div></div>
+        <div class="stat"><div class="lbl">高匹配项目（≥80）</div><div class="val num red">3</div><div class="sub">待决策 2 · 已决策 1</div></div>
+        <div class="stat"><div class="lbl">待办事项</div><div class="val num orange">5</div><div class="sub">决策 2 · 撰写 2 · 资质到期 1</div></div>
+        <div class="stat"><div class="lbl">本月导出标书</div><div class="val num green">4</div><div class="sub">较上月 +1</div></div>
+      </div>
+
+      <div class="grid g-13" style="margin-top:16px">
+        <!-- 待办清单 -->
+        <div class="card">
+          <h3>待办清单 <span class="more">全部待办 ›</span></h3>
+          <div class="todo-item">
+            <div class="icon-box" style="background:var(--primary-light)">★</div>
+            <div class="t">
+              <div class="n">滨海新城智慧校园一体化建设项目（一期）</div>
+              <div class="m">待投标决策 · 匹配 87 分（高匹配）· 截止还剩 44 小时</div>
+            </div>
+            <span class="badge badge-high">87 高匹配</span>
+            <a class="btn sm primary" href="suggestion.html">去决策</a>
+          </div>
+          <div class="todo-item">
+            <div class="icon-box" style="background:var(--primary-light)">★</div>
+            <div class="t">
+              <div class="n">市第一人民医院信息化运维服务采购</div>
+              <div class="m">待投标决策 · 匹配 92 分（高匹配）· 截止还剩 6 天</div>
+            </div>
+            <span class="badge badge-high">92 高匹配</span>
+            <a class="btn sm primary" href="suggestion.html">去决策</a>
+          </div>
+          <div class="todo-item">
+            <div class="icon-box" style="background:var(--ai-bg)">✎</div>
+            <div class="t">
+              <div class="n">滨海新城智慧校园项目 · 技术标撰写</div>
+              <div class="m">进度 62% · 2 个响应点未应答 · 王标书 编辑中</div>
+            </div>
+            <span class="badge badge-no">2 项遗漏</span>
+            <a class="btn sm" href="editor.html#bh">继续撰写</a>
+          </div>
+          <div class="todo-item">
+            <div class="icon-box" style="background:var(--warning-bg)">⏳</div>
+            <div class="t">
+              <div class="n">ISO27001 信息安全认证将于 45 天后到期</div>
+              <div class="m">关联 5 个订阅方向 · 请资料管理员尽快更新证照</div>
+            </div>
+            <span class="badge badge-warn">临期</span>
+            <a class="btn sm">去处理</a>
+          </div>
+        </div>
+
+        <!-- 高匹配 TOP5 -->
+        <div class="card">
+          <h3>高匹配项目 TOP5 <span class="badge badge-high">≥80 分</span></h3>
+          <table class="tbl">
+            <tr><td><a class="link" href="match.html#cond">滨海新城智慧校园一体化（一期）</a><div class="note">预算 1,280 万 · 剩 44h</div></td><td class="c"><span class="badge badge-high">87</span></td></tr>
+            <tr><td><a class="link" href="match.html#go">市第一人民医院信息化运维服务</a><div class="note">预算 860 万 · 剩 6 天</div></td><td class="c"><span class="badge badge-high">92</span></td></tr>
+            <tr><td><a class="link" href="list.html">区政务服务中心一网通办平台建设</a><div class="note">预算 150 万 · 剩 3 天 · 已决定投标</div></td><td class="c"><span class="badge badge-high">81</span></td></tr>
+            <tr><td><a class="link" href="match.html#watch">省政务云平台安全运营服务 <span class="tag">WATCH</span></a><div class="note">预算 2,100 万 · 剩 9 天</div></td><td class="c"><span class="badge badge-mid">74</span></td></tr>
+            <tr><td><a class="link" href="match.html#nogo">城市轨道交通视频监控系统升级</a><div class="note">预算未载明 · 剩 12 天 · NO-GO</div></td><td class="c"><span class="badge badge-mid">66</span></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 订阅动态 -->
+      <div class="card">
+        <h3>订阅动态 <span class="note">入库后 ≤30 分钟触达 · 按订阅分组</span><span class="more"><a class="link" href="list.html#sub">管理订阅 ›</a></span></h3>
+        <div class="push-card">
+          <span class="badge badge-high">87</span>
+          <div style="flex:1"><b>滨海新城智慧校园一体化建设项目（一期）</b> 招标公告 <span class="tag">教育</span> <span class="tag">山东·滨州</span><div class="note">来源：山东省公共资源交易平台 · 采集 26 分钟前 · 订阅「智慧校园方向」</div></div>
+          <span class="time">今日 09:12</span><a class="btn sm" href="match.html">查看匹配</a>
+        </div>
+        <div class="push-card">
+          <span class="badge badge-mid">74</span>
+          <div style="flex:1"><b>省政务云平台安全运营服务采购项目</b> 招标公告 <span class="tag">政务</span><div class="note">来源：省政府采购网 · 采集 1 小时前 · 订阅「安全服务方向」</div></div>
+          <span class="time">今日 08:30</span><a class="btn sm" href="match.html">查看匹配</a>
+        </div>
+        <div class="push-card">
+          <span class="tag correction">更正</span>
+          <div style="flex:1"><b>水务集团 SCADA 系统采购</b> 更正公告：开标时间变更为 08-20 <span class="badge badge-warn">关注变更</span><div class="note">来源：市公共资源交易中心 · 采集 2 小时前 · 已收藏项目</div></div>
+          <span class="time">今日 07:45</span><a class="btn sm">查看变更</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+</body>
+</html>

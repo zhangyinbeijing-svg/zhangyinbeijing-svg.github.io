@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>竞争对手详情 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+.rd-head{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rd-ava{width:52px;height:52px;border-radius:50%;background:#F1EEFF;color:var(--ai);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;flex-shrink:0}
+.rd-head .nm{font-size:17px;font-weight:700}
+.rd-head .mt{font-size:12.5px;color:var(--text-3);margin-top:5px}
+.rd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.rd-grid .stat .v{font-family:Consolas,monospace}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item active" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">张</div><span>张资料 · 资料管理员</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">资产与洞察 / <a class="link" href="profile.html#rival">企业画像 · 竞争对手</a> / <b>竞争对手详情</b></div>
+      <div style="margin-bottom:12px"><a class="link" href="profile.html#rival">‹ 返回竞争对手列表</a></div>
+
+      <!-- 页头 -->
+      <div class="rd-head">
+        <div class="rd-ava" id="rAva">恒</div>
+        <div style="flex:1;min-width:280px">
+          <div class="nm" id="rName">山东恒远智能科技有限公司 <span class="badge badge-mid">自动采集</span></div>
+          <div class="mt" id="rMeta">济南 · 成立 2012 · 注册资本 3,000 万</div>
+          <div style="margin-top:6px" id="rTags"><span class="tag">智慧校园</span> <span class="tag">信息化集成</span></div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn sm" onclick="showToast('打开编辑表单：资质 / 报价风格 / 备注 · 修改后记录操作人')">✎ 补充信息</button>
+          <button class="btn sm" onclick="showToast('已导出竞对画像（PDF · 仅供内部投标策略参考）')">⇩ 导出画像</button>
+        </div>
+      </div>
+
+      <!-- 统计 -->
+      <div class="rd-grid" id="rStats">
+        <div class="stat"><div class="lbl">同场竞标</div><div class="val num blue">4 次</div></div>
+        <div class="stat"><div class="lbl">胜负（本司 : 竞对）</div><div class="val num">2 : 2</div></div>
+        <div class="stat"><div class="lbl">平均报价 / 预算</div><div class="val num">96%</div></div>
+        <div class="stat"><div class="lbl">近 1 年报价趋势</div><div class="val num green">+5%</div></div>
+      </div>
+
+      <!-- 已知资质 -->
+      <div class="card">
+        <h3>基本信息与已知资质 <span class="note">来源：中标公示披露 + 企业信用公示，自动采集字段标注更新时间</span></h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px" id="rQuals"></div>
+      </div>
+
+      <!-- 报价风格与策略参考 -->
+      <div class="card">
+        <h3>报价风格与策略参考 <span class="note">用于投标建议页的竞争维度评估，不参与标书引用</span><span class="more" onclick="showToast('打开备注编辑 · 保存后记录操作人与时间')">✎ 编辑备注</span></h3>
+        <div id="rStyle" style="font-size:13px;line-height:1.9;color:var(--text)"></div>
+      </div>
+
+      <!-- 公开中标轨迹 -->
+      <div class="card">
+        <h3>公开中标轨迹 <span class="note">自动采集自中标 / 成交公告，仅收录可公开核验的记录</span></h3>
+        <table class="tbl">
+          <thead><tr><th>项目名称</th><th class="r">中标金额</th><th>中标日期</th><th>采购人</th><th>信息来源</th></tr></thead>
+          <tbody id="rRecs"></tbody>
+        </table>
+      </div>
+
+      <!-- 与本司交锋记录 -->
+      <div class="card">
+        <h3>与本司交锋记录 <span class="note">开标结果公示后自动聚合，含本司报价与失分要点</span></h3>
+        <table class="tbl">
+          <thead><tr><th>项目名称</th><th>开标时间</th><th class="r">项目预算</th><th>中标方</th><th>过程要点</th></tr></thead>
+          <tbody id="rBattles"></tbody>
+        </table>
+      </div>
+
+      <div class="note" id="rUpd">最近更新：—</div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800);}
+/* ===== 竞争对手详情数据（与 profile.html 列表页一致） ===== */
+var RIVAL={
+ hy:{ava:'恒',name:'山东恒远智能科技有限公司',src:'<span class="badge badge-mid" title="来源：中标公示自动识别">自动采集</span>',
+  meta:'济南 · 成立 2012 · 注册资本 3,000 万 · 主营教育行业信息化集成',
+  tags:'<span class="tag">智慧校园</span> <span class="tag">信息化集成</span>',
+  quals:['信息系统建设和服务能力 CS3','ISO9001 质量管理体系','电子与智能化工程专业承包贰级','安防工程企业能力贰级','高新技术企业（2025 认定）'],
+  style:'报价贴近预算上限（近 1 年平均 96%），偏好教育行业项目，本地交付与驻场服务承诺是其常用得分手段。<b>应对建议</b>：教育类项目交锋时，强化业绩规模与技术方案差异化，避免与其进入纯价格比拼；其近 1 年报价持续走高（+5%），价格分劣势在扩大。',
+  stats:[['同场竞标','4 次','blue'],['胜负（本司 : 竞对）','2 : 2',''],['平均报价 / 预算','96%',''],['近 1 年报价趋势','+5%','green']],
+  recs:[['临川区职业中专智慧校园一期','¥ 512 万','2026-07-18','临川区教育体育局','中标公告'],
+        ['市第七中学多媒体教室设备改造','¥ 186 万','2026-05-30','市第七中学','中标公告'],
+        ['章丘区教育云平台运维服务','¥ 96 万/年','2026-03-11','章丘区教育体育局','成交公告'],
+        ['某县智慧校园试点建设项目','¥ 233 万','2025-12-02','某县教育局','中标公告']],
+  battles:[['临川三小智慧校园建设项目','2025-07','¥ 498 万','华信智能（本司）','本司 486 万 vs 恒远 502 万 · 本司业绩分领先获胜'],
+        ['东方港区安防系统改造项目','2024-11','¥ 218 万','恒远（竞对）','本司 210 万 vs 恒远 205 万 · 价格分惜败'],
+        ['蓝湾中学多功能教室集成项目','2023-08','¥ 105 万','华信智能（本司）','本司 98 万 vs 恒远 102 万'],
+        ['城区智慧校园二期项目','2024-05','¥ 660 万','恒远（竞对）','本司 638 万 vs 恒远 620 万 · 预算贴合度失分']],
+  upd:'最近更新：2026-08-12 · 来源：临川区职业中专中标公告（自动采集）· 共收录中标 6 项 / 交锋 4 场'},
+ hn:{ava:'海',name:'青岛海纳信息系统有限公司',src:'<span class="badge badge-mid" title="来源：中标公示自动识别">自动采集</span>',
+  meta:'青岛 · 成立 2016 · 注册资本 2,000 万 · 主营政务云平台与运维外包',
+  tags:'<span class="tag">政务信息化</span> <span class="tag">运维服务</span>',
+  quals:['信息系统建设和服务能力 CS2','ISO27001 信息安全管理体系','ITSS 信息技术服务标准三级'],
+  style:'低价激进（近 1 年平均 82% 预算），专注政务云与运维外包，近两年与本司交锋 2 次均以价格分取胜，报价仍在走低（-3%）。<b>应对建议</b>：运维类项目交锋时争取技术分与本地响应承诺拉开差距，必要时评估是否触发其低于成本价竞标的异常低价核查条款。',
+  stats:[['同场竞标','2 次','blue'],['胜负（本司 : 竞对）','0 : 2','red'],['平均报价 / 预算','82%',''],['近 1 年报价趋势','-3%','red']],
+  recs:[['市医疗云平台运维服务二期','¥ 88 万/年','2026-02-14','市卫健委','成交公告'],
+        ['高新区政务网络运维服务（2025–2026）','¥ 128 万/年','2025-09-12','高新区大数据局','中标公告'],
+        ['区应急指挥平台运维服务','¥ 64 万/年','2025-06-08','区应急管理局','成交公告'],
+        ['滨海新城数据中心运维外包','¥ 215 万','2024-12-20','滨海新城管委会','中标公告']],
+  battles:[['高新区政务网络运维服务（2025–2026）','2025-09','¥ 135 万/年','海纳（竞对）','本司报价 129 万/年 vs 海纳 112 万/年 · 价格分失分'],
+        ['滨海新城数据中心运维外包','2024-12','¥ 230 万','海纳（竞对）','本司报价 218 万 vs 海纳 190 万 · 价格分失分']],
+  upd:'最近更新：2026-08-09 · 来源：市医疗云平台成交公告（自动采集）· 共收录中标 9 项 / 交锋 2 场'},
+ at:{ava:'安',name:'济南安泰安防工程有限公司',src:'<span class="badge badge-low" title="来源：商务人工录入">手动创建</span>',
+  meta:'济南 · 成立 2018 · 注册资本 1,000 万 · 创建人：李商务（08-11）',
+  tags:'<span class="tag">安防工程</span> <span class="tag">视频监控</span>',
+  quals:['安防工程企业设计施工维护能力壹级','电子与智能化工程专业承包贰级'],
+  style:'本地施工队资源丰富，施工交付能力强，但软件平台开发能力弱。被标记为城市轨道交通视频监控系统升级项目（GDJT-2026-0455）的潜在竞对。<b>跟进建议</b>：关注该项目开标结果公示，若其参与则自动转入「自动采集」持续跟踪；若本司决定投标，技术标突出平台软件与 AI 分析能力以扬长避短。',
+  stats:[['同场竞标','0 次',''],['胜负（暂无交锋）','—',''],['平均报价 / 预算','—',''],['近 1 年报价趋势','—','']],
+  recs:[],battles:[],
+  upd:'最近更新：2026-08-11 · 来源：商务人工录入 · 自动采集命中后将增量补充公开中标与交锋数据'}
+};
+var KEY=(location.hash||'#hy').slice(1);var R=RIVAL[KEY]||RIVAL.hy;
+(function(){
+  document.title=R.name+' - 竞争对手详情 - 寻标司南';
+  document.getElementById('rAva').textContent=R.ava;
+  document.getElementById('rName').innerHTML=R.name+' '+R.src;
+  document.getElementById('rMeta').textContent=R.meta;
+  document.getElementById('rTags').innerHTML=R.tags;
+  var s='';for(var i=0;i<R.stats.length;i++){s+='<div class="stat"><div class="lbl">'+R.stats[i][0]+'</div><div class="val num '+(R.stats[i][2]||'')+'">'+R.stats[i][1]+'</div></div>';}
+  document.getElementById('rStats').innerHTML=s;
+  var q='';for(var j=0;j<R.quals.length;j++){q+='<span class="tag" style="padding:6px 14px">'+R.quals[j]+'</span>';}
+  document.getElementById('rQuals').innerHTML=q||'<span class="note">暂无已知资质 · 可点击「补充信息」手动录入</span>';
+  document.getElementById('rStyle').innerHTML=R.style;
+  var rc='';for(var k=0;k<R.recs.length;k++){var r=R.recs[k];rc+='<tr><td>'+r[0]+'</td><td class="r num">'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td><span class="badge badge-mid">'+r[4]+'</span></td></tr>';}
+  document.getElementById('rRecs').innerHTML=rc||'<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:26px">尚未采集到该企业参与的中标公告 · 自动采集命中后将自动补充</td></tr>';
+  var bt='';for(var m=0;m<R.battles.length;m++){var b=R.battles[m];var win=b[3].indexOf('本司')>-1;bt+='<tr><td>'+b[0]+'</td><td>'+b[1]+'</td><td class="r num">'+b[2]+'</td><td><span class="badge '+(win?'badge-ok':'badge-no')+'">'+b[3]+'</span></td><td class="note" style="font-size:12px">'+b[4]+'</td></tr>';}
+  document.getElementById('rBattles').innerHTML=bt||'<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:26px">暂无与本司同场竞标记录 · 开标结果公示命中后自动聚合</td></tr>';
+  document.getElementById('rUpd').textContent=R.upd;
+})();
+</script>
+</body>
+</html>

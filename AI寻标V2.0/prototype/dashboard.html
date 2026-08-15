@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>数据看板 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+.caliber{font-size:11px;color:var(--warning);background:var(--warning-bg);border-radius:5px;padding:2px 8px;display:inline-block;margin-top:6px}
+.legend-row{display:flex;gap:18px;font-size:12px;color:var(--text-2);margin-bottom:6px}
+.bar-row{display:grid;grid-template-columns:130px 1fr 44px;gap:10px;align-items:center;margin-bottom:12px;font-size:13px}
+.bar-track{background:var(--low-bg);border-radius:6px;height:18px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#70AFCF,var(--primary))}
+.drill{font-size:12px;color:var(--primary);cursor:pointer}
+.subtabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
+.subtabs a{padding:10px 18px;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.subtabs a.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.subtabs a:hover{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item active" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <!-- 子页签 -->
+      <div class="subtabs">
+        <a class="on" href="dashboard.html">闭环效果看板</a>
+        <a href="collectboard.html">数据采集看板</a>
+      </div>
+
+      <div class="crumb">资产与洞察 / 数据看板 / <b>闭环效果看板</b></div>
+      <div class="page-title">闭环看板 <select class="mini" style="width:150px"><option>统计周期：近 6 个月</option><option>近 3 个月</option><option>本年度</option></select> <span class="note">决策与投标结果数据回流，反向优化匹配与推荐策略</span></div>
+
+      <!-- 指标卡 -->
+      <div class="grid g4">
+        <div class="stat">
+          <div class="lbl">推荐率（建议采纳率）</div>
+          <div class="val num blue">71%</div>
+          <span class="caliber">口径：超推荐下限项目被采纳数 / 推荐总数 · 当期下限 = 80（8 月 1 日起由 75 调整）</span>
+        </div>
+        <div class="stat">
+          <div class="lbl">中标率</div>
+          <div class="val num green">38%</div>
+          <div class="sub">采纳项目中实际中标比例 · 近 6 个月</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">采纳项目数</div>
+          <div class="val num">17</div>
+          <div class="sub">超下限推荐 24 个 · 决策为投 17 个 <span class="drill">查看明细 ›</span></div>
+        </div>
+        <div class="stat">
+          <div class="lbl">平均匹配分</div>
+          <div class="val num">76.4</div>
+          <div class="sub">中标项目平均 84.2 · 未中标 71.5 <span class="drill">查看明细 ›</span></div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-top:16px">
+        <!-- 趋势图 -->
+        <div class="card">
+          <h3>推荐率 / 中标率 月度趋势 <span class="note">点击数据点可下钻当月项目明细</span></h3>
+          <div class="legend-row"><span><span class="sw" style="background:var(--primary)"></span> 推荐率（%）</span><span><span class="sw" style="background:var(--success)"></span> 中标率（%）</span><span style="color:var(--warning)">▮ 8 月起推荐下限调整为 80</span></div>
+          <svg width="100%" height="230" viewBox="0 0 580 230">
+            <line x1="40" y1="20" x2="40" y2="180" stroke="#E5E9F0"/><line x1="40" y1="180" x2="560" y2="180" stroke="#E5E9F0"/>
+            <line x1="40" y1="100" x2="560" y2="100" stroke="#F0F2F6" stroke-dasharray="3 4"/><line x1="40" y1="60" x2="560" y2="60" stroke="#F0F2F6" stroke-dasharray="3 4"/><line x1="40" y1="140" x2="560" y2="140" stroke="#F0F2F6" stroke-dasharray="3 4"/>
+            <text x="14" y="184" font-size="10" fill="#8A94A6">0</text><text x="14" y="104" font-size="10" fill="#8A94A6">50</text><text x="10" y="26" font-size="10" fill="#8A94A6">100</text>
+            <!-- 推荐率 52 58 55 63 68 71 -->
+            <polyline points="80,96.8 170,87.2 260,92 350,79.2 440,71.2 530,66.4" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+            <g fill="var(--primary)"><circle cx="80" cy="96.8" r="3.5"/><circle cx="170" cy="87.2" r="3.5"/><circle cx="260" cy="92" r="3.5"/><circle cx="350" cy="79.2" r="3.5"/><circle cx="440" cy="71.2" r="3.5"/><circle cx="530" cy="66.4" r="3.5"/></g>
+            <!-- 中标率 20 25 22 30 33 38 -->
+            <polyline points="80,148 170,140 260,144.8 350,132 440,127.2 530,119.2" fill="none" stroke="var(--success)" stroke-width="2.5"/>
+            <g fill="var(--success)"><circle cx="80" cy="148" r="3.5"/><circle cx="170" cy="140" r="3.5"/><circle cx="260" cy="144.8" r="3.5"/><circle cx="350" cy="132" r="3.5"/><circle cx="440" cy="127.2" r="3.5"/><circle cx="530" cy="119.2" r="3.5"/></g>
+            <!-- 推荐下限调整分界 -->
+            <line x1="485" y1="20" x2="485" y2="180" stroke="var(--warning)" stroke-dasharray="4 4"/>
+            <text x="440" y="200" font-size="10" fill="#8A94A6">3月</text><text x="130" y="200" font-size="10" fill="#8A94A6">4月</text><text x="220" y="200" font-size="10" fill="#8A94A6">5月</text><text x="310" y="200" font-size="10" fill="#8A94A6">6月</text><text x="400" y="200" font-size="10" fill="#8A94A6">7月</text><text x="490" y="200" font-size="10" fill="#8A94A6">8月</text>
+            <text x="70" y="88" font-size="10" fill="var(--primary)" font-weight="bold">52</text><text x="536" y="60" font-size="10" fill="var(--primary)" font-weight="bold">71</text>
+            <text x="536" y="133" font-size="10" fill="var(--success)" font-weight="bold">38</text>
+          </svg>
+        </div>
+
+        <!-- 失分归因 -->
+        <div class="card">
+          <h3>失分归因 · 未中标项目（7 个） <span class="note">基于评标反馈登记与复盘</span></h3>
+          <div class="bar-row"><span>技术方案深度不足</span><div class="bar-track"><div class="bar-fill" style="width:70%"></div></div><span class="num">28%</span></div>
+          <div class="bar-row"><span>报价竞争力弱</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:linear-gradient(90deg,#F8B557,var(--warning))"></div></div><span class="num">24%</span></div>
+          <div class="bar-row"><span>同类业绩数量差距</span><div class="bar-track"><div class="bar-fill" style="width:45%;background:linear-gradient(90deg,#F8B557,var(--warning))"></div></div><span class="num">18%</span></div>
+          <div class="bar-row"><span>响应点遗漏/偏差</span><div class="bar-track"><div class="bar-fill" style="width:30%;background:var(--low)"></div></div><span class="num">12%</span></div>
+          <div class="bar-row"><span>格式/编制不规范</span><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--low)"></div></div><span class="num">8%</span></div>
+          <div class="bar-row"><span>其他（地域分等）</span><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--low)"></div></div><span class="num">10%</span></div>
+          <div class="note" style="margin-top:6px">归因结论已反哺策略：建议调高「技术方案」生成模板深度，并在编辑页强化响应点遗漏检查。</div>
+        </div>
+      </div>
+
+      <!-- 对手对比 -->
+      <div class="card">
+        <h3>主要竞争对手对比 <span class="badge badge-warn" style="font-weight:400">参考性数据 · 来自公开中标公告</span> <span class="more">近 12 个月 · 同类项目</span></h3>
+        <table class="tbl">
+          <thead><tr><th>竞争对手</th><th class="c">同场竞争次数</th><th class="c">其中标次数</th><th class="c">对我方胜率</th><th>报价区间（预算占比）</th><th>活跃区域</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>云帆智能科技</td><td class="c num">5</td><td class="c num">3</td><td class="c"><span class="badge badge-no">60%</span></td><td class="num">88% – 94%</td><td>青岛 · 潍坊</td><td><span class="link">查看对手档案</span></td></tr>
+            <tr><td>海蓝信息技术</td><td class="c num">4</td><td class="c num">1</td><td class="c"><span class="badge badge-warn">25%</span></td><td class="num">85% – 90%</td><td>青岛 · 烟台</td><td><span class="link">查看对手档案</span></td></tr>
+            <tr><td>拓普智能系统</td><td class="c num">3</td><td class="c num">1</td><td class="c"><span class="badge badge-warn">33%</span></td><td class="num">90% – 96%</td><td>济南 · 青岛</td><td><span class="link">查看对手档案</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

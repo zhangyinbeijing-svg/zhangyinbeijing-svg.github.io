@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>数据采集看板 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+.subtabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
+.subtabs a{padding:10px 18px;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.subtabs a.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.subtabs a:hover{color:var(--primary)}
+.caliber{font-size:11px;color:var(--warning);background:var(--warning-bg);border-radius:5px;padding:2px 8px;display:inline-block;margin-top:6px}
+.bar-row{display:grid;grid-template-columns:180px 1fr 90px;gap:10px;align-items:center;margin-bottom:12px;font-size:13px}
+.bar-track{background:var(--low-bg);border-radius:6px;height:18px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#70AFCF,var(--primary))}
+.legend-row{display:flex;gap:18px;font-size:12px;color:var(--text-2);margin-bottom:6px}
+.persp{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.persp span{font-size:12px;color:var(--text-2);background:#F4F6FC;border:1px solid var(--border);border-radius:999px;padding:5px 14px}
+.persp b{color:var(--primary)}
+.funnel{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+.f-step{flex:1;min-width:120px;background:#F7F9FC;border:1px solid var(--border);border-radius:10px;padding:12px 10px;text-align:center;position:relative;margin-right:22px}
+.f-step:last-child{margin-right:0}
+.f-step::after{content:"›";position:absolute;right:-17px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--low)}
+.f-step:last-child::after{content:""}
+.f-step .v{font-size:20px;font-weight:700;font-family:var(--font-num,inherit)}
+.f-step .l{font-size:12px;color:var(--text-2);margin-top:2px}
+.f-step .r{font-size:11px;color:var(--success);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item active" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">周</div><span>周管理 · 租户管理员</span></div>
+    </header>
+
+    <div class="content">
+      <!-- 子页签 -->
+      <div class="subtabs">
+        <a href="dashboard.html">闭环效果看板</a>
+        <a class="on" href="collectboard.html">数据采集看板</a>
+      </div>
+
+      <div class="crumb">资产与洞察 / 数据看板 / <b>数据采集看板</b></div>
+      <div class="page-title">数据采集看板 <select class="mini" style="width:150px"><option>统计周期：本月</option><option>近 3 个月</option><option>近 6 个月</option><option>本年度</option></select> <span class="note">企业领导视角：看数据资产的规模、时效、价值转化、成本与风险</span></div>
+
+      <!-- 领导五问 -->
+      <div class="persp">
+        <span>① <b>家底多厚</b>：数据资产规模与增长</span>
+        <span>② <b>快不快</b>：信息时效决定抢标先机</span>
+        <span>③ <b>有没有用</b>：采集数据向投标与中标的转化</span>
+        <span>④ <b>钱花得值吗</b>：商业数据源成本效能</span>
+        <span>⑤ <b>有没有风险</b>：覆盖盲区与合规健康度</span>
+      </div>
+
+      <!-- 核心指标卡 -->
+      <div class="grid g4">
+        <div class="stat">
+          <div class="lbl">数据资产规模（累计入库）</div>
+          <div class="val num blue">12,480</div>
+          <div class="sub">本月新增 1,908 · 环比 <span style="color:var(--success)">+12.4%</span></div>
+        </div>
+        <div class="stat">
+          <div class="lbl">时效 SLA 达标率</div>
+          <div class="val num green">98.6%</div>
+          <div class="sub">L1 99.2% · L2 98.1% · L3 96.5% <span style="color:var(--warning)">1 源轻微超标</span></div>
+        </div>
+        <div class="stat">
+          <div class="lbl">采集成功率（日均）</div>
+          <div class="val num green">99.4%</div>
+          <div class="sub">目标 ≥99% · 异常源 1（央企平台 97.8%）</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">高匹配线索贡献（本月）</div>
+          <div class="val num orange">6</div>
+          <div class="sub">订阅命中 156 → 超推荐下限 6 → 已决策 4</div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-top:16px">
+        <!-- 入库量趋势 -->
+        <div class="card">
+          <h3>月度入库量趋势 <span class="note">去重后口径 · 点击月份可下钻来源构成</span></h3>
+          <div class="legend-row"><span><span class="sw" style="background:var(--primary)"></span> 入库项目数（条）</span></div>
+          <svg width="100%" height="230" viewBox="0 0 580 230">
+            <line x1="40" y1="20" x2="40" y2="180" stroke="#E5E9F0"/><line x1="40" y1="180" x2="560" y2="180" stroke="#E5E9F0"/>
+            <line x1="40" y1="140" x2="560" y2="140" stroke="#F0F2F6" stroke-dasharray="3 4"/><line x1="40" y1="100" x2="560" y2="100" stroke="#F0F2F6" stroke-dasharray="3 4"/><line x1="40" y1="60" x2="560" y2="60" stroke="#F0F2F6" stroke-dasharray="3 4"/><line x1="40" y1="20" x2="560" y2="20" stroke="#F0F2F6" stroke-dasharray="3 4"/>
+            <text x="8" y="184" font-size="10" fill="#8A94A6">0</text><text x="2" y="144" font-size="10" fill="#8A94A6">500</text><text x="2" y="104" font-size="10" fill="#8A94A6">1000</text><text x="2" y="64" font-size="10" fill="#8A94A6">1500</text><text x="2" y="24" font-size="10" fill="#8A94A6">2000</text>
+            <!-- 1250 1380 1460 1610 1702 1908 -->
+            <polyline points="80,80 170,69.6 260,63.2 350,51.2 440,43.8 530,27.4" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+            <g fill="var(--primary)"><circle cx="80" cy="80" r="3.5"/><circle cx="170" cy="69.6" r="3.5"/><circle cx="260" cy="63.2" r="3.5"/><circle cx="350" cy="51.2" r="3.5"/><circle cx="440" cy="43.8" r="3.5"/><circle cx="530" cy="27.4" r="3.5"/></g>
+            <text x="70" y="72" font-size="10" fill="var(--primary)" font-weight="bold">1250</text><text x="500" y="20" font-size="10" fill="var(--primary)" font-weight="bold">1908</text>
+            <text x="70" y="200" font-size="10" fill="#8A94A6">3月</text><text x="160" y="200" font-size="10" fill="#8A94A6">4月</text><text x="250" y="200" font-size="10" fill="#8A94A6">5月</text><text x="340" y="200" font-size="10" fill="#8A94A6">6月</text><text x="430" y="200" font-size="10" fill="#8A94A6">7月</text><text x="520" y="200" font-size="10" fill="#8A94A6">8月</text>
+          </svg>
+          <div class="note">连续 6 个月正增长；8 月增量主要来自省级平台扩面与千里马 API 长尾补充。</div>
+        </div>
+
+        <!-- 来源贡献占比 -->
+        <div class="card">
+          <h3>数据源贡献占比（本月入库） <span class="note">通道 A 占 91.8% · 通道 B 占 8.2%</span></h3>
+          <div class="bar-row"><span>中国政府采购网</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="num">486 · 25.5%</span></div>
+          <div class="bar-row"><span>全国公共资源交易平台</span><div class="bar-track"><div class="bar-fill" style="width:85%"></div></div><span class="num">412 · 21.6%</span></div>
+          <div class="bar-row"><span>省公共资源交易平台</span><div class="bar-track"><div class="bar-fill" style="width:61%"></div></div><span class="num">298 · 15.6%</span></div>
+          <div class="bar-row"><span>地市级交易平台集群</span><div class="bar-track"><div class="bar-fill" style="width:54%"></div></div><span class="num">262 · 13.7%</span></div>
+          <div class="bar-row"><span>中国招标投标公共服务平台</span><div class="bar-track"><div class="bar-fill" style="width:36%"></div></div><span class="num">174 · 9.1%</span></div>
+          <div class="bar-row"><span>千里马招标大数据 API</span><div class="bar-track"><div class="bar-fill" style="width:32%;background:linear-gradient(90deg,#9C86FF,var(--ai))"></div></div><span class="num">156 · 8.2%</span></div>
+          <div class="bar-row"><span>央企采购平台（4 家）</span><div class="bar-track"><div class="bar-fill" style="width:17%;background:linear-gradient(90deg,#F8B557,var(--warning))"></div></div><span class="num">84 · 4.4%</span></div>
+          <div class="bar-row"><span>金融/代理机构站点</span><div class="bar-track"><div class="bar-fill" style="width:7%;background:var(--low)"></div></div><span class="num">36 · 1.9%</span></div>
+          <div class="note" style="margin-top:6px">紫色为通道 B（商业授权），橙色为时效整改中来源。前两大核心源贡献 47.1%，来源集中度健康（无单一来源依赖 &gt;30%）。</div>
+        </div>
+      </div>
+
+      <!-- 各数据源采集统计（核心表） -->
+      <div class="card">
+        <h3>各数据源采集统计 <span class="note">入库量按「招标编号+项目名称+招标方」跨通道去重 · 点击来源可下钻项目明细</span></h3>
+        <table class="tbl">
+          <thead><tr><th>数据源</th><th class="c">分级</th><th class="c">通道</th><th class="c">本月入库</th><th class="c">去重有效率</th><th class="c">订阅命中</th><th class="c">超下限线索</th><th class="c">时效 P95</th><th class="c">SLA</th><th class="c">成功率</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td><b>中国政府采购网</b></td><td class="c"><span class="badge badge-high" style="font-weight:400">L1</span></td><td class="c">A</td><td class="c num">486</td><td class="c num">82%</td><td class="c num">41</td><td class="c num">2</td><td class="c num">42 分钟</td><td class="c"><span class="badge badge-ok">达标</span></td><td class="c num">99.8%</td><td><span class="badge badge-ok">正常</span></td></tr>
+            <tr><td><b>全国公共资源交易平台</b></td><td class="c"><span class="badge badge-high" style="font-weight:400">L1</span></td><td class="c">A</td><td class="c num">412</td><td class="c num">79%</td><td class="c num">33</td><td class="c num">1</td><td class="c num">55 分钟</td><td class="c"><span class="badge badge-ok">达标</span></td><td class="c num">99.6%</td><td><span class="badge badge-ok">正常</span></td></tr>
+            <tr><td><b>省公共资源交易平台</b></td><td class="c"><span class="badge badge-high" style="font-weight:400">L1</span></td><td class="c">A</td><td class="c num">298</td><td class="c num">85%</td><td class="c num">28</td><td class="c num">2</td><td class="c num">48 分钟</td><td class="c"><span class="badge badge-ok">达标</span></td><td class="c num">99.7%</td><td><span class="badge badge-ok">正常</span></td></tr>
+            <tr><td><b>地市级交易平台集群</b><div class="note">37 个站点</div></td><td class="c"><span class="badge badge-mid" style="font-weight:400">L2</span></td><td class="c">A</td><td class="c num">262</td><td class="c num">74%</td><td class="c num">22</td><td class="c num">1</td><td class="c num">1.6 小时</td><td class="c"><span class="badge badge-ok">达标</span></td><td class="c num">99.1%</td><td><span class="badge badge-ok">正常</span></td></tr>
+            <tr><td><b>中国招标投标公共服务平台</b></td><td class="c"><span class="badge badge-mid" style="font-weight:400">L2</span></td><td class="c">A</td><td class="c num">174</td><td class="c num">71%</td><td class="c num">12</td><td class="c num">0</td><td class="c num">1.8 小时</td><td class="c"><span class="badge badge-ok">达标</span></td><td class="c num">99.3%</td><td><span class="badge badge-ok">正常</span></td></tr>
+            <tr><td><b>千里马招标大数据 API</b><div class="note">合同 QL-2026-088 · 补长尾</div></td><td class="c"><span class="note">—</span></td><td class="c">B</td><td class="c num">156</td><td class="c num">68%</td><td class="c num">14</td><td class="c num">1</td><td class="c num">25 分钟</td><td class="c"><span class="badge badge-ok">达标</span></td><td class="c num">99.9%</td><td><span class="badge badge-ok">正常</span></td></tr>
+            <tr style="background:#FFFBF0"><td><b>央企采购平台</b><div class="note">含国网平台（审查中）</div></td><td class="c"><span class="badge badge-mid" style="font-weight:400">L2</span></td><td class="c">A</td><td class="c num">84</td><td class="c num">77%</td><td class="c num">4</td><td class="c num">0</td><td class="c num" style="color:var(--warning)">2.1 小时</td><td class="c"><span class="badge badge-warn">轻微超标</span></td><td class="c num" style="color:var(--warning)">97.8%</td><td><span class="badge badge-warn">整改中</span></td></tr>
+            <tr><td><b>金融/代理机构站点</b><div class="note">12 个站点</div></td><td class="c"><span class="badge badge-low" style="font-weight:400">L3</span></td><td class="c">A</td><td class="c num">36</td><td class="c num">63%</td><td class="c num">2</td><td class="c num">0</td><td class="c num">9.5 小时</td><td class="c"><span class="badge badge-ok">达标</span></td><td class="c num">99.0%</td><td><span class="badge badge-ok">正常</span></td></tr>
+          </tbody>
+        </table>
+        <span class="caliber">口径：SLA 目标 L1 时效 P95 ≤1h / L2 ≤2h / L3 ≤24h · 采集成功率目标 ≥99% · 超下限线索 = 该来源入库且推荐值超当期推荐下限（80）的项目</span>
+      </div>
+
+      <!-- 数据价值转化漏斗 -->
+      <div class="card">
+        <h3>数据价值转化漏斗（近 6 个月） <span class="note">回答"采回来的数据有没有变成生意"</span></h3>
+        <div class="funnel">
+          <div class="f-step"><div class="v" style="color:var(--primary)">9,310</div><div class="l">入库项目</div><div class="r">采集基盘</div></div>
+          <div class="f-step"><div class="v">7,080</div><div class="l">去重有效</div><div class="r">有效率 76.0%</div></div>
+          <div class="f-step"><div class="v">762</div><div class="l">订阅命中</div><div class="r">命中率 10.8%</div></div>
+          <div class="f-step"><div class="v" style="color:var(--warning)">24</div><div class="l">超推荐下限</div><div class="r">下限 = 80</div></div>
+          <div class="f-step"><div class="v" style="color:var(--ai)">17</div><div class="l">决定投标</div><div class="r">采纳率 70.8%</div></div>
+          <div class="f-step" style="background:#EFFAF4;border-color:#BFE8D2"><div class="v" style="color:var(--success)">6</div><div class="l">中标</div><div class="r">中标金额 2,140 万</div></div>
+        </div>
+        <div class="note" style="margin-top:12px">管理解读：每 1,550 条入库信息转化 1 个中标；订阅命中率是漏斗最窄处，建议优化订阅关键词并评估补充医疗专项源（见覆盖盲区）。</div>
+      </div>
+
+      <div class="grid g2">
+        <!-- 覆盖与盲区 -->
+        <div class="card">
+          <h3>覆盖广度与盲区 <span class="note">回答"信息有没有漏"</span></h3>
+          <div class="bar-row" style="grid-template-columns:120px 1fr 110px"><span>省份覆盖</span><div class="bar-track"><div class="bar-fill" style="width:90%"></div></div><span class="num">28 / 31（90%）</span></div>
+          <div class="bar-row" style="grid-template-columns:120px 1fr 110px"><span>订阅方向覆盖</span><div class="bar-track"><div class="bar-fill" style="width:83%"></div></div><span class="num">5 / 6 个方向</span></div>
+          <div class="bar-row" style="grid-template-columns:120px 1fr 110px"><span>行业覆盖</span><div class="bar-track"><div class="bar-fill" style="width:86%"></div></div><span class="num">教育/政务/安防…</span></div>
+          <div style="border-top:1px dashed var(--border);margin-top:8px;padding-top:12px;font-size:12.5px;line-height:1.9;color:var(--text-2)">
+            <b style="color:var(--warning)">盲区提示：</b><br>
+            · 未覆盖省份：西藏、青海、宁夏（当地招标密度低，暂以千里马 API 兜底）<br>
+            · 「医疗信息化」方向仅依赖 2 个来源，且本月命中项目少于其他方向 60%，建议评估接入医疗专项数据源<br>
+            · 央企采购批次（V1.1）尚有 3 家平台未完成合规审查，预计 9 月补齐
+          </div>
+        </div>
+
+        <!-- 通道 B 成本效能 -->
+        <div class="card">
+          <h3>通道 B 成本效能 <span class="note">回答"商业数据源的钱花得值吗"</span></h3>
+          <div class="grid g2" style="gap:12px">
+            <div class="stat" style="text-align:left"><div class="lbl">月均订阅成本</div><div class="val num" style="font-size:22px">¥ 4,167</div><div class="sub">千里马年约 ¥50,000</div></div>
+            <div class="stat" style="text-align:left"><div class="lbl">独家增量线索</div><div class="val num" style="font-size:22px">42 条/月</div><div class="sub">通道 A 未覆盖的补充线索</div></div>
+            <div class="stat" style="text-align:left"><div class="lbl">单条线索成本</div><div class="val num" style="font-size:22px">¥ 99</div><div class="sub">低于行业自采维护折算成本</div></div>
+            <div class="stat" style="text-align:left"><div class="lbl">中标贡献</div><div class="val num green" style="font-size:22px">1 个</div><div class="sub">近 6 个月经 B 通道线索中标 186 万</div></div>
+          </div>
+          <div class="note" style="margin-top:10px">结论：成本效能良好，建议按期续签（合同 2027-06-19 到期，到期前 60 天系统自动提醒）。对比自研采集器维护长尾站点的人力成本，通道 B 具备正收益。</div>
+        </div>
+      </div>
+
+      <!-- 风险与合规提示 -->
+      <div class="card" style="margin-bottom:0">
+        <h3>风险与合规健康度 <span class="note">回答"有没有隐患"</span></h3>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+          <div style="display:flex;gap:10px;align-items:flex-start"><span class="badge badge-warn" style="flex-shrink:0">整改中</span><span>央企采购平台时效 P95 = 2.1 小时，超出 L2 SLA（≤2h）；已提频整改，预计 08-16 恢复，超 24 小时未恢复将升级告警。</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start"><span class="badge badge-warn" style="flex-shrink:0">审查中</span><span>国网电子商务平台合规审查进行中（08-10 受理），审查通过前该源仅采集不推送，不计入订阅分发。</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start"><span class="badge badge-no" style="flex-shrink:0">已停用</span><span>某招标代理站点（L3）因页面结构改版导致采集失败率超标，已停用重评，由千里马 API 兜底其覆盖区域。</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start"><span class="badge badge-ok" style="flex-shrink:0">合规</span><span>通道 A 六条合规红线月度自检全部通过；全部在用源均已完成法务合规审查并登记授权依据。</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

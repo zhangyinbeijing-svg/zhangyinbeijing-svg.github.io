@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>消息详情 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+.detail-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:18px}
+.detail-head .micon{width:46px;height:46px;border-radius:12px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.detail-head .t{font-size:18px;font-weight:700;color:var(--text);line-height:1.5}
+.detail-head .meta{font-size:12.5px;color:var(--low);margin-top:6px;display:flex;gap:16px;flex-wrap:wrap}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:8px 12px;font-size:13.5px}
+.kv .k{color:var(--low)}
+.kv .v{color:var(--text)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- 左侧导航 -->
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">4</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb"><a class="link" href="messages.html">消息中心</a> / <b>消息详情</b></div>
+
+      <div class="card">
+        <div class="detail-head">
+          <div class="micon">📡</div>
+          <div style="flex:1">
+            <div class="t">【订阅推送】滨海新城智慧校园一体化建设项目（一期）· 匹配 87 分（高匹配）</div>
+            <div class="meta">
+              <span>类型：订阅推送</span><span>送达：今日 09:12（入库后 26 分钟）</span><span>接收人：李商务、王标书</span><span class="badge badge-warn">未读</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <a class="btn sm" href="messages.html">‹ 返回列表</a>
+          </div>
+        </div>
+
+        <!-- 消息正文 -->
+        <div style="border-top:1px solid var(--border);padding-top:18px">
+          <p style="font-size:14px;color:var(--text);line-height:1.9;margin:0 0 16px">
+            您订阅的方向「<b>智慧校园方向</b>」命中新的招标公告，系统已完成入库匹配：匹配得分 <b style="color:var(--high)">87 分（高匹配）</b>，推荐值 <b>86</b>，高于您设置的推荐下限 <b>80</b>，建议尽快进入决策。
+          </p>
+          <div class="kv" style="background:#F7F9FC;border-radius:var(--radius);padding:16px 18px">
+            <div class="k">项目名称</div><div class="v">滨海新城智慧校园一体化建设项目（一期）</div>
+            <div class="k">招标方</div><div class="v">滨海新城教育局</div>
+            <div class="k">信息来源</div><div class="v">山东省公共资源交易平台（L1 核心源 · 通道 A 公开采集）</div>
+            <div class="k">预算金额</div><div class="v">1,280 万元</div>
+            <div class="k">投标截止</div><div class="v" style="color:var(--high);font-weight:600">2026-08-15 09:30（剩余约 44 小时）</div>
+            <div class="k">关键要求</div><div class="v">电子与智能化工程专业承包一级 · 智慧校园类业绩 ≥2 个 · 本地化服务能力</div>
+            <div class="k">匹配摘要</div><div class="v">资质满足（30/30）· 业绩满足（23/25）· 地域临近（13/15）；无硬性条件一票否决项</div>
+          </div>
+        </div>
+
+        <!-- 关联操作 -->
+        <div style="margin-top:20px;padding:16px 18px;background:var(--primary-light);border-radius:var(--radius)">
+          <div style="font-size:13px;font-weight:600;margin-bottom:12px">接下来你可以：</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn primary sm" href="match.html">查看匹配结果</a>
+            <a class="btn primary sm" href="suggestion.html">进入投标决策</a>
+            <button class="btn sm" onclick="showToast('已加入拟投标的')">＋ 加入拟投标的</button>
+            <button class="btn sm" onclick="showToast('已收藏')">☆ 收藏</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 送达与推送渠道 -->
+      <div class="card">
+        <h3>送达记录 <span class="note">站内信 + 邮件双通道 · V1.1 起支持企微推送</span></h3>
+        <table class="tbl">
+          <thead><tr><th>渠道</th><th>接收人</th><th>状态</th><th>时间</th></tr></thead>
+          <tr><td>站内信</td><td>李商务、王标书</td><td><span class="badge badge-warn">未读</span></td><td>今日 09:12</td></tr>
+          <tr><td>邮件</td><td>li.sw@huaxin-tech.cn</td><td><span class="badge badge-ok">已送达</span></td><td>今日 09:12</td></tr>
+          <tr><td>企业微信</td><td>—</td><td><span class="note">V1.1 规划中</span></td><td>—</td></tr>
+        </table>
+      </div>
+
+      <!-- 上一条 / 下一条 -->
+      <div style="display:flex;justify-content:space-between;gap:12px">
+        <a class="btn" href="message-detail.html">‹ 上一条：市第一人民医院信息化运维服务采购</a>
+        <a class="btn" href="message-detail.html">下一条：水务集团 SCADA 系统采购开标时间变更 ›</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800);}
+</script>
+</body>
+</html>

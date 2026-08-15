@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>消息中心 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+.msg-item{display:flex;gap:14px;padding:16px 4px;border-bottom:1px solid var(--border);align-items:flex-start}
+.msg-item:last-child{border-bottom:none}
+.msg-item .micon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.msg-item .mbody{flex:1;min-width:0}
+.msg-item .mt{font-size:14px;font-weight:600;color:var(--text)}
+.msg-item .mt a{color:var(--text);text-decoration:none}
+.msg-item .mt a:hover{color:var(--primary)}
+.msg-item .ms{font-size:12.5px;color:var(--text2);margin-top:4px;line-height:1.6}
+.msg-item.unread .mt::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--high);margin-right:7px;vertical-align:2px}
+.msg-item .mtime{font-size:12px;color:var(--low);white-space:nowrap;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- 左侧导航 -->
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心" style="opacity:.55">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">首页 / <b>消息中心</b></div>
+      <div class="page-title">消息中心 <span class="note">5 条未读 · 订阅推送入库后 ≤30 分钟触达</span> <button class="btn sm" style="float:right" onclick="showToast('已全部标记为已读')">全部标记已读</button></div>
+
+      <!-- 分类页签 -->
+      <div class="card">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px">
+          <span class="chip on">全部（5 未读 / 28）</span>
+          <span class="chip">订阅推送（3）</span>
+          <span class="chip">变更公告（1）</span>
+          <span class="chip">决策提醒（1）</span>
+          <span class="chip">资产提醒（0）</span>
+          <span class="chip">系统通知（0）</span>
+        </div>
+
+        <!-- 消息列表 -->
+        <div class="msg-item unread">
+          <div class="micon" style="background:var(--primary-light)">📡</div>
+          <div class="mbody">
+            <div class="mt"><a href="message-detail.html">【订阅推送】滨海新城智慧校园一体化建设项目（一期）· 匹配 87 分（高匹配）</a></div>
+            <div class="ms">来源：山东省公共资源交易平台 · 订阅「智慧校园方向」命中 · 预算 1,280 万，截止 2026-08-15 09:30（剩 44 小时），建议尽快决策。</div>
+          </div>
+          <div class="mtime">今日 09:12</div>
+          <a class="btn sm" href="message-detail.html">查看</a>
+        </div>
+
+        <div class="msg-item unread">
+          <div class="micon" style="background:var(--primary-light)">📡</div>
+          <div class="mbody">
+            <div class="mt"><a href="message-detail.html">【订阅推送】市第一人民医院信息化运维服务采购 · 匹配 92 分（高匹配）</a></div>
+            <div class="ms">来源：市政府采购网 · 订阅「医疗信息化方向」命中 · 预算 860 万，截止 2026-08-19 10:00。</div>
+          </div>
+          <div class="mtime">昨日 14:26</div>
+          <a class="btn sm" href="message-detail.html">查看</a>
+        </div>
+
+        <div class="msg-item unread">
+          <div class="micon" style="background:var(--warning-bg)">⚠</div>
+          <div class="mbody">
+            <div class="mt"><a href="message-detail.html">【变更公告】水务集团 SCADA 系统采购：开标时间变更</a></div>
+            <div class="ms">已收藏项目发生更正：开标时间由 08-16 变更为 08-20 09:30，投标截止时间同步顺延。请关注对撰写排期的影响。</div>
+          </div>
+          <div class="mtime">今日 07:45</div>
+          <a class="btn sm" href="message-detail.html">查看</a>
+        </div>
+
+        <div class="msg-item unread">
+          <div class="micon" style="background:var(--ai-bg)">★</div>
+          <div class="mbody">
+            <div class="mt"><a href="message-detail.html">【决策提醒】2 个高匹配项目等待投标决策</a></div>
+            <div class="ms">滨海新城智慧校园（87 分，剩 44h）、市第一人民医院（92 分，剩 6 天）已加入拟投标的但尚未决策。超推荐下限项目建议 24 小时内完成决策。</div>
+          </div>
+          <div class="mtime">今日 08:00</div>
+          <a class="btn sm primary" href="planlist.html">去决策</a>
+        </div>
+
+        <div class="msg-item unread">
+          <div class="micon" style="background:var(--primary-light)">📡</div>
+          <div class="mbody">
+            <div class="mt"><a href="message-detail.html">【订阅推送】区政务服务中心一网通办平台建设项目 · 匹配 81 分（高匹配）</a></div>
+            <div class="ms">来源：区公共资源交易中心 · 订阅「政务平台方向」命中 · 预算 150 万，截止 2026-08-16 14:00。</div>
+          </div>
+          <div class="mtime">08-11 10:08</div>
+          <a class="btn sm" href="message-detail.html">查看</a>
+        </div>
+
+        <div class="msg-item">
+          <div class="micon" style="background:var(--warning-bg)">⏳</div>
+          <div class="mbody">
+            <div class="mt">【资产提醒】ISO27001 信息安全认证将于 45 天后到期</div>
+            <div class="ms">该证照关联 5 个订阅方向与 2 个在手拟投标项目，到期未及时续期将影响资质匹配维度得分。已同步提醒资料管理员张资料。</div>
+          </div>
+          <div class="mtime">08-10 09:00</div>
+          <a class="btn sm" href="profile.html">去处理</a>
+        </div>
+
+        <div class="msg-item">
+          <div class="micon" style="background:#EEF1F5">⚙</div>
+          <div class="mbody">
+            <div class="mt">【系统通知】匹配规则库已更新至 v8</div>
+            <div class="ms">管理员孙配置调整了六维权重（技术 10% → 12%，竞争 5% → 3%），已通过二次确认，仅影响后续新触发的匹配计算。</div>
+          </div>
+          <div class="mtime">08-08 17:20</div>
+          <a class="btn sm" href="rules.html">查看规则</a>
+        </div>
+
+        <!-- 分页 -->
+        <div class="pagination">
+          <span class="on">1</span><span>2</span><span>3</span><span>4</span><span>下一页 ›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800);}
+</script>
+</body>
+</html>

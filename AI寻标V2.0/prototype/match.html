@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>匹配结果 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group"><a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a></div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的</a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">资产与洞察</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>企业画像</a>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>数据看板</a>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">招标信息 / <b>匹配结果</b> / <span id="crumbProj">滨海新城智慧校园一体化建设项目（一期）</span></div>
+      <div class="page-title" id="pageTitle">滨海新城智慧校园一体化建设项目（一期）</div>
+
+      <!-- 结论横幅 -->
+      <div class="conclusion ok" id="conclBox">
+        <div style="font-size:34px;font-weight:800" class="num" id="conclScore">87<span style="font-size:14px;color:var(--text-3)">/100</span></div>
+        <div>
+          <div class="big" id="conclBig">匹配总分 87 · 高匹配档（≥80）</div>
+          <div class="desc" id="conclDesc"></div>
+        </div>
+        <div style="margin-left:auto;display:flex;gap:10px">
+          <a class="btn primary" href="suggestion.html" id="sugLink">查看投标建议 ›</a>
+          <button class="btn" onclick="showToast('匹配报告已推送并存档')">推送/存档报告</button>
+        </div>
+      </div>
+
+      <div class="grid g-31">
+        <!-- 逐项判定明细 -->
+        <div class="card">
+          <h3>逐项判定明细 <span class="note">每条判定均链接依据原文，可人工修正（修正留痕）</span></h3>
+          <table class="tbl">
+            <tr><th style="width:34%">项目要求（证据摘录）</th><th class="c" style="width:110px">判定</th><th>企业侧依据</th><th class="c" style="width:80px">操作</th></tr>
+            <tbody id="judgeRows"></tbody>
+          </table>
+        </div>
+
+        <!-- 六维得分 -->
+        <div class="card">
+          <h3>六维得分 <span class="note">权重为当期配置</span></h3>
+          <svg viewBox="0 0 220 236" width="100%">
+            <polygon points="110,30 179.3,70 179.3,150 110,190 40.7,150 40.7,70" fill="none" stroke="#E5E9F0"/>
+            <polygon points="110,50 162,80 162,140 110,170 58,140 58,80" fill="none" stroke="#EDF0F5"/>
+            <polygon points="110,70 144.6,90 144.6,130 110,150 75.4,130 75.4,90" fill="none" stroke="#EDF0F5"/>
+            <polygon points="110,90 127.3,100 127.3,120 110,130 92.7,120 92.7,100" fill="none" stroke="#EDF0F5"/>
+            <polygon id="radarPoly" points="110,35.6 173.7,73.2 160.6,139.2 110,179.6 47.6,146 68.4,86" fill="rgba(59,123,154,.14)" stroke="var(--primary)" stroke-width="2"/>
+            <text id="lblQ" x="110" y="20" text-anchor="middle" font-size="11" fill="#5A6474">资质 28/30</text>
+            <text id="lblP" x="186" y="66" font-size="11" fill="#5A6474">业绩 23/25</text>
+            <text id="lblR" x="186" y="156" font-size="11" fill="#5A6474">地域 11/15</text>
+            <text id="lblS" x="110" y="208" text-anchor="middle" font-size="11" fill="#5A6474">商务 13/15</text>
+            <text id="lblT" x="34" y="156" text-anchor="end" font-size="11" fill="#5A6474">技术 9/10</text>
+            <text id="lblC" x="34" y="66" text-anchor="end" font-size="11" fill="#F59F0B">竞争 3/5</text>
+          </svg>
+          <div style="margin-top:6px" id="dimsList"></div>
+          <div class="note" style="margin-top:10px" id="dimsNote"></div>
+        </div>
+      </div>
+
+      <div class="note" id="footNote">评分说明：规则评分（本期）+ 语义评分（V1.1）；匹配计算耗时 18s；本报告含 0 处人工修正。</div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2000);}
+function row(req,judge,base){return '<tr><td>'+req+'</td><td class="c">'+judge+'</td><td>'+base+'</td><td class="c"><span class="link" onclick="showToast(\'打开修正弹窗：修改判定 + 填写理由，保存后重算并留痕\')">修正</span></td></tr>';}
+function ev(s){return '<div class="evidence">'+s+'</div>';}
+function ai(t){return '<span class="ai-tag" onclick="showToast(\'依据：'+t+'\')">◆ 依据</span>';}
+function dim(name,w,score,cls){return '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);padding:5px 0;border-bottom:1px dashed var(--border)"><span>'+name+'（权重 '+w+'）</span><b class="num"'+(cls?' style="color:'+cls+'"':'')+'>'+score+'</b></div>';}
+
+const PROFILES = {
+  /* ========== GO：市第一人民医院信息化运维服务采购 ========== */
+  go: {
+    name:'市第一人民医院信息化运维服务采购',
+    badge:'<span class="badge badge-high">92 高匹配</span>',
+    calc:'计算于 2026-08-13 10:05 · 规则版本 v2026.08 · 权重为当期配置',
+    concl:'ok', score:'92',
+    big:'匹配总分 92 · 高匹配档（≥80）',
+    desc:'硬性条件核查：<b style="color:var(--success)">6 项满足</b> · 0 项待确认 · 0 项不满足（无一票否决项）· 推荐决策 <b style="color:var(--success)">GO 建议投标</b>',
+    rows:[
+      row('<b>具备 ISO20000 IT 服务管理体系认证</b>'+ev('公告 3.2 条："投标人须具备有效期内的 ISO20000 认证证书"'),'<span class="judge-ok">✓ 满足</span>','ISO20000 证书（有效期至 2027-05-20）'+ai('企业画像 · 资质证照 · ISO20000')),
+      row('<b>具备 ISO27001 信息安全管理体系认证</b>'+ev('公告 3.3 条："…须具备 ISO27001 认证证书"'),'<span class="judge-ok">✓ 满足</span><div class="note" style="color:var(--warning)">临期 45 天</div>','ISO27001 证书（2026-09-27 到期，远晚于投标截止）'+ai('企业画像 · 资质证照')),
+      row('<b>近 3 年医疗/政务信息化运维业绩 ≥3 个</b>'+ev('公告 3.4 条："提供 2023 年以来同类运维项目合同复印件不少于 3 份"'),'<span class="judge-ok">✓ 满足</span>','命中 4 个业绩：市妇幼保健院运维（320 万/2025）、区政务中心运维（210 万/2024）、市疾控中心巡检（96 万/2024）等'+ai('企业画像 · 业绩案例 · 4 条记录')),
+      row('<b>项目团队：ITSS 服务经理证书 ≥1 人</b>'+ev('公告 4.2 条："拟派项目经理须持有 ITSS 服务经理证书"'),'<span class="judge-ok">✓ 满足</span>','2 人持有 ITSS 服务经理证书（王标书 / 赵运维）'+ai('企业画像 · 团队人员')),
+      row('<b>注册资本 ≥500 万元</b>'+ev('公告 3.1 条："投标人注册资本不低于 500 万元人民币"'),'<span class="judge-ok">✓ 满足</span>','注册资本 5,000 万元（营业执照）'+ai('企业画像 · 基本信息')),
+      row('<b>投标保证金 43 万元（预算 5%）</b>'+ev('公告 5.1 条："投标保证金人民币肆拾叁万元整"'),'<span class="judge-ok">✓ 满足</span>','财务能力评估：可承受（历史最高缴纳 50 万）'+ai('企业画像 · 基本信息 · 财务字段'))
+    ],
+    poly:'110,32.6 176.5,71.6 179.3,150 110,174 47.6,146 68.4,86',
+    labels:[['资质 29/30','#5A6474'],['业绩 24/25','#5A6474'],['地域 15/15','#5A6474'],['商务 12/15','#5A6474'],['技术 9/10','#5A6474'],['竞争 3/5','#F59F0B']],
+    dims:[dim('资质证照','30%','29 分'),dim('业绩案例','25%','24 分'),dim('地域/覆盖','15%','15 分','var(--success)'),dim('商务/财务','15%','12 分'),dim('技术能力','10%','9 分'),dim('竞争态势','5%','3 分')],
+    note:'失分提示：商务维度因付款 90→60 天账期仍偏长扣 3 分；存量服务商海蓝信息构成主要竞争压力；本地化（同城）满分。',
+    foot:'评分说明：规则评分（本期）+ 语义评分（V1.1）；匹配计算耗时 14s；本报告含 0 处人工修正。'
+  },
+  /* ========== GO 附条件：滨海新城智慧校园一体化建设项目（一期） ========== */
+  cond: {
+    name:'滨海新城智慧校园一体化建设项目（一期）',
+    badge:'<span class="badge badge-high">87 高匹配</span>',
+    calc:'计算于 2026-08-13 09:40 · 规则版本 v2026.08 · 权重为当期配置',
+    concl:'ok', score:'87',
+    big:'匹配总分 87 · 高匹配档（≥80）',
+    desc:'硬性条件核查：<b style="color:var(--success)">5 项满足</b> · <b style="color:var(--warning)">1 项待人工确认</b> · 0 项不满足（无一票否决项）· 推荐决策 <b style="color:var(--primary)">GO 附条件 · 建议投标</b>',
+    rows:[
+      row('<b>信息系统建设和服务能力等级 CS2 及以上</b>'+ev('公告 3.2 条："投标人须具备信息系统建设和服务能力等级 CS2 及以上…"'),'<span class="judge-ok">✓ 满足</span>','CS3 证书（有效期至 2028-06-12）'+ai('企业画像 · 资质证照 · CS3 证书')),
+      row('<b>近 3 年同类智慧校园项目业绩 ≥3 个</b>'+ev('公告 3.4 条："提供 2023 年 1 月以来同类项目合同复印件不少于 3 份…"'),'<span class="judge-ok">✓ 满足</span>','命中 3 个业绩：滨州某中学智慧校园（980 万/2024）、开发区教育云平台（650 万/2024）、县教体局 OA 集成（210 万/2023）'+ai('企业画像 · 业绩案例 · 3 条记录')),
+      row('<b>具备 ISO27001 信息安全管理体系认证</b>'+ev('公告 3.5 条："…须具备有效期内的 ISO27001 认证证书"'),'<span class="judge-ok">✓ 满足</span><div class="note" style="color:var(--warning)">临期 45 天</div>','ISO27001 证书（2026-09-27 到期）'+ai('企业画像 · 资质证照')),
+      row('<b>注册资本 ≥1,000 万元</b>'+ev('公告 3.1 条："投标人注册资本不低于 1000 万元人民币"'),'<span class="judge-ok">✓ 满足</span>','注册资本 5,000 万元（营业执照）'+ai('企业画像 · 基本信息')),
+      row('<b>投标保证金 20 万元（预算 1.56%）</b>'+ev('公告 5.1 条："投标保证金人民币贰拾万元整…"'),'<span class="judge-ok">✓ 满足</span>','财务能力评估：可承受（历史最高缴纳 50 万）'+ai('企业画像 · 基本信息 · 财务字段')),
+      row('<b>本地化服务团队驻场（滨海市内 2 小时内响应）</b>'+ev('公告 6.3 条："中标人须在滨海市设有服务机构或承诺 2 小时内到场…"'),'<span class="judge-q">? 待确认</span>','<span style="color:var(--warning)">画像中未发现滨州分支机构记录；可走"承诺函"方式响应，需人工判断</span>'+ai('企业画像 · 未命中 + 公告条款语义分析'))
+    ],
+    poly:'110,35.6 173.7,73.2 160.6,139.2 110,179.6 47.6,146 68.4,86',
+    labels:[['资质 28/30','#5A6474'],['业绩 23/25','#5A6474'],['地域 11/15','#F59F0B'],['商务 13/15','#5A6474'],['技术 9/10','#5A6474'],['竞争 3/5','#F59F0B']],
+    dims:[dim('资质证照','30%','28 分'),dim('业绩案例','25%','23 分'),dim('地域/覆盖','15%','11 分','var(--warning)'),dim('商务/财务','15%','13 分'),dim('技术能力','10%','9 分'),dim('竞争态势','5%','3 分')],
+    note:'失分提示：地域维度因无滨州驻点扣 4 分；竞争态势数据积累中。',
+    foot:'评分说明：规则评分（本期）+ 语义评分（V1.1）；匹配计算耗时 18s；本报告含 0 处人工修正。'
+  },
+  /* ========== WATCH：省政务云平台安全运营服务采购项目 ========== */
+  watch: {
+    name:'省政务云平台安全运营服务采购项目',
+    badge:'<span class="badge badge-mid">74 中匹配</span>',
+    calc:'计算于 2026-08-13 11:20 · 规则版本 v2026.08 · 权重为当期配置',
+    concl:'warn', score:'74',
+    big:'匹配总分 74 · 中匹配档（60–79）· 低于推荐下限 80',
+    desc:'硬性条件核查：<b style="color:var(--success)">4 项满足</b> · <b style="color:var(--warning)">1 项待确认（资质补正受理中）</b> · <b style="color:var(--danger)">1 项不满足（加分项，非否决）</b> · 推荐决策 <b style="color:#B97708">WATCH 建议观望</b>',
+    rows:[
+      row('<b>信息系统安全运维服务资质一级</b>'+ev('公告 3.2 条："投标人须具备信息安全服务资质（安全运维类）一级，提供受理回执视同有效"'),'<span class="judge-q">? 待确认</span>','<span style="color:var(--warning)">我司资质补正申请已受理（预计 08-25 出证）；需按公告要求附受理回执 + 承诺函</span>'+ai('企业画像 · 资质证照 · 补正受理回执')),
+      row('<b>近 3 年省级及以上政务平台安全运营业绩 ≥2 个</b>'+ev('公告 3.4 条："提供省级及以上政务平台安全运维合同及验收证明"'),'<span class="judge-ok">✓ 满足</span>','踩线命中 2 个：省交通平台安全运维（150 万/2024）、市政务云安全巡检（80 万/2025）'+ai('企业画像 · 业绩案例 · 2 条记录')),
+      row('<b>驻场安全团队 ≥5 人（含 CISAW 认证）</b>'+ev('公告 4.1 条："驻场服务人员不少于 5 人，其中 ≥2 人持有 CISAW 证书"'),'<span class="judge-ok">✓ 满足</span>','在册安全人员 8 人，3 人持 CISAW'+ai('企业画像 · 团队人员')),
+      row('<b>具备 ISO27001 认证</b>'+ev('公告 3.3 条'),'<span class="judge-ok">✓ 满足</span>','ISO27001 证书（2026-09-27 到期）'+ai('企业画像 · 资质证照')),
+      row('<b>投标保证金 210 万元（预算 10%）</b>'+ev('公告 5.1 条："投标保证金人民币贰佰壹拾万元整"'),'<span class="judge-ok">✓ 满足</span><div class="note" style="color:var(--warning)">占用额度高</div>','财务能力评估：可承受，但需提前安排资金'+ai('企业画像 · 基本信息 · 财务字段')),
+      row('<b>省级政务云"专属运营"业绩加分项（+4 分）</b>'+ev('评分办法 4.3 条："具有省级政务云平台专属运营业绩的加 4 分"'),'<span class="judge-no">✗ 不满足</span><div class="note">加分项 · 非否决</div>','<span style="color:var(--danger)">仅 1 个可证明的省级政务云运维业绩，不满足"专属运营"表述</span>'+ai('企业画像 · 业绩案例 · 语义比对'))
+    ],
+    poly:'110,56.7 159.9,81.2 156.2,136.7 110,174 47.6,146 40.7,70',
+    labels:[['资质 20/30','#F59F0B'],['业绩 18/25','#5A6474'],['地域 10/15','#5A6474'],['商务 12/15','#5A6474'],['技术 9/10','#5A6474'],['竞争 5/5','#5A6474']],
+    dims:[dim('资质证照','30%','20 分','var(--warning)'),dim('业绩案例','25%','18 分'),dim('地域/覆盖','15%','10 分'),dim('商务/财务','15%','12 分'),dim('技术能力','10%','9 分'),dim('竞争态势','5%','5 分')],
+    note:'失分提示：资质补正结果未定（资质维扣 10 分）；业绩踩线（业绩维扣 7 分）。若 08-25 前资质出证或公告更正放宽要求，系统将自动重算并重新推送。',
+    foot:'评分说明：规则评分（本期）+ 语义评分（V1.1）；匹配计算耗时 16s；本报告含 0 处人工修正。'
+  },
+  /* ========== NO-GO：城市轨道交通视频监控系统升级项目 ========== */
+  nogo: {
+    name:'城市轨道交通视频监控系统升级项目',
+    badge:'<span class="badge badge-mid">66 中匹配 · 含一票否决</span>',
+    calc:'计算于 2026-08-13 14:02 · 规则版本 v2026.08 · 权重为当期配置',
+    concl:'no', score:'66',
+    big:'匹配总分 66 · 触发一票否决，不得标高匹配',
+    desc:'硬性条件核查：<b style="color:var(--success)">4 项满足</b> · <b style="color:var(--warning)">1 项待确认</b> · <b style="color:var(--danger)">1 项不满足（硬性业绩要求 · 一票否决）</b> · 推荐决策 <b style="color:var(--danger)">NO-GO 建议放弃</b>',
+    rows:[
+      row('<b>近 3 年城市轨道交通视频监控类项目业绩 ≥2 个</b>'+ev('公告 3.3 条："投标人须具有 2023 年以来城市轨道交通视频监控项目业绩不少于 2 个（硬性要求）"'),'<span class="judge-no">✗ 不满足 · 一票否决</span>','<span style="color:var(--danger)">画像中轨道交通行业业绩 0 个；该条为硬性要求，无法通过承诺函补足</span>'+ai('企业画像 · 业绩案例 · 行业标签未命中')),
+      row('<b>预算金额（公告未载明）</b>'+ev('公告首页预算栏缺失 · 字段缺失明示，不参与依赖该字段的匹配计分'),'<span class="judge-q">? 待确认</span>','<span style="color:var(--warning)">价格基准线无法建立，报价决策缺乏依据；已登记字段缺失并等待更正公告</span>'+ai('采集质量登记 · 缺失字段 #F-0455')),
+      row('<b>安防工程企业设计施工维护能力一级</b>'+ev('公告 3.2 条'),'<span class="judge-ok">✓ 满足</span>','安防工程壹级能力证书（2026-11-08 到期）'+ai('企业画像 · 资质证照')),
+      row('<b>具备 ISO27001 认证</b>'+ev('公告 3.5 条'),'<span class="judge-ok">✓ 满足</span>','ISO27001 证书（2026-09-27 到期）'+ai('企业画像 · 资质证照')),
+      row('<b>本地化服务机构（广州市内）</b>'+ev('公告 6.2 条："中标人须在广州市设有服务机构"'),'<span class="judge-q">? 待确认</span>','<span style="color:var(--warning)">无广东分支机构；新设机构成本与本项目收益不匹配</span>'+ai('企业画像 · 分支机构')),
+      row('<b>投标保证金 50 万元</b>'+ev('公告 5.1 条'),'<span class="judge-ok">✓ 满足</span>','财务能力评估：可承受'+ai('企业画像 · 基本信息 · 财务字段'))
+    ],
+    poly:'110,51.3 143.3,90.8 128.5,120.7 110,179.3 40.7,150 40.7,70',
+    labels:[['资质 22/30','#5A6474'],['业绩 12/25','#F59F0B'],['地域 4/15','#D93025'],['商务 13/15','#5A6474'],['技术 10/10','#5A6474'],['竞争 5/5','#5A6474']],
+    dims:[dim('资质证照','30%','22 分'),dim('业绩案例','25%','12 分','var(--warning)'),dim('地域/覆盖','15%','4 分','var(--danger)'),dim('商务/财务','15%','13 分'),dim('技术能力','10%','10 分'),dim('竞争态势','5%','5 分')],
+    note:'失分提示：硬性业绩要求不满足触发一票否决——总分仅作展示，不得进入推荐列表；异地（广东）无驻点，地域维几近清零。建议 NO-GO 归档，待补齐轨道交通行业业绩后再关注同类项目。',
+    foot:'评分说明：一票否决项命中时系统禁止标高匹配（硬性条件一票否决机制，F2-3）；匹配计算耗时 15s；本报告含 0 处人工修正。'
+  }
+};
+
+function apply(key){
+  const p = PROFILES[key] || PROFILES.cond;
+  document.getElementById('crumbProj').textContent = p.name;
+  document.getElementById('pageTitle').innerHTML = p.name + ' ' + p.badge + ' <span class="note">' + p.calc + '</span>';
+  document.getElementById('conclBox').className = 'conclusion ' + p.concl;
+  document.getElementById('conclScore').innerHTML = p.score + '<span style="font-size:14px;color:var(--text-3)">/100</span>';
+  document.getElementById('conclBig').textContent = p.big;
+  document.getElementById('conclDesc').innerHTML = p.desc;
+  document.getElementById('sugLink').href = 'suggestion.html#' + key;
+  document.getElementById('judgeRows').innerHTML = p.rows.join('');
+  document.getElementById('radarPoly').setAttribute('points', p.poly);
+  const ids=['lblQ','lblP','lblR','lblS','lblT','lblC'];
+  p.labels.forEach(function(l,i){const el=document.getElementById(ids[i]);el.textContent=l[0];el.setAttribute('fill',l[1]);});
+  document.getElementById('dimsList').innerHTML = p.dims.join('');
+  document.getElementById('dimsNote').textContent = p.note;
+  document.getElementById('footNote').textContent = p.foot;
+  document.title = '匹配结果 · ' + p.name + ' - 寻标司南';
+}
+apply((location.hash||'#cond').slice(1));
+</script>
+</body>
+</html>
