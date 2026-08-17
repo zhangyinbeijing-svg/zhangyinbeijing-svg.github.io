@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>原型导航 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ===== 聚合页专用样式（无侧边栏，居中布局） ===== */
+  .hub{max-width:1120px;margin:0 auto;padding:36px 32px 60px}
+  .hub-head{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+  .hub-head .mark{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--ai));color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:20px}
+  .hub-head h1{font-size:24px}
+  .hub-head small{display:block;font-size:13px;color:var(--text-3);font-weight:400}
+  .hub-meta{color:var(--text-3);font-size:13px;margin-bottom:26px}
+  .hub-meta b{color:var(--primary);font-weight:600}
+
+  /* 主线流程条 */
+  .mainline{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--text-2)}
+  .mainline .k{font-weight:700;color:var(--text);margin-right:4px}
+  .mainline a{color:var(--primary)}
+  .mainline a:hover{text-decoration:underline}
+  .mainline .arr{color:var(--text-3)}
+
+  .grp{margin-bottom:26px}
+  .grp h2{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .grp h2 .cnt{font-size:12px;color:var(--text-3);font-weight:400}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .p-card{display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:box-shadow .18s,border-color .18s}
+  .p-card:hover{border-color:var(--primary);box-shadow:0 8px 22px rgba(59,123,154,.10)}
+  .p-card .t{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px;margin-bottom:4px}
+  .p-card .t .ico{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+  .p-card .d{font-size:12px;color:var(--text-3);line-height:1.7}
+  .p-card .f{font-size:11px;color:var(--text-3);margin-top:6px;font-family:Consolas,monospace;opacity:.75}
+  .p-card .thumb{width:100%;height:118px;object-fit:cover;object-position:center top;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;background:#F4F6FC;display:block}
+  .p-card:hover .thumb{border-color:var(--primary);box-shadow:0 4px 14px rgba(59,123,154,.14)}
+
+  /* 四档决策演示卡组 */
+  .demo-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .demo-cell{border:1px solid var(--border);border-radius:10px;padding:14px 16px;background:#fff}
+  .demo-cell b{display:block;font-size:13.5px;margin-bottom:2px}
+  .demo-cell .proj{font-size:12px;color:var(--text-3);margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .demo-cell .lnk{display:flex;gap:8px}
+  .demo-cell .lnk a{flex:1;text-align:center;font-size:12px;border:1px solid var(--border);border-radius:6px;padding:5px 0;color:var(--text-2)}
+  .demo-cell .lnk a:hover{border-color:var(--primary);color:var(--primary)}
+  .hub-foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--border);font-size:12px;color:var(--text-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+</style>
+</head>
+<body>
+<div class="hub">
+
+  <!-- 头部 -->
+  <div class="hub-head">
+    <div class="mark"><img src="images/logo.png" alt="寻标司南"></div>
+    <div>
+      <h1>寻标司南 · 高保真原型导航</h1>
+      <small>全部页面聚合入口 · 供设计 / 前端 / 产品评审</small>
+    </div>
+  </div>
+  <div class="hub-meta">共 <b>21 个页面</b> · 预览服务 <b>localhost:8600</b> · 演示日 2026-08-13 · 演示数据以<a href="list.html" style="color:var(--primary)">推送标的页</a>为唯一真相源 · 架构图鉴置顶 · 原型页面见后（PRD V3.0 第十一章）</div>
+
+  <!-- PRD 架构与流程图图鉴 -->
+  <div class="grp">
+    <h2>◈ PRD 架构与流程图图鉴 <span class="cnt">10 图 · 点击放大 · 对应 PRD V3.0 第十一章（11.1-11.6）</span></h2>
+    <div class="cards">
+      <a class="p-card" href="images/技术架构图.png" target="_blank">
+        <img class="thumb" src="images/技术架构图.png" alt="技术架构图" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--primary-light)">⚡</span>技术架构图</div>
+        <div class="d">五层架构（接入/应用/AI 能力/平台服务/数据）+ 横切安全，SaaS 多租户</div>
+        <div class="f">images/技术架构图.png</div>
+      </a>
+      <a class="p-card" href="images/功能架构图.png" target="_blank">
+        <img class="thumb" src="images/功能架构图.png" alt="功能架构图" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--success-bg)">◫</span>功能架构图</div>
+        <div class="d">八大功能域 × 子能力 × 原型页映射，主链路八步闭环</div>
+        <div class="f">images/功能架构图.png</div>
+      </a>
+      <a class="p-card" href="images/数据关系图.png" target="_blank">
+        <img class="thumb" src="images/数据关系图.png" alt="数据关系图 ER" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--warning-bg)">⛃</span>数据关系图（ER）</div>
+        <div class="d">五域 24 核心表，全链路 ID 贯通：公告→项目→决策→标书→归档</div>
+        <div class="f">images/数据关系图.png</div>
+      </a>
+      <a class="p-card" href="images/投标全流程图.png" target="_blank">
+        <img class="thumb" src="images/投标全流程图.png" alt="投标全流程图" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--high-bg)">∞</span>投标全流程图</div>
+        <div class="d">端到端七阶段主链路 + 9 条支路 + 4 条回路（WATCH/合规/闭环回流）</div>
+        <div class="f">images/投标全流程图.png</div>
+      </a>
+      <a class="p-card" href="images/Agent1-数据采集流程图.png" target="_blank">
+        <img class="thumb" src="images/Agent1-数据采集流程图.png" alt="数据采集 Agent 流程图" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--primary-light)">①</span>数据采集 Agent</div>
+        <div class="d">采集→去重→OCR 解析→入库，更正公告监测，时效 SLA ≤30 分钟</div>
+        <div class="f">images/Agent1-数据采集流程图.png</div>
+      </a>
+      <a class="p-card" href="images/Agent2-订阅推送流程图.png" target="_blank">
+        <img class="thumb" src="images/Agent2-订阅推送流程图.png" alt="订阅推送 Agent 流程图" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--success-bg)">②</span>订阅推送 Agent</div>
+        <div class="d">关键词+语义双通道命中，不命中静默丢弃；门槛过滤、考虑中自动入拟投</div>
+        <div class="f">images/Agent2-订阅推送流程图.png</div>
+      </a>
+      <a class="p-card" href="images/Agent3-匹配评分流程图.png" target="_blank">
+        <img class="thumb" src="images/Agent3-匹配评分流程图.png" alt="匹配评分 Agent 流程图" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--warning-bg)">③</span>匹配评分 Agent</div>
+        <div class="d">六维度加权（资质30/业绩25/地域15/商务15/技术10/竞争5）+ 一票否决</div>
+        <div class="f">images/Agent3-匹配评分流程图.png</div>
+      </a>
+      <a class="p-card" href="images/Agent4-投标决策流程图.png" target="_blank">
+        <img class="thumb" src="images/Agent4-投标决策流程图.png" alt="投标决策 Agent 流程图" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--high-bg)">④</span>投标决策 Agent</div>
+        <div class="d">E1-E6 引擎编排 → GO/GO附条件/WATCH/NO-GO 四档 + 11 项一致性校验</div>
+        <div class="f">images/Agent4-投标决策流程图.png</div>
+      </a>
+      <a class="p-card" href="images/Agent5-标书撰写流程图.png" target="_blank">
+        <img class="thumb" src="images/Agent5-标书撰写流程图.png" alt="标书撰写 Agent 流程图" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--ai-bg)">⑤</span>标书撰写 Agent</div>
+        <div class="d">响应点拆解→AI 生成→合规闸口（未过阻断导出）→套红头导出</div>
+        <div class="f">images/Agent5-标书撰写流程图.png</div>
+      </a>
+      <a class="p-card" href="images/Agent6-竞争情报流程图.png" target="_blank">
+        <img class="thumb" src="images/Agent6-竞争情报流程图.png" alt="竞争情报 Agent 流程图" loading="lazy">
+        <div class="t"><span class="ico" style="background:var(--ai-bg)">⑥</span>竞争情报 Agent</div>
+        <div class="d">中标公示 ≤24h 采集，同场竞标聚合交锋，自动建档+手动补充</div>
+        <div class="f">images/Agent6-竞争情报流程图.png</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 主线流程 -->
+  <div class="mainline">
+    <span class="k">演示主线</span>
+    <a href="site.html">官网</a><span class="arr">→</span>
+    <a href="login.html">登录</a><span class="arr">→</span>
+    <a href="index.html">工作台</a><span class="arr">→</span>
+    <a href="list.html">推送标的</a><span class="arr">→</span>
+    <a href="match.html#cond">匹配结果</a><span class="arr">→</span>
+    <a href="suggestion.html#cond">投标建议（四档决策）</a><span class="arr">→</span>
+    <a href="bidprojects.html">投标标的 / 标书</a><span class="arr">→</span>
+    <a href="archive.html">归档标的</a>
+    <span class="note" style="margin-left:auto">决策留痕回流推荐率，形成闭环</span>
+  </div>
+
+  <!-- 入口页 -->
+  <div class="grp">
+    <h2>◈ 入口页 <span class="cnt">2 页 · 不属应用内导航</span></h2>
+    <div class="cards">
+      <a class="p-card" href="site.html">
+        <div class="t"><span class="ico" style="background:var(--primary-light)">🌐</span>产品官网</div>
+        <div class="d">营销页：Hero 四档决策演示卡、核心能力、E1-E6 引擎、五步闭环、安全合规与 CTA</div>
+        <div class="f">site.html</div>
+      </a>
+      <a class="p-card" href="login.html">
+        <div class="t"><span class="ico" style="background:var(--ai-bg)">🔑</span>登录页</div>
+        <div class="d">左品牌区 + 右表单：密码/验证码双 tab、滑块验证、企业微信/钉钉/CA 三方登录</div>
+        <div class="f">login.html</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 工作台 -->
+  <div class="grp">
+    <h2>◈ 工作台 <span class="cnt">1 页</span></h2>
+    <div class="cards">
+      <a class="p-card" href="index.html">
+        <div class="t"><span class="ico" style="background:var(--primary-light)">⌂</span>工作台</div>
+        <div class="d">今日指标卡、待办清单、高匹配 TOP5、截止时间两级提醒（≤72h 橙 / ≤24h 红）</div>
+        <div class="f">index.html</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 招标信息 -->
+  <div class="grp">
+    <h2>◈ 招标信息 <span class="cnt">3 页 · 推送 → 拟投 → 投标执行全流程</span></h2>
+    <div class="cards">
+      <a class="p-card" href="list.html">
+        <div class="t"><span class="ico" style="background:var(--high-bg)">☰</span>推送标的</div>
+        <div class="d">7 行真相数据表：匹配分 + 推荐决策四档徽标 + 更正公告标记，全站数据唯一基准</div>
+        <div class="f">list.html</div>
+      </a>
+      <a class="p-card" href="planlist.html">
+        <div class="t"><span class="ico" style="background:var(--warning-bg)">✚</span>拟投标的</div>
+        <div class="d">决策状态 tab 三分（全部/待决策/持续观察），决定投标后自动流转至投标标的 + 推荐决策列</div>
+        <div class="f">planlist.html</div>
+      </a>
+      <a class="p-card" href="bidprojects.html">
+        <div class="t"><span class="ico" style="background:var(--primary-light)">✎</span>投标标的</div>
+        <div class="d">投标状态四态（撰写中/已投标/已中标/未中标）：确认投标、标记结果（未中标原因必填）与归档</div>
+        <div class="f">bidprojects.html</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 历史标的 -->
+  <div class="grp">
+    <h2>◈ 历史标的 <span class="cnt">1 页</span></h2>
+    <div class="cards">
+      <a class="p-card" href="archive.html">
+        <div class="t"><span class="ico" style="background:var(--low-bg)">▣</span>归档标的</div>
+        <div class="d">NO-GO 决策书与已结标项目归档、原因必填、90 天可恢复、数据回流推荐率与失分归因</div>
+        <div class="f">archive.html</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 四档决策演示 -->
+  <div class="grp">
+    <h2>◈ 四档决策演示 <span class="cnt">2 页 × 4 档案 · hash 参数化（#go / #cond / #watch / #nogo，默认 cond）</span></h2>
+    <div class="demo-row">
+      <div class="demo-cell">
+        <b><span class="badge badge-ok">GO</span> 市第一人民医院</b>
+        <div class="proj">92 分 · 860 万 · 剩 6 天 · 无前提条件</div>
+        <div class="lnk"><a href="match.html#go">匹配结果</a><a href="suggestion.html#go">投标建议</a></div>
+      </div>
+      <div class="demo-cell">
+        <b><span class="badge badge-mid">GO 附条件</span> 滨海智慧校园</b>
+        <div class="proj">87 分 · 1,280 万 · 剩 44h · 附 3 项前提</div>
+        <div class="lnk"><a href="match.html#cond">匹配结果</a><a href="suggestion.html#cond">投标建议</a></div>
+      </div>
+      <div class="demo-cell">
+        <b><span class="badge badge-warn">WATCH</span> 省政务云安全运营</b>
+        <div class="proj">74 分 · 2,100 万 · 剩 9 天 · 待资质出证</div>
+        <div class="lnk"><a href="match.html#watch">匹配结果</a><a href="suggestion.html#watch">投标建议</a></div>
+      </div>
+      <div class="demo-cell">
+        <b><span class="badge badge-no">NO-GO</span> 轨交视频监控</b>
+        <div class="proj">66 分 · 一票否决 · 剩 12 天 · 建议放弃</div>
+        <div class="lnk"><a href="match.html#nogo">匹配结果</a><a href="suggestion.html#nogo">投标建议</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 标书撰写（项目级操作页） -->
+  <div class="grp">
+    <h2>◈ 标书撰写 <span class="cnt">2 页 · 项目级操作页，导出入口在编辑页</span></h2>
+    <div class="cards">
+      <a class="p-card" href="editor.html#bh">
+        <div class="t"><span class="ico" style="background:var(--ai-bg)">✍</span>标书编辑</div>
+        <div class="d">三栏布局：目录树 / 响应点对照 + 遗漏红点 / AI 助手；按标的参数化（#bh / #qz / #sw / #gj / #dsj / #xl）</div>
+        <div class="f">editor.html#标的 key</div>
+      </a>
+      <a class="p-card" href="check.html">
+        <div class="t"><span class="ico" style="background:var(--danger-bg)">☑</span>合规检查</div>
+        <div class="d">真实性/格式/敏感信息三层检查，真实性红线最高警示且阻断导出</div>
+        <div class="f">check.html</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 企业画像 -->
+  <div class="grp">
+    <h2>◈ 企业画像 <span class="cnt">2 页 · 导航分栏：本企业 / 竞争对手</span></h2>
+    <div class="cards">
+      <a class="p-card" href="profile.html">
+        <div class="t"><span class="ico" style="background:var(--success-bg)">◆</span>本企业画像</div>
+        <div class="d">完整度 88% · 证照到期横幅 + 基本信息/资质/业绩/团队/投标资料库；同页 ⚔ Tab 切换至竞争对手</div>
+        <div class="f">profile.html</div>
+      </a>
+      <a class="p-card" href="rival.html">
+        <div class="t"><span class="ico" style="background:var(--ai-bg)">⚔</span>竞争对手详情</div>
+        <div class="d">按 hash 参数化（#hy/#hn/#at）：已知资质、报价风格、公开中标轨迹、与本司交锋记录</div>
+        <div class="f">rival.html</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 数据洞察 -->
+  <div class="grp">
+    <h2>◈ 数据洞察 <span class="cnt">3 页 · 导航分栏：效果 / 采集 / 市场看板（子页签互达）</span></h2>
+    <div class="cards">
+      <a class="p-card" href="dashboard.html">
+        <div class="t"><span class="ico" style="background:var(--warning-bg)">▤</span>效果看板</div>
+        <div class="d">闭环效果：推荐率（标注口径与当期下限）、中标率趋势、失分归因、对手对比（参考性角标）</div>
+        <div class="f">dashboard.html</div>
+      </a>
+      <a class="p-card" href="collectboard.html">
+        <div class="t"><span class="ico" style="background:var(--ai-bg)">▦</span>采集看板</div>
+        <div class="d">领导视角：数据资产规模、时效 SLA、价值转化漏斗、通道 B 成本效能、覆盖盲区</div>
+        <div class="f">collectboard.html</div>
+      </a>
+      <a class="p-card" href="marketboard.html">
+        <div class="t"><span class="ico" style="background:var(--success-bg)">◈</span>市场看板</div>
+        <div class="d">商务/市场视角：商机规模与行业热度、地区分布、订阅热词、未来 30 天大额商机前瞻</div>
+        <div class="f">marketboard.html</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 系统配置 -->
+  <div class="grp">
+    <h2>◈ 系统配置 <span class="cnt">3 页</span></h2>
+    <div class="cards">
+      <a class="p-card" href="admin.html">
+        <div class="t"><span class="ico" style="background:var(--low-bg)">⚙</span>系统管理</div>
+        <div class="d">成员与角色（六角色 RBAC + MFA）/ 模板库 / 归档原因字典 / 审计日志（只增不改）等六子页签，同页 Tab 切换</div>
+        <div class="f">admin.html</div>
+      </a>
+      <a class="p-card" href="datasources.html">
+        <div class="t"><span class="ico" style="background:var(--primary-light)">⛁</span>数据源管理</div>
+        <div class="d">L1/L2/L3 分级 + 通道 A/B、合规审查状态、SLA 与 7 日成功率、准入四步流程</div>
+        <div class="f">datasources.html</div>
+      </a>
+      <a class="p-card" href="rules.html">
+        <div class="t"><span class="ico" style="background:var(--warning-bg)">⚖</span>匹配规则库</div>
+        <div class="d">三档分数线、六维权重滑块（合计=100% 校验）、一票否决开关、版本回滚</div>
+        <div class="f">rules.html</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- 消息中心 -->
+  <div class="grp">
+    <h2>◈ 消息中心 <span class="cnt">2 页 · 不入导航，顶栏铃铛直连</span></h2>
+    <div class="cards">
+      <a class="p-card" href="messages.html">
+        <div class="t"><span class="ico" style="background:var(--high-bg)">🔔</span>消息中心</div>
+        <div class="d">订阅推送/决策提醒/更正公告/系统通知聚合，分类筛选与一键去决策</div>
+        <div class="f">messages.html</div>
+      </a>
+      <a class="p-card" href="message-detail.html">
+        <div class="t"><span class="ico" style="background:var(--ai-bg)">✉</span>消息详情</div>
+        <div class="d">推送正文 + 项目摘要（滨海智慧校园），跳转匹配/决策/加入拟投标的</div>
+        <div class="f">message-detail.html</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="hub-foot">
+    <span>寻标司南 · 智能投标效能平台 · 高保真 HTML 原型（纯静态，无框架依赖）</span>
+    <span>2026-08-14 · V3 · 演示数据不构成任何投标依据</span>
+  </div>
+
+</div>
+</body>
+</html>
