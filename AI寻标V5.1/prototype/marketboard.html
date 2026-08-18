@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>商机市场看板 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+.subtabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
+.subtabs a{padding:10px 18px;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.subtabs a.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.subtabs a:hover{color:var(--primary)}
+.bar-row{display:grid;grid-template-columns:150px 1fr 120px;gap:10px;align-items:center;margin-bottom:12px;font-size:13px}
+.bar-track{background:var(--low-bg);border-radius:6px;height:18px;overflow:hidden}
+.bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#70AFCF,var(--primary))}
+.legend-row{display:flex;gap:18px;font-size:12px;color:var(--text-2);margin-bottom:6px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.kw-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;background:#fff;padding:6px 14px;font-size:13px;color:var(--text-2);margin:0 8px 8px 0}
+.kw-chip .num{color:var(--primary);font-weight:700}
+.kw-chip.hot{border-color:#F3D9A4;background:var(--warning-bg);color:#B97708;font-weight:600}
+.kw-chip.hot .num{color:#B97708}
+.kw-chip.up::after{content:"↑";color:var(--success);font-weight:700;font-size:11px}
+.kw-chip.down::after{content:"↓";color:var(--danger);font-weight:700;font-size:11px}
+.region-cell{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:10px;background:#fff;padding:9px 14px;margin:0 8px 8px 0;font-size:13px}
+.region-cell .city{font-weight:600}
+.region-cell .n{color:var(--primary);font-weight:700}
+.region-cell.home{border-color:#BFDDEA;background:var(--primary-light)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的<span class="nav-badge">3</span></a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的<span class="nav-badge">2</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">企业画像</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>本企业</a>
+        <a class="nav-item" href="profile.html#rival"><span class="ico">⚔</span>竞争对手</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">数据洞察</div>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>效果看板</a>
+        <a class="nav-item" href="collectboard.html"><span class="ico">▦</span>采集看板</a>
+        <a class="nav-item active" href="marketboard.html"><span class="ico">◈</span>市场看板</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">系统配置</div>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <!-- 子页签 -->
+      <div class="subtabs">
+        <a href="dashboard.html">闭环效果看板</a>
+        <a href="collectboard.html">数据采集看板</a>
+        <a class="on" href="marketboard.html">商机市场看板</a>
+      </div>
+
+      <div class="crumb">数据洞察 / <b>商机市场看板</b></div>
+      <div class="page-title">商机市场看板 <select class="mini" style="width:150px"><option>统计周期：本月</option><option>近 3 个月</option><option>近 6 个月</option><option>本年度</option></select> <span class="note">商务 / 市场视角：看外部市场水温 —— 商机在哪、热度多高、竞争多强、何时出手</span></div>
+
+      <!-- 指标卡 -->
+      <div class="grid g4">
+        <div class="stat">
+          <div class="lbl">本月新增商机（采集口径）</div>
+          <div class="val num blue">428</div>
+          <div class="sub">山东省公开招标公告去重后 · 环比 +12% <span class="badge badge-ok" style="font-weight:400">连续 6 月增长</span></div>
+        </div>
+        <div class="stat">
+          <div class="lbl">商机预算规模</div>
+          <div class="val num">¥24.9 亿</div>
+          <div class="sub">载明预算项目占比 82% · 未载明 18%</div>
+        </div>
+        <div class="stat">
+          <div class="lbl">与我司高匹配商机（≥80 分）</div>
+          <div class="val num green">23</div>
+          <div class="sub">按当前六维权重与推荐下限 80 计算 <span class="badge badge-mid" style="font-weight:400">规则库 v8</span></div>
+        </div>
+        <div class="stat">
+          <div class="lbl">活跃竞争对手（近 30 天）</div>
+          <div class="val num" style="color:var(--warning)">14</div>
+          <div class="sub">同场出现 ≥1 次 · 已建档 3 家 <span class="link" style="font-size:12px">对手档案 ›</span></div>
+        </div>
+      </div>
+
+      <div class="grid g2" style="margin-top:16px">
+        <!-- 行业热度排行 -->
+        <div class="card">
+          <h3>行业商机热度排行 <span class="note">本月 · 按商机数量 · 金额为载明预算合计</span></h3>
+          <div class="bar-row"><span>智慧校园 / 教育信息化</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="num">68 条 · ¥6.2 亿</span></div>
+          <div class="bar-row"><span>医院信息化 / 运维</span><div class="bar-track"><div class="bar-fill" style="width:84%"></div></div><span class="num">57 条 · ¥4.1 亿</span></div>
+          <div class="bar-row"><span>政务云 / 安全运营</span><div class="bar-track"><div class="bar-fill" style="width:65%"></div></div><span class="num">44 条 · ¥5.8 亿</span></div>
+          <div class="bar-row"><span>雪亮工程 / 公安视频</span><div class="bar-track"><div class="bar-fill" style="width:56%;background:linear-gradient(90deg,#F8B557,var(--warning))"></div></div><span class="num">38 条 · ¥3.3 亿</span></div>
+          <div class="bar-row"><span>水务 / SCADA 工控</span><div class="bar-track"><div class="bar-fill" style="width:43%;background:linear-gradient(90deg,#F8B557,var(--warning))"></div></div><span class="num">29 条 · ¥2.6 亿</span></div>
+          <div class="bar-row"><span>轨道交通安防</span><div class="bar-track"><div class="bar-fill" style="width:24%;background:var(--low)"></div></div><span class="num">16 条 · ¥2.9 亿</span></div>
+          <div class="note" style="margin-top:6px">热度与我司行业标签叠加解读：教育 + 医疗为我司主场（命中率 21%），轨交类因业绩门槛建议继续屏蔽（见 NO-GO 回流规则）。</div>
+        </div>
+
+        <!-- 商机规模月度趋势 -->
+        <div class="card">
+          <h3>商机预算规模月度趋势 <span class="note">载明预算商机合计（亿元）· 点击数据点可下钻当月清单</span></h3>
+          <div class="legend-row"><span><span class="sw" style="background:var(--primary)"></span> 商机预算规模（亿元）</span><span><span class="sw" style="background:var(--success)"></span> 其中与我司高匹配占比（%，右轴示意）</span></div>
+          <svg width="100%" height="230" viewBox="0 0 580 230">
+            <line x1="40" y1="20" x2="40" y2="180" stroke="#E5E9F0"/><line x1="40" y1="180" x2="560" y2="180" stroke="#E5E9F0"/>
+            <line x1="40" y1="100" x2="560" y2="100" stroke="#F0F2F6" stroke-dasharray="3 4"/><line x1="40" y1="60" x2="560" y2="60" stroke="#F0F2F6" stroke-dasharray="3 4"/><line x1="40" y1="140" x2="560" y2="140" stroke="#F0F2F6" stroke-dasharray="3 4"/>
+            <text x="14" y="184" font-size="10" fill="#8A94A6">0</text><text x="14" y="104" font-size="10" fill="#8A94A6">15</text><text x="10" y="26" font-size="10" fill="#8A94A6">30</text>
+            <!-- 规模 18.6 17.2 19.8 21.5 23.1 24.9 -->
+            <polyline points="80,80.8 170,88.3 260,74.4 350,65.3 440,56.8 530,47.2" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+            <g fill="var(--primary)"><circle cx="80" cy="80.8" r="3.5"/><circle cx="170" cy="88.3" r="3.5"/><circle cx="260" cy="74.4" r="3.5"/><circle cx="350" cy="65.3" r="3.5"/><circle cx="440" cy="56.8" r="3.5"/><circle cx="530" cy="47.2" r="3.5"/></g>
+            <!-- 高匹配占比 3.2 3.8 4.1 4.6 5.0 5.4（放大示意） -->
+            <polyline points="80,162.9 170,159.7 260,158.1 350,155.5 440,153.3 530,151.2" fill="none" stroke="var(--success)" stroke-width="2.5"/>
+            <g fill="var(--success)"><circle cx="80" cy="162.9" r="3.5"/><circle cx="170" cy="159.7" r="3.5"/><circle cx="260" cy="158.1" r="3.5"/><circle cx="350" cy="155.5" r="3.5"/><circle cx="440" cy="153.3" r="3.5"/><circle cx="530" cy="151.2" r="3.5"/></g>
+            <text x="40" y="200" font-size="10" fill="#8A94A6">3月</text><text x="130" y="200" font-size="10" fill="#8A94A6">4月</text><text x="220" y="200" font-size="10" fill="#8A94A6">5月</text><text x="310" y="200" font-size="10" fill="#8A94A6">6月</text><text x="400" y="200" font-size="10" fill="#8A94A6">7月</text><text x="490" y="200" font-size="10" fill="#8A94A6">8月</text>
+            <text x="536" y="42" font-size="10" fill="var(--primary)" font-weight="bold">24.9</text>
+            <text x="536" y="147" font-size="10" fill="var(--success)" font-weight="bold">5.4%</text>
+          </svg>
+          <div class="note" style="margin-top:2px">解读：8 月规模环比 +7.8%，教育新基建与医疗运维专项集中释放；高匹配占比连续 3 月上行，订阅方向调优见效。</div>
+        </div>
+      </div>
+
+      <!-- 地区分布 + 关键词命中 -->
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card">
+          <h3>商机地区分布 <span class="note">本月 · 山东省内 · 气泡大小按商机数</span> <span class="more">覆盖 16 地市 · 缺失 0</span></h3>
+          <div>
+            <span class="region-cell"><span class="city">青岛</span><span class="n">86</span><span class="note">条</span></span>
+            <span class="region-cell"><span class="city">济南</span><span class="n">72</span><span class="note">条</span></span>
+            <span class="region-cell"><span class="city">潍坊</span><span class="n">45</span><span class="note">条</span></span>
+            <span class="region-cell"><span class="city">烟台</span><span class="n">38</span><span class="note">条</span></span>
+            <span class="region-cell"><span class="city">临沂</span><span class="n">31</span><span class="note">条</span></span>
+            <span class="region-cell"><span class="city">淄博</span><span class="n">28</span><span class="note">条</span></span>
+            <span class="region-cell home"><span class="city">滨州（我司所在地）</span><span class="n">12</span><span class="note">条 · 命中率最高 21%</span></span>
+            <span class="region-cell"><span class="city">其他 9 市</span><span class="n">116</span><span class="note">条</span></span>
+          </div>
+          <div class="note" style="margin-top:8px">地域维度权重 15%：滨州本地商机虽少但命中率最高；青岛 / 济南为存量对手活跃区，建议结合对手档案评估再进入。</div>
+        </div>
+        <div class="card">
+          <h3>订阅关键词命中热词 <span class="note">本月 · 来自 8 条生效订阅 · ↑↓ 为环比</span> <span class="more"><a class="link" href="list.html">管理订阅 ›</a></span></h3>
+          <div>
+            <span class="kw-chip hot up">智慧校园 <span class="num">46</span></span>
+            <span class="kw-chip hot up">运维服务 <span class="num">38</span></span>
+            <span class="kw-chip up">信息化 <span class="num">52</span></span>
+            <span class="kw-chip">安防工程 <span class="num">27</span></span>
+            <span class="kw-chip up">雪亮工程 <span class="num">19</span></span>
+            <span class="kw-chip down">政务云 <span class="num">16</span></span>
+            <span class="kw-chip">SCADA <span class="num">9</span></span>
+            <span class="kw-chip down">视频监控 <span class="num">11</span></span>
+          </div>
+          <div class="note" style="margin-top:8px">命中热词直接回流订阅调优：「视频监控」连续 2 月走低且多为轨交门槛项目，建议维持屏蔽（NO-GO 回流）；「智慧校园」热度上升，可将推送门槛由 85 适度放宽至 80 观察一期。</div>
+        </div>
+      </div>
+
+      <!-- 未来大额商机前瞻 -->
+      <div class="card">
+        <h3>未来 30 天大额商机前瞻（预算 ≥1,000 万）<span class="note">来自更正公告与采购意向公开 · 参考性数据</span> <span class="more">共 9 条 · 展示 5 条</span></h3>
+        <table class="tbl">
+          <thead><tr><th>项目名称</th><th class="c">预算</th><th>开标 / 预计时间</th><th class="c">初评匹配</th><th>竞争预判</th><th class="c">状态</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>省政务云平台安全运营服务采购项目<div class="note">省大数据局 · 济南</div></td><td class="c num">2,100 万</td><td>2026-08-22 09:30</td><td class="c"><span class="badge badge-mid">74</span></td><td class="note">存量厂商强势（鲁信安全）</td><td class="c"><span class="badge badge-warn">WATCH 观察中</span></td><td><a class="link" href="suggestion.html#watch">查看建议 ›</a></td></tr>
+            <tr><td>滨海新城智慧校园一体化建设项目（一期）<div class="note">滨海新城教育局 · 滨州</div></td><td class="c num">1,280 万</td><td>2026-08-15 09:30</td><td class="c"><span class="badge badge-high">87</span></td><td class="note">3 家活跃对手 · 云帆最强</td><td class="c"><span class="badge badge-mid">已在拟投标的</span></td><td><a class="link" href="suggestion.html#cond">查看建议 ›</a></td></tr>
+            <tr><td>潍坊二中智慧校园改造项目<div class="note">潍坊市教育局 · 潍坊</div></td><td class="c num">1,150 万</td><td>预计 09-05（意向公开）</td><td class="c"><span class="badge badge-high">89</span></td><td class="note">暂无存量服务商 · 窗口期好</td><td class="c"><span class="badge badge-ok">建议提前建联</span></td><td><span class="link">加入订阅跟踪</span></td></tr>
+            <tr><td>区县雪亮工程四期建设项目<div class="note">某区公安分局 · 滨州</div></td><td class="c num">1,020 万</td><td>预计 09-12（意向公开）</td><td class="c"><span class="badge badge-high">83</span></td><td class="note">本地项目 · 地域维度占优</td><td class="c"><span class="badge badge-ok">建议提前建联</span></td><td><span class="link">加入订阅跟踪</span></td></tr>
+            <tr><td>城市轨道交通视频监控系统升级（二期）<div class="note">某市轨道交通集团 · 异地</div></td><td class="c num">未载明</td><td>预计 09 月下旬</td><td class="c"><span class="badge badge-low">—</span></td><td class="note">轨交业绩门槛未消除</td><td class="c"><span class="badge badge-no">已屏蔽（NO-GO 回流）</span></td><td><span class="note">补齐业绩后自动恢复</span></td></tr>
+          </tbody>
+        </table>
+        <div class="note" style="margin-top:8px">口径：初评匹配为采集入库时按当前规则库的预评分，正式评分以推送后六维匹配为准；被屏蔽方向来自不投标归档的回流规则（F5-4）。</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="nav.js"></script>
+</body>
+</html>

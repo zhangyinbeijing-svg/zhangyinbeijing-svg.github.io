@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>寻标司南 - 智能投标效能平台 | 从找标到中标的决策伙伴</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ===== 官网专用样式（营销页独立布局，不复用应用内框架） ===== */
+  html{scroll-behavior:smooth}
+  body{background:#fff}
+  .site-wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+
+  /* 顶部导航 */
+  .site-nav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .site-nav .inner{max-width:1180px;margin:0 auto;padding:0 32px;height:62px;display:flex;align-items:center;gap:32px}
+  .site-nav .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
+  .site-nav .brand .mark{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--ai));color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .site-nav .menu{display:flex;gap:26px;flex:1}
+  .site-nav .menu a{font-size:14px;color:var(--text-2)}
+  .site-nav .menu a:hover{color:var(--primary)}
+
+  /* Hero */
+  .hero{background:linear-gradient(160deg,#152736 0%,#1F3D52 42%,#2E5D78 100%);color:#fff;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-160px;top:-160px;width:560px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(112,175,207,.35),transparent 70%)}
+  .hero::before{content:"";position:absolute;left:-120px;bottom:-200px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(59,123,154,.30),transparent 70%)}
+  .hero .inner{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:88px 32px 76px;display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+  .hero .tag-line{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:5px 16px;font-size:13px;color:#C9E2EF;margin-bottom:22px}
+  .hero h1{font-size:44px;line-height:1.25;font-weight:700;margin-bottom:18px}
+  .hero h1 em{font-style:normal;background:linear-gradient(90deg,#70AFCF,#A5DCEF);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .sub{font-size:16px;color:#A9C4D4;line-height:1.9;margin-bottom:32px}
+  .hero .cta{display:flex;gap:14px;margin-bottom:44px}
+  .hero .cta .go{background:linear-gradient(90deg,var(--primary),var(--ai));color:#fff;padding:13px 34px;border-radius:9px;font-size:15px;font-weight:600;box-shadow:0 8px 24px rgba(47,99,125,.45)}
+  .hero .cta .go:hover{opacity:.92}
+  .hero .cta .ghost{border:1px solid rgba(255,255,255,.4);color:#fff;padding:13px 30px;border-radius:9px;font-size:15px}
+  .hero .cta .ghost:hover{background:rgba(255,255,255,.1)}
+  .hero .nums{display:flex;gap:44px}
+  .hero .nums .n{font-size:28px;font-weight:700;color:#fff}
+  .hero .nums .l{font-size:12px;color:#8FA9BA;margin-top:2px}
+  /* Hero 右侧决策卡演示 */
+  .hero-deck{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:20px;backdrop-filter:blur(4px)}
+  .hero-deck .hd{display:flex;align-items:center;gap:8px;font-size:13px;color:#C9E2EF;margin-bottom:14px}
+  .hero-deck .row{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+  .hero-deck .row .t{flex:1;font-size:13px;color:#E7F1F6;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .hero-deck .row .s{font-size:11px;color:#8FA9BA;margin-top:1px}
+  .hd-badge{padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+  .hb-go{background:rgba(47,158,110,.25);color:#7FE0B4}
+  .hb-cond{background:rgba(112,175,207,.28);color:#A5DCEF}
+  .hb-watch{background:rgba(245,159,11,.22);color:#FFD587}
+  .hb-no{background:rgba(217,48,37,.25);color:#FFA39B}
+  .hero-deck .ft{font-size:11px;color:#8FA9BA;text-align:center;margin-top:4px}
+
+  /* 通用章节 */
+  .section{padding:76px 0}
+  .section.alt{background:#F7F9FC}
+  .sec-head{text-align:center;margin-bottom:48px}
+  .sec-head .k{display:inline-block;font-size:13px;color:var(--primary);background:var(--primary-light);border-radius:999px;padding:4px 16px;margin-bottom:14px;font-weight:600}
+  .sec-head h2{font-size:30px;font-weight:700;margin-bottom:10px}
+  .sec-head p{color:var(--text-2);font-size:15px;max-width:640px;margin:0 auto;line-height:1.8}
+
+  /* 痛点 */
+  .pain{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .pain .it{border:1px solid var(--border);border-radius:12px;padding:22px;background:#fff}
+  .pain .it .ic{font-size:24px;margin-bottom:10px}
+  .pain .it b{display:block;font-size:15px;margin-bottom:6px}
+  .pain .it p{font-size:13px;color:var(--text-2);line-height:1.8}
+
+  /* 核心能力 */
+  .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .feat .it{border:1px solid var(--border);border-radius:14px;padding:26px;background:#fff;transition:box-shadow .2s}
+  .feat .it:hover{box-shadow:0 10px 30px rgba(31,39,51,.08)}
+  .feat .it .ic{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
+  .feat .it h3{font-size:17px;margin-bottom:8px}
+  .feat .it p{font-size:13px;color:var(--text-2);line-height:1.9}
+  .feat .it .pts{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+  .feat .it .pts span{font-size:12px;color:var(--text-2);background:var(--bg);border-radius:5px;padding:3px 10px}
+
+  /* 决策引擎 */
+  .engine{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .engine .e{border:1px solid var(--border);border-radius:12px;padding:20px 22px;background:#fff}
+  .engine .e .no{font-size:12px;font-weight:700;color:var(--ai);background:var(--ai-bg);display:inline-block;border-radius:6px;padding:2px 10px;margin-bottom:10px}
+  .engine .e b{display:block;font-size:15px;margin-bottom:6px}
+  .engine .e p{font-size:12.5px;color:var(--text-2);line-height:1.8}
+  .engine-out{margin-top:26px;border:1px solid var(--border);border-radius:14px;padding:22px 26px;background:#fff;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .engine-out .lbl{font-weight:700;font-size:14px}
+
+  /* 流程 */
+  .flow{display:flex;align-items:stretch;gap:0}
+  .flow .st{flex:1;text-align:center;padding:0 14px;position:relative}
+  .flow .st .c{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--ai));color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 12px;position:relative;z-index:2}
+  .flow .st::before{content:"";position:absolute;top:27px;left:0;right:0;height:2px;background:linear-gradient(90deg,#C9DCE6,#EAF3F8);z-index:1}
+  .flow .st:first-child::before{left:50%} .flow .st:last-child::before{right:50%}
+  .flow .st b{font-size:14px;display:block;margin-bottom:4px}
+  .flow .st p{font-size:12px;color:var(--text-3);line-height:1.7}
+
+  /* 安全 */
+  .safe{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .safe .it{border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;background:#fff}
+  .safe .it .ic{font-size:26px;margin-bottom:8px}
+  .safe .it b{display:block;font-size:14px;margin-bottom:4px}
+  .safe .it p{font-size:12px;color:var(--text-3);line-height:1.7}
+
+  /* 数据成效 */
+  .result{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .result .it{background:linear-gradient(160deg,#1A2C3C,#25465E);border-radius:14px;padding:26px 22px;color:#fff;text-align:center}
+  .result .it .n{font-size:34px;font-weight:700;background:linear-gradient(90deg,#70AFCF,#A5DCEF);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .result .it .l{font-size:13px;color:#A9C4D4;margin-top:6px}
+
+  /* CTA */
+  .cta-band{background:linear-gradient(120deg,var(--primary),var(--ai));border-radius:18px;padding:52px 48px;display:flex;align-items:center;gap:24px;color:#fff}
+  .cta-band h2{font-size:26px;margin-bottom:8px}
+  .cta-band p{color:#D9EAF4;font-size:14px}
+  .cta-band .btns{margin-left:auto;display:flex;gap:14px;flex-shrink:0}
+  .cta-band .btns a{padding:12px 30px;border-radius:9px;font-size:15px;font-weight:600}
+  .cta-band .btns .w{background:#fff;color:var(--primary)}
+  .cta-band .btns .t{border:1px solid rgba(255,255,255,.55);color:#fff}
+
+  /* 页脚 */
+  .footer{background:#0F1526;color:#9AA5BC;padding:52px 0 28px;margin-top:76px}
+  .footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+  .footer h4{color:#fff;font-size:14px;margin-bottom:14px}
+  .footer .cols a{display:block;font-size:13px;color:#9AA5BC;margin-bottom:9px}
+  .footer .cols a:hover{color:#fff}
+  .footer .brand-line{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:16px;margin-bottom:12px}
+  .footer .brand-line .mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--primary),var(--ai));display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+  .footer .desc{font-size:12.5px;line-height:1.9}
+  .footer .icp{border-top:1px solid #232C44;margin-top:36px;padding-top:20px;font-size:12px;color:#626E88;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<nav class="site-nav">
+  <div class="inner">
+    <div class="brand"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div>寻标司南</div>
+    <div class="menu">
+      <a href="#pain">行业痛点</a>
+      <a href="#features">核心能力</a>
+      <a href="#engine">决策引擎</a>
+      <a href="#flow">产品流程</a>
+      <a href="#safe">数据安全</a>
+    </div>
+    <a class="btn" href="site.html#contact" style="padding:6px 16px">联系我们</a>
+    <a class="btn primary" href="login.html" style="padding:6px 20px">登录</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="inner">
+    <div>
+      <span class="tag-line">✦ AI 驱动投标全流程智能化 · B2B SaaS</span>
+      <h1>寻标司南，让每一次投标<br>都<em>有的放矢</em></h1>
+      <p class="sub">全网采集招标信息，企业画像六维匹配评分，六大引擎输出 GO / GO 附条件 / WATCH / NO-GO 四档决策，AI 辅助标书——从「找标」到「中标」的一站式智能投标效能平台。</p>
+      <div class="cta">
+        <a class="go" href="login.html">免费试用</a>
+        <a class="ghost" href="javascript:void(0)" onclick="showToast('已提交预约，顾问将在 1 个工作日内联系您')">预约演示</a>
+      </div>
+      <div class="nums">
+        <div><div class="n num">200+</div><div class="l">合规数据源接入</div></div>
+        <div><div class="n num">6 维</div><div class="l">画像匹配评分模型</div></div>
+        <div><div class="n num">4 档</div><div class="l">标准决策词库</div></div>
+        <div><div class="n num">≤5 分钟</div><div class="l">公告入库时效</div></div>
+      </div>
+    </div>
+    <!-- 右侧：四档决策演示卡 -->
+    <div class="hero-deck">
+      <div class="hd">◈ 今日智能决策 · 实时演示</div>
+      <div class="row"><div class="t">市第一人民医院信息化运维服务<div class="s">匹配分 92 · 预算 860 万</div></div><span class="hd-badge hb-go">GO</span></div>
+      <div class="row"><div class="t">滨海新城智慧校园一体化建设（一期）<div class="s">匹配分 87 · 附 3 项前提条件</div></div><span class="hd-badge hb-cond">GO 附条件</span></div>
+      <div class="row"><div class="t">省政务云平台安全运营服务采购<div class="s">匹配分 74 · 待资质出证</div></div><span class="hd-badge hb-watch">WATCH</span></div>
+      <div class="row"><div class="t">某区政务数据中心网络安全运维外包服务<div class="s">匹配分 38 · 硬性资质缺失，一票否决</div></div><span class="hd-badge hb-no">NO-GO</span></div>
+      <div class="ft">决策书 · 风险登记 · 报价策略 · 执行清单，一键生成</div>
+    </div>
+  </div>
+</section>
+
+<!-- 行业痛点 -->
+<section class="section" id="pain">
+  <div class="site-wrap">
+    <div class="sec-head">
+      <span class="k">行业痛点</span>
+      <h2>投标团队的时间，不该浪费在这些地方</h2>
+      <p>传统投标流程高度依赖人工盯网、凭经验拍板、熬夜写标书，商机漏看、错标陪跑、资源错配是三大顽疾。</p>
+    </div>
+    <div class="pain">
+      <div class="it"><div class="ic">🕳️</div><b>商机漏看</b><p>招标信息分散在数百个政府与行业网站，人工盯网覆盖率不足 30%，高价值项目频频错过报名窗口。</p></div>
+      <div class="it"><div class="ic">🎲</div><b>凭感觉投标</b><p>该不该投、报什么价，靠领导经验拍脑袋；资质不符仍盲目陪跑，人力与保证金成本白白消耗。</p></div>
+      <div class="it"><div class="ic">⏳</div><b>标书赶工</b><p>响应点核对靠肉眼、格式合规靠运气，截标前通宵赶稿，漏项废标风险始终悬在头顶。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 核心能力 -->
+<section class="section alt" id="features">
+  <div class="site-wrap">
+    <div class="sec-head">
+      <span class="k">核心能力</span>
+      <h2>六大能力，覆盖投标全生命周期</h2>
+      <p>采集 → 匹配 → 决策 → 管理 → 撰写 → 复盘，六大能力闭环联动，数据驱动推荐策略持续进化。</p>
+    </div>
+    <div class="feat">
+      <div class="it">
+        <div class="ic" style="background:var(--primary-light)">📡</div>
+        <h3>招标信息智能采集与订阅推送</h3>
+        <p>合规接入 200+ 官方与行业数据源，分级管理（L1 官方 / L2 聚合 / L3 增值），分钟级入库；按关键词 + 语义双模订阅，高匹配项目实时推送至工作台与消息中心。</p>
+        <div class="pts"><span>≤5 分钟时效 SLA</span><span>更正公告自动识别</span><span>数据源合规审查</span></div>
+      </div>
+      <div class="it">
+        <div class="ic" style="background:var(--success-bg)">🎯</div>
+        <h3>企业画像匹配评分</h3>
+        <p>资质、业绩、地域、商务、技术、竞争六维度加权评分（权重可配置、版本可回滚），高 ≥80 / 中 60–79 / 低 &lt;60 三档分数线，硬性条件一票否决；每项判定附公告原文证据引用，得分可解释、可复核。</p>
+        <div class="pts"><span>六维加权模型</span><span>一票否决机制</span><span>证据链溯源</span></div>
+      </div>
+      <div class="it">
+        <div class="ic" style="background:var(--ai-bg)">🧠</div>
+        <h3>四档投标决策引擎</h3>
+        <p>E1 风险筛查、E2 市场调研、E3 中标格局、E4 指定性识别、E5 三层量化评分、E6 策略对比矩阵六大引擎协同，输出 GO / GO 附条件 / WATCH / NO-GO 标准决策书，附执行清单与双向预案。</p>
+        <div class="pts"><span>六大引擎</span><span>四档标准词库</span><span>决策留痕 F5-4</span></div>
+      </div>
+      <div class="it">
+        <div class="ic" style="background:var(--warning-bg)">✍️</div>
+        <h3>AI 辅助标书与合规检查</h3>
+        <p>响应点逐条对照、遗漏红点提示，AI 整章生成 / 续写 / 改写（产出带 ✦ 角标，采纳留痕）；真实性红线 / 格式规范 / 敏感信息三层合规检查，红线问题同时阻断导出与确认投标，杜绝废标隐患。</p>
+        <div class="pts"><span>响应点对照</span><span>AI 产出可追溯</span><span>红线阻断导出</span></div>
+      </div>
+      <div class="it">
+        <div class="ic" style="background:var(--primary-light)">🗂️</div>
+        <h3>标的流转全流程管理</h3>
+        <p>推送标的 → 拟投标的 → 投标标的 → 归档标的四级清单；拟投标的按待决策 / 持续观察管理，决定投标后自动流转并创建标书任务；投标进度分撰写中 / 已投标 / 已中标 / 未中标，结果标记回流推荐模型。</p>
+        <div class="pts"><span>四级清单漏斗</span><span>决策自动流转</span><span>结果回流推荐</span></div>
+      </div>
+      <div class="it">
+        <div class="ic" style="background:var(--success-bg)">📅</div>
+        <h3>截止时间轴工作台</h3>
+        <p>时间轴汇聚本周开标、决策截止与更正节点，越靠前越紧急；当前焦点面板一屏呈现最优先标的的决策要点；待处理行动与决策项分离呈现——今天该决策什么、该动手做什么，一目了然。</p>
+        <div class="pts"><span>截止时间轴</span><span>当前焦点面板</span><span>待办行动分离</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 决策引擎 -->
+<section class="section" id="engine">
+  <div class="site-wrap">
+    <div class="sec-head">
+      <span class="k">决策引擎</span>
+      <h2>不止告诉你「匹配多少分」，更回答「该不该投」</h2>
+      <p>六大引擎层层过滤，把资深投标总监的研判经验沉淀为可复用的决策流水线。</p>
+    </div>
+    <div class="engine">
+      <div class="e"><span class="no">E1</span><b>四层风险筛查</b><p>致命条款 / 商务履约大坑 / 评分定向陷阱 / 疑似异常信号，任一命中即预警或否决。</p></div>
+      <div class="e"><span class="no">E2</span><b>市场调研</b><p>市场规模、竞品格局、政策导向、价格基准线（a–f 六细分项），建立报价坐标系。</p></div>
+      <div class="e"><span class="no">E3</span><b>历史中标格局</b><p>甲方与历史服务商五维画像，识别长期合作壁垒与突破口。</p></div>
+      <div class="e"><span class="no">E4</span><b>指定性识别</b><p>内定风险低 / 中 / 高三级研判（附参考性角标），避免陪跑消耗。</p></div>
+      <div class="e"><span class="no">E5</span><b>三层量化评分</b><p>L1 资质门槛 → L2 价格竞争力 → L3 履约可行性，合成决策综合得分。</p></div>
+      <div class="e"><span class="no">E6</span><b>策略对比决策矩阵</b><p>多策略 × 报价区间 × 资质组合对比，输出中标概率与风险等级，择优推荐。</p></div>
+    </div>
+    <div class="engine-out">
+      <span class="lbl">标准化决策输出 →</span>
+      <span class="badge badge-ok">GO · 建议投标</span>
+      <span class="badge badge-mid">GO 附条件 · 满足前提后投标</span>
+      <span class="badge badge-warn">WATCH · 持续观察</span>
+      <span class="badge badge-no">NO-GO · 建议放弃</span>
+      <span class="note" style="margin-left:auto">决策书为单一真相源 · 11 项交付一致性校验 · 决定投标后自动流转投标标的创建任务 · 全部决策留痕回流推荐率统计</span>
+    </div>
+  </div>
+</section>
+
+<!-- 产品流程 -->
+<section class="section alt" id="flow">
+  <div class="site-wrap">
+    <div class="sec-head">
+      <span class="k">产品流程</span>
+      <h2>六步闭环，从信息到中标</h2>
+    </div>
+    <div class="flow">
+      <div class="st"><div class="c">📡</div><b>采集订阅</b><p>全网采集<br>双模订阅推送</p></div>
+      <div class="st"><div class="c">🎯</div><b>匹配推送</b><p>六维画像评分<br>证据链可溯源</p></div>
+      <div class="st"><div class="c">🧭</div><b>拟投决策</b><p>进入拟投标的清单<br>六引擎四档研判</p></div>
+      <div class="st"><div class="c">✚</div><b>决定投标</b><p>一键决定并建任务<br>流转至投标标的</p></div>
+      <div class="st"><div class="c">✍️</div><b>标书交付</b><p>AI 辅助撰写<br>合规红线拦截</p></div>
+      <div class="st"><div class="c">📈</div><b>归档复盘</b><p>结果标记归档<br>推荐策略迭代</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 数据安全 -->
+<section class="section" id="safe">
+  <div class="site-wrap">
+    <div class="sec-head">
+      <span class="k">数据安全</span>
+      <h2>企业级安全与合规底座</h2>
+      <p>数据采集全程留痕、分级授权、审计日志只增不改，为您的投标资产保驾护航。</p>
+    </div>
+    <div class="safe">
+      <div class="it"><div class="ic">🛡️</div><b>等保三级架构</b><p>审计与业务日志保留 12 个月，运行日志 90 天，冷热分层存储。</p></div>
+      <div class="it"><div class="ic">🔐</div><b>RBAC 六角色权限</b><p>成员角色分级授权，敏感操作 MFA 二次验证，权限变更全留痕。</p></div>
+      <div class="it"><div class="ic">📜</div><b>数据源合规准入</b><p>L1/L2/L3 分级 + 通道合规审查，未过审不得接入，条款变更即时停用。</p></div>
+      <div class="it"><div class="ic">🗂️</div><b>决策全程留痕</b><p>匹配快照、决策书、覆盖理由完整归档，90 天可恢复，支撑审计追溯。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 数据成效 -->
+<section class="section alt">
+  <div class="site-wrap">
+    <div class="sec-head">
+      <span class="k">客户成效</span>
+      <h2>用数据说话（试点客户平均值）</h2>
+    </div>
+    <div class="result">
+      <div class="it"><div class="n num">↑ 68%</div><div class="l">商机覆盖率提升</div></div>
+      <div class="it"><div class="n num">↓ 45%</div><div class="l">无效陪标次数下降</div></div>
+      <div class="it"><div class="n num">↑ 2.3 倍</div><div class="l">标书撰写效率</div></div>
+      <div class="it"><div class="n num">0 起</div><div class="l">漏项废标事故</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" id="contact" style="padding-top:0">
+  <div class="site-wrap">
+    <div class="cta-band">
+      <div>
+        <h2>准备好让投标团队提速了吗？</h2>
+        <p>14 天全功能免费试用 · 专属顾问 1 对 1 配置企业画像 · 无需绑卡</p>
+      </div>
+      <div class="btns">
+        <a class="w" href="login.html">立即试用</a>
+        <a class="t" href="javascript:void(0)" onclick="showToast('咨询热线：400-888-0000（工作日 9:00-18:00）')">联系顾问</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer class="footer">
+  <div class="site-wrap">
+    <div class="cols">
+      <div>
+        <div class="brand-line"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div>寻标司南</div>
+        <p class="desc">智能投标效能平台。联网采集招标信息，企业画像六维匹配评分，六大引擎四档智能决策，拟投标的 → 投标标的 → 归档全流程管理，AI 辅助标书——让每一次投标都有的放矢。</p>
+      </div>
+      <div>
+        <h4>产品</h4>
+        <a href="#features">核心能力</a>
+        <a href="#engine">决策引擎</a>
+        <a href="#flow">产品流程</a>
+        <a href="login.html">登录系统</a>
+      </div>
+      <div>
+        <h4>资源</h4>
+        <a href="javascript:void(0)" onclick="showToast('帮助中心建设中')">帮助中心</a>
+        <a href="javascript:void(0)" onclick="showToast('开发者文档建设中')">开放接口</a>
+        <a href="javascript:void(0)" onclick="showToast('更新日志建设中')">更新日志</a>
+      </div>
+      <div>
+        <h4>公司</h4>
+        <a href="javascript:void(0)" onclick="showToast('关于我们建设中')">关于我们</a>
+        <a href="#contact">商务合作</a>
+        <a href="javascript:void(0)" onclick="showToast('隐私政策与安全白皮书建设中')">隐私与安全</a>
+      </div>
+    </div>
+    <div class="icp">© 2026 寻标司南 · 华信智能科技有限公司 · 鲁ICP备XXXXXXXX号-1（演示占位） · 增值电信业务经营许可（演示占位）</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  clearTimeout(t._tm);t._tm=setTimeout(function(){t.style.display='none'},2200);
+}
+</script>
+</body>
+</html>

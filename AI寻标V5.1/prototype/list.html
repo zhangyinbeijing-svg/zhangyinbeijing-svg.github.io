@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>推送标的 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ===== 订阅推送弹层 ===== */
+.modal-mask{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:60;align-items:flex-start;justify-content:center;padding:44px 16px}
+.modal-mask.open{display:flex}
+.modal{background:#fff;border-radius:12px;width:100%;max-width:880px;max-height:calc(100vh - 88px);display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(15,23,42,.22)}
+.modal-head{display:flex;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid var(--border)}
+.modal-head .t{font-size:16px;font-weight:700;flex:1}
+.modal-head .x{border:none;background:none;font-size:18px;color:var(--text-2);cursor:pointer}
+.modal-body{padding:18px 22px;overflow-y:auto}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.f-label{font-size:13px;font-weight:600;color:var(--text);margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.f-label .req{color:var(--danger)}
+.f-label .note{font-weight:400}
+.opt{display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:999px;padding:5px 14px;font-size:12.5px;color:var(--text-2);cursor:pointer;margin:0 8px 8px 0;background:#fff;user-select:none}
+.opt.on{border-color:var(--primary);color:var(--primary);background:var(--primary-light);font-weight:600}
+.sub-row{border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:10px;background:#FAFBFC;font-size:13px}
+.sub-row .top{display:flex;align-items:center;gap:10px}
+.sub-row .nm{font-weight:600;white-space:nowrap}
+.sub-row .cds{font-size:12px;color:var(--text-2);flex:1;min-width:0}
+.sub-row .lnk{font-size:12px;color:var(--primary);cursor:pointer;white-space:nowrap}
+.sub-row .nl{width:100%;margin-top:8px;border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:12px;color:var(--text-2);background:#fff;resize:vertical;min-height:34px;font-family:inherit;line-height:1.6;outline:none}
+.sub-row .nl:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(59,123,154,.10)}
+.sw{position:relative;display:inline-block;width:34px;height:19px;flex-shrink:0}
+.sw input{display:none}
+.sw i{position:absolute;inset:0;background:#CDD4DE;border-radius:999px;transition:.2s;cursor:pointer}
+.sw i::after{content:'';position:absolute;left:2px;top:2px;width:15px;height:15px;background:#fff;border-radius:50%;transition:.2s}
+.sw input:checked + i{background:var(--success)}
+.sw input:checked + i::after{left:17px}
+/* ===== 自定义清理弹层补充 ===== */
+.cl-sec{border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;background:#FAFBFC}
+.cl-prev{border:1px dashed var(--border);border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--text-2);background:#fff;max-height:120px;overflow-y:auto;line-height:1.9}
+.cl-prev b{color:var(--danger)}
+.tbl tr.cl-hit td{background:#FDF3E0}
+.tbl tr.cl-out{opacity:0;transform:translateX(24px);transition:.4s}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group"><a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a></div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item active" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的<span class="nav-badge">3</span></a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的<span class="nav-badge">2</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+            <div class="nav-group">
+        <div class="nav-title">企业画像</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>本企业</a>
+        <a class="nav-item" href="profile.html#rival"><span class="ico">⚔</span>竞争对手</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">数据洞察</div>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>效果看板</a>
+        <a class="nav-item" href="collectboard.html"><span class="ico">▦</span>采集看板</a>
+        <a class="nav-item" href="marketboard.html"><span class="ico">◈</span>市场看板</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">系统配置</div>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">招标信息 / <b>推送标的</b></div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="page-title" style="flex:1;margin:0">推送标的 <span class="note">共 2,416 条 · 默认按匹配分排序</span></div>
+        <button class="btn" onclick="openModal('cleanModal');previewClean()">🧹 自定义清理</button>
+        <button class="btn primary" onclick="openModal('subModal')">📡 订阅推送</button>
+      </div>
+      <div class="note" id="cleanRuleNote" style="margin-top:6px;display:none"></div>
+      <div class="note" style="margin-top:6px">已配置 3 个订阅（启用 2 · 停用 1：智慧校园 / 医疗信息化 / 安防维保）· 命中后入库 ≤30 分钟推送</div>
+      <div class="note" style="margin-top:4px">推荐决策四档：<b style="color:var(--success)">GO</b> / <b style="color:var(--primary)">GO 附条件</b> / <b style="color:var(--warning)">WATCH</b> / <b style="color:var(--danger)">NO-GO</b> · 点击决策徽标进入对应投标建议页，匹配与建议页数据均按项目实际情况生成</div>
+
+      <!-- 检索栏：关键词 / 语义切换 -->
+      <div class="card" style="padding:16px 20px">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="search-mode">
+            <span class="on" onclick="setMode(this,'kw')">关键词检索</span>
+            <span class="" onclick="setMode(this,'ai')">✦ AI 语义检索</span>
+          </div>
+          <div class="searchbox">
+            <span id="sicon">🔍</span>
+            <input id="kw" placeholder="输入关键词，如：智慧校园 集成" value="智慧校园">
+          </div>
+          <button class="btn primary">检索</button>
+          <button class="btn" onclick="openAdd()">保存为订阅</button>
+        </div>
+        <div id="aihint" class="note" style="display:none;margin-top:8px;color:var(--ai)">✦ 语义模式支持自然语言，例如："山东 千万级 智慧校园 集成项目，要求信息系统建设资质"</div>
+      </div>
+
+      <!-- 筛选器 -->
+      <div class="filter-bar">
+        <button class="btn sm">地区：全部 ▾</button>
+        <button class="btn sm">金额：全部 ▾</button>
+        <button class="btn sm">公告类型：全部 ▾</button>
+        <button class="btn sm">发布时间：近 7 天 ▾</button>
+        <span class="chip on">仅看高匹配（≥80）</span>
+        <span class="chip">我收藏的</span>
+        <span style="flex:1"></span>
+        <span class="note">排序：匹配分 ▾</span>
+      </div>
+
+      <!-- 结果表格 -->
+      <div class="card" style="padding:0">
+        <table class="tbl">
+          <tr>
+            <th style="width:28px"><input type="checkbox"></th>
+            <th>项目名称</th><th>地区</th><th class="r">预算金额</th><th>投标截止</th><th>公告类型</th><th class="c">匹配分</th><th class="c" style="width:118px">推荐决策</th><th style="width:190px">操作</th>
+          </tr>
+          <tr data-days="2" data-score="87">
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>滨海新城智慧校园一体化建设项目（一期）</b></a><div class="note">编号 BHZB-2026-0812 · 滨海新城教育局 · 山东省公共资源交易平台</div></td>
+            <td>山东·滨州</td><td class="r num">1,280 万</td>
+            <td><span class="cd warn">剩 44 小时<span class="sub">08-15 09:30 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-high">87 高</span></td>
+            <td class="c"><a href="suggestion.html#cond" title="进入投标建议页（附 3 项前提条件）"><span class="badge badge-mid">GO 附条件</span></a></td>
+            <td><a class="btn sm primary" href="match.html#cond">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="addPlan(this)">＋拟投标</button></td>
+          </tr>
+          <tr data-days="3" data-score="92">
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>市第一人民医院信息化运维服务采购</b></a><div class="note">编号 SYZB-2026-0731 · 市第一人民医院 · 市公共资源交易中心</div></td>
+            <td>山东·滨州</td><td class="r num">860 万</td>
+            <td><span class="cd">剩 6 天<span class="sub">08-19 10:00 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-high">92 高</span></td>
+            <td class="c"><a href="suggestion.html#go" title="进入投标建议页（无前提条件）"><span class="badge badge-ok">GO</span></a></td>
+            <td><a class="btn sm primary" href="match.html#go">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="addPlan(this)">＋拟投标</button></td>
+          </tr>
+          <tr data-days="5" data-score="81" data-protect="已决定投标">
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>区政务服务中心一网通办平台建设项目</b></a><div class="note">编号 QZZC-2026-0219 · 区行政审批服务局 · 省政府采购网</div></td>
+            <td>山东·滨州</td><td class="r num">150 万</td>
+            <td><span class="cd warn">剩 3 天<span class="sub">08-16 14:00 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-high">81 高</span></td>
+            <td class="c"><a href="bidprojects.html" title="已完成决策，进入投标标的"><span class="badge badge-ok">✓ 已决定投标</span></a></td>
+            <td><a class="btn sm primary" href="match.html">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="addPlan(this)">＋拟投标</button></td>
+          </tr>
+          <tr data-days="4" data-score="74">
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>省政务云平台安全运营服务采购项目</b></a><div class="note">编号 SZC-2026-1102 · 省大数据局 · 省政府采购网</div></td>
+            <td>山东·济南</td><td class="r num">2,100 万</td>
+            <td><span class="cd">剩 9 天<span class="sub">08-22 09:30 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-mid">74 中</span></td>
+            <td class="c"><a href="suggestion.html#watch" title="进入投标建议页（建议观望）"><span class="badge badge-warn">WATCH</span></a></td>
+            <td><a class="btn sm primary" href="match.html#watch">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="addPlan(this)">＋拟投标</button></td>
+          </tr>
+          <tr data-days="6" data-score="71" data-protect="已决定投标">
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>水务集团 SCADA 系统采购项目</b> <span class="tag correction">更</span></a><div class="note">编号 SWJT-2026-0088 · 更正公告：开标时间变更为 08-20 · 市公共资源交易中心</div></td>
+            <td>山东·滨州</td><td class="r num">620 万</td>
+            <td><span class="cd">剩 7 天<span class="sub">08-20 09:30 开标</span></span></td>
+            <td><span class="tag correction">更正</span></td>
+            <td class="c"><span class="badge badge-mid">71 中</span></td>
+            <td class="c"><a href="bidprojects.html" title="已完成决策（合规已通过，可导出）"><span class="badge badge-ok">✓ 已决定投标</span></a></td>
+            <td><a class="btn sm primary" href="match.html">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">★</button> <button class="btn sm" onclick="addPlan(this)">＋拟投标</button></td>
+          </tr>
+          <tr data-days="3" data-score="66">
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>城市轨道交通视频监控系统升级项目</b></a><div class="note">编号 GDJT-2026-0455 · 预算金额字段缺失 <span title="字段缺失明示，不参与依赖该字段的匹配计分" style="color:var(--warning)">ⓘ</span> · 中国招标投标公共服务平台</div></td>
+            <td>广东·广州</td><td class="r num" style="color:var(--text-3)">—</td>
+            <td><span class="cd">剩 12 天<span class="sub">08-25 10:00 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-mid">66 中</span></td>
+            <td class="c"><a href="suggestion.html#nogo" title="进入投标建议页（建议放弃）"><span class="badge badge-no">NO-GO</span></a></td>
+            <td><a class="btn sm primary" href="match.html#nogo">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="addPlan(this)">＋拟投标</button></td>
+          </tr>
+          <tr data-days="12" data-score="58">
+            <td><input type="checkbox"></td>
+            <td><a class="link" href="match.html"><b>大学图书馆数字化资源建设项目</b></a><div class="note">编号 DXSG-2026-0317 · 某大学 · 中国政府采购网</div></td>
+            <td>北京</td><td class="r num">380 万</td>
+            <td><span class="cd">剩 8 天<span class="sub">08-21 09:00 开标</span></span></td>
+            <td><span class="tag">招标</span></td>
+            <td class="c"><span class="badge badge-low">58 低</span></td>
+            <td class="c"><span class="badge badge-low" title="匹配分低于推荐下限 80，未进入推荐列表">未达下限</span></td>
+            <td><a class="btn sm primary" href="match.html">查看匹配</a> <button class="btn sm" onclick="showToast('已收藏')">☆</button> <button class="btn sm" onclick="addPlan(this)">＋拟投标</button></td>
+          </tr>
+        </table>
+        <div style="display:flex;align-items:center;padding:12px 16px">
+          <button class="btn sm" onclick="showToast('已批量加入拟投标的：' + document.querySelectorAll('.tbl tr:not(:first-child) input[type=checkbox]:checked').length + ' 个标的 · 决策后自动流转')">批量加入拟投标</button>
+          <div class="pagination" style="flex:1;margin:0">
+            <span>‹</span><span class="on">1</span><span>2</span><span>3</span><span>…</span><span>47</span><span>›</span>
+          </div>
+        </div>
+      </div>
+      <div class="note">匹配分说明：高 ≥80（红）· 中 60–79（蓝）· 低 &lt;60（灰）；硬性条件不满足时无论总分高低均不得标高匹配。</div>
+    </div>
+  </div>
+</div>
+<!-- ===== 订阅推送弹层（一级：我的订阅列表） ===== -->
+<div class="modal-mask" id="subModal" onclick="if(event.target===this)closeModal('subModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <span style="font-size:19px">📡</span>
+      <div class="t">订阅推送管理 <span class="note" style="font-weight:400">命中后入库 ≤30 分钟推送（F4）· 每条订阅附自然语言描述，作为 AI 语义命中的补充依据</span></div>
+      <button class="x" onclick="closeModal('subModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- 我的订阅 -->
+      <div class="f-label" style="margin-top:0" id="subCnt">我的订阅（3 / 上限 10 个）</div>
+      <div class="sub-row">
+        <div class="top">
+          <span class="nm">智慧校园方向</span>
+          <span class="cds">关键词：智慧校园、教育信息化 · 系统集成 · 山东 · ≥300 万 · 实时推送</span>
+          <span class="lnk" onclick="editSub('智慧校园方向')">编辑</span>
+          <label class="sw" title="启用/停用"><input type="checkbox" checked><i></i></label>
+          <span class="lnk" style="color:var(--danger)" onclick="showToast('删除前需二次确认，历史推送记录保留')">删除</span>
+        </div>
+        <textarea class="nl" rows="2" onchange="showToast('订阅描述已更新（AI 语义匹配将同步生效）')">关注山东省内预算 300 万以上的智慧校园与教育信息化集成项目，要求具备信息系统建设相关资质</textarea>
+      </div>
+      <div class="sub-row">
+        <div class="top">
+          <span class="nm">医疗信息化方向</span>
+          <span class="cds">关键词：医院信息化、运维服务 · 运维服务 · 山东 · 不限金额 · 实时推送</span>
+          <span class="lnk" onclick="editSub('医疗信息化方向')">编辑</span>
+          <label class="sw" title="启用/停用"><input type="checkbox" checked><i></i></label>
+          <span class="lnk" style="color:var(--danger)" onclick="showToast('删除前需二次确认，历史推送记录保留')">删除</span>
+        </div>
+        <textarea class="nl" rows="2" onchange="showToast('订阅描述已更新（AI 语义匹配将同步生效）')">关注山东省各级医院的信息化运维服务采购，金额不限，包含 HIS、PACS 等核心系统的运维外包</textarea>
+      </div>
+      <div class="sub-row" style="opacity:.7">
+        <div class="top">
+          <span class="nm">安防维保方向</span>
+          <span class="cds">关键词：安防、维保 · 运维服务 · 已停用 · 连续 30 天无命中，系统建议优化关键词</span>
+          <span class="lnk" onclick="editSub('安防维保方向')">编辑</span>
+          <label class="sw" title="启用/停用"><input type="checkbox"><i></i></label>
+          <span class="lnk" style="color:var(--danger)" onclick="showToast('删除前需二次确认，历史推送记录保留')">删除</span>
+        </div>
+        <textarea class="nl" rows="2" onchange="showToast('订阅描述已更新（AI 语义匹配将同步生效）')">关注安防设施维保与运维类项目，含视频监控、门禁系统的定期维护服务采购</textarea>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin:14px 0 2px">
+        <button class="btn primary" onclick="openAdd()">＋ 添加订阅</button>
+        <span class="note">自然语言描述可直接在上方文本框中修改，保存后自动作为语义匹配依据</span>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span class="note">命中推送可在 <a class="link" href="messages.html">消息中心</a> 查看，订阅效果可在 <a class="link" href="collectboard.html">数据采集看板</a> 复盘。</span>
+      <span style="flex:1"></span>
+      <button class="btn primary" onclick="closeModal('subModal')">完成</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 新建/编辑订阅弹层（二级） ===== -->
+<div class="modal-mask" id="addModal" onclick="if(event.target===this)closeModal('addModal')">
+  <div class="modal">
+    <div class="modal-head">
+      <span style="font-size:19px">➕</span>
+      <div class="t">新建订阅 <span class="note" style="font-weight:400">定义关注的关键词与标的类型，命中后入库 ≤30 分钟推送（F4）</span></div>
+      <button class="x" onclick="closeModal('addModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="f-label" style="margin-top:0"><span class="req">*</span> 订阅名称</div>
+      <input class="mini" style="width:280px;padding:8px 10px" placeholder="如：智慧校园方向">
+
+      <div class="f-label">✦ 自然语言描述 <span class="note">用一句话描述想关注的项目，AI 语义匹配将与关键词规则共同生效</span></div>
+      <textarea class="mini" rows="3" style="width:100%;padding:9px 12px;resize:vertical;font-family:inherit;line-height:1.7" placeholder="例如：关注山东省内预算 300 万以上的智慧校园与教育信息化集成项目，要求具备信息系统建设相关资质"></textarea>
+
+      <div class="f-label"><span class="req">*</span> 关注关键词 <span class="note">命中任一关键词即视为命中；支持企业画像推荐词</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">智慧校园</span><span class="opt on" onclick="tgl(this)">教育信息化</span><span class="opt on" onclick="tgl(this)">系统集成</span><span class="opt" onclick="tgl(this)">弱电智能化</span><span class="opt" onclick="tgl(this)">雪亮工程</span><span class="opt" onclick="tgl(this)">安防</span><span class="opt" onclick="tgl(this)">运维服务</span><span class="opt" onclick="tgl(this)">数据中台</span><span class="opt" onclick="tgl(this)">一网通办</span>
+        <span style="display:inline-flex;gap:6px;vertical-align:middle"><input class="mini" id="kwAdd" placeholder="自定义关键词…" style="width:140px;padding:6px 10px"><button class="btn sm" onclick="addKw()">＋ 添加</button></span>
+      </div>
+
+      <div class="f-label">标的类型（采购内容分类） <span class="note">多选 · 不限则留空</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">系统集成</span><span class="opt on" onclick="tgl(this)">运维服务</span><span class="opt" onclick="tgl(this)">设备采购</span><span class="opt" onclick="tgl(this)">软件开发</span><span class="opt" onclick="tgl(this)">工程施工</span><span class="opt" onclick="tgl(this)">咨询设计</span><span class="opt" onclick="tgl(this)">货物类</span><span class="opt" onclick="tgl(this)">服务类</span>
+      </div>
+
+      <div class="f-label">公告类型 <span class="note">更正/中标结果推送用于跟踪已关注项目</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">招标公告</span><span class="opt on" onclick="tgl(this)">更正公告</span><span class="opt" onclick="tgl(this)">中标结果</span><span class="opt" onclick="tgl(this)">废标公告</span><span class="opt" onclick="tgl(this)">采购意向</span>
+      </div>
+
+      <div class="f-label">关注地区 <span class="note">多选 · 默认全国</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">山东</span><span class="opt" onclick="tgl(this)">河北</span><span class="opt" onclick="tgl(this)">江苏</span><span class="opt" onclick="tgl(this)">北京</span><span class="opt" onclick="tgl(this)">天津</span><span class="opt" onclick="tgl(this)">河南</span><span class="opt" onclick="tgl(this)">全国（不限）</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 26px">
+        <div>
+          <div class="f-label">预算金额区间 <span class="note">留空不限</span></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input class="mini" style="width:96px;padding:8px 10px" placeholder="不限"><span class="note">万 至</span>
+            <input class="mini" style="width:96px;padding:8px 10px" placeholder="不限">
+            <span class="note">万</span>
+          </div>
+        </div>
+        <div>
+          <div class="f-label">推送门槛（防打扰）</div>
+          <select class="mini" style="width:100%;padding:8px 10px">
+            <option>仅推送匹配分 ≥ 我的推荐下限（当前 80）的项目（推荐）</option>
+            <option>推送匹配分 ≥ 60（中匹配及以上）的项目</option>
+            <option>命中关键词即推送（不限匹配分）</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 26px">
+        <div>
+          <div class="f-label">推送渠道</div>
+          <div>
+            <span class="opt on" onclick="tgl(this)">站内信</span><span class="opt on" onclick="tgl(this)">邮件</span><span class="opt" onclick="tgl(this)" title="V1.1 规划中">企业微信（V1.1）</span>
+          </div>
+        </div>
+        <div>
+          <div class="f-label">推送频率</div>
+          <div>
+            <span class="opt on" onclick="tgl(this)">实时（入库后 ≤30 分钟）</span><span class="opt" onclick="tgl(this)">每日汇总（09:00）</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="f-label">接收人 <span class="note">由 RBAC 控制：商务市场/标书撰写默认可接收，观察者不可接收</span></div>
+      <div>
+        <span class="opt on" onclick="tgl(this)">李商务</span><span class="opt" onclick="tgl(this)">王标书</span><span class="opt" onclick="tgl(this)">张资料</span>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span class="note">保存后即刻生效；命中推送可在 <a class="link" href="messages.html">消息中心</a> 查看，订阅效果可在 <a class="link" href="collectboard.html">数据采集看板</a> 复盘。</span>
+      <span style="flex:1"></span>
+      <button class="btn" onclick="closeModal('addModal')">取消</button>
+      <button class="btn primary" onclick="saveSub()">保存订阅</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 自定义清理弹层 ===== -->
+<div class="modal-mask" id="cleanModal" onclick="if(event.target===this)closeModal('cleanModal')">
+  <div class="modal" style="max-width:660px">
+    <div class="modal-head">
+      <span style="font-size:19px">🧹</span>
+      <div class="t">自定义清理推送标的 <span class="note" style="font-weight:400">设定采集时间与匹配度条件，由系统自动清理过期低价值标的</span></div>
+      <button class="x" onclick="closeModal('cleanModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="cl-sec">
+        <div class="f-label" style="margin-top:0">① 采集时间条件 <span class="note">以公告采集入库时间为准</span></div>
+        <span class="opt" onclick="cleanDays(this,3)">采集超过 3 天</span>
+        <span class="opt on" onclick="cleanDays(this,7)">采集超过 7 天</span>
+        <span class="opt" onclick="cleanDays(this,15)">采集超过 15 天</span>
+        <span class="opt" onclick="cleanDays(this,30)">采集超过 30 天</span>
+      </div>
+      <div class="cl-sec">
+        <div class="f-label" style="margin-top:0">② 匹配度条件 <span class="note">匹配分来自六维匹配评分（资质/业绩/地域/商务/技术/竞争）</span></div>
+        <span class="opt" onclick="cleanScore(this,0,40)">匹配分 &lt; 40</span>
+        <span class="opt on" onclick="cleanScore(this,0,60)">匹配分 &lt; 60（低匹配）</span>
+        <span class="opt" onclick="cleanScore(this,0,80)">匹配分 &lt; 80（推荐下限以下）</span>
+        <span class="opt" onclick="cleanScore(this,60,79)">仅 60–79（中匹配）</span>
+        <div class="note" id="scoreDesc" style="margin-top:4px">当前条件：清理匹配分低于 60 的标的</div>
+      </div>
+      <div class="cl-sec">
+        <div class="f-label" style="margin-top:0">③ 豁免保护 <span class="note">命中条件的以下标的不会被清理</span></div>
+        <span class="opt on" onclick="tgl(this)">已收藏</span>
+        <span class="opt on" onclick="tgl(this)">已加入拟投标的</span>
+        <span class="opt on" style="cursor:default" title="已决定投标的标的已进入后续流程，永不清理">已决定投标（始终保护）</span>
+      </div>
+      <div class="cl-sec">
+        <div class="f-label" style="margin-top:0">④ 定时自动执行 <span class="note">系统按规则定期自动清理并留痕</span></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="opt freq on" style="margin:0" onclick="pickFreq(this)">每日 02:00</span>
+          <span class="opt freq" style="margin:0" onclick="pickFreq(this)">每周一 02:00</span>
+          <span style="flex:1"></span>
+          <span class="note">自动清理</span>
+          <label class="sw" title="启用/停用自动清理"><input type="checkbox" id="autoSw" checked><i></i></label>
+        </div>
+      </div>
+      <div class="f-label">⑤ 命中预览 <span class="note">基于当前列表（第 1 页）；执行时对全部分页数据生效</span> <button class="btn sm" style="margin-left:8px" onclick="previewClean()">刷新预览</button></div>
+      <div class="cl-prev" id="cleanPrev">点击「刷新预览」查看命中当前条件的标的。</div>
+    </div>
+    <div class="modal-foot">
+      <span class="note">清理仅移出推送标的列表，采集留痕与匹配快照保留，可在 <a class="link" href="collectboard.html">数据采集看板</a> 复盘。</span>
+      <span style="flex:1"></span>
+      <button class="btn" onclick="closeModal('cleanModal')">取消</button>
+      <button class="btn primary" onclick="applyClean()">确认清理并保存规则</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800);}
+function setMode(el,mode){
+  document.querySelectorAll('.search-mode span').forEach(s=>s.className='');
+  el.className = mode==='ai' ? 'on-ai' : 'on';
+  document.getElementById('aihint').style.display = mode==='ai' ? 'block' : 'none';
+  document.getElementById('kw').placeholder = mode==='ai' ? '用自然语言描述你想找的项目…' : '输入关键词，如：智慧校园 集成';
+  document.getElementById('sicon').textContent = mode==='ai' ? '✦' : '🔍';
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function openAdd(){document.getElementById('addModal').classList.add('open');}
+function editSub(name){document.getElementById('addModal').classList.add('open');showToast('已载入订阅「'+name+'」的配置进行编辑');}
+function saveSub(){
+  closeModal('addModal');showToast('订阅已保存并生效');
+  const row=document.createElement('div');row.className='sub-row';
+  row.innerHTML='<div class="top"><span class="nm">新订阅（待命名）</span><span class="cds">关键词 + 语义描述 · 实时推送 · 刚刚创建</span><span class="lnk" onclick="editSub(\'新订阅\')">编辑</span><label class="sw" title="启用/停用"><input type="checkbox" checked><i></i></label><span class="lnk" style="color:var(--danger)" onclick="showToast(\'删除前需二次确认，历史推送记录保留\')">删除</span></div><textarea class="nl" rows="2" onchange="showToast(\'订阅描述已更新（AI 语义匹配将同步生效）\')"></textarea>';
+  const rows=document.querySelectorAll('#subModal .sub-row');
+  const last=rows[rows.length-1];
+  last.parentElement.insertBefore(row,last.nextSibling);
+  document.getElementById('subCnt').textContent='我的订阅（'+document.querySelectorAll('#subModal .sub-row').length+' / 上限 10 个）';
+}
+function tgl(el){el.classList.toggle('on');}
+function addKw(){
+  const i=document.getElementById('kwAdd');const v=i.value.trim();if(!v)return;
+  const s=document.createElement('span');s.className='opt on';s.textContent=v;s.onclick=function(){tgl(this);};
+  i.parentElement.parentElement.insertBefore(s,i.parentElement);
+  i.value='';showToast('关键词已添加：'+v);
+}
+/* ===== 加入拟投标的 ===== */
+function addPlan(btn){
+  const tr=btn.closest('tr');
+  const name=tr.querySelector('b').textContent.trim();
+  const score=tr.querySelector('.badge').textContent.trim().split(' ')[0];
+  const dec=tr.cells[7].textContent.trim();
+  const cd=tr.querySelector('.cd .sub');
+  btn.textContent='✓ 已加入';btn.disabled=true;btn.style.color='var(--success)';btn.style.borderColor='var(--success)';btn.style.cursor='default';
+  let tip='';
+  if(dec.indexOf('GO 附条件')>-1)tip='｜建议先核实 3 项前提条件（资质 / 业绩 / 时间）';
+  else if(dec.indexOf('WATCH')>-1)tip='｜推荐决策为 WATCH，建议持续观察后再定';
+  else if(dec.indexOf('NO-GO')>-1)tip='｜系统推荐 NO-GO，人工加入后请尽快完成决策复核';
+  else if(dec.indexOf('已决定投标')>-1)tip='｜该标的已完成决策，可在「投标标的」中查看';
+  else if(dec.indexOf('未达下限')>-1)tip='｜匹配分未达推荐下限，请谨慎评估';
+  showToast('✓ 已加入拟投标的：'+name+'（匹配分 '+score+'）'+tip+'，开标 '+(cd?cd.textContent.trim():'')+' · 前往「拟投标的」完成投标决策');
+}
+/* ===== 自定义清理 ===== */
+let cleanDaysV=7, cleanMin=0, cleanMax=60;
+function cleanDays(el,v){el.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));el.classList.add('on');cleanDaysV=v;previewClean();}
+function cleanScore(el,lo,hi){el.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));el.classList.add('on');cleanMin=lo;cleanMax=hi;
+  document.getElementById('scoreDesc').textContent='当前条件：清理匹配分'+(lo>0?lo+'–'+hi+' 区间内':'低于 '+hi)+'的标的';previewClean();}
+function pickFreq(el){document.querySelectorAll('.freq').forEach(o=>o.classList.remove('on'));el.classList.add('on');}
+function previewClean(){
+  document.querySelectorAll('.tbl tr.cl-hit').forEach(r=>r.classList.remove('cl-hit'));
+  const rows=[...document.querySelectorAll('.tbl tr')].slice(1);
+  const hits=[];let prot=0;
+  rows.forEach(tr=>{
+    if(tr.dataset.protect){prot++;return;}
+    if((+tr.dataset.days)>cleanDaysV && (+tr.dataset.score)>=cleanMin && (+tr.dataset.score)<cleanMax){hits.push(tr);tr.classList.add('cl-hit');}
+  });
+  const box=document.getElementById('cleanPrev');
+  if(!hits.length){box.innerHTML='当前页无命中条件的标的（<b>0</b> 条）· '+prot+' 条已决定投标标的受豁免保护';return;}
+  box.innerHTML='共命中 <b>'+hits.length+'</b> 条（表格中已高亮）：<br>'+hits.map(tr=>'· '+tr.querySelector('b').textContent+' — 采集 '+tr.dataset.days+' 天前 · 匹配分 '+tr.dataset.score).join('<br>');
+}
+function applyClean(){
+  const rows=[...document.querySelectorAll('.tbl tr')].slice(1);
+  const hits=rows.filter(tr=>!tr.dataset.protect && (+tr.dataset.days)>cleanDaysV && (+tr.dataset.score)>=cleanMin && (+tr.dataset.score)<cleanMax);
+  const auto=document.getElementById('autoSw').checked;
+  const freq=document.querySelector('.freq.on').textContent;
+  updateRuleNote(auto,freq,hits.length);
+  if(!hits.length){closeModal('cleanModal');showToast('清理规则已保存 · 当前无命中条件的标的');return;}
+  hits.forEach(tr=>tr.classList.add('cl-out'));
+  setTimeout(()=>hits.forEach(tr=>tr.remove()),420);
+  const nt=document.querySelector('.page-title .note');
+  nt.textContent='共 '+(2416-hits.length).toLocaleString()+' 条 · 默认按匹配分排序';
+  closeModal('cleanModal');
+  showToast('🧹 已清理 '+hits.length+' 条标的（采集超 '+cleanDaysV+' 天 · 匹配分 '+cleanMin+'–'+cleanMax+'）· 采集留痕保留，看板可复盘');
+}
+function updateRuleNote(auto,freq,n){
+  const el=document.getElementById('cleanRuleNote');
+  el.style.display='block';
+  el.innerHTML='🧹 自动清理规则 '+(auto?'<b style="color:var(--success)">已启用</b>':'<b style="color:var(--text-3)">已停用</b>')+'：采集超过 '+cleanDaysV+' 天 且 匹配分 '+(cleanMin>0?cleanMin+'–'+cleanMax+' 区间':'低于 '+cleanMax)+(auto?' · '+freq+' 自动执行':'')+ (n?' · 本次已清理 <b>'+n+'</b> 条':'');
+}
+if(location.hash==='#sub'){openModal('subModal');}
+if(location.hash==='#clean'){openModal('cleanModal');previewClean();}
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
