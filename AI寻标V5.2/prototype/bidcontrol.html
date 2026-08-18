@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>投标管控 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* 基础信息两列 */
+.b-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:22px}
+.b-row{display:flex;gap:10px;padding:6.5px 0;border-bottom:1px dashed var(--border);font-size:13px}
+.b-row:last-child{border-bottom:none}
+.b-row .k{width:86px;flex-shrink:0;color:var(--text-3)}
+.b-row .v{flex:1;line-height:1.6}
+/* 关键里程碑横向步骤条 */
+.ms-track{display:flex;margin-top:8px}
+.ms-step{flex:1;position:relative;padding-top:16px;text-align:center}
+.ms-step::before{content:"";position:absolute;top:7px;left:-50%;right:50%;height:2px;background:var(--border)}
+.ms-step:first-child::before{display:none}
+.ms-step.done::before{background:var(--success)}
+.ms-step.cur::before{background:var(--success)}
+.ms-step .dot{position:absolute;top:0;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--border);z-index:1}
+.ms-step.done .dot{background:var(--success);border-color:var(--success)}
+.ms-step.done .dot::after{content:"✓";color:#fff;font-size:10px;display:block;line-height:13px;text-align:center}
+.ms-step.cur .dot{border-color:var(--warning);background:var(--warning);box-shadow:0 0 0 4px rgba(245,159,11,.18)}
+.ms-step.cur .dot::after{content:"●";color:#fff;font-size:8px;display:block;line-height:14px;text-align:center}
+.ms-step .nm{font-size:12.5px;font-weight:600;margin-top:4px}
+.ms-step.cur .nm{color:#B97708}
+.ms-step.done .nm{color:var(--text-2)}
+.ms-step.future .nm{color:var(--text-3);font-weight:400}
+.ms-step .dt{font-size:11px;color:var(--text-3);margin-top:1px}
+/* 执行清单（与决策页同款，支持点击切换） */
+.chk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer}
+.chk:last-child{border-bottom:none}
+.chk .box{width:17px;height:17px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.chk.done .box{background:var(--success);border-color:var(--success)}
+.chk.done .act{color:var(--text-3);text-decoration:line-through}
+/* 资金条目 */
+.fund{border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:10px}
+.fund:last-child{margin-bottom:0}
+.fund .fh{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px}
+.fund .fh .amt{margin-left:auto;font-weight:700;font-size:14px}
+.fund .fd{font-size:12px;color:var(--text-3);margin-top:4px;line-height:1.6}
+/* 文档清单 */
+.doc{display:flex;align-items:center;gap:9px;padding:7.5px 0;border-bottom:1px solid var(--border);font-size:13px}
+.doc:last-child{border-bottom:none}
+.doc .di{width:15px;text-align:center}
+/* 澄清与更正 */
+.clr{border-left:3px solid var(--warning);background:#FFFCF2;border-radius:0 10px 10px 0;padding:11px 14px;font-size:13px;line-height:1.7}
+.clr .ct{font-weight:600}
+.clr .cm{font-size:12px;color:var(--text-3);margin-top:3px}
+/* 区块标题 */
+.sec-t{display:flex;align-items:center;gap:10px;margin:18px 2px 10px;font-size:15px;font-weight:700}
+.sec-t .eid{font-size:11px;padding:2px 9px;border-radius:6px;background:var(--primary-light);color:var(--primary-dark);font-weight:600}
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- 左侧导航 -->
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的<span class="nav-badge">3</span></a>
+        <a class="nav-item active" href="bidprojects.html"><span class="ico">✎</span>投标标的<span class="nav-badge">2</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+            <div class="nav-group">
+        <div class="nav-title">企业画像</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>本企业</a>
+        <a class="nav-item" href="profile.html#rival"><span class="ico">⚔</span>竞争对手</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">数据洞察</div>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>效果看板</a>
+        <a class="nav-item" href="collectboard.html"><span class="ico">▦</span>采集看板</a>
+        <a class="nav-item" href="marketboard.html"><span class="ico">◈</span>市场看板</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">系统配置</div>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">王</div><span>王标书 · 标书撰写</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">招标信息 / <a href="bidprojects.html" style="color:inherit;text-decoration:none">投标标的</a> / <b>投标管控</b></div>
+      <div class="page-title" id="pgTitle">投标管控</div>
+
+      <!-- 管控指标卡 -->
+      <div class="grid g4">
+        <div class="stat"><div class="lbl">执行清单完成</div><div class="val num blue" id="stExec">—</div><div class="sub" id="stExecSub">投标前必做动作 · 点击可勾选</div></div>
+        <div class="stat"><div class="lbl">风险项（高 / 中 / 低）</div><div class="val num red" id="stRisk">—</div><div class="sub" id="stRiskSub">与决策页 E1 风险筛查同源</div></div>
+        <div class="stat"><div class="lbl">下一关键节点</div><div class="val num orange" id="stNext" style="font-size:19px;line-height:38px">—</div><div class="sub" id="stNextSub">关键里程碑 · 系统自动提醒</div></div>
+        <div class="stat"><div class="lbl">资金占用</div><div class="val num green" id="stFund">—</div><div class="sub" id="stFundSub">保证金 / 报价 / 预算</div></div>
+      </div>
+
+      <!-- ① 标的信息 + 关键里程碑 -->
+      <div class="sec-t"><span class="eid">管控 · 1</span>标的信息 <span class="note">与推送标的 / 匹配结果同源 · 更正公告自动同步本页时间线</span></div>
+      <div class="card">
+        <div class="b-grid">
+          <div id="baseLeft"></div>
+          <div id="baseRight"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <h3>关键里程碑 <span class="note" id="msNote"></span> <span class="more" onclick="showToast('已同步至工作台待办与日历提醒（截止前 72h / 24h 两级提醒）')">同步到工作台待办</span></h3>
+        <div class="ms-track" id="msTrack"></div>
+      </div>
+
+      <!-- ② 执行清单 + 风险登记表（自决策页迁移至投标阶段统一管控） -->
+      <div class="sec-t"><span class="eid">管控 · 2</span>执行管控 <span class="note">执行清单与风险登记表随决策采纳自动生成 · 投标阶段持续维护至归档</span></div>
+      <div class="grid g2">
+        <div class="card" style="margin-bottom:0">
+          <h3>执行清单 <span class="note" id="execNote"></span> <span class="more" id="execMore"></span></h3>
+          <div id="execItems"></div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <input class="mini" id="execAdd" placeholder="补充执行事项，如：联系招标代理确认递交地点…" style="flex:1;padding:8px 12px">
+            <button class="btn sm" onclick="addExec()">＋ 添加</button>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:0">
+          <h3>风险登记表 <span class="note">评级与 E1 风险筛查一致 · 高风险项每日推送责任人</span> <span class="more" onclick="showToast('添加风险项：风险描述 + 评级 + 责任人 + 时间窗口 + 应对预案')">✚ 添加风险项</span></h3>
+          <table class="tbl">
+            <thead><tr><th>风险项</th><th class="c">评级</th><th>责任人</th><th>时间窗口</th><th>应对预案</th></tr></thead>
+            <tbody id="regRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ③ 资金保证金 + 投标文档件 + 澄清更正 -->
+      <div class="sec-t"><span class="eid">管控 · 3</span>商务与文件 <span class="note">资金占用实时统计 · 文件就绪度在递交前必须 100%</span></div>
+      <div class="grid g3">
+        <div class="card" style="margin-bottom:0">
+          <h3>资金与保证金 <span class="note">缴纳凭证上传后自动挂接时间线</span></h3>
+          <div id="fundItems"></div>
+        </div>
+        <div class="card" style="margin-bottom:0">
+          <h3>投标文档件清单 <span class="note" id="docNote"></span></h3>
+          <div id="docItems"></div>
+        </div>
+        <div class="card" style="margin-bottom:0">
+          <h3>澄清与更正跟踪 <span class="note">更正公告由系统监测 · 澄清须在截止前提交</span></h3>
+          <div id="clrItems"></div>
+        </div>
+      </div>
+
+      <!-- 底部操作 -->
+      <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+        <a class="btn" href="bidprojects.html">‹ 返回投标标的列表</a>
+        <a class="btn primary" id="editorLink" href="editor.html#bh">标书编辑 ›</a>
+        <button class="btn" onclick="showToast('打印 / 导出管控看板（PDF · 审计留痕，只增不改）')">导出管控看板</button>
+        <button class="btn" onclick="showToast('已发送催办提醒：执行清单未完成事项的责任人（消息中心 + 邮件）')">催办未完成事项</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2400);}
+function chk(done,act,meta){return '<div class="chk'+(done?' done':'')+'" onclick="toggleChk(this)"><span class="box">'+(done?'✓':'')+'</span><span class="act" style="flex:1">'+act+'</span><span class="note">'+meta+'</span></div>';}
+function reg(r,lv,owner,win,plan){var cls=lv==='高'?'no':lv==='中'?'warn':'low';return '<tr><td>'+r+'</td><td class="c"><span class="badge badge-'+cls+'">'+lv+'</span></td><td>'+owner+'</td><td class="note">'+win+'</td><td class="note">'+plan+'</td></tr>';}
+function bkv(k,v){return '<div class="b-row"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>';}
+function fund(name,st,cls,amt,detail){return '<div class="fund"><div class="fh">'+name+' <span class="badge badge-'+cls+'">'+st+'</span><span class="amt num">'+amt+'</span></div><div class="fd">'+detail+'</div></div>';}
+function doc(st,name,meta){var ico=st==='ok'?'✅':st==='warn'?'⏳':'⬜';return '<div class="doc"><span class="di">'+ico+'</span><span style="flex:1">'+name+'</span><span class="note">'+meta+'</span></div>';}
+function clr(t,meta){return '<div class="clr" style="margin-bottom:10px"><div class="ct">'+t+'</div><div class="cm">'+meta+'</div></div>';}
+function ms(nm,dt,st){return '<div class="ms-step '+st+'"><span class="dot"></span><div class="nm">'+nm+'</div><div class="dt">'+dt+'</div></div>';}
+
+const PROFILES = {
+/* ================= bh 滨海新城智慧校园（撰写中 · GO 附条件 · 红线告警） ================= */
+bh:{name:'滨海新城智慧校园一体化建设项目（一期）',badge:'<span class="badge badge-mid">撰写中</span> <span class="badge badge-no">红线告警 ×1</span>',
+ baseL:[['项目编号','公告 BHZB-2026-0812 · 标书任务 #BS-2026-0813'],['招标方','滨海新城教育和卫生健康事业服务中心'],['项目类型','智慧校园 · 信息化集成建设'],['预算金额','¥1,280 万（最高限价 ¥1,260 万）'],['资金来源','财政资金 · 已批复'],['递交方式','线下密封递交 · 滨海公共资源交易中心']],
+ baseR:[['匹配评分','<span class="badge badge-high">87</span> 高度匹配'],['推荐决策','<a href="suggestion.html#cond">GO 附条件 · 3 项前提</a>（已逐项确认）'],['投标报价','测算区间 ¥1,180–1,256 万 · 终审未启动'],['撰写进度','62% · 响应点 21/23 · 撰写人：王标书'],['合规状态','<b style="color:var(--danger)">未通过</b> · 真实性红线 ×1 · 格式 ×3 · 已阻断导出与确认投标'],['截止时间','<b style="color:var(--high)">2026-08-15 09:30 开标 · 剩 44 小时</b>']],
+ msNote:'红线处理是当前唯一阻塞项 · 里程碑随合规结果自动重算',
+ mses:[['决策采纳','08-12','done'],['红线处理','08-14 12:00 前','cur'],['报价终审','08-14',''],['保证金缴纳','08-14 17:00',''],['密封递交','08-15 08:00',''],['开标','08-15 09:30','']],
+ next:['红线处理','08-14 12:00 前'],fundShort:'¥64 万',fundShortSub:'保证金待缴 · 报价区间测算中',
+ exec:[chk(true,'GO 附条件 3 项前提条件逐项确认并留痕','李商务 · 08-12 · 已完成'),chk(true,'CS3 证书与 ISO27001 扫描件归档','张资料 · 08-12 · 已完成'),chk(true,'智慧校园同类业绩 2 个合同 + 验收报告调取','张资料 · 08-13 · 已完成'),chk(false,'处理真实性红线 ×1（业绩表述与合同原件核对）','王标书 · 08-14 12:00 · <b style="color:var(--danger)">阻塞投标</b>'),chk(false,'修复格式问题 ×3（页眉模板 / 目录页码 / 签字页）','王标书 · 08-14 15:00 · 进行中'),chk(false,'滨海驻场团队组建方案确认（地域维度待确认项）','周管理 · 08-14 · 待开始'),chk(false,'保证金 ¥64 万缴纳审批','周管理 · 08-14 17:00 · 待开始'),chk(false,'最终报价审批（稳健主攻区间）+ 复测合规 → 密封递交','李商务 · 王标书 · 08-15 08:00 · 待开始')],
+ regR:reg('合规红线未处理 · 导出与确认投标被阻断','高','王标书','至 08-14 12:00','红线逐项核对原件；逾期启动升级机制（负责人 + 管理员双签）')+reg('截止临近（剩 44h）','高','王标书','至 08-15 09:30','红线修复后立即终审 + 递交；预留 2 小时交通缓冲')+reg('滨海驻场团队未落实（地域维度 ?待确认）','中','周管理','至 08-14','本地合作伙伴备选名单 2 家，48 小时内可锁定')+reg('存量集成商竞争（参考情报）','中','李商务','开标前','突出智慧校园专项业绩与驻场承诺差异化'),
+ funds:[fund('投标保证金','待缴','warn','¥64 万','预算 1,280 万的 5% · 缴纳窗口至 08-14 17:00 · 凭证须随标书递交'),fund('项目预算','已载明','ok','¥1,280 万','最高限价 ¥1,260 万 · 报价审批按稳健主攻区间 ¥1,180–1,256 万'),fund('履约保证金（中标后）','预案','low','10%','合同额 10% · 可用银行保函替代，财务已预审授信额度')],
+ docNote:'就绪 4 / 7 · 红线修复后方可定稿',
+ docs:[doc('warn','投标文件正本（撰写中 62%）','响应点 21/23 · 红线 ×1 待处理'),doc('warn','报价明细表','测算完成 · 待终审签批'),doc('ok','法定代表人授权书','已盖章扫描'),doc('ok','业绩证明材料（2 个同类项目）','合同 + 验收报告已归档'),doc('ok','资质证书扫描件（CS3 / ISO27001）','张资料 08-12 归档'),doc('warn','驻场服务承诺函','待驻场方案确认后出具'),doc('warn','密封包装与递交回执','递交日当天执行')],
+ clrs:[
+  '<div class="ct">澄清：驻场人员社保缴纳地要求是否限滨海本地</div><div class="cm">08-13 09:20 提交 · 澄清截止 08-13 17:00 · <b style="color:#B97708">待答复</b> · 影响驻场方案与地域维度判定</div>',
+  '<div class="ct">更正公告监测：暂无</div><div class="cm">系统每 30 分钟巡检滨海交易中心 · 检测到更正自动重算里程碑并通知责任人</div>']},
+/* ================= qz 区政务服务中心一网通办（已投标 · 待开标） ================= */
+qz:{name:'区政务服务中心一网通办平台建设项目',badge:'<span class="badge badge-mid">已投标 · 待开标</span>',
+ baseL:[['项目编号','公告 QZZC-2026-0219 · 标书任务 #BS-2026-0810'],['招标方','区政务服务中心（区行政审批服务局）'],['项目类型','政务服务平台建设'],['预算金额','¥420 万'],['资金来源','财政资金 · 已批复'],['递交方式','电子投标 · 区公共资源交易平台']],
+ baseR:[['匹配评分','<span class="badge badge-high">81</span> 高度匹配'],['推荐决策','<a href="suggestion.html#go">GO 已采纳</a>（08-08 决策留痕）'],['投标报价','¥396.8 万（预算下浮 5.5%）'],['撰写进度','100% · 响应点 18/18 · 撰写人：王标书'],['合规状态','<b style="color:var(--success)">已通过</b> · 08-12 15:40 · 红线 0 · 格式 0 · 资质 0'],['开标时间','2026-08-16 14:00 · 08-13 09:40 已提交']],
+ msNote:'标书侧全部完成 · 当前进入开标等待期 · 开标后请及时标记结果',
+ mses:[['标书定稿','08-10','done'],['合规通过','08-12','done'],['确认投标','08-13','done'],['开标','08-16 14:00','cur'],['结果公示','预计 08-19',''],['标记结果','公示后','']],
+ next:['开标','08-16 14:00'],fundShort:'¥12.6 万',fundShortSub:'保证金已缴 · 预计开标后 5 个工作日退还',
+ exec:[chk(true,'报价审批（¥396.8 万 · 预算下浮 5.5%）','李商务 · 08-11 · 已完成'),chk(true,'标书终稿合规检查（红线 0 / 格式 0 / 资质 0）','系统 · 08-12 15:40 · 已完成'),chk(true,'docx 导出 · 招标方模板套红头','王标书 · 08-12 17:05 · 已完成'),chk(true,'投标保证金 ¥12.6 万缴纳 + 凭证上传','周管理 · 08-12 · 已完成'),chk(true,'投标文件电子提交（回执 #TJ-0813-0940）','李商务 · 08-13 09:40 · 已完成'),chk(false,'开标会安排（08-16 14:00 · 授权代表出席确认）','李商务 · 08-16 · 待开始'),chk(false,'结果公示跟踪 → 标记投标结果','李商务 · 预计 08-19 · 待开始'),chk(false,'保证金退还跟踪','周管理 · 结果公示后 5 个工作日 · 待开始')],
+ regR:reg('竞争对手本地关系优势','中','李商务','开标前','突出响应点 18/18 完整度与零偏离承诺')+reg('述标环节主观分占比 30%','中','王标书','若进入述标','述标 PPT 预置 + 08-15 内部演练')+reg('开标结果延迟公示','低','李商务','开标后 3 日','每日监测系统公告，超 3 日未公示即电话跟催'),
+ funds:[fund('投标保证金','已缴','ok','¥12.6 万','08-12 缴纳 · 凭证已挂接时间线 · 预计开标后 5 个工作日退还'),fund('投标报价','已定稿','ok','¥396.8 万','预算 ¥420 万下浮 5.5% · 稳健区间 · 无二次报价环节'),fund('履约保证金（中标后）','预案','low','5%','合同额 5% · 接受保函 · 授信额度已预审')],
+ docNote:'就绪 7 / 7 · 定稿提交',
+ docs:[doc('ok','投标文件终稿 v4（docx · 套红头）','08-12 17:05 导出 · 校验通过'),doc('ok','报价明细表','已随标书提交'),doc('ok','法定代表人授权书','已盖章'),doc('ok','保证金缴纳凭证','已上传交易平台'),doc('ok','电子提交回执 #TJ-0813-0940','08-13 09:40'),doc('ok','述标 PPT（预置）','若进入述标环节启用'),doc('ok','开标授权委托书','授权代表：李商务')],
+ clrs:[
+  '<div class="ct">澄清：验收指标中"一网通办事项数"统计口径</div><div class="cm">08-10 提交 · 08-11 答复：以省平台接入清单为准 · 已同步响应点编制（无偏离）</div>',
+  '<div class="ct">更正公告监测：暂无</div><div class="cm">系统每 30 分钟巡检区交易中心 · 检测到更正自动重算里程碑并通知责任人</div>']},
+/* ================= sw 水务集团 SCADA（已投标 · 更正延期） ================= */
+sw:{name:'水务集团 SCADA 系统采购项目',badge:'<span class="badge badge-mid">已投标 · 待开标</span> <span class="tag correction">更正延期</span>',
+ baseL:[['项目编号','公告 SWJT-2026-0088 · 标书任务 #BS-2026-0805'],['招标方','水务集团（企业自主采购）'],['项目类型','SCADA 工业控制系统'],['预算金额','¥850 万'],['资金来源','企业自筹'],['递交方式','线下递交 · 水务集团采购中心']],
+ baseR:[['匹配评分','<span class="badge badge-mid">71</span> 中等匹配'],['推荐决策','<a href="suggestion.html#go">低于下限 80 · 人工决定投标</a>（理由已留痕）'],['投标报价','¥812 万（预算下浮 4.5%）'],['撰写进度','100% · 响应点 15/15 · 撰写人：李商务'],['合规状态','<b style="color:var(--success)">已通过</b> · 08-09 10:20 · 红线 0 · 格式 0'],['开标时间','<b style="color:#B97708">更正：08-13 → 08-20 09:30</b> · 08-12 已提交']],
+ msNote:'08-11 检测到更正公告（开标延期 7 天）· 里程碑已重算 · 报价有效期需确认覆盖',
+ mses:[['标书定稿','08-09','done'],['更正检测 · 重算','08-11','done'],['确认投标','08-12','done'],['有效期确认','08-15','cur'],['更正后开标','08-20 09:30',''],['标记结果','开标后','']],
+ next:['更正后开标','08-20 09:30'],fundShort:'¥25.5 万',fundShortSub:'保证金已缴 · 延期期间资金占用 +7 天',
+ exec:[chk(true,'标书定稿 · 企业标准样式 v2 导出','李商务 · 08-09 11:30 · 已完成'),chk(true,'保证金 ¥25.5 万缴纳（原开标 08-13 前完成）','周管理 · 08-09 · 已完成'),chk(true,'更正公告处理：时间线重算 + 相关人通知','系统 · 08-11 14:00 · 已完成'),chk(true,'投标文件提交（按原计划 08-12 递交）','李商务 · 08-12 10:00 · 已完成'),chk(false,'报价有效期确认（投标函载明覆盖至 08-27）','李商务 · 08-15 · 进行中'),chk(false,'延期窗口竞争情报跟踪（竞对是否弃标/调价）','李商务 · 至 08-19 · 进行中'),chk(false,'现场开标出席安排（08-20 09:30）','李商务 · 08-19 确认 · 待开始'),chk(false,'结果标记 + 保证金退还跟踪','李商务 · 周管理 · 开标后 · 待开始')],
+ regR:reg('开标延期引发报价有效期 / 竞对调价','中','李商务','至 08-20','投标函有效期已确认覆盖；延期窗口每日监测竞对动态')+reg('价格竞争（预算下浮空间有限）','中','李商务','开标前','我方下浮 4.5% 处合理区间；若流标二次报价启用激进预案')+reg('SCADA 技术参数偏离表扣分','低','王标书','评标期','偏离表 0 项 · 技术答疑口径已预置'),
+ funds:[fund('投标保证金','已缴','ok','¥25.5 万','预算 3% · 延期不重复缴纳 · 资金占用延长 7 天已登记'),fund('投标报价','已定稿','ok','¥812 万','预算 ¥850 万下浮 4.5% · 有效期确认覆盖至 08-27'),fund('履约保证金（中标后）','预案','low','10%','合同额 10% · 现金或保函均可')],
+ docNote:'就绪 6 / 6 · 定稿提交',
+ docs:[doc('ok','投标文件定稿（docx · 企业标准样式 v2）','08-09 导出 · 校验通过'),doc('ok','报价明细表 + 分项报价','已随标书递交'),doc('ok','技术偏离表（0 偏离）','已签章'),doc('ok','保证金缴纳凭证','已附'),doc('ok','递交回执','08-12 10:00 · 采购中心签收'),doc('ok','开标授权委托（出席 08-20）','授权代表：李商务')],
+ clrs:[
+  '<div class="ct">更正公告（08-11 检测到）：开标时间 08-13 09:30 → 08-20 09:30</div><div class="cm">原因：招标方内部审批延期 · 里程碑已自动重算 · 相关人已通知 · 标书无需修改</div>',
+  '<div class="ct">澄清：PLC 品牌限定是否接受同等品替代</div><div class="cm">08-05 提交 · 08-06 答复：接受同等品并提供检测报告 · 已按答复编制（无偏离）</div>']},
+/* ================= gj 城市轨道交通视频监控（撰写中 · 人工覆盖 NO-GO） ================= */
+gj:{name:'城市轨道交通视频监控系统升级项目',badge:'<span class="badge badge-mid">撰写中</span> <span class="badge badge-no">人工覆盖 NO-GO</span>',
+ baseL:[['项目编号','公告 GDJT-2026-0455 · 标书任务 #BS-2026-0814'],['招标方','某市轨道交通集团（异地 · 广州）'],['项目类型','轨交安防 · 视频监控升级'],['预算金额','未载明（已登记数据源反馈 #F-0455）'],['资金来源','国企自筹'],['递交方式','线下递交 · 广州公共资源交易中心']],
+ baseR:[['匹配评分','<span class="badge badge-mid">66</span> 偏低'],['推荐决策','<a href="suggestion.html#nogo">NO-GO · 一票否决（轨交业绩 0/2）</a>'],['人工覆盖','08-11 决定投标 · 强制四问 + 理由留痕（F5-4）'],['撰写进度','18% · 响应点 5/28 · 撰写人：王标书'],['合规状态','未提交 · 建议完成度 ≥80% 后发起'],['截止时间','2026-08-25 10:00 开标 · 剩 12 天']],
+ msNote:'覆盖 NO-GO 属高风险决策 · 本周复盘点：08-20（澄清无果则建议止损归档）',
+ mses:[['覆盖决策留痕','08-11','done'],['澄清函提交','08-14','cur'],['澄清答复','08-18 前',''],['08-20 复盘止损点','08-20',''],['确认投标','08-24',''],['开标','08-25 10:00','']],
+ next:['澄清函答复','08-18 前'],fundShort:'待定',fundShortSub:'预算未载明 · 澄清后再启动报价审批',
+ exec:[chk(true,'NO-GO 覆盖决策留痕 · 强制四问完成','李商务 · 08-11 · 已完成'),chk(true,'响应点拆解 28 项 · 骨架搭建','王标书 · 08-12 · 已完成'),chk(false,'发澄清函：是否接受联合体投标（业绩补足唯一路径）','李商务 · 08-14 提交 · <b style="color:#B97708">关键节点</b>'),chk(false,'联合体伙伴评估（济南安泰 / 轨交厂商 2 家接洽）','李商务 · 08-16 · 进行中'),chk(false,'轨交行业项目经理认证人员外聘评估','周管理 · 08-17 · 待开始'),chk(false,'响应点编制冲刺（当前 5/28 → 目标 80%）','王标书 · 08-20 · 待开始'),chk(false,'08-20 复盘点：澄清无果 → 启动止损归档评估','周管理 · 08-20 · 待开始'),chk(false,'报价审批（需先澄清预算）+ 合规检查 + 确认投标','李商务 · 08-23 · 待开始')],
+ regR:reg('人工覆盖 NO-GO · 资格审查被否决风险','高','周管理','至开标','每周复盘 + 08-20 止损评估点；否决即归档并回流规则')+reg('轨交业绩缺口 0/2 无法短期补足','高','李商务','长期','澄清联合体口径；同步接洽轨交厂商储备合作')+reg('预算未载明 · 报价无锚点','中','孙配置','至澄清答复','数据源反馈 #F-0455 跟踪；澄清函一并询问预算区间')+reg('异地投标成本（广州）','中','周管理','至决策','差旅 + 驻场预估 ¥8 万已计入成本模型'),
+ funds:[fund('投标保证金','待定','warn','待澄清','金额未载明 · 澄清函一并询问；按行业惯例预估 2%（约 ¥10 万级）'),fund('项目预算','未载明','warn','—','数据源反馈 #F-0455 · 澄清答复后再启动报价审批'),fund('投标成本预估','已计','low','≈¥8 万','异地差旅 + 标书资源 · 覆盖 NO-GO 强制四问时已评估')],
+ docNote:'就绪 1 / 4 · 视澄清结果推进',
+ docs:[doc('ok','投标函框架','骨架已生成'),doc('warn','澄清函（联合体 + 预算 + 保证金）','初稿完成 · 08-14 提交'),doc('warn','联合体协议（预案）','澄清确认接受后启动'),doc('warn','轨交业绩替代证明材料','依赖联合体伙伴 · 评估中')],
+ clrs:[
+  '<div class="ct">澄清函（草拟中）：① 是否接受联合体投标 ② 业绩是否认联合体合并业绩 ③ 预算区间 ④ 保证金金额</div><div class="cm">计划 08-14 提交 · 澄清截止 08-18 · <b style="color:#B97708">答复决定投/弃走向（08-20 复盘点）</b></div>',
+  '<div class="ct">更正公告监测：暂无</div><div class="cm">系统每 30 分钟巡检广州交易中心 · 检测到更正自动重算里程碑并通知责任人</div>']},
+/* ================= dsj 区大数据局运维（已中标 · 合同与归档） ================= */
+dsj:{name:'区大数据局数据共享交换平台运维项目',badge:'<span class="badge badge-ok">已中标 · 合同与归档</span>',
+ baseL:[['项目编号','标书任务 #BS-2026-0721'],['招标方','区大数据局'],['项目类型','政务平台运维服务'],['预算金额','¥175 万'],['中标价格','¥168 万（08-05 公示 · 中标通知书已收）'],['服务期','12 个月 · 驻场 + 远程']],
+ baseR:[['匹配评分','<span class="badge badge-high">83</span> 高度匹配'],['推荐决策','<a href="suggestion.html#go">GO 已采纳</a>（07-11 决策留痕）'],['投标报价','¥168 万（预算下浮 4%）'],['撰写进度','100% · 响应点 12/12 · 撰写人：王标书'],['合规状态','<b style="color:var(--success)">已通过</b> · 07-24 11:00 · 0 问题'],['结果','08-05 标记已中标 · 待合同评审后归档']],
+ msNote:'中标后进入合同与履约阶段 · 归档前须完成复盘与材料沉淀',
+ mses:[['确认投标','07-26','done'],['开标','07-28','done'],['标记中标','08-05','done'],['保证金退还','08-08','done'],['合同评审','08-19 前','cur'],['归档','评审后','']],
+ next:['合同评审','08-19 前'],fundShort:'-¥3.5 万',fundShortSub:'中标保证金已退 · 待缴履约保证金 8.4 万',
+ exec:[chk(true,'标书定稿 · 合规检查通过 · 导出','王标书 · 07-25 · 已完成'),chk(true,'确认投标 · 文件提交','李商务 · 07-26 · 已完成'),chk(true,'开标 + 结果标记：已中标（¥168 万）','李商务 · 08-05 · 已完成'),chk(true,'中标保证金 ¥3.5 万退还确认','周管理 · 08-08 · 已完成'),chk(false,'合同评审（重点：付款节点 / 违约条款 / 考核指标）','李商务 · 08-19 前 · 进行中'),chk(false,'履约保证金 ¥8.4 万缴纳（合同生效后 5 个工作日）','周管理 · 待合同签订 · 待开始'),chk(false,'归档（标书 + 决策记录 + 中标通知书留存）','李商务 · 合同评审后 · 待开始'),chk(false,'启动运维交接与驻场排班（8 人团队 · ITSM 接入）','周管理 · 08 月底 · 待开始')],
+ regR:reg('合同条款风险（付款节点 / 考核违约）','中','李商务','至 08-19','法务参与评审；考核条款争取宽限期与申诉机制')+reg('履约保证金占用资金约 60 天','低','周管理','合同签订后','财务已预留头寸；可用保函替代降低占用')+reg('存量运维文档交接配合度','低','周管理','进场首月','进场前发函明确交接清单与甲方配合责任'),
+ funds:[fund('中标保证金','已退','ok','-¥3.5 万','08-08 全额退还 · 凭证已归档'),fund('履约保证金','待缴','warn','¥8.4 万','合同额 5% · 合同生效后 5 个工作日内缴纳'),fund('中标金额','已公示','ok','¥168 万','预算下浮 4% · 回款节点以合同评审结果为准')],
+ docNote:'就绪 3 / 3 · 待归档沉淀',
+ docs:[doc('ok','投标文件定稿版','合规通过 · 校验 0 问题'),doc('ok','中标通知书','08-05 收取 · 已上传'),doc('ok','合同草案（评审中）','法务意见 08-19 前出具')],
+ clrs:[
+  '<div class="ct">澄清与更正：本项目全流程无澄清 / 更正事项</div><div class="cm">公告发布至开标期间系统监测无变更 · 时间线未重算</div>',
+  '<div class="ct">中标公示跟踪：已完成</div><div class="cm">08-05 公示 · 公示期 3 日无异议 · 结果已标记并回流中标率统计</div>']},
+/* ================= xl 高新区雪亮工程三期（未中标 · 复盘与归档） ================= */
+xl:{name:'高新区雪亮工程三期建设项目',badge:'<span class="badge badge-no">未中标 · 复盘与归档</span>',
+ baseL:[['项目编号','标书任务 #BS-2026-0708'],['招标方','高新区公安分局'],['项目类型','安防 · 雪亮工程视频监控'],['预算金额','¥1,150 万'],['我方报价','¥1,120 万（预算下浮 2.6%）'],['结果','未中标 · 07-25 公示 · 原因：价格竞争力不足']],
+ baseR:[['匹配评分','<span class="badge badge-mid">77</span> 中等匹配'],['推荐决策','<a href="suggestion.html#go">GO 已采纳</a>（07-06 决策留痕）'],['撰写进度','100% · 响应点 20/20 · 撰写人：李商务'],['合规状态','<b style="color:var(--success)">已通过</b> · 07-16 09:30 · 0 问题'],['失分归因','价格竞争力不足 · 已入库（F5-4）'],['后续','复盘完成 → 归档至归档标的']],
+ msNote:'标的事后管控：复盘结论回流匹配规则与报价策略',
+ mses:[['确认投标','07-17','done'],['开标','07-20','done'],['标记未中标','07-25','done'],['复盘会','07-26','done'],['竞对情报补录','08-15','cur'],['归档','补录后','']],
+ next:['归档','复盘会后'],fundShort:'-¥23 万',fundShortSub:'保证金已全额退还',
+ exec:[chk(true,'标书定稿 · 合规通过 · 确认投标','李商务 · 07-17 · 已完成'),chk(true,'开标 + 结果标记：未中标（原因必选）','李商务 · 07-25 · 已完成'),chk(true,'保证金 ¥23 万退还确认','周管理 · 07-23 · 已完成'),chk(true,'失分归因登记：价格竞争力不足','李商务 · 07-25 · 已完成'),chk(true,'复盘会：报价策略与竞对情报回顾','周管理 · 07-26 · 已完成'),chk(false,'竞争对手中标情报补录（中标价 / 方案亮点）','李商务 · 08-15 · 进行中'),chk(false,'竞争对手画像更新（交锋记录 +1）','李商务 · 08-16 · 待开始'),chk(false,'归档（标书 + 决策记录 + 复盘纪要留存）','李商务 · 待情报补录 · 待开始')],
+ regR:reg('报价策略沉淀不足（本次失分于价格）','中','李商务','长期','复盘结论入库；同类安防项目报价下限校准（下浮 ≥5% 评估）')+reg('竞对情报缺口（中标价未知）','中','李商务','至 08-15','通过成交公告 + 渠道补录，回流竞争对手画像')+reg('方案复用沉淀','低','王标书','归档前','安防方案章节模板化，供雪亮工程四期复用（匹配 83 分）'),
+ funds:[fund('投标保证金','已退','ok','-¥23 万','07-23 全额退还 · 凭证已归档'),fund('我方报价','已开标','low','¥1,120 万','预算下浮 2.6% · 复盘结论：同类项目价格策略偏保守')],
+ docNote:'就绪 4 / 4 · 待归档沉淀',
+ docs:[doc('ok','投标文件定稿版','合规通过 · 已开标使用'),doc('ok','开标记录表','07-20 现场开标 · 已扫描'),doc('ok','未中标原因登记单','07-25 · 回流 F5-4 失分归因'),doc('ok','复盘纪要','07-26 复盘会 · 待情报补录后归档')],
+ clrs:[
+  '<div class="ct">澄清与更正：本项目全流程无澄清 / 更正事项</div><div class="cm">公告发布至开标期间系统监测无变更</div>',
+  '<div class="ct">结果跟踪：已完成</div><div class="cm">07-25 公示未中标 · 原因已登记 · 回流推荐率与失分归因</div>']}
+};
+
+var CUR='bh';
+function render(){
+  var p=PROFILES[CUR];if(!p)return;
+  document.getElementById('pgTitle').innerHTML='投标管控 <span class="note">'+p.name+' · '+p.badge+'</span>';
+  /* 基础信息 */
+  document.getElementById('baseLeft').innerHTML=p.baseL.map(function(r){return bkv(r[0],r[1]);}).join('');
+  document.getElementById('baseRight').innerHTML=p.baseR.map(function(r){return bkv(r[0],r[1]);}).join('');
+  document.getElementById('msNote').textContent=p.msNote;
+  /* 指标卡 */
+  var done=p.exec.filter(function(s){return s.indexOf('done')>0;}).length;
+  document.getElementById('stExec').textContent=done+' / '+p.exec.length;
+  var hi=(p.regR.match(/badge-no/g)||[]).length, mi=(p.regR.match(/badge-warn/g)||[]).length, li=(p.regR.match(/badge-low/g)||[]).length;
+  document.getElementById('stRisk').textContent=hi+' / '+mi+' / '+li;
+  document.getElementById('stRiskSub').textContent=hi>0?'存在高风险项 · 每日推送责任人':'无高风险项 · 常规跟踪';
+  document.getElementById('stNext').textContent=p.next[0];
+  document.getElementById('stNextSub').textContent=p.next[1]+' · 系统自动提醒';
+  document.getElementById('stFund').textContent=p.fundShort;
+  document.getElementById('stFundSub').textContent=p.fundShortSub;
+  /* 里程碑 */
+  document.getElementById('msTrack').innerHTML=p.mses.map(function(m){return ms(m[0],m[1],m[2]);}).join('');
+  /* 执行清单 / 风险 / 资金 / 文档 / 澄清 */
+  document.getElementById('execItems').innerHTML=p.exec.join('');
+  document.getElementById('execNote').textContent=CUR==='dsj'||CUR==='xl'?'中标/未中标后收尾动作':'投标阶段管控动作';
+  document.getElementById('execMore').textContent='完成 '+done+' / '+p.exec.length;
+  document.getElementById('regRows').innerHTML=p.regR;
+  document.getElementById('fundItems').innerHTML=p.funds.join('');
+  document.getElementById('docNote').textContent=p.docNote;
+  document.getElementById('docItems').innerHTML=p.docs.join('');
+  document.getElementById('clrItems').innerHTML=p.clrs.join('');
+  document.getElementById('editorLink').href='editor.html#'+CUR;
+}
+function toggleChk(el){
+  el.classList.toggle('done');
+  el.querySelector('.box').textContent=el.classList.contains('done')?'✓':'';
+  var items=document.querySelectorAll('#execItems .chk');var d=0;
+  items.forEach(function(c){if(c.classList.contains('done'))d++;});
+  document.getElementById('execMore').textContent='完成 '+d+' / '+items.length;
+  document.getElementById('stExec').textContent=d+' / '+items.length;
+  showToast(el.classList.contains('done')?'已勾选完成（操作留痕 · 同步工作台待办）':'已取消勾选（操作留痕）');
+}
+function addExec(){
+  var inp=document.getElementById('execAdd');var v=inp.value.trim();if(!v){showToast('请先输入执行事项');return;}
+  document.getElementById('execItems').insertAdjacentHTML('beforeend',chk(false,v,'我 · 刚刚添加 · 待开始'));
+  var items=document.querySelectorAll('#execItems .chk');
+  document.getElementById('execMore').textContent='完成 '+document.querySelectorAll('#execItems .chk.done').length+' / '+items.length;
+  inp.value='';showToast('已添加执行事项（留痕 · 可指派责任人）');
+}
+apply((location.hash||'#bh').slice(1));
+window.addEventListener('hashchange',function(){apply((location.hash||'#bh').slice(1));});
+function apply(k){if(PROFILES[k])CUR=k;render();}
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>投标建议（决策页） - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ===== 决策结论四档标准词库 ===== */
+.go-banner{border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;border:1px solid #BFDDEA;background:linear-gradient(135deg,#EFF7FB,#FBFDFE);display:flex;gap:20px;align-items:flex-start}
+.go-tag{font-size:26px;font-weight:800;color:#fff;background:var(--primary);border-radius:10px;padding:8px 22px;letter-spacing:1px;white-space:nowrap}
+.go-tag.green{background:var(--success)} .go-tag.orange{background:var(--warning)} .go-tag.red{background:var(--danger)}
+.truth{font-size:11px;color:var(--primary);background:#fff;border:1px solid #BFDDEA;border-radius:999px;padding:2px 10px;display:inline-flex;align-items:center;gap:4px}
+.facts{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+.fact{background:#fff;border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:12px}
+.fact .k{color:var(--text-3)} .fact .v{font-weight:600;margin-top:2px}
+/* ===== 区块导航 ===== */
+.sec-nav{position:sticky;top:56px;z-index:12;background:var(--bg);padding:8px 0 10px;display:flex;gap:8px;flex-wrap:wrap}
+.sec-nav a{font-size:12px;padding:5px 13px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--text-2)}
+.sec-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.sec-t{font-size:16px;font-weight:700;margin:22px 0 12px;display:flex;align-items:center;gap:10px}
+.sec-t .eid{font-size:11px;background:var(--primary-light);color:var(--primary);border-radius:5px;padding:2px 8px;font-weight:600}
+/* ===== E5 三层评分 ===== */
+.l-row{display:grid;grid-template-columns:190px 1fr 60px 250px;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.l-row:last-of-type{border-bottom:none}
+.l-track{background:var(--low-bg);border-radius:6px;height:12px;overflow:hidden}
+.l-fill{height:100%;border-radius:6px}
+.total-score{display:flex;align-items:center;gap:16px;margin-top:12px;padding:12px 16px;background:var(--primary-light);border-radius:8px}
+/* ===== E1 四层风险卡片 ===== */
+.r4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.r4-card{border-radius:10px;padding:14px;border:1px solid var(--border);background:#fff}
+.r4-card .n{font-size:24px;font-weight:700}
+.r4-card.ok{border-color:#BCE5D2} .r4-card.ok .n{color:var(--success)}
+.r4-card.warn{border-color:#F0D9A6} .r4-card.warn .n{color:var(--warning)}
+.r4-card.bad{border-color:#F0B9B4} .r4-card.bad .n{color:var(--danger)}
+/* ===== E2 价格基准线 ===== */
+.pb{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pb-item{border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;background:#fff}
+.pb-item .k{color:var(--text-3)} .pb-item .v{font-weight:600;margin-top:3px}
+.pb-item.ok .v{color:var(--success)} .pb-item.warn .v{color:var(--warning)}
+/* ===== E6 策略矩阵 ===== */
+.matrix tr.rec td{background:var(--primary-light);font-weight:600}
+.matrix tr.rec td:first-child{border-left:3px solid var(--primary)}
+.matrix tr.recw td{background:var(--warning-bg);font-weight:600}
+.matrix tr.recw td:first-child{border-left:3px solid var(--warning)}
+.matrix tr.recn td{background:var(--danger-bg);font-weight:600}
+.matrix tr.recn td:first-child{border-left:3px solid var(--danger)}
+/* ===== 执行清单 ===== */
+.chk{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.chk:last-child{border-bottom:none}
+.chk .box{width:17px;height:17px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.chk.done .box{background:var(--success);border-color:var(--success)}
+.chk.done .act{color:var(--text-3);text-decoration:line-through}
+/* ===== 双向预案 ===== */
+.plan{border:1px solid var(--border);border-radius:10px;padding:16px;background:#fff}
+.plan h5{font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.plan li{font-size:13px;color:var(--text-2);padding:4px 0 4px 4px}
+.ev-li{display:flex;gap:8px;padding:8px 0;border-bottom:1px dashed var(--border);font-size:13px}
+.ev-li:last-child{border-bottom:none}
+/* ===== 决策操作三选一 ===== */
+.dec-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.dec-card{position:relative;border:1.5px solid var(--border);border-radius:10px;background:#fff;padding:16px 18px;font-size:15px;font-weight:700;color:var(--text);cursor:pointer;text-align:left;transition:.15s;line-height:1.4}
+.dec-card span{display:block;font-size:12px;font-weight:400;color:var(--text-3);margin-top:5px}
+.dec-card:hover{border-color:var(--primary)}
+.dec-card.on-bid{border-color:var(--success);background:var(--success-bg)}
+.dec-card.on-watch{border-color:var(--warning);background:var(--warning-bg)}
+.dec-card.on-nogo{border-color:var(--danger);background:var(--danger-bg)}
+.dec-rec{position:absolute;top:10px;right:12px;font-style:normal;font-size:11px;font-weight:600;color:var(--primary);background:var(--primary-light);border:1px solid #BFDDEA;border-radius:999px;padding:2px 9px}
+.dec-panel{border:1px solid var(--border);border-radius:10px;background:#FAFBFC;padding:16px;margin-top:12px}
+.reason-chip{border:1px solid var(--border);border-radius:999px;background:#fff;padding:6px 14px;font-size:13px;color:var(--text-2);cursor:pointer;margin:0 8px 8px 0;transition:.12s}
+.reason-chip:hover{border-color:var(--danger);color:var(--danger)}
+.reason-chip.on{border-color:var(--danger);background:var(--danger-bg);color:var(--danger);font-weight:600}
+.reason-chip.custom::after{content:" · 自定义";font-size:11px;color:var(--text-3)}
+.reason-chip.custom.on::after{color:var(--danger)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的<span class="nav-badge">3</span></a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的<span class="nav-badge">2</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+            <div class="nav-group">
+        <div class="nav-title">企业画像</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>本企业</a>
+        <a class="nav-item" href="profile.html#rival"><span class="ico">⚔</span>竞争对手</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">数据洞察</div>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>效果看板</a>
+        <a class="nav-item" href="collectboard.html"><span class="ico">▦</span>采集看板</a>
+        <a class="nav-item" href="marketboard.html"><span class="ico">◈</span>市场看板</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">系统配置</div>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb"><a class="btn sm" style="padding:3px 12px;margin-right:12px" href="planlist.html" title="返回拟投标的清单">← 返回拟投标的</a>招标信息 / <b>投标建议（决策页）</b></div>
+      <div class="card" style="display:flex;align-items:center;gap:16px;padding:16px 20px">
+        <div style="flex:1;min-width:0">
+          <div class="page-title" style="margin-bottom:0;font-size:18px" id="mTitle"></div>
+          <div class="note" style="margin-top:4px" id="mNote"></div>
+        </div>
+        <span id="mBadge"></span>
+        <a class="btn sm" id="mMatch" href="match.html">匹配明细</a>
+      </div>
+
+      <!-- ① ★决策书摘要总览（单一真相源） -->
+      <div class="go-banner">
+        <div class="go-tag" id="bTag"></div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <b style="font-size:16px" id="bHeadline"></b>
+            <span class="truth">★ 决策书派生 · 单一真相源 · 不重新解释</span>
+            <span class="badge badge-ok" style="margin-left:auto" id="bConsist"></span>
+          </div>
+          <div class="note" style="margin-top:6px">决策结论标准词库：GO（绿）/ GO 附条件（蓝）/ WATCH（橙）/ NO-GO（红）· 本页摘要由★决策书统一派生，禁止模糊措辞</div>
+          <div class="facts" id="bFacts"></div>
+          <div style="margin-top:10px;font-size:12px;color:var(--text-2)" id="bPre"></div>
+        </div>
+      </div>
+
+      <!-- 区块导航 -->
+      <div class="sec-nav">
+        <a href="#e5">E5 三层量化评分</a><a href="#e1">E1 四层风险筛查</a><a href="#e2">E2 市场调研</a><a href="#e3">E3 历史中标格局</a><a href="#e4">E4 指定性识别</a><a href="#e6">E6 策略决策矩阵</a><a href="#exec">执行清单</a><a href="#reg">风险登记表</a><a href="#plan">双向预案</a><a href="#decide">决策操作</a>
+      </div>
+
+      <!-- ② E5 三层量化匹配评分 -->
+      <div class="sec-t" id="e5"><span class="eid">E5 · P0</span>三层量化匹配评分 <span class="note">决策级研判：够不够格 / 报价怎么定 / 扛不扛得下（区别于商机发现阶段的六维匹配分）</span></div>
+      <div class="card" id="e5body"></div>
+
+      <!-- ③ E1 四层风险筛查 -->
+      <div class="sec-t" id="e1"><span class="eid">E1 · P0</span>四层风险筛查 <span class="note">基础体检：先判断"能不能投" → 形成风险清单（与风险登记表等级一致）</span></div>
+      <div class="r4" id="e1cards"></div>
+      <div class="card" style="margin-top:12px">
+        <h3>风险清单明细 <span class="note">判定依据：预算与配置匹配度 / 特殊条款 / 特定功能特征</span></h3>
+        <div id="e1list"></div>
+      </div>
+
+      <!-- ④ E2 市场调研 -->
+      <div class="sec-t" id="e2"><span class="eid">E2 · P1</span>市场调研 <span class="badge badge-warn" style="font-weight:400">参考性数据 · 来自公开渠道</span></div>
+      <div id="e2body"></div>
+      <div class="card" style="margin-top:12px">
+        <h3>价格基准线（a–f 六细分项）<span class="note">报价区间在市场调研 / 策略矩阵 / 决策书三处一致（校验项 3）</span></h3>
+        <div class="pb" id="e2pb"></div>
+      </div>
+
+      <!-- ⑤ E3 历史中标格局 -->
+      <div class="sec-t" id="e3"><span class="eid">E3 · P1</span>历史中标格局 <span class="note">客户画像：了解甲方和现有服务商</span> <span class="badge badge-warn" style="font-weight:400">参考性数据 · 来自公开中标公告</span></div>
+      <div class="grid" style="grid-template-columns:repeat(5,1fr)" id="e3body"></div>
+
+      <!-- ⑥ E4 指定性识别 -->
+      <div class="sec-t" id="e4"><span class="eid">E4 · P1</span>指定性识别 <span class="badge badge-warn" style="font-weight:400">参考性研判 · 基于公开数据分析，不构成法律结论</span></div>
+      <div class="card">
+        <div style="display:flex;gap:24px;align-items:center;margin-bottom:12px" id="e4head"></div>
+        <table class="tbl">
+          <thead><tr><th>识别指标</th><th class="c">判定</th><th>证据摘要</th></tr></thead>
+          <tbody id="e4rows"></tbody>
+        </table>
+      </div>
+
+      <!-- ⑦ E6 策略对比决策矩阵 -->
+      <div class="sec-t" id="e6"><span class="eid">E6 · P1</span>策略对比决策矩阵 <span class="note">点击行可切换推荐策略（需二次确认，同步更新总体建议前提条件）</span></div>
+      <div class="card">
+        <table class="tbl matrix">
+          <thead><tr><th>策略</th><th>建议报价</th><th>资质组合</th><th class="c">综合得分</th><th class="c">中标概率</th><th class="c">风险等级</th></tr></thead>
+          <tbody id="e6body"></tbody>
+        </table>
+      </div>
+
+      <div class="grid g2">
+        <!-- ⑧ 执行清单 -->
+        <div class="card" id="exec" style="margin-bottom:0">
+          <h3>执行清单 <span class="note" id="execNote">投标前必做动作</span> <span class="more" id="execMore"></span> <span class="more"><a href="bidcontrol.html" style="color:inherit;text-decoration:none">决策采纳后转入投标管控页持续跟踪 ›</a></span></h3>
+          <div id="execItems"></div>
+        </div>
+        <!-- ⑨ 风险登记表 -->
+        <div class="card" id="reg" style="margin-bottom:0">
+          <h3>风险登记表 <span class="note">评级与 E1 风险筛查一致（校验项 5）· 投标阶段在管控页维护</span> <span class="more">✚ 添加风险项</span></h3>
+          <table class="tbl">
+            <thead><tr><th>风险项</th><th class="c">评级</th><th>责任人</th><th>时间窗口</th><th>应对预案</th></tr></thead>
+            <tbody id="regRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ⑩ 双向预案 -->
+      <div class="sec-t" id="plan">双向预案 <span class="note">"双向预案，不浪费这次投标动作"</span></div>
+      <div class="grid g2">
+        <div class="plan" style="border-color:#BCE5D2">
+          <h5 style="color:var(--success)" id="planWinH">🏆 中标后下一步（合同 / 履约准备）</h5>
+          <ul style="padding-left:18px" id="planWin"></ul>
+        </div>
+        <div class="plan" style="border-color:#F0D9A6">
+          <h5 style="color:#B97708" id="planLoseH">🔄 不中标后下一步（复盘 / 转投储备）</h5>
+          <ul style="padding-left:18px" id="planLose"></ul>
+        </div>
+      </div>
+
+      <!-- ⑪ 决策操作区（含推荐值仪表快速参考） -->
+      <div class="sec-t" id="decide">决策操作</div>
+      <div class="grid g-31">
+        <div class="card" style="margin-bottom:0">
+          <h3>做出决策 <span class="note">三选一：投标 / 持续观察 / 不投标 · 全部决策写入决策记录，作为推荐率统计与策略迭代的输入（F5-4）</span></h3>
+          <div class="dec-opts">
+            <button class="dec-card" id="dcBid" onclick="pickDec('bid')">✓ 投标<span>按推荐策略创建标书任务并生成大纲</span></button>
+            <button class="dec-card" id="dcWatch" onclick="pickDec('watch')">◔ 持续观察<span>登记触发条件，变更后自动重评</span></button>
+            <button class="dec-card" id="dcNogo" onclick="pickDec('nogo')">✕ 不投标<span>移出拟投标的并归档（原因必填）</span></button>
+          </div>
+          <div id="decPanel"></div>
+          <div class="note" style="margin-top:10px">选择「不投标」须选择归档原因（支持自定义，自定义后自动入字典、下次可直接选择，可在<a class="link" href="admin.html#archDict">系统管理 · 归档原因字典</a>维护）；归档后本标的自动移出<a class="link" href="planlist.html">拟投标的</a>并转入<a class="link" href="archive.html">归档标的</a>列表，弃标条件与双向预案触发条件一致（校验项 6）。</div>
+        </div>
+        <div class="card" style="margin-bottom:0">
+          <h3 style="font-size:13px">推荐值 · 快速参考（Q7 机制）</h3>
+          <svg width="100%" height="120" viewBox="0 0 220 132">
+            <path d="M 20 110 A 90 90 0 0 1 200 110" fill="none" stroke="#E9EDF3" stroke-width="12" stroke-linecap="round"/>
+            <path d="M 182.8 57.1 A 90 90 0 0 1 200 110" fill="none" stroke="#F6C6C8" stroke-width="12"/>
+            <path id="gaugeArc" d="M 20 110 A 90 90 0 0 1 191.4 71.7" fill="none" stroke="var(--primary)" stroke-width="12" stroke-linecap="round"/>
+            <line x1="182.8" y1="57.1" x2="189.3" y2="52.4" stroke="var(--high)" stroke-width="3" stroke-linecap="round"/>
+            <text x="160" y="40" font-size="10" fill="var(--high)" font-weight="bold">下限 80</text>
+          </svg>
+          <div style="text-align:center;margin-top:-30px"><span class="num" style="font-size:26px;font-weight:800" id="gaugeVal">86</span> <span class="note" id="gaugeCap">/ 100 · 超下限，进入推荐列表</span></div>
+          <div style="text-align:center;margin-top:8px"><span class="link" style="font-size:12px">⚙ 调整我的推荐下限（60–95）</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2200);}
+function fact(k,v){return '<div class="fact"><div class="k">'+k+'</div><div class="v">'+v+'</div></div>';}
+function lrow(name,sub,score,color,note){return '<div class="l-row"><div><b>'+name+'</b><div class="note">'+sub+'</div></div><div class="l-track"><div class="l-fill" style="width:'+score+'%;background:'+color+'"></div></div><div class="num" style="font-weight:700">'+score+'</div><div class="note">'+note+'</div></div>';}
+function r4c(cls,n,note,title){return '<div class="r4-card '+cls+'"><div style="font-weight:600">'+title+'</div><div class="n num">'+n+'</div><div class="note">'+note+'</div></div>';}
+function evli(lv,html){var t=lv==='warn'?'中':lv==='no'?'高':'低';return '<div class="ev-li"><span class="badge badge-'+lv+'">'+t+'</span><div>'+html+'</div></div>';}
+function c5(t,html){return '<div class="card" style="margin-bottom:0;padding:14px"><h3 style="font-size:13px">'+t+'</h3><div class="note">'+html+'</div></div>';}
+function e4r(a,b,c){return '<tr><td>'+a+'</td><td class="c">'+b+'</td><td class="note">'+c+'</td></tr>';}
+function chk(done,act,meta){return '<div class="chk'+(done?' done':'')+'"><span class="box">'+(done?'✓':'')+'</span><span class="act" style="flex:1">'+act+'</span><span class="note">'+meta+'</span></div>';}
+function reg(r,lv,owner,win,plan){var cls=lv==='高'?'no':lv==='中'?'warn':'low';return '<tr><td>'+r+'</td><td class="c"><span class="badge badge-'+cls+'">'+lv+'</span></td><td>'+owner+'</td><td class="note">'+win+'</td><td class="note">'+plan+'</td></tr>';}
+function li(s){return '<li>'+s+'</li>';}
+
+const PROFILES = {
+/* ================= GO：市第一人民医院信息化运维服务采购 ================= */
+go:{
+  mTitle:'市第一人民医院信息化运维服务采购',
+  mNote:'招标方：市第一人民医院 · 预算 ¥860 万 · 编号 SYZB-2026-0731 · <span class="cd">截止 2026-08-19 10:00 · 剩 6 天</span>',
+  mBadge:'<span class="badge badge-high">六维匹配 92 高匹配</span>', mHash:'go',
+  bTag:['green','GO'], bHeadline:'总体建议：建议投标（主攻），报价 ¥774–791 万，无前提条件 · 门槛项全部满足',
+  bConsist:'一致性校验 11/11 通过 · 可交付',
+  bFacts:[fact('核心风险','无重大风险 · 付款 60 天账期'),fact('关键机会','存量运维延伸 + 本地同城服务'),fact('预算匹配度','94%（历史中标均值 91%）'),fact('竞争格局','2 家活跃对手 · 海蓝为存量服务商'),fact('推荐策略','稳健主攻')],
+  bPre:'无前提条件：6 项门槛全部满足，资质/业绩/人员/资金均可直接响应，可立即启动标书编制。',
+  e5:lrow('L1 资质匹配','软著/资质/案例/人员 → 够不够门槛',96,'var(--success)','ISO20000 + ISO27001 + 运维业绩 4 个 + ITSS 服务经理 2 人，全部满足')
+     +lrow('L2 价格竞争力','历史中标价基线 + 异常低价红线 → 报价区间',82,'var(--primary)','建议报价区间 <b style="color:var(--primary)">¥774–791 万</b>（预算 90–92%）· 红线 ¥559 万')
+     +lrow('L3 履约可行性','业绩/团队/周期/资金 → 能否扛下合同',88,'var(--success)','运维团队 8 人现成梯队；保证金 ¥43 万无压力；3 年服务期排班可达')
+     +'<div class="total-score"><div style="font-size:30px;font-weight:800;color:var(--success)" class="num">89</div><div><b>决策综合得分</b><div class="note">L1 40% + L2 30% + L3 30% 加权合成 · 推荐值仪表（Q7 机制）见页尾决策操作区，二者并存不替代</div></div></div>',
+  e1c:r4c('ok','0 项','无废标项 / 资格不符 · 通过','① 致命条款')+r4c('warn','1 项','付款验收后 60 天账期','② 商务履约大坑')+r4c('ok','0 项','未发现定向加分陷阱','③ 评分定向陷阱')+r4c('ok','0 项','公告期正常 · 无更正记录','④ 疑似异常信号'),
+  e1l:evli('warn','<b>付款条件：</b>验收后 60 天付清 + 履约保证金 5%（约 ¥43 万）<div class="note">依据：招标文件合同条款 7.2 / 7.4 · 优于行业常见 90 天，可接受；合同谈判争取 30% 预付款</div>')
+     +evli('low','<b>存量优势：</b>海蓝信息为现运维服务商，掌握系统资料与院方关系<div class="note">依据：公开中标公告 · 应对：强调 2025 年市妇幼运维零事故记录与本地响应速度</div>'),
+  e2:'<div class="grid" style="grid-template-columns:repeat(3,1fr)">'+c5('市场规模估算','<div style="font-size:22px;font-weight:700" class="num">约 ¥1.2 亿</div><div class="note">山东省 2026 年医疗信息化运维公开招标预算（同比 +14%）；本项目占 7.2%，属中型标的</div>')+c5('竞品图谱','活跃对手 2 家：<b>海蓝信息</b>（院方存量运维服务商，近 12 月中标 2 次）、康华科技（省级医院案例多）· <span class="link">查看对手档案 ›</span>')+c5('政策环境扫描','智慧医院评级（电子病历五级）推进带来运维刚需；医疗数据安全合规趋严，专业运维续约意愿增强')+'</div>',
+  e2pb:'<div class="pb-item"><div class="k">a. 同期同类中标均价 / 中位价</div><div class="v num">¥790 万 / ¥786 万（预算占比 92%）</div></div><div class="pb-item ok"><div class="k">b. 预算 vs 历史中标价</div><div class="v">预算 ¥860 万 · 匹配度 94% · 水位合理</div></div><div class="pb-item warn"><div class="k">c. 异常低价审查阈值</div><div class="v">预算 65% = ¥559 万 · 低于此价须书面说明</div></div><div class="pb-item ok"><div class="k">d. 价格扣除系数适用</div><div class="v">我司为小微企业 · 适用 6% 价格扣除优惠</div></div><div class="pb-item ok"><div class="k">e. 人员成本基线核算</div><div class="v">8 人驻场 + 二线支持 · 年人力成本 ¥205 万，3 年毛利空间 18%</div></div><div class="pb-item ok"><div class="k">f. 工具与平台合规</div><div class="v">自研 ITSM 工单平台具备等保三级，满足院方接入要求 ✓</div></div>',
+  e3:c5('同标方历史项目','医院近 3 年信息化项目 <b>6 个</b>，累计 ¥2,800 万，运维类占 4 成')+c5('老服务商依赖度','<span class="badge badge-warn">中高</span> 海蓝信息承接现运维 1 期（3 年），熟悉 HIS/EMR 架构')+c5('多服务商博弈','历史项目平均 3.1 家竞标；运维类竞争低于新建类')+c5('甲方更换倾向','<span class="badge badge-ok">倾向更换</span> 院方 2025 年对海蓝响应时效有书面投诉记录')+c5('中标后被淘汰可能','<span class="badge badge-ok">低</span> 智慧医院评级推进，运维续约确定性高'),
+  e4h:'<div style="font-size:34px;font-weight:800;color:var(--success)">低风险</div><div class="note" style="flex:1">综合判断"有没有被内定"：未发现指定特征，评分结构中性，存量服务商有惯性优势但非排他，可正常参与。</div>',
+  e4:e4r('硬参数指向','<span class="badge badge-ok">正常</span>','运维服务类无设备参数指向')+e4r('评分结构 / 主观分占比','<span class="badge badge-ok">正常</span>','主观分占 30%，客观分以业绩与证书为主')+e4r('资源门槛','<span class="badge badge-ok">正常</span>','ISO20000 + 业绩 3 个门槛与项目规模匹配')+e4r('案例地区/行业指向','<span class="badge badge-warn">弱指向</span>','"本市医疗行业案例"加 2 分：我司有市妇幼 / 市疾控案例可应答')+e4r('人员资质搭配','<span class="badge badge-ok">正常</span>','要求 ITSS 服务经理，我司 2 人满足')+e4r('系统依赖','<span class="badge badge-warn">注意</span>','需接手海蓝既有运维文档，中标后需约定交接期')+e4r('排除性条款','<span class="badge badge-ok">无</span>','未发现排除性条款'),
+  e6:'<tr class="rec"><td>稳健主攻 <span class="badge badge-mid">★ 推荐</span></td><td class="num">¥774–791 万</td><td class="note">ISO20000 + ISO27001 + ITSS 双经理 + 医疗案例 4 个</td><td class="c num">89</td><td class="c num" style="color:var(--success)">52%</td><td class="c"><span class="badge badge-ok">低</span></td></tr><tr><td>进取压价</td><td class="num">¥758–774 万</td><td class="note">同资质组合，压价换分，压缩毛利至 12%</td><td class="c num">84</td><td class="c num">46%</td><td class="c"><span class="badge badge-warn">中</span></td></tr><tr><td>低价抢标</td><td class="num">¥560–620 万</td><td class="note">逼近异常低价红线，履约亏损风险</td><td class="c num">65</td><td class="c num">20%</td><td class="c"><span class="badge badge-no">高</span></td></tr><tr><td>战略放弃</td><td class="note">—</td><td class="note">资源转投储备项目：县中医院运维（匹配 88 分）</td><td class="c num">—</td><td class="c num">—</td><td class="c"><span class="badge badge-ok">低</span></td></tr>',
+  execNote:'投标前必做动作', execMore:'完成 3 / 8',
+  exec:chk(true,'调取市妇幼 / 区政务中心运维合同与考核优良证明','张资料 · 08-13 · 已完成')+chk(true,'ITSS 服务经理 / CISAW 人员证书扫描归档','张资料 · 08-13 · 已完成')+chk(true,'运维人力成本与报价区间测算','李商务 · 08-13 · 已完成')+chk(false,'向院方信息科确认运维交接范围与文档清单','李商务 · 08-15 · 进行中')+chk(false,'出具 7×24 应急响应与驻场服务承诺函','王标书 · 08-16 · 待开始')+chk(false,'保证金 ¥43 万缴纳安排','周管理 · 08-16 · 待开始')+chk(false,'最终报价审批（按稳健主攻区间）','李商务 · 08-18 08:00 · 待开始')+chk(false,'标书终稿合规检查 + 密封递交','王标书 · 08-18 16:00 · 待开始'),
+  regR:reg('截止时间常规（剩 6 天）','中','王标书','至 08-19 10:00','标准标书流程，AI 辅助提效')+reg('海蓝信息存量优势','中','李商务','开标前','突出零事故记录 + 本地 2 小时响应承诺')+reg('付款 60 天账期','低','周管理','合同谈判期','争取 30% 预付款条款'),
+  winH:'🏆 中标后下一步（合同 / 履约准备）',
+  win:li('7 日内完成合同评审（重点核对付款与违约条款）')+li('与海蓝信息启动 2 周运维交接（文档 / 账号 / 资产清单）')+li('组建 8 人驻场团队排班表，接入自研 ITSM 工单平台')+li('与 HIS 厂商建立接口协作机制，锁定月度考核指标'),
+  loseH:'🔄 不中标后下一步（复盘 / 转投储备）',
+  lose:li('依法申请评分明细反馈，48 小时内完成失分归因登记')+li('投标结果录入闭环看板，回流匹配与推荐策略优化')+li('资源转投储备项目：县中医院信息化运维（匹配 88 分）')+li('沉淀医疗运维方案至模板库（医疗运维模板 v2）'),
+  decRec:'bid',
+  bidNote:'将按「稳健主攻」推荐策略创建标书任务并生成大纲，跳转投标标的。',
+  bidToast:'已按稳健主攻策略创建标书任务 #BS-2026-0815，跳转投标标的',
+  watchToast:'已加入观察名单（有变更将重新推送）',
+  gauge:['88','var(--success)','M 20 110 A 90 90 0 0 1 193.7 76.9','/ 100 · 超下限，进入推荐列表']
+},
+/* ================= GO 附条件：滨海新城智慧校园一体化建设项目（一期） ================= */
+cond:{
+  mTitle:'滨海新城智慧校园一体化建设项目（一期）',
+  mNote:'招标方：滨海新城教育局 · 预算 ¥1,280 万 · 编号 BHZB-2026-0812 · <span class="cd warn">截止 2026-08-15 09:30 · 剩 44 小时</span>',
+  mBadge:'<span class="badge badge-high">六维匹配 87 高匹配</span>', mHash:'cond',
+  bTag:['','GO 附条件'], bHeadline:'总体建议：建议投标（稳健主攻），报价 ¥1,152–1,178 万，前提：3 项前提条件全部落实',
+  bConsist:'一致性校验 11/11 通过 · 可交付',
+  bFacts:[fact('核心风险','资质临期 · 截止紧张 44h'),fact('关键机会','主营契合 + 同类业绩 3 个'),fact('预算匹配度','92%（历史中标均值 91%）'),fact('竞争格局','3 家活跃对手 · 云帆最强'),fact('推荐策略','稳健主攻')],
+  bPre:'前提条件：① 安防资质证书续期受理回执在投标截止前取得；② 最终报价不低于异常低价红线 ¥832 万；③ 售后 7×24 响应承诺函按招标格式出具。',
+  e5:lrow('L1 资质匹配','软著/资质/案例/人员 → 够不够门槛',90,'var(--success)','门槛项全部满足；安防资质临期但截止日有效（附续期受理回执更稳）')
+     +lrow('L2 价格竞争力','历史中标价基线 + 异常低价红线 → 报价区间',78,'var(--primary)','建议报价区间 <b style="color:var(--primary)">¥1,152–1,178 万</b>（预算 90–92%）· 红线 ¥832 万')
+     +lrow('L3 履约可行性','业绩/团队/周期/资金 → 能否扛下合同',85,'var(--success)','120 天工期可达；投标保证金 ¥20 万（1.56%）无压力，履约保证金 10%（约 ¥116 万）需提前安排资金')
+     +'<div class="total-score"><div style="font-size:30px;font-weight:800;color:var(--primary)" class="num">84</div><div><b>决策综合得分</b><div class="note">L1 40% + L2 30% + L3 30% 加权合成 · 推荐值仪表（Q7 机制）见页尾决策操作区，二者并存不替代</div></div></div>',
+  e1c:r4c('ok','0 项','无废标项 / 资格不符 · 通过','① 致命条款')+r4c('warn','2 项','付款 90 天账期 · 履约保证金 10%','② 商务履约大坑')+r4c('warn','1 项','软著加分项本地仅 3 家满足','③ 评分定向陷阱')+r4c('ok','0 项','公告期正常 · 无频繁更正','④ 疑似异常信号'),
+  e1l:evli('warn','<b>付款条件：</b>验收后 90 天付清 + 履约保证金 10%（约 ¥116 万）<div class="note">依据：招标文件第 8 章合同条款 8.3 / 8.5 · 建议合同谈判争取 30% 预付款</div>')
+     +evli('warn','<b>资质临期：</b>安防工程壹级能力证书 2026-11-08 到期，投标截止日有效但窗口收窄<div class="note">依据：企业画像证照库 · 已列入执行清单第 1 项</div>')
+     +evli('low','<b>评分定向：</b>"智慧校园平台软件著作权"加 3 分，本地满足企业约 3 家<div class="note">依据：评分办法第 4.2 条 · 我司持有该软著，影响可控</div>'),
+  e2:'<div class="grid" style="grid-template-columns:repeat(3,1fr)">'+c5('市场规模估算','<div style="font-size:22px;font-weight:700" class="num">约 ¥8 亿</div><div class="note">山东省 2026 年智慧校园类公开招标预算（同比 +18%）；本项目占 1.6%，属中大型标的</div>')+c5('竞品图谱','活跃对手 3 家：<b>云帆智能</b>（近 12 月中标 3 次，胜率 60%）、海蓝信息（1 次）、拓普智能（1 次）· 海蓝为甲方存量运维服务商 <span class="link">查看对手档案 ›</span>')+c5('政策环境扫描','教育新基建专项持续投入；信创目录 2.0 要求核心设备国产化率 ≥ 70%；本项目已列入滨海新城 2026 民生实事清单（资金保障度高）')+'</div>',
+  e2pb:'<div class="pb-item"><div class="k">a. 同期同类中标均价 / 中位价</div><div class="v num">¥1,165 万 / ¥1,160 万（预算占比 91%）</div></div><div class="pb-item ok"><div class="k">b. 预算 vs 历史中标价</div><div class="v">预算 ¥1,280 万 · 匹配度 92% · 水位合理</div></div><div class="pb-item warn"><div class="k">c. 异常低价审查阈值</div><div class="v">预算 65% = ¥832 万 · 低于此价须书面说明</div></div><div class="pb-item ok"><div class="k">d. 价格扣除系数适用</div><div class="v">我司为小微企业 · 适用 6% 价格扣除优惠</div></div><div class="pb-item ok"><div class="k">e. 核心产品在产核验</div><div class="v">所选 8 项核心设备均在产 ✓（无停产型号）</div></div><div class="pb-item ok"><div class="k">f. 核心产品产地合规</div><div class="v">采购要求本国产品 · 所选方案 100% 本国产品 ✓</div></div>',
+  e3:c5('同标方历史项目','滨海新城教育局近 3 年信息化项目 <b>5 个</b>，累计 ¥2,100 万，均按期验收')+c5('老服务商依赖度','<span class="badge badge-warn">中高</span> 海蓝信息承接存量运维 2 期，掌握既有系统资料')+c5('多服务商博弈','历史项目平均 4.2 家竞标；新建类项目竞争高于运维类')+c5('甲方更换倾向','<span class="badge badge-ok">倾向更换</span> 2025 年曾因交付延期更换 1 家集成商，对履约记录敏感')+c5('中标后被淘汰可能','<span class="badge badge-ok">低</span> 项目含 3 年运维 + 二期规划，延续价值高'),
+  e4h:'<div style="font-size:34px;font-weight:800;color:var(--warning)">中低风险</div><div class="note" style="flex:1">综合判断"有没有被内定"：未发现强指定特征，存在 2 项弱指向信号；评分结构留有竞争空隙，可正常参与。</div>',
+  e4:e4r('硬参数指向','<span class="badge badge-warn">弱指向</span>','2 项设备参数与主流品牌配置吻合，但均有 ≥3 个品牌可满足')+e4r('评分结构 / 主观分占比','<span class="badge badge-ok">正常</span>','主观分占 40%，评分离散性留有竞争空隙')+e4r('资源门槛','<span class="badge badge-ok">正常</span>','资质/业绩门槛与项目规模匹配，无超配要求')+e4r('案例地区/行业指向','<span class="badge badge-warn">弱指向</span>','"本市教育行业案例"加 2 分，海蓝信息占优；我司有临川三小同类案例可应答')+e4r('人员资质搭配','<span class="badge badge-ok">正常</span>','要求项目经理一级建造师 + PMP，我司 2 人满足')+e4r('系统依赖','<span class="badge badge-warn">注意</span>','需与存量校园安防平台对接，既有系统由海蓝承建（接口配合风险）')+e4r('排除性条款','<span class="badge badge-ok">无</span>','未发现排除性条款')+e4r('"业绩加分但难证明"项','<span class="badge badge-warn">1 项</span>','同类业绩加分要求提供合同原件核查，已列入执行清单第 2 项准备'),
+  e6:'<tr class="rec"><td>稳健主攻 <span class="badge badge-mid">★ 推荐</span></td><td class="num">¥1,152–1,178 万</td><td class="note">电子智能化壹级 + CS3 + ISO 双证 + 一建项目经理</td><td class="c num">84</td><td class="c num" style="color:var(--success)">45%</td><td class="c"><span class="badge badge-ok">低</span></td></tr><tr><td>进取博弈</td><td class="num">¥1,130–1,152 万</td><td class="note">在稳健组合上加压报价，强化本地案例陈述</td><td class="c num">81</td><td class="c num">40%</td><td class="c"><span class="badge badge-warn">中</span></td></tr><tr><td>低价抢标</td><td class="num">¥840–960 万</td><td class="note">贴近异常低价红线，基础资质组合，压缩利润保中标</td><td class="c num">72</td><td class="c num">25%</td><td class="c"><span class="badge badge-no">高</span></td></tr><tr><td>战略放弃</td><td class="note">—</td><td class="note">资源转投潍坊二中储备项目（匹配 89 分）</td><td class="c num">—</td><td class="c num">—</td><td class="c"><span class="badge badge-ok">低</span></td></tr>',
+  execNote:'投标前必做动作', execMore:'完成 2 / 10',
+  exec:chk(true,'安防资质续期申请提交并取得受理回执','张资料 · 08-13 · 已完成')+chk(true,'调取临川三小 / 东方港区业绩合同与验收报告原件','张资料 · 08-13 · 已完成')+chk(false,'向厂商锁定核心设备供货周期承诺函','李商务 · 08-14 · 进行中')+chk(false,'核对核心设备在产型号与本国产品产地证明','李商务 · 08-14 · 进行中')+chk(false,'投标保证金 ¥20 万 + 履约保证金资金安排确认','周管理 · 08-14 · 待开始')+chk(false,'与海蓝信息确认存量安防平台接口对接方案','王标书 · 08-14 · 待开始')+chk(false,'人员社保证明与一建 / PMP 证书扫描归档','张资料 · 08-14 · 待开始')+chk(false,'最终报价审批（按策略矩阵稳健主攻区间）','李商务 · 08-15 08:00 · 待开始')+chk(false,'标书终稿合规检查 + 打印装订密封','王标书 · 08-15 08:30 · 待开始')+chk(false,'递交现场踏勘（路线 / CA 锁 / 签到时间确认）','王标书 · 08-14 · 待开始'),
+  regR:reg('截止时间紧张（44h）','高','王标书','至 08-15 09:30','启用 AI 整章生成 + 双人夜班校对')+reg('安防资质临期','中','张资料','至 08-15 09:30','附证书 + 续期受理回执双证明')+reg('云帆智能价格战','中','李商务','开标前','备用报价 ¥1,152 万底线 + 小微企业 6% 扣除')+reg('付款 90 天资金占用','低','周管理','合同谈判期','争取 30% 预付款条款'),
+  winH:'🏆 中标后下一步（合同 / 履约准备）',
+  win:li('7 日内完成合同评审（重点核对付款与违约条款）')+li('缴纳履约保证金，启动项目立项与项目部组建（陈建国挂帅）')+li('锁定样板校（滨海一中）深化设计与设备排产')+li('与海蓝信息签署存量平台接口对接协作备忘录'),
+  loseH:'🔄 不中标后下一步（复盘 / 转投储备）',
+  lose:li('依法申请评分明细反馈，48 小时内完成失分归因登记')+li('投标结果录入闭环看板，回流匹配与推荐策略优化')+li('资源转投储备项目：潍坊二中智慧校园改造（匹配 89 分）')+li('沉淀本套技术方案至企业模板库（智慧校园模板 v3）'),
+  decRec:'bid',
+  bidNote:'将按「稳健主攻」推荐策略创建标书任务并生成大纲，3 项前提条件随任务备注跟踪，跳转投标标的。',
+  bidToast:'已按稳健主攻策略创建标书任务 #BS-2026-0813，跳转投标标的',
+  watchToast:'已加入观察名单（有变更将重新推送）',
+  gauge:['86','var(--primary)','M 20 110 A 90 90 0 0 1 191.4 71.7','/ 100 · 超下限，进入推荐列表']
+},
+/* ================= WATCH：省政务云平台安全运营服务采购项目 ================= */
+watch:{
+  mTitle:'省政务云平台安全运营服务采购项目',
+  mNote:'招标方：省大数据局 · 预算 ¥2,100 万 · 编号 SZC-2026-1102 · <span class="cd">截止 2026-08-22 09:30 · 剩 9 天</span>',
+  mBadge:'<span class="badge badge-mid">六维匹配 74 中匹配</span>', mHash:'watch',
+  bTag:['orange','WATCH'], bHeadline:'总体建议：建议观望 —— 安全运维资质补正结果未定（预计 08-25 出证），匹配分 74 低于推荐下限 80，待触发条件满足后自动重评',
+  bConsist:'一致性校验 11/11 通过 · 观望条件已登记',
+  bFacts:[fact('核心风险','资质缺口（一级资质补正中）'),fact('关键机会','预算大 · 省级平台战略价值高'),fact('预算匹配度','88%（历史中标均值 89%）'),fact('竞争格局','省级平台存量厂商强势'),fact('推荐策略','观望待资质')],
+  bPre:'观望触发条件：① 安全运维资质补正出证（预计 08-25）→ 自动重算匹配分并升级决策；② 更正公告放宽专属运营业绩加分 → 即时重评；③ 08-20 前仍无信号 → 系统自动归档（原因：资质/业绩缺口）。',
+  e5:lrow('L1 资质匹配','软著/资质/案例/人员 → 够不够门槛',58,'var(--warning)','安全运维一级资质补正受理中（预计 08-25 出证）；受理回执可应答但存在评审口径风险')
+     +lrow('L2 价格竞争力','历史中标价基线 + 异常低价红线 → 报价区间',80,'var(--primary)','若投：建议报价区间 <b style="color:var(--primary)">¥1,890–1,974 万</b>（预算 90–94%）· 红线 ¥1,365 万')
+     +lrow('L3 履约可行性','业绩/团队/周期/资金 → 能否扛下合同',85,'var(--success)','安全团队 8 人梯队充足；保证金 ¥210 万需提前安排资金')
+     +'<div class="total-score"><div style="font-size:30px;font-weight:800;color:#B97708" class="num">73</div><div><b>决策综合得分</b><div class="note">L1 40% + L2 30% + L3 30% 加权合成 · 低于推荐下限 80，暂不进入推荐列表（Q7 机制）</div></div></div>',
+  e1c:r4c('ok','0 项','公告允许"受理回执视同有效"，非否决','① 致命条款')+r4c('warn','1 项','保证金 10%（¥210 万）占用高','② 商务履约大坑')+r4c('bad','2 项','专属运营业绩加分 +4 · 省级门槛倾斜','③ 评分定向陷阱')+r4c('ok','0 项','公告期正常 · 暂无更正','④ 疑似异常信号'),
+  e1l:evli('no','<b>评分定向：</b>"省级政务云专属运营业绩"加 4 分，我司仅踩线 1 个可证明业绩<div class="note">依据：评分办法 4.3 条 · 存量省级平台厂商占绝对优势，为本项目最大结构性劣势</div>')
+     +evli('warn','<b>资质不确定性：</b>安全运维一级资质补正出证时间（预计 08-25）晚于投标截止（08-22）风险<div class="note">依据：企业画像证照库 · 若截止前未出证，仅凭受理回执应答存在被质疑风险</div>')
+     +evli('warn','<b>资金占用：</b>投标保证金 ¥210 万（预算 10%）+ 履约保证金 10%<div class="note">依据：公告 5.1 条 · 需财务提前安排，与其他在投标的资金占用统筹</div>'),
+  e2:'<div class="grid" style="grid-template-columns:repeat(3,1fr)">'+c5('市场规模估算','<div style="font-size:22px;font-weight:700" class="num">约 ¥2.8 亿</div><div class="note">山东省 2026 年政务云安全运营公开招标预算（同比 +22%）；本项目为年度最大单体标的</div>')+c5('竞品图谱','活跃对手 2 家：<b>鲁信安全</b>（省政务云存量运营 3 期）、安恒华东（省级案例 5 个）· 我司为挑战者角色 <span class="link">查看对手档案 ›</span>')+c5('政策环境扫描','数字政府安全合规要求升级（等保 2.0 三级常态化）；省级安全运营预算连续 3 年增长')+'</div>',
+  e2pb:'<div class="pb-item"><div class="k">a. 同期同类中标均价 / 中位价</div><div class="v num">¥1,932 万 / ¥1,915 万（预算占比 92%）</div></div><div class="pb-item ok"><div class="k">b. 预算 vs 历史中标价</div><div class="v">预算 ¥2,100 万 · 匹配度 88% · 水位偏高</div></div><div class="pb-item warn"><div class="k">c. 异常低价审查阈值</div><div class="v">预算 65% = ¥1,365 万 · 低于此价须书面说明</div></div><div class="pb-item ok"><div class="k">d. 价格扣除系数适用</div><div class="v">小微企业 6% 扣除适用 · 但大标中边际作用有限</div></div><div class="pb-item ok"><div class="k">e. 安全工具链成本核算</div><div class="v">SOC 平台授权 + 威胁情报订阅年成本 ¥180 万，已核实</div></div><div class="pb-item warn"><div class="k">f. 人员持证要求核验</div><div class="v">CISAW ≥2 人满足 ✓ · 但要求安全负责人 CISP-PTE，仅 1 人持有（单点风险）</div></div>',
+  e3:c5('同标方历史项目','省大数据局近 3 年安全类项目 <b>7 个</b>，累计 ¥6,300 万，全部由 2 家头部厂商承接')+c5('老服务商依赖度','<span class="badge badge-no">高</span> 鲁信安全连续 3 期承接省政务云运营，掌握全量资产台账')+c5('多服务商博弈','历史项目平均 2.8 家竞标；省级大标呈双寡头格局')+c5('甲方更换倾向','<span class="badge badge-warn">倾向保留</span> 未发现更换信号；甲方强调"连续性优先"')+c5('中标后被淘汰可能','<span class="badge badge-warn">中</span> 若中标，次期面临存量厂商强力反扑'),
+  e4h:'<div style="font-size:34px;font-weight:800;color:#B97708">中高风险</div><div class="note" style="flex:1">综合判断"有没有被内定"：存在 3 项指向信号（专属业绩加分 / 存量厂商技术依赖 / 主观分占比高），虽无违法指定证据，但挑战者胜率结构性偏低。</div>',
+  e4:e4r('硬参数指向','<span class="badge badge-ok">正常</span>','服务类项目无设备参数指向')+e4r('评分结构 / 主观分占比','<span class="badge badge-warn">注意</span>','主观分占 45%，方案陈述环节存量厂商熟悉甲方偏好')+e4r('资源门槛','<span class="badge badge-warn">注意</span>','一级资质 + 省级业绩双门槛，全省满足企业约 4 家')+e4r('案例地区/行业指向','<span class="badge badge-no">强指向</span>','"省级政务云专属运营业绩"加 4 分，全省仅鲁信安全完全满足')+e4r('人员资质搭配','<span class="badge badge-ok">正常</span>','CISAW / CISP 要求我司可满足')+e4r('系统依赖','<span class="badge badge-no">强指向</span>','需无缝接管存量 SOC 平台（鲁信自建），交接配合风险高')+e4r('排除性条款','<span class="badge badge-ok">无</span>','未发现排除性条款'),
+  e6:'<tr class="recw"><td>观望待资质 <span class="badge badge-warn">★ 推荐</span></td><td class="note">—（暂不报价）</td><td class="note">等待资质出证 / 更正公告，触发后自动重评</td><td class="c num">—</td><td class="c num">—</td><td class="c"><span class="badge badge-ok">低</span></td></tr><tr><td>跟进挑战（凭受理回执投标）</td><td class="num">¥1,932–1,974 万</td><td class="note">受理回执 + 承诺函应答，业绩加分处劣势</td><td class="c num">68</td><td class="c num">22%</td><td class="c"><span class="badge badge-no">高</span></td></tr><tr><td>低价换案例</td><td class="num">¥1,380–1,500 万</td><td class="note">接近红线，战略亏损需董事会批准</td><td class="c num">61</td><td class="c num">18%</td><td class="c"><span class="badge badge-no">高</span></td></tr><tr><td>战略放弃</td><td class="note">—</td><td class="note">资源转投市应急指挥平台安全项目（匹配 82 分）</td><td class="c num">—</td><td class="c num">—</td><td class="c"><span class="badge badge-ok">低</span></td></tr>',
+  execNote:'观望期监测动作（系统自动 + 人工补充）', execMore:'完成 2 / 6',
+  exec:chk(true,'安全运维资质补正申请提交并取得受理回执','张资料 · 08-08 · 已完成')+chk(true,'登记观望触发条件（资质出证 / 更正公告 / 超时归档）','李商务 · 08-13 · 已完成')+chk(false,'每日监测公告更正动态（系统自动，异常即推送）','系统 · 持续 · 进行中')+chk(false,'向认证机构确认出证时间能否提前至 08-21','张资料 · 08-15 · 进行中')+chk(false,'收集鲁信安全近 12 月中标价格区间（竞争情报）','李商务 · 08-16 · 待开始')+chk(false,'08-20 触发点复核：无信号则执行自动归档','周管理 · 08-20 · 待开始'),
+  regR:reg('资质补正晚于投标截止','高','张资料','至 08-25','确认提前出证可能；否则凭回执应答或放弃')+reg('存量厂商结构性优势','高','李商务','开标前','仅在更正放宽后转为挑战策略')+reg('决策窗口收窄','中','周管理','至 08-20','触发点复核机制 + 自动归档兜底'),
+  winH:'🎯 触发 GO 后下一步（预案预置）',
+  win:li('资质出证或公告放宽 → 决策自动升级为 GO 附条件，48 小时内完成报价审批')+li('预置报价区间 ¥1,890–1,974 万与 SOC 平台成本模型待命')+li('保证金 ¥210 万资金安排预审已通过，随时可缴纳')+li('标书骨架按省级安全运营模板 v2 预生成（撰写进度可提速 40%）'),
+  loseH:'🔄 触发归档后下一步（复盘 / 转投储备）',
+  lose:li('归档原因自动登记：资质/业绩缺口（NO-GO 决策书派生）')+li('资质出证后订阅"省级安全运营"方向，下季度同类项目提前触达')+li('资源转投市应急指挥平台安全项目（匹配 82 分）')+li('省级平台竞争情报沉淀至对手档案（鲁信安全 / 安恒华东）'),
+  decRec:'watch',
+  bidNote:'人工覆盖：不采纳系统观望建议决定投标，需填写理由并计入推荐率校准（F5-4）。',
+  bidToast:'人工覆盖投标：理由已计入推荐率校准（F5-4），已创建标书任务，跳转投标标的',
+  watchToast:'已确认观望：系统将持续监测更正公告与资质出证，触发后自动重新推送',
+  gauge:['74','var(--warning)','M 20 110 A 90 90 0 0 1 171.6 44.4','/ 100 · 低于下限 80，未进入推荐列表 · 观望待触发']
+},
+/* ================= NO-GO：城市轨道交通视频监控系统升级项目 ================= */
+nogo:{
+  mTitle:'城市轨道交通视频监控系统升级项目',
+  mNote:'招标方：某市轨道交通集团 · 预算未载明 · 编号 GDJT-2026-0455 · <span class="cd">截止 2026-08-25 10:00 · 剩 12 天</span>',
+  mBadge:'<span class="badge badge-mid">六维匹配 66 · 一票否决</span>', mHash:'nogo',
+  bTag:['red','NO-GO'], bHeadline:'总体建议：建议放弃 —— 硬性业绩要求不满足触发一票否决；叠加预算缺失与异地服务成本，不具备投标价值',
+  bConsist:'一致性校验 11/11 通过 · NO-GO 决策书已生成',
+  bFacts:[fact('核心风险','轨交业绩 0 个（硬性否决）'),fact('关键机会','无（补齐业绩后再关注同类）'),fact('预算匹配度','无法评估（字段缺失）'),fact('竞争格局','轨交行业 ≥5 家专业厂商'),fact('推荐策略','战略放弃')],
+  bPre:'放弃依据：① 公告 3.3 条硬性业绩要求（轨交视频监控 ≥2 个）不满足且无法补足；② 预算金额字段缺失，价格基准线无法建立；③ 异地（广东）无服务机构，新设成本与收益不匹配。NO-GO 决策书将随归档自动存档，90 天内未超截止可恢复。',
+  e5:lrow('L1 资质匹配','软著/资质/案例/人员 → 够不够门槛',42,'var(--danger)','轨交行业硬性业绩 0/2 不满足 → 一票否决；其余资质项满足')
+     +lrow('L2 价格竞争力','历史中标价基线 + 异常低价红线 → 报价区间',30,'var(--danger)','预算未载明 → 报价区间无法建立（依赖字段缺失，不计入决策）')
+     +lrow('L3 履约可行性','业绩/团队/周期/资金 → 能否扛下合同',60,'var(--warning)','技术团队可胜任视频监控本体；但异地驻场需新设机构，履约成本高')
+     +'<div class="total-score" style="background:var(--danger-bg)"><div style="font-size:30px;font-weight:800;color:var(--danger)" class="num">54</div><div><b>决策综合得分</b><div class="note">存在一票否决项，得分仅作参考 · 系统禁止将该标的标为可推荐（F2-3）</div></div></div>',
+  e1c:r4c('bad','1 项','轨交硬性业绩不满足 → 否决','① 致命条款')+r4c('warn','1 项','保证金 50 万 + 异地履约成本','② 商务履约大坑')+r4c('warn','1 项','轨交行业资质组合加分集中','③ 评分定向陷阱')+r4c('warn','1 项','预算字段缺失（异常信号）','④ 疑似异常信号'),
+  e1l:evli('no','<b>致命条款：</b>公告 3.3 条要求近 3 年城市轨道交通视频监控业绩 ≥2 个（硬性要求），我司 0 个<div class="note">依据：公告 3.3 条 + 企业画像行业标签比对 · 一票否决，无法通过承诺函或联合体在截止前补足</div>')
+     +evli('warn','<b>预算缺失：</b>公告未载明预算金额，价格基准线（E2 a–c 项）全部无法计算<div class="note">依据：采集质量登记 #F-0455 · 已反馈数据源，等待更正公告；即使更正也无法消除业绩否决项</div>')
+     +evli('warn','<b>异地成本：</b>要求广州市内服务机构，我司无广东分支，新设机构固定成本约 ¥80 万/年<div class="note">依据：企业画像 · 分支机构 · 财务测算 · 单项目无法摊薄</div>'),
+  e2:'<div class="grid" style="grid-template-columns:repeat(3,1fr)">'+c5('市场规模估算','<div style="font-size:22px;font-weight:700" class="num">不可评估</div><div class="note">预算字段缺失；参考同规模轨交视频监控改造项目约 ¥800–1,500 万区间（仅供参考）</div>')+c5('竞品图谱','轨交安防赛道专业厂商 ≥5 家（均具备行业业绩）：锐目智能、中车数智、蓝疆安防等 · 我司无行业入场券 <span class="link">查看对手档案 ›</span>')+c5('政策环境扫描','轨道交通智能化改造专项债支持力度大；但行业准入呈封闭生态， outsiders 中标率 < 8%')+'</div>',
+  e2pb:'<div class="pb-item warn"><div class="k">a. 同期同类中标均价 / 中位价</div><div class="v">不可计算 · 预算缺失 + 我司无同类中标样本</div></div><div class="pb-item warn"><div class="k">b. 预算 vs 历史中标价</div><div class="v">预算未载明 · 待更正公告补充</div></div><div class="pb-item warn"><div class="k">c. 异常低价审查阈值</div><div class="v">无法计算（依赖预算字段）</div></div><div class="pb-item"><div class="k">d. 价格扣除系数适用</div><div class="v">小微企业 6% 扣除 · 在行业壁垒前无实质作用</div></div><div class="pb-item"><div class="k">e. 核心产品在产核验</div><div class="v">未启动（决策已 NO-GO，不投入核价资源）</div></div><div class="pb-item"><div class="k">f. 核心产品产地合规</div><div class="v">未启动</div></div>',
+  e3:c5('同标方历史项目','该轨道交通集团近 3 年信息化项目 <b>9 个</b>，均由轨交生态内厂商承接')+c5('老服务商依赖度','<span class="badge badge-no">高</span> 既有线路视频监控由锐目智能承建，升级项目延续性强')+c5('多服务商博弈','历史项目平均 3.4 家竞标，均在行业白名单内')+c5('甲方更换倾向','<span class="badge badge-no">倾向保留</span> 轨交行业强安全文化，不轻易更换供应商')+c5('中标后被淘汰可能','<span class="badge badge-warn">中</span> （若中标）行业生态排外，后续项目参与难度大'),
+  e4h:'<div style="font-size:34px;font-weight:800;color:var(--danger)">高（行业壁垒）</div><div class="note" style="flex:1">综合判断：硬性业绩门槛 + 存量厂商延续 + 行业白名单生态，外部厂商胜率结构性接近于零；未发现违法指定，但参与价值极低。</div>',
+  e4:e4r('硬参数指向','<span class="badge badge-warn">注意</span>','存储与流媒体参数与锐目智能常用方案高度一致')+e4r('评分结构 / 主观分占比','<span class="badge badge-ok">正常</span>','主观分占 35%，行业常规水平')+e4r('资源门槛','<span class="badge badge-no">超配</span>','轨交业绩 ≥2 个门槛对生态外企业构成实质性排除')+e4r('案例地区/行业指向','<span class="badge badge-no">强指向</span>','行业业绩为硬性要求，非加分项')+e4r('人员资质搭配','<span class="badge badge-warn">注意</span>','要求轨交行业项目经理认证，我司无人持有')+e4r('系统依赖','<span class="badge badge-no">强指向</span>','需与既有线路监控平台（锐目承建）无缝对接')+e4r('排除性条款','<span class="badge badge-warn">实质性排除</span>','硬性业绩条款对生态外企业构成实质性排除效果'),
+  e6:'<tr class="recn"><td>战略放弃 <span class="badge badge-no">★ 推荐</span></td><td class="note">—</td><td class="note">归档并回流匹配规则（新增轨交行业标签）；资源转投本市雪亮工程四期（匹配 83 分）</td><td class="c num">—</td><td class="c num">—</td><td class="c"><span class="badge badge-ok">低</span></td></tr><tr><td>联合体借业绩投标</td><td class="note">待定</td><td class="note">需寻找轨交厂商组联合体；公告未明确接受联合体，需发澄清函确认，成功率低</td><td class="c num">48</td><td class="c num">8%</td><td class="c"><span class="badge badge-no">高</span></td></tr><tr><td>强行投标（不建议）</td><td class="note">—</td><td class="note">资格审查阶段即被否决，徒耗标书资源</td><td class="c num">30</td><td class="c num">0%</td><td class="c"><span class="badge badge-no">高</span></td></tr>',
+  execNote:'归档前收尾动作', execMore:'完成 2 / 5',
+  exec:chk(true,'硬性条件否决项核验（行业业绩 0/2，无法补足）','李商务 · 08-13 · 已完成')+chk(true,'预算缺失登记并反馈数据源（#F-0455）','孙配置 · 08-13 · 已完成')+chk(false,'生成 NO-GO 决策书并随归档存档','系统 · 08-14 · 进行中')+chk(false,'匹配规则回流：新增"轨道交通"行业标签与业绩门槛提醒','孙配置 · 08-15 · 待开始')+chk(false,'订阅方向调优：屏蔽同类轨交项目推送（直至补齐业绩）','李商务 · 08-15 · 待开始'),
+  regR:reg('硬性业绩缺口','高','李商务','长期','积累轨交行业合作机会；补齐前屏蔽同类推送')+reg('预算字段缺失','中','孙配置','至更正公告','采集质量登记 + 数据源整改跟踪')+reg('异地服务成本','低','周管理','—','广东方向暂不新设机构'),
+  winH:'📁 归档后价值回流（NO-GO 不是终点）',
+  win:li('否决原因入库失分归因，驱动匹配规则迭代（行业标签更精准）')+li('订阅推送屏蔽同类项目，减少无效打扰（预计月省 6 条）')+li('轨交生态厂商情报沉淀，为未来联合体合作储备名单')+li('若未来补齐轨交业绩，系统自动恢复同类项目推送'),
+  loseH:'⚠ 若人工覆盖决策（强制投标）',
+  lose:li('资格审查阶段即被否决，标书人力与保证金机会成本损失')+li('人工覆盖需填写理由并计入推荐率校准（F5-4）')+li('否决项未消除前，系统保留 NO-GO 结论不变（单一真相源）')+li('建议替代动作：关注同地域雪亮工程 / 公安视频监控类项目（无行业门槛）'),
+  decRec:'nogo',
+  bidNote:'人工覆盖：否决项未消除，资格审查阶段即被否决；需填写理由并计入推荐率校准（F5-4）。',
+  bidToast:'人工覆盖投标：理由已计入推荐率校准（F5-4），跳转投标标的',
+  watchToast:'已加入观察名单：若更正公告消除否决项将重新推送',
+  gauge:['66','var(--danger)','M 20 110 A 90 90 0 0 1 153.4 31.1','/ 100 · 低于下限 + 一票否决 · 不进入推荐列表']
+}
+};
+
+/* ===== 归档原因字典（与系统管理 · 归档原因字典同源 localStorage） ===== */
+const DEF_REASONS=['时间不足','价格不具备竞争力','资质/业绩缺口','战略放弃','其他'];
+function getReasons(){try{const r=JSON.parse(localStorage.getItem('archReasons')||'null');return (Array.isArray(r)&&r.length)?r:DEF_REASONS.slice();}catch(e){return DEF_REASONS.slice();}}
+function saveReasons(list){localStorage.setItem('archReasons',JSON.stringify(list));}
+
+let curProfile=null, decAct=null, decReason=null;
+function pickDec(act){
+  decAct=act; decReason=null;
+  ['bid','watch','nogo'].forEach(a=>{const c=document.getElementById('dc'+a[0].toUpperCase()+a.slice(1));c.classList.remove('on-bid','on-watch','on-nogo');if(a===act)c.classList.add('on-'+a);});
+  const p=curProfile, panel=document.getElementById('decPanel');
+  if(act==='bid'){
+    panel.innerHTML='<div class="dec-panel"><div class="note" style="margin-bottom:10px">'+p.bidNote+'</div><a class="btn primary" style="padding:10px 26px" href="bidprojects.html" onclick="showToast(\''+p.bidToast+'\')">确认投标 · 创建标书任务</a></div>';
+  }else if(act==='watch'){
+    panel.innerHTML='<div class="dec-panel"><div class="note" style="margin-bottom:10px">观望触发条件随决策一并登记（与 E6 策略矩阵联动），条件满足后自动重评并重新推送；弃标条件与双向预案触发条件一致（校验项 6）。</div><button class="btn primary" style="padding:10px 26px" onclick="showToast(\''+p.watchToast+'\')">确认持续观察</button></div>';
+  }else{
+    renderNogoPanel();
+  }
+}
+function renderNogoPanel(){
+  const chips=getReasons().map(r=>'<button class="reason-chip'+(r===decReason?' on':'')+(DEF_REASONS.indexOf(r)<0?' custom':'')+'" data-r="'+r+'" onclick="pickReason(this)">'+r+'</button>').join('');
+  document.getElementById('decPanel').innerHTML='<div class="dec-panel">'
+    +'<div style="font-weight:600;margin-bottom:10px">归档原因（必填）<span class="note" style="font-weight:400">预置于<a class="link" href="admin.html#archDict">系统管理 · 归档原因字典</a>；自定义原因自动入字典，下次可直接选择</span></div>'
+    +'<div id="reasonChips">'+chips+'</div>'
+    +'<div style="display:flex;gap:8px;margin-top:6px"><input class="mini" id="reasonNew" style="flex:1;max-width:320px;padding:8px 12px" placeholder="＋ 输入自定义归档原因"><button class="btn sm" onclick="addReason()">添加</button></div>'
+    +'<div style="margin-top:14px"><button class="btn danger-ghost" style="padding:10px 26px" onclick="confirmNogo()">确认不投标 · 归档</button> <span class="note">归档后移出<a class="link" href="planlist.html">拟投标的</a>，转入<a class="link" href="archive.html">归档标的</a>，NO-GO 决策书与匹配快照一并存档，90 天内可恢复</span></div>'
+    +'</div>';
+}
+function pickReason(el){decReason=el.dataset.r;document.querySelectorAll('.reason-chip').forEach(c=>c.classList.toggle('on',c.dataset.r===decReason));}
+function addReason(){
+  const inp=document.getElementById('reasonNew'), v=(inp.value||'').trim();
+  if(!v){showToast('请输入自定义归档原因');return;}
+  const list=getReasons();
+  if(list.indexOf(v)<0){list.push(v);saveReasons(list);showToast('新原因「'+v+'」已加入归档原因字典，下次可直接选择');}
+  decReason=v; renderNogoPanel();
+}
+function confirmNogo(){
+  if(!decReason){showToast('请先选择或填写归档原因');return;}
+  showToast('已归档：原因「'+decReason+'」已登记 · 决策书与匹配快照一并存档，90 天内可恢复');
+  setTimeout(function(){location.href='archive.html';},900);
+}
+
+function apply(key){
+  const p = PROFILES[key] || PROFILES.cond;
+  curProfile=p; decAct=null; decReason=null;
+  document.querySelectorAll('.dec-rec').forEach(e=>e.remove());
+  document.querySelectorAll('.dec-card').forEach(c=>c.classList.remove('on-bid','on-watch','on-nogo'));
+  document.getElementById('decPanel').innerHTML='';
+  document.getElementById('dc'+p.decRec[0].toUpperCase()+p.decRec.slice(1)).insertAdjacentHTML('beforeend','<em class="dec-rec">★ 推荐</em>');
+  document.getElementById('mTitle').textContent = p.mTitle;
+  document.getElementById('mNote').innerHTML = p.mNote;
+  document.getElementById('mBadge').innerHTML = p.mBadge;
+  document.getElementById('mMatch').href = 'match.html#' + p.mHash;
+  const tag = document.getElementById('bTag');
+  tag.className = 'go-tag ' + p.bTag[0]; tag.textContent = p.bTag[1];
+  document.getElementById('bHeadline').textContent = p.bHeadline;
+  document.getElementById('bConsist').textContent = p.bConsist;
+  document.getElementById('bFacts').innerHTML = p.bFacts.join('');
+  document.getElementById('bPre').textContent = p.bPre;
+  document.getElementById('e5body').innerHTML = p.e5;
+  document.getElementById('e1cards').innerHTML = p.e1c;
+  document.getElementById('e1list').innerHTML = p.e1l;
+  document.getElementById('e2body').innerHTML = p.e2;
+  document.getElementById('e2pb').innerHTML = p.e2pb;
+  document.getElementById('e3body').innerHTML = p.e3;
+  document.getElementById('e4head').innerHTML = p.e4h;
+  document.getElementById('e4rows').innerHTML = p.e4;
+  document.getElementById('e6body').innerHTML = p.e6;
+  document.getElementById('execNote').textContent = p.execNote;
+  document.getElementById('execMore').textContent = p.execMore;
+  document.getElementById('execItems').innerHTML = p.exec;
+  document.getElementById('regRows').innerHTML = p.regR;
+  document.getElementById('planWinH').textContent = p.winH;
+  document.getElementById('planWin').innerHTML = p.win;
+  document.getElementById('planLoseH').textContent = p.loseH;
+  document.getElementById('planLose').innerHTML = p.lose;
+  document.getElementById('gaugeVal').textContent = p.gauge[0];
+  document.getElementById('gaugeCap').textContent = p.gauge[3];
+  const arc = document.getElementById('gaugeArc');
+  arc.setAttribute('d', p.gauge[2]); arc.setAttribute('stroke', p.gauge[1]);
+  document.title = '投标建议 · ' + p.mTitle + ' - 寻标司南';
+}
+apply((location.hash||'#cond').slice(1));
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

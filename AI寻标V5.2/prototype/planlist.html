@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>拟投标的 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* 导入标书文件弹层（复用全站 modal 规范） */
+.modal-mask{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:60;align-items:flex-start;justify-content:center;padding:60px 16px}
+.modal-mask.open{display:flex}
+.modal{background:#fff;border-radius:12px;width:100%;max-width:560px;box-shadow:0 18px 50px rgba(15,23,42,.22)}
+.modal-head{display:flex;align-items:center;gap:10px;padding:16px 22px;border-bottom:1px solid var(--border)}
+.modal-head .t{font-size:16px;font-weight:700;flex:1}
+.modal-head .x{border:none;background:none;font-size:18px;color:var(--text-2);cursor:pointer}
+.modal-body{padding:18px 22px}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+.imp-drop{border:1.5px dashed var(--border);border-radius:10px;padding:24px;text-align:center;color:var(--text-3);font-size:13px;background:var(--bg)}
+.imp-file{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-top:10px;cursor:pointer;font-size:13px;color:var(--text-2)}
+.imp-file small{margin-left:auto;color:var(--text-3);white-space:nowrap}
+.imp-file.on{border-color:var(--primary);background:var(--primary-light);color:var(--primary);font-weight:600}
+.imp-step{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:13px;color:var(--text-3)}
+.imp-step .mk{width:20px;height:20px;border-radius:50%;border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.imp-step.done{color:var(--text)}
+.imp-step.done .mk{background:var(--success);border-color:var(--success);color:#fff}
+.imp-bar{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;margin:8px 0 4px}
+.imp-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--ai));transition:width .35s}
+.kv{display:grid;grid-template-columns:92px 1fr;gap:8px 10px;font-size:13px}
+.kv .k{color:var(--text-3)}
+.kv .v{color:var(--text)}
+/* 标题旁说明图标：悬浮展示清单流转规则 */
+.flow-help{position:relative;display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;background:var(--primary-light);border:1px solid #BFDDEA;color:var(--primary);font-size:12px;font-weight:700;cursor:help;vertical-align:3px;margin-left:6px;font-style:normal}
+.flow-help::after{content:"";position:absolute;left:-8px;right:-8px;top:100%;height:12px}
+.flow-pop{display:none;position:absolute;left:-160px;top:calc(100% + 10px);width:460px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 34px rgba(15,23,42,.18);padding:16px 18px;z-index:50;cursor:default;text-align:left;font-weight:400;line-height:1.6}
+.flow-help:hover .flow-pop,.flow-help:focus .flow-pop{display:block}
+.flow-pop .fp-t{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.flow-pop .fp-t .note{font-weight:400}
+.flow-pop .fp-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);font-size:12.5px;color:var(--text-2)}
+.flow-pop .fp-item:last-of-type{border-bottom:none}
+.flow-pop .fp-k{flex-shrink:0;width:62px;font-weight:600;color:var(--text)}
+.flow-pop .fp-more{margin-top:8px;font-size:12px;color:var(--text-3)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- 左侧导航 -->
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item active" href="planlist.html"><span class="ico">✚</span>拟投标的<span class="nav-badge">3</span></a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的<span class="nav-badge">2</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+            <div class="nav-group">
+        <div class="nav-title">企业画像</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>本企业</a>
+        <a class="nav-item" href="profile.html#rival"><span class="ico">⚔</span>竞争对手</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">数据洞察</div>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>效果看板</a>
+        <a class="nav-item" href="collectboard.html"><span class="ico">▦</span>采集看板</a>
+        <a class="nav-item" href="marketboard.html"><span class="ico">◈</span>市场看板</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">系统配置</div>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">招标信息 / <b>拟投标的</b></div>
+      <div class="page-title">拟投标的 <span class="note">推送标的「＋拟投标」加入 · 支持导入已下载标书文件由系统解析生成 · 决策后自动流转</span><span class="flow-help" tabindex="0">?<div class="flow-pop">
+        <div class="fp-t">🔄 清单流转规则 <span class="note">决策结果驱动，无需人工维护</span></div>
+        <div class="fp-item"><span class="fp-k">入口</span><span>推送标的「＋拟投标」加入；订阅推送中标记“考虑中”自动加入；本页「导入标书文件」上传已下载的标书/公告文件，系统解析后生成（来源标注“文件导入”）。</span></div>
+        <div class="fp-item"><span class="fp-k">决定投标</span><span>在投标建议页选择「投标」后，项目自动移出本清单，进入<a class="link" href="bidprojects.html">投标标的</a>，跟踪标书撰写、合规与确认投标。</span></div>
+        <div class="fp-item"><span class="fp-k">不投标归档</span><span>在投标建议页选择「不投标 · 归档」（原因必填）后，项目自动移出本清单，转入<a class="link" href="archive.html">归档标的</a>（90 天内可恢复）。</span></div>
+        <div class="fp-more">持续观察（WATCH）项保留在本清单，触发条件满足后自动重评升级；全部流转由决策结果驱动，无需人工维护。</div>
+      </div></span></div>
+
+      <!-- 指标卡 -->
+      <div class="grid g3">
+        <div class="stat"><div class="lbl">清单项目</div><div class="val num blue">3</div><div class="sub">本月加入 9 · 移出 6（决策流转/放弃）</div></div>
+        <div class="stat"><div class="lbl">待决策</div><div class="val num orange">2</div><div class="sub">GO ×1 · GO 附条件 ×1 · 滨海仅剩 44h</div></div>
+        <div class="stat"><div class="lbl">持续观察（WATCH）</div><div class="val num" style="color:var(--warning)">1</div><div class="sub">待资质出证 / 更正公告触发</div></div>
+      </div>
+
+      <!-- 筛选 -->
+      <div class="card" style="margin-top:16px">
+        <div id="stChips" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <span class="note" style="margin-right:2px">决策状态：</span>
+          <span class="chip" data-f="all" onclick="filterPlan('all')">全部（3）</span>
+          <span class="chip on" data-f="wait" onclick="filterPlan('wait')">待决策（2）</span>
+          <span class="chip" data-f="watch" onclick="filterPlan('watch')">持续观察（1）</span>
+          <div style="flex:1"></div>
+          <button class="btn primary" style="padding:7px 14px" onclick="openImport()">⇪ 导入标书文件</button>
+          <select class="mini" style="padding:7px 10px"><option>按截止时间排序</option><option>按匹配分排序</option><option>按加入时间排序</option></select>
+        </div>
+
+        <table class="tbl" id="planTbl" style="margin-top:12px">
+          <thead>
+            <tr><th>项目</th><th class="c">匹配分</th><th class="c">预算</th><th>截止时间</th><th>决策状态</th><th class="c">推荐决策</th><th>标书进度</th><th>操作</th></tr>
+          </thead>
+          <tr data-st="wait">
+            <td><a class="link" href="match.html#cond">滨海新城智慧校园一体化建设项目（一期）</a><div class="note">山东·滨州 · 教育 · 今日 09:12 加入</div></td>
+            <td class="c"><span class="badge badge-high">87</span></td>
+            <td class="c">1,280 万</td>
+            <td>2026-08-15 09:30<div class="note" style="color:var(--high)">剩 44 小时</div></td>
+            <td><span class="badge badge-warn">待决策</span></td>
+            <td class="c"><a href="suggestion.html#cond" title="查看投标建议（附 3 项前提条件）"><span class="badge badge-mid">GO 附条件</span></a></td>
+            <td class="c">—</td>
+            <td><a class="btn sm primary" href="suggestion.html#cond">投标建议</a> <button class="btn sm" onclick="giveUp(this)">放弃投标</button></td>
+          </tr>
+          <tr data-st="wait">
+            <td><a class="link" href="match.html#go">市第一人民医院信息化运维服务采购</a><div class="note">山东·滨州 · 医疗 · 昨日加入</div></td>
+            <td class="c"><span class="badge badge-high">92</span></td>
+            <td class="c">860 万</td>
+            <td>2026-08-19 10:00<div class="note">剩 6 天</div></td>
+            <td><span class="badge badge-warn">待决策</span></td>
+            <td class="c"><a href="suggestion.html#go" title="查看投标建议（无前提条件）"><span class="badge badge-ok">GO</span></a></td>
+            <td class="c">—</td>
+            <td><a class="btn sm primary" href="suggestion.html#go">投标建议</a> <button class="btn sm" onclick="giveUp(this)">放弃投标</button></td>
+          </tr>
+          <tr data-st="watch" style="display:none">
+            <td><a class="link" href="match.html#watch">省政务云平台安全运营服务采购项目</a><div class="note">山东·济南 · 政务 · 2 天前加入</div></td>
+            <td class="c"><span class="badge badge-mid">74</span></td>
+            <td class="c">2,100 万</td>
+            <td>2026-08-22 09:30<div class="note">剩 9 天</div></td>
+            <td><span class="badge badge-mid">持续观察</span><div class="note">触发条件已登记</div></td>
+            <td class="c"><a href="suggestion.html#watch" title="查看投标建议（建议观望）"><span class="badge badge-warn">WATCH</span></a></td>
+            <td class="c">—</td>
+            <td><a class="btn sm primary" href="suggestion.html#watch">投标建议</a> <button class="btn sm" onclick="giveUp(this)">放弃投标</button></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 导入标书文件弹层（解析生成拟投标的） ===== -->
+<div class="modal-mask" id="impModal" onclick="if(event.target===this)closeImport()">
+  <div class="modal">
+    <div class="modal-head">
+      <span style="font-size:18px">⇪</span>
+      <div class="t">导入标书文件 <span class="note" style="font-weight:400">系统解析后生成拟投标的</span></div>
+      <button class="x" onclick="closeImport()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- 步骤1：选择文件 -->
+      <div id="impS1">
+        <div class="imp-drop">拖拽文件到此处，或点击下方示例选择<br><span style="font-size:12px">支持标书 / 招标公告文件：.pdf · .docx · 扫描件（OCR）</span></div>
+        <div class="imp-file" onclick="pickFile(this,'滨海经济开发区智慧物流园区信息化建设项目（二期）标书.pdf')">📄 滨海经济开发区智慧物流园区信息化建设项目（二期）标书.pdf<small>2.4 MB</small></div>
+        <div class="imp-file" onclick="showToast('演示：仅第一个文件可解析')">📄 市妇幼保健院 HIS 系统升级招标公告.docx<small>1.1 MB</small></div>
+        <div class="imp-file" onclick="showToast('演示：仅第一个文件可解析')">📄 区县雪亮工程四期标书（扫描件）.pdf<small>6.8 MB</small></div>
+        <div class="note" style="margin-top:10px">解析入库的标的来源将标注「文件导入」，采集留痕与来源渠道可追溯（合规要求）。</div>
+      </div>
+      <!-- 步骤2：解析中 -->
+      <div id="impS2" style="display:none">
+        <div class="note" id="impFileLine" style="margin-bottom:6px"></div>
+        <div class="imp-step" id="ps1"><span class="mk">1</span>文件结构提取（正文 / 附表 / 资质要求清单）</div>
+        <div class="imp-step" id="ps2"><span class="mk">2</span>标书关键字段识别（标题 / 编号 / 预算 / 开标时间）</div>
+        <div class="imp-step" id="ps3"><span class="mk">3</span>资质要求比对企业画像 · 匹配评分计算</div>
+        <div class="imp-bar"><i id="impBarFill"></i></div>
+        <div class="note" id="impStatus">正在解析…</div>
+      </div>
+      <!-- 步骤3：解析结果确认 -->
+      <div id="impS3" style="display:none">
+        <div class="kv">
+          <div class="k">项目名称</div><div class="v">滨海经济开发区智慧物流园区信息化建设项目（二期）</div>
+          <div class="k">标书编号</div><div class="v">BHZB-2026-0890</div>
+          <div class="k">预算金额</div><div class="v">690 万元</div>
+          <div class="k">开标时间</div><div class="v">2026-08-26 10:00（剩 9 天）</div>
+          <div class="k">地区 / 行业</div><div class="v">山东·滨州 · 物流园区信息化</div>
+          <div class="k">采购单位</div><div class="v">滨海经济开发区管理委员会</div>
+          <div class="k">资质要求</div><div class="v">电子智能化工程专业承包二级及以上 · 信息系统建设与服务能力 CS3</div>
+          <div class="k">来源</div><div class="v">文件导入 · 系统解析（字段可点击修正）</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:12px 14px;background:var(--bg);border-radius:10px">
+          <span class="note">匹配评分</span><span class="badge badge-mid num" style="font-size:14px">78</span>
+          <span class="note">中匹配 · 推荐决策</span><span class="badge badge-mid">GO 附条件</span>
+          <span class="note" style="margin-left:auto">附 1 项前提：CS3 证书在有效期内</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeImport()">取消</button>
+      <button class="btn primary" id="impNext" style="display:none" onclick="startParse()">开始解析</button>
+      <button class="btn primary" id="impAdd" style="display:none" onclick="confirmImport()">加入拟投标的</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',1800);}
+/* ===== 决策状态筛选：进入默认选中「待决策」 ===== */
+function filterPlan(f){
+  document.querySelectorAll('#stChips .chip').forEach(c=>c.classList.toggle('on',c.dataset.f===f));
+  document.querySelectorAll('#planTbl tr[data-st]').forEach(tr=>{tr.style.display=(f==='all'||tr.dataset.st===f)?'':'none';});
+}
+/* ===== 放弃投标：原因必填，转入归档标的，90 天内可恢复 ===== */
+function giveUp(btn){
+  const name=btn.closest('tr').querySelector('.link').textContent.trim();
+  btn.textContent='✓ 已放弃';btn.disabled=true;btn.style.color='var(--text-3)';btn.style.borderColor='var(--border)';btn.style.cursor='default';
+  showToast('已放弃投标「'+name+'」· 归档原因已记录，转入归档标的（90 天内可恢复）');
+}
+/* ===== 导入标书文件：选择 → 系统解析 → 确认加入（计数联动） ===== */
+var impFile='';
+function openImport(){
+  impFile='';
+  document.querySelectorAll('.imp-file').forEach(f=>f.classList.remove('on'));
+  document.getElementById('impS1').style.display='';
+  document.getElementById('impS2').style.display='none';
+  document.getElementById('impS3').style.display='none';
+  document.getElementById('impNext').style.display='none';
+  document.getElementById('impAdd').style.display='none';
+  document.getElementById('impModal').classList.add('open');
+}
+function closeImport(){document.getElementById('impModal').classList.remove('open');}
+function pickFile(el,name){
+  document.querySelectorAll('.imp-file').forEach(f=>f.classList.remove('on'));
+  el.classList.add('on');impFile=name;
+  document.getElementById('impNext').style.display='';
+}
+function startParse(){
+  document.getElementById('impS1').style.display='none';
+  document.getElementById('impS2').style.display='';
+  document.getElementById('impNext').style.display='none';
+  document.getElementById('impFileLine').textContent='📄 '+impFile;
+  ['ps1','ps2','ps3'].forEach(id=>{var e=document.getElementById(id);e.classList.remove('done');e.querySelector('.mk').textContent=e.id.slice(2);});
+  var bar=document.getElementById('impBarFill');bar.style.width='0';
+  var st=document.getElementById('impStatus');
+  var steps=[['ps1','34%','文件结构提取完成（正文 42 页 · 附表 6 张 · 资质要求 7 条）'],
+             ['ps2','68%','关键字段识别完成（标题 / 编号 / 预算 / 开标时间）'],
+             ['ps3','100%','资质要求已比对企业画像 · 匹配评分计算完成：78 分（中匹配）']];
+  steps.forEach(function(s,i){
+    setTimeout(function(){
+      var e=document.getElementById(s[0]);e.classList.add('done');e.querySelector('.mk').textContent='✓';
+      bar.style.width=s[1];st.textContent=s[2];
+      if(i===2){
+        setTimeout(function(){
+          document.getElementById('impS2').style.display='none';
+          document.getElementById('impS3').style.display='';
+          document.getElementById('impAdd').style.display='';
+        },400);
+      }
+    },500+i*650);
+  });
+}
+function confirmImport(){
+  var tbl=document.getElementById('planTbl');
+  var tr=document.createElement('tr');tr.dataset.st='wait';
+  tr.innerHTML='<td><a class="link" href="javascript:showToast(\'演示：文件导入标的的匹配详情\')">滨海经济开发区智慧物流园区信息化建设项目（二期）</a><div class="note">山东·滨州 · 物流园区信息化 · 今日 15:40 文件导入加入</div></td>'
+    +'<td class="c"><span class="badge badge-mid">78</span></td>'
+    +'<td class="c">690 万</td>'
+    +'<td>2026-08-26 10:00<div class="note">剩 9 天</div></td>'
+    +'<td><span class="badge badge-warn">待决策</span></td>'
+    +'<td class="c"><span class="badge badge-mid" title="附 1 项前提：CS3 证书在有效期内">GO 附条件</span></td>'
+    +'<td class="c">—</td>'
+    +'<td><a class="btn sm primary" href="suggestion.html#cond">投标建议</a> <button class="btn sm" onclick="giveUp(this)">放弃投标</button></td>';
+  tbl.appendChild(tr);
+  var cur=document.querySelector('#stChips .chip.on').dataset.f;
+  tr.style.display=(cur==='all'||cur==='wait')?'':'none';
+  var chips={all:'全部（4）',wait:'待决策（3）',watch:'持续观察（1）'};
+  document.querySelectorAll('#stChips .chip').forEach(c=>c.textContent=chips[c.dataset.f]);
+  var vals=document.querySelectorAll('.grid.g3 .stat .val');
+  vals[0].textContent='4';vals[1].textContent='3';
+  vals[0].closest('.stat').querySelector('.sub').textContent='本月加入 10 · 移出 6（决策流转/放弃）';
+  vals[1].closest('.stat').querySelector('.sub').textContent='GO ×1 · GO 附条件 ×2 · 滨海仅剩 44h';
+  var bd=document.querySelector('.nav-item.active .nav-badge');if(bd)bd.textContent='4';
+  closeImport();
+  showToast('已加入拟投标的 · 来源「文件导入」· 推荐决策 GO 附条件（附 1 项前提待核实）');
+}
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
