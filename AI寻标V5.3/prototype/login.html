@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>登录 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ===== 登录页专用样式 ===== */
+  body{background:#F0F3F9;display:flex;min-height:100vh}
+  .login-wrap{display:flex;width:100%;min-height:100vh}
+
+  /* 左侧品牌区 */
+  .brand-side{flex:1.1;background:linear-gradient(160deg,#152736 0%,#1F3D52 45%,#2E5D78 100%);color:#fff;display:flex;flex-direction:column;justify-content:center;padding:64px 72px;position:relative;overflow:hidden;min-width:460px}
+  .brand-side::after{content:"";position:absolute;right:-140px;top:-140px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(112,175,207,.32),transparent 70%)}
+  .brand-side::before{content:"";position:absolute;left:-100px;bottom:-160px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(59,123,154,.30),transparent 70%)}
+  .brand-side .in{position:relative;z-index:2}
+  .brand-side .logo-line{display:flex;align-items:center;gap:12px;margin-bottom:44px}
+  .brand-side .logo-line .mark{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--primary),var(--ai));display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700}
+  .brand-side .logo-line b{font-size:20px}
+  .brand-side .logo-line small{display:block;font-size:12px;color:#8FA9BA;font-weight:400}
+  .brand-side h1{font-size:30px;line-height:1.5;margin-bottom:14px}
+  .brand-side h1 em{font-style:normal;background:linear-gradient(90deg,#70AFCF,#A5DCEF);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand-side .sub{color:#A9C4D4;font-size:14px;line-height:1.9;margin-bottom:40px;max-width:420px}
+  .brand-side .pts{display:flex;flex-direction:column;gap:14px;max-width:420px}
+  .brand-side .pts .p{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 16px}
+  .brand-side .pts .p .ic{width:30px;height:30px;border-radius:8px;background:rgba(112,175,207,.25);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  .brand-side .pts .p b{font-size:13.5px;display:block}
+  .brand-side .pts .p span{font-size:12px;color:#8FA9BA}
+  .brand-side .site-link{margin-top:44px;font-size:13px;color:#8FA9BA}
+  .brand-side .site-link a{color:#A5DCEF;text-decoration:underline}
+
+  /* 右侧表单区 */
+  .form-side{flex:1;display:flex;align-items:center;justify-content:center;padding:40px}
+  .login-card{width:400px;max-width:100%}
+  .login-card .hd{margin-bottom:26px}
+  .login-card .hd h2{font-size:22px;margin-bottom:6px}
+  .login-card .hd p{font-size:13px;color:var(--text-3)}
+
+  /* 登录方式切换 */
+  .login-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:22px}
+  .login-tabs span{padding:10px 4px;margin-right:26px;font-size:14px;color:var(--text-3);cursor:pointer;border-bottom:2px solid transparent}
+  .login-tabs span.on{color:var(--primary);font-weight:600;border-bottom-color:var(--primary)}
+
+  .f-item{margin-bottom:16px}
+  .f-item label{display:block;font-size:13px;color:var(--text-2);margin-bottom:6px}
+  .f-item input{width:100%;border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-size:14px;outline:none;background:#fff}
+  .f-item input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,123,154,.12)}
+  .f-item .with-btn{display:flex;gap:10px}
+  .f-item .with-btn input{flex:1}
+  .f-item .with-btn .btn{flex-shrink:0;padding:0 16px;font-size:13px}
+
+  /* 滑块验证（静态演示） */
+  .slide{height:40px;border:1px solid var(--border);border-radius:8px;background:var(--bg);position:relative;display:flex;align-items:center;margin-bottom:16px;overflow:hidden}
+  .slide .track-txt{position:absolute;left:0;right:0;text-align:center;font-size:12px;color:var(--text-3);pointer-events:none}
+  .slide .knob{width:40px;height:38px;background:#fff;border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--primary);box-shadow:0 1px 4px rgba(31,39,51,.1)}
+  .slide.done{background:var(--success-bg);border-color:#BCE5D2}
+  .slide.done .track-txt{color:var(--success)}
+
+  .f-row{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-2);margin-bottom:20px}
+  .f-row .remember{display:flex;align-items:center;gap:6px;cursor:pointer}
+  .f-row a{color:var(--primary)}
+  .f-row a:hover{text-decoration:underline}
+
+  .login-btn{width:100%;padding:12px;border-radius:9px;background:linear-gradient(90deg,var(--primary),var(--ai));color:#fff;font-size:15px;font-weight:600;border:none;cursor:pointer;box-shadow:0 8px 20px rgba(47,99,125,.30)}
+  .login-btn:hover{opacity:.93}
+
+  .divider{display:flex;align-items:center;gap:12px;color:var(--text-3);font-size:12px;margin:24px 0 16px}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--border)}
+  .third{display:flex;gap:12px;justify-content:center}
+  .third .t{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;color:var(--text-2)}
+  .third .t:hover{border-color:var(--primary);color:var(--primary)}
+
+  .signup{text-align:center;font-size:13px;color:var(--text-3);margin-top:26px}
+  .signup a{color:var(--primary);font-weight:600}
+
+  /* 演示账号提示条 */
+  .demo-tip{margin-top:22px;background:var(--primary-light);border:1px dashed #B9CDF7;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text-2);line-height:1.8}
+  .demo-tip b{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="login-wrap">
+
+  <!-- 左侧品牌区 -->
+  <div class="brand-side">
+    <div class="in">
+      <div class="logo-line">
+        <div class="mark"><img src="images/logo.png" alt="寻标司南"></div>
+        <div><b>寻标司南</b><small>智能投标效能平台</small></div>
+      </div>
+      <h1>让每一次投标<br>都<em>有的放矢</em></h1>
+      <p class="sub">招标信息智能采集 · 企业画像匹配评分 · 四档智能决策 · AI 辅助标书撰写</p>
+      <div class="pts">
+        <div class="p"><div class="ic">📡</div><div><b>全网采集 · 分钟级推送</b><span>200+ 合规数据源，高匹配项目实时送达工作台</span></div></div>
+        <div class="p"><div class="ic">🧠</div><div><b>六大决策引擎 · 四档标准结论</b><span>GO / GO 附条件 / WATCH / NO-GO，决策留痕可回溯</span></div></div>
+        <div class="p"><div class="ic">✍️</div><div><b>AI 标书 · 合规红线拦截</b><span>响应点逐条对照，废标风险在导出前清零</span></div></div>
+      </div>
+      <div class="site-link">还没有账号？<a href="site.html#contact">预约演示，申请试用 ›</a></div>
+    </div>
+  </div>
+
+  <!-- 右侧表单区 -->
+  <div class="form-side">
+    <div class="login-card">
+      <div class="hd">
+        <h2>欢迎登录</h2>
+        <p>华信智能科技 · 企业工作台</p>
+      </div>
+
+      <div class="login-tabs">
+        <span class="on" id="tabPwd" onclick="switchTab('pwd')">密码登录</span>
+        <span id="tabSms" onclick="switchTab('sms')">验证码登录</span>
+      </div>
+
+      <!-- 密码登录 -->
+      <div id="formPwd">
+        <div class="f-item">
+          <label>手机号 / 邮箱</label>
+          <input type="text" value="lishangwu@huaxin.cn" placeholder="请输入手机号或企业邮箱">
+        </div>
+        <div class="f-item">
+          <label>密码</label>
+          <input type="password" value="demo123456" placeholder="请输入密码">
+        </div>
+      </div>
+
+      <!-- 验证码登录（默认隐藏） -->
+      <div id="formSms" style="display:none">
+        <div class="f-item">
+          <label>手机号</label>
+          <input type="text" placeholder="请输入已注册的手机号">
+        </div>
+        <div class="f-item">
+          <label>短信验证码</label>
+          <div class="with-btn">
+            <input type="text" placeholder="6 位验证码">
+            <button class="btn" onclick="showToast('验证码已发送（演示环境不实际下发）')">获取验证码</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 滑块验证 -->
+      <div class="slide" id="slide" onclick="doSlide()">
+        <span class="track-txt" id="slideTxt">按住滑块，拖动完成验证</span>
+        <div class="knob" id="knob">➤</div>
+      </div>
+
+      <div class="f-row">
+        <label class="remember"><input type="checkbox" checked>记住我（7 天免登录）</label>
+        <a href="javascript:void(0)" onclick="showToast('请联系租户管理员重置密码，或拨打 400-888-0000')">忘记密码？</a>
+      </div>
+
+      <a href="index.html" style="text-decoration:none"><button class="login-btn" onclick="showToast('登录成功，进入工作台')">登 录</button></a>
+
+      <div class="divider">其他登录方式</div>
+      <div class="third">
+        <div class="t" title="企业微信登录" onclick="showToast('企业微信授权登录（演示）')">💬</div>
+        <div class="t" title="钉钉登录" onclick="showToast('钉钉授权登录（演示）')">📌</div>
+        <div class="t" title="CA 证书登录" onclick="showToast('CA 证书登录需插入 UKey（演示）')">🔑</div>
+      </div>
+
+      <div class="signup">还没有企业账号？<a href="site.html#contact">立即申请试用</a></div>
+
+      <div class="demo-tip">
+        <b>演示环境</b>：账号 <b>lishangwu@huaxin.cn</b> / 密码任意 · 角色：商务负责人（李商务）· 数据为演示样例，不构成任何投标依据。
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.style.display='block';
+  clearTimeout(t._tm);t._tm=setTimeout(function(){t.style.display='none'},2200);
+}
+function switchTab(mode){
+  var pwd=mode==='pwd';
+  document.getElementById('formPwd').style.display=pwd?'block':'none';
+  document.getElementById('formSms').style.display=pwd?'none':'block';
+  document.getElementById('tabPwd').className=pwd?'on':'';
+  document.getElementById('tabSms').className=pwd?'':'on';
+}
+function doSlide(){
+  var s=document.getElementById('slide'),k=document.getElementById('knob');
+  if(s.className.indexOf('done')>=0)return;
+  k.style.transition='margin-left .4s ease';
+  k.style.marginLeft=(s.offsetWidth-44)+'px';
+  setTimeout(function(){
+    s.className='slide done';
+    document.getElementById('slideTxt').textContent='✓ 验证通过';
+    k.textContent='✓';
+  },420);
+}
+</script>
+</body>
+</html>

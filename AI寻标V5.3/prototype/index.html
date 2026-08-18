@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>工作台 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ===== 工作台专属：时间轴 / 匹配分圆徽 / 焦点面板（Granite 令牌） ===== */
+.tl-row{display:grid;grid-template-columns:96px 1fr;position:relative}
+.tl-row+.tl-row{margin-top:12px}
+.tl-lb{text-align:right;padding:14px 20px 0 0;font-size:12px;color:var(--text-3);line-height:1.5}
+.tl-lb b{display:block;font-size:14px;color:var(--text);font-weight:600}
+.tl-row::before{content:"";position:absolute;left:108px;top:0;bottom:-12px;width:1px;background:var(--border)}
+.tl-row:last-child::before{bottom:0}
+.tl-row::after{content:"";position:absolute;left:105px;top:20px;width:7px;height:7px;border-radius:50%;background:#fff;border:2px solid #B9C8D1}
+.tl-row.hot::after{border-color:var(--high);background:var(--high);box-shadow:0 0 0 4px rgba(229,72,77,.15)}
+.tl-card{position:relative;background:#fff;border:1px solid var(--border);border-left:3px solid var(--border);border-radius:12px;padding:14px 16px;margin-left:24px;cursor:pointer;transition:all .18s ease}
+.tl-card:hover{border-color:#B9C8D1;border-left-color:var(--primary);box-shadow:var(--shadow)}
+.tl-row.hot .tl-card{border-left-color:var(--high)}
+/* 选中态 = 深色高亮卡，随点击在卡片间迁移 */
+.tl-card.sel{background:linear-gradient(135deg,#2C3E50,#1B2836);border-color:#2C3E50;border-left-color:#70AFCF;color:#EAF2F7;box-shadow:0 6px 20px rgba(27,40,54,.28)}
+.tl-card.sel .note,.tl-card.sel .tl-sub{color:#8FA9BA}
+.tl-row.hot .tl-card.sel{border-left-color:var(--high)}
+.tl-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.tl-time{font-size:12px;color:var(--text-3)}
+.tl-card.sel .tl-time{color:#A5DCEF}
+.tl-cta{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--primary);white-space:nowrap}
+.tl-card.sel .tl-cta{color:#A5DCEF}
+.tl-cta::after{content:"→";transition:transform .18s ease}
+.tl-card:hover .tl-cta::after{transform:translateX(3px)}
+.tl-name{font-size:14.5px;font-weight:600;line-height:1.5}
+.tl-sub{font-size:12px;color:var(--text-3);margin-top:3px}
+.tl-now{display:inline-block;font-size:11px;padding:1px 8px;border-radius:5px;background:rgba(229,72,77,.14);color:#FF8A80;margin-left:6px;vertical-align:1px}
+/* 匹配分圆形徽章（参考图数字徽章） */
+.score{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;line-height:1;background:#F3F6F8;border:1px solid var(--border);color:var(--text)}
+.score b{font-size:15px}
+.score small{font-size:8px;color:var(--text-3);font-weight:400;margin-top:1px}
+.score.hi{background:var(--high-bg);border-color:#F3C1C3;color:var(--high)}
+.score.hi small{color:var(--high)}
+.score.md{background:var(--warning-bg);border-color:#F4DCA6;color:#B77A06}
+.score.md small{color:#B77A06}
+/* 当前焦点详情面板（参考图右栏） */
+.focus-panel{position:sticky;top:72px}
+.fp-head{display:flex;gap:14px;align-items:flex-start}
+.fp-head .score{width:54px;height:54px}
+.fp-head .score b{font-size:20px}
+.fp-head .score small{font-size:9px}
+.fp-tt{font-size:16px;font-weight:700;line-height:1.55}
+.fp-tags{margin-top:7px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fp-sec{font-size:12px;color:var(--text-3);margin:16px 0 8px}
+.avatars{display:flex;align-items:center}
+.av{width:28px;height:28px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;background:var(--brand-g)}
+.av+.av{margin-left:-8px}
+.av.more{background:#E9EEF2;color:var(--text-2)}
+.fp-infos{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.fp-info{display:flex;gap:10px;align-items:center;background:#F7F9FA;border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12.5px;color:var(--text-2)}
+.fp-info .i{width:26px;height:26px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:#fff;border:1px solid var(--border)}
+.fp-info.hot{background:var(--high-bg);border-color:#F3C1C3;color:#8B2C24}
+.fp-btns{display:flex;gap:10px;margin-top:14px}
+.fp-btns .btn{flex:1;justify-content:center}
+/* 待办 / 高匹配 TOP5 */
+.todo-item .score{width:36px;height:36px}
+.todo-item .score b{font-size:13px}
+.top-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.top-row:last-child{border-bottom:none}
+.top-row .score{width:36px;height:36px}
+.top-row .score b{font-size:13px}
+.top-row .info{flex:1;min-width:0}
+.top-row .n{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="layout">
+  <!-- 左侧导航 -->
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item active" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的<span class="nav-badge">3</span></a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的<span class="nav-badge">2</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+            <div class="nav-group">
+        <div class="nav-title">企业画像</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>本企业</a>
+        <a class="nav-item" href="profile.html#rival"><span class="ico">⚔</span>竞争对手</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">数据洞察</div>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>效果看板</a>
+        <a class="nav-item" href="collectboard.html"><span class="ico">▦</span>采集看板</a>
+        <a class="nav-item" href="marketboard.html"><span class="ico">◈</span>市场看板</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">系统配置</div>
+        <a class="nav-item" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- 主区域 -->
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">李</div><span>李商务 · 华信智能科技</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">首页 / <b>工作台</b></div>
+      <div class="page-title">早上好，李商务 <span class="note">2026-08-13 周四 · 2 个高匹配项目等待决策 · 滨海开标仅剩 44 小时</span></div>
+
+      <!-- 指标卡 -->
+      <div class="grid g4">
+        <div class="stat"><div class="lbl">今日新增推送</div><div class="val num blue">12</div><div class="sub">来自 4 个订阅 · ≤30 分钟触达</div></div>
+        <div class="stat"><div class="lbl">高匹配项目（≥80）</div><div class="val num red">3</div><div class="sub">待决策 2 · 已决策 1</div></div>
+        <div class="stat"><div class="lbl">待处理行动</div><div class="val num orange">4</div><div class="sub">撰写 2 · 标记结果 1 · 资质到期 1 · 决策见时间轴</div></div>
+        <div class="stat"><div class="lbl">本月导出标书</div><div class="val num green">4</div><div class="sub">较上月 +1 · 合规闸口全通过</div></div>
+      </div>
+
+      <div class="grid g-13" style="margin-top:16px;align-items:start">
+        <!-- 左：截止时间轴 -->
+        <div class="card">
+          <h3>截止时间轴 <span class="note">本周关键节点 · 待决策 / 开标 / 更正，越靠前越紧急</span><span class="more"><a class="link" href="planlist.html">全部拟投 ›</a></span></h3>
+
+          <div class="tl-row hot">
+            <div class="tl-lb"><b>08-15 周六</b>后天</div>
+            <div class="tl-card sel" id="tl-bh" onclick="focusItem('bh')">
+              <div class="tl-top"><span class="score hi"><b>87</b><small>匹配</small></span><span class="tl-time">开标 09:30<span class="tl-now">● 剩 44h</span></span><a class="tl-cta" href="suggestion.html#cond">去决策</a></div>
+              <div class="tl-name">滨海新城智慧校园一体化建设项目（一期）</div>
+              <div class="tl-sub">待决策 · GO 附条件 3 项前提待核实 · 标书预建 62% · 合规红线未处理</div>
+            </div>
+          </div>
+
+          <div class="tl-row">
+            <div class="tl-lb"><b>08-16 周日</b>3 天后</div>
+            <div class="tl-card" id="tl-qz" onclick="focusItem('qz')">
+              <div class="tl-top"><span class="score hi"><b>81</b><small>匹配</small></span><span class="tl-time">开标 14:00</span><a class="tl-cta" href="bidprojects.html">去跟踪</a></div>
+              <div class="tl-name">区政务服务中心一网通办平台建设项目</div>
+              <div class="tl-sub">已投标 · 标书定稿已导出 · 合规通过 · 开标后请标记结果</div>
+            </div>
+          </div>
+
+          <div class="tl-row">
+            <div class="tl-lb"><b>08-19 周三</b>剩 6 天</div>
+            <div class="tl-card" id="tl-sy" onclick="focusItem('sy')">
+              <div class="tl-top"><span class="score hi"><b>92</b><small>匹配</small></span><span class="tl-time">截止 10:00</span><a class="tl-cta" href="suggestion.html#go">去决策</a></div>
+              <div class="tl-name">市第一人民医院信息化运维服务采购</div>
+              <div class="tl-sub">GO · 无前提条件 · 预算 860 万 · 建议尽快决策锁定撰写档期</div>
+            </div>
+          </div>
+
+          <div class="tl-row">
+            <div class="tl-lb"><b>08-20 周四</b>更正后</div>
+            <div class="tl-card" id="tl-sw" onclick="focusItem('sw')">
+              <div class="tl-top"><span class="score md"><b>71</b><small>匹配</small></span><span class="tl-time">开标 09:30 <span class="tag correction">更正</span></span><a class="tl-cta" href="bidprojects.html">去跟踪</a></div>
+              <div class="tl-name">水务集团 SCADA 系统采购项目</div>
+              <div class="tl-sub">已投标 · 开标时间由 08-13 更正为 08-20 · 标书已定稿</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右：当前焦点详情面板 -->
+        <div class="card focus-panel" id="fp">
+          <h3>当前焦点 <span class="note" id="fpState">待决策 · 紧急</span></h3>
+          <div class="fp-head">
+            <div class="score hi" id="fpScore"><b id="fpScoreN">87</b><small>匹配分</small></div>
+            <div style="flex:1">
+              <div class="fp-tt" id="fpName">滨海新城智慧校园一体化建设项目（一期）</div>
+              <div class="fp-tags" id="fpTags"><span class="tag">山东·滨州</span><span class="tag">教育</span><span class="tag">08-12 加入</span><span class="badge badge-mid">GO 附条件</span></div>
+            </div>
+          </div>
+          <div class="fp-sec">参与决策</div>
+          <div class="avatars" id="fpAva"><span class="av">李</span><span class="av" style="background:#5E8CA7">王</span><span class="av more">+2</span></div>
+          <div class="fp-infos" id="fpInfos">
+            <div class="fp-info hot"><span class="i">⏰</span>开标 · 08-15 周六 09:30（剩 44 小时）· 须尽快完成决策</div>
+            <div class="fp-info"><span class="i">💰</span>预算 1,280 万</div>
+            <div class="fp-info"><span class="i">◎</span>推荐 GO 附条件 · 3 项前提条件待核实</div>
+            <div class="fp-info"><span class="i">✦</span>命中订阅「智慧校园方向」</div>
+            <div class="fp-info"><span class="i">⚠</span>标书预建 62% · 真实性红线 ×1 待处理</div>
+          </div>
+          <div class="fp-btns"><a class="btn primary" href="suggestion.html#cond" id="fpBtn1">去决策 →</a><a class="btn" href="match.html#cond" id="fpBtn2">查看匹配</a></div>
+        </div>
+      </div>
+
+      <!-- 待处理行动（与时间轴互斥：决策类已归时间轴，此处仅人工任务） -->
+      <div class="card">
+        <h3>待处理行动 <span class="note">撰写 2 · 标记结果 1 · 资质到期 1 · 决策项见上方时间轴</span><span class="more">全部待办 ›</span></h3>
+        <div class="todo-item">
+          <div class="icon-box" style="background:var(--ai-bg)">✎</div>
+          <div class="t">
+            <div class="n">滨海新城智慧校园项目 · 技术标撰写</div>
+            <div class="m">进度 62% · 2 个响应点未应答 · 合规红线 ×1 待处理 · 王标书 编辑中</div>
+          </div>
+          <span class="badge badge-no">2 项遗漏</span>
+          <a class="btn sm" href="editor.html#bh">继续撰写</a>
+        </div>
+        <div class="todo-item">
+          <div class="icon-box" style="background:var(--ai-bg)">✎</div>
+          <div class="t">
+            <div class="n">城市轨道交通视频监控 · 标书撰写</div>
+            <div class="m">进度 18% · 响应点 5/28 · 人工覆盖 NO-GO（F5-4）· 王标书</div>
+          </div>
+          <span class="badge badge-mid">18%</span>
+          <a class="btn sm" href="editor.html#gj">继续撰写</a>
+        </div>
+        <div class="todo-item">
+          <div class="icon-box" style="background:var(--success-bg)">🏁</div>
+          <div class="t">
+            <div class="n">区政务一网通办平台 · 开标后标记投标结果</div>
+            <div class="m">开标 08-16 周日 14:00 · 结果公示后请及时标记，回流失分归因</div>
+          </div>
+          <span class="badge badge-ok">待开标</span>
+          <a class="btn sm" href="bidprojects.html">去跟踪</a>
+        </div>
+        <div class="todo-item">
+          <div class="icon-box" style="background:var(--warning-bg)">⏳</div>
+          <div class="t">
+            <div class="n">ISO27001 信息安全认证将于 45 天后到期</div>
+            <div class="m">关联 5 个订阅方向 · 请资料管理员尽快更新证照</div>
+          </div>
+          <span class="badge badge-warn">临期</span>
+          <a class="btn sm">去处理</a>
+        </div>
+      </div>
+
+      <div class="grid g-13" style="align-items:start">
+        <!-- 订阅动态 -->
+        <div class="card">
+          <h3>订阅动态 <span class="note">入库后 ≤30 分钟触达 · 按订阅分组</span><span class="more"><a class="link" href="list.html#sub">管理订阅 ›</a></span></h3>
+          <div class="push-card">
+            <span class="score hi"><b>87</b><small>匹配</small></span>
+            <div style="flex:1"><b>滨海新城智慧校园一体化建设项目（一期）</b> 招标公告 <span class="tag">教育</span> <span class="tag">山东·滨州</span><div class="note">来源：山东省公共资源交易平台 · 采集 26 分钟前 · 订阅「智慧校园方向」</div></div>
+            <span class="time">今日 09:12</span><a class="btn sm" href="match.html#cond">查看匹配</a>
+          </div>
+          <div class="push-card">
+            <span class="score md"><b>74</b><small>匹配</small></span>
+            <div style="flex:1"><b>省政务云平台安全运营服务采购项目</b> 招标公告 <span class="tag">政务</span><div class="note">来源：省政府采购网 · 采集 1 小时前 · 订阅「安全服务方向」</div></div>
+            <span class="time">今日 08:30</span><a class="btn sm" href="match.html#watch">查看匹配</a>
+          </div>
+          <div class="push-card">
+            <span class="tag correction">更正</span>
+            <div style="flex:1"><b>水务集团 SCADA 系统采购</b> 更正公告：开标时间变更为 08-20 <span class="badge badge-warn">关注变更</span><div class="note">来源：市公共资源交易中心 · 采集 2 小时前 · 已收藏项目</div></div>
+            <span class="time">今日 07:45</span><a class="btn sm">查看变更</a>
+          </div>
+        </div>
+
+        <!-- 高匹配 TOP5 -->
+        <div class="card">
+          <h3>高匹配 TOP5 <span class="badge badge-high">≥80 分</span></h3>
+          <div class="top-row">
+            <span class="score hi"><b>92</b><small>匹配</small></span>
+            <div class="info"><a class="n link" href="match.html#go">市第一人民医院信息化运维服务</a><div class="note">预算 860 万 · 剩 6 天 · 待决策</div></div>
+          </div>
+          <div class="top-row">
+            <span class="score hi"><b>87</b><small>匹配</small></span>
+            <div class="info"><a class="n link" href="match.html#cond">滨海新城智慧校园一体化（一期）</a><div class="note">预算 1,280 万 · 剩 44h · 待决策</div></div>
+          </div>
+          <div class="top-row">
+            <span class="score hi"><b>81</b><small>匹配</small></span>
+            <div class="info"><a class="n link" href="bidprojects.html">区政务服务中心一网通办平台建设</a><div class="note">预算 150 万 · 剩 3 天 · 已投标</div></div>
+          </div>
+          <div class="top-row">
+            <span class="score md"><b>74</b><small>匹配</small></span>
+            <div class="info"><a class="n link" href="match.html#watch">省政务云平台安全运营服务 <span class="tag">WATCH</span></a><div class="note">预算 2,100 万 · 剩 9 天 · 持续观察</div></div>
+          </div>
+          <div class="top-row">
+            <span class="score"><b>66</b><small>匹配</small></span>
+            <div class="info"><a class="n link" href="match.html#nogo">城市轨道交通视频监控系统升级</a><div class="note">预算未载明 · 剩 12 天 · NO-GO 人工覆盖</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+/* ===== 当前焦点面板：点击时间轴卡片联动切换 ===== */
+var FP={
+ bh:{score:'87',cls:'hi',state:'待决策 · 紧急',name:'滨海新城智慧校园一体化建设项目（一期）',
+  tags:'<span class="tag">山东·滨州</span><span class="tag">教育</span><span class="tag">08-12 加入</span><span class="badge badge-mid">GO 附条件</span>',
+  ava:'<span class="av">李</span><span class="av" style="background:#5E8CA7">王</span><span class="av more">+2</span>',
+  infos:[['⏰','开标 · 08-15 周六 09:30（剩 44 小时）· 须尽快完成决策','hot'],['💰','预算 1,280 万'],['◎','推荐 GO 附条件 · 3 项前提条件待核实'],['✦','命中订阅「智慧校园方向」'],['⚠','标书预建 62% · 真实性红线 ×1 待处理']],
+  b1:['去决策 →','suggestion.html#cond'],b2:['查看匹配','match.html#cond']},
+ qz:{score:'81',cls:'hi',state:'已投标 · 待开标',name:'区政务服务中心一网通办平台建设项目',
+  tags:'<span class="tag">山东·滨州</span><span class="tag">政务</span><span class="tag">08-08 加入</span><span class="badge badge-ok">GO · 已采纳</span>',
+  ava:'<span class="av">李</span><span class="av" style="background:#5E8CA7">王</span>',
+  infos:[['⏰','开标 · 08-16 周日 14:00（剩 3 天）'],['💰','预算 150 万'],['✓','合规检查已通过 · 标书已导出定稿'],['🏁','开标后请及时标记投标结果']],
+  b1:['去跟踪 →','bidprojects.html'],b2:['查看标书','editor.html#qz']},
+ sy:{score:'92',cls:'hi',state:'待决策 · 高匹配',name:'市第一人民医院信息化运维服务采购',
+  tags:'<span class="tag">山东·滨州</span><span class="tag">医疗</span><span class="tag">昨日加入</span><span class="badge badge-ok">GO</span>',
+  ava:'<span class="av">李</span><span class="av more">+1</span>',
+  infos:[['⏰','截止 · 08-19 周三 10:00（剩 6 天）'],['💰','预算 860 万'],['◎','推荐 GO · 无前提条件'],['✦','命中订阅「医疗信息化方向」']],
+  b1:['去决策 →','suggestion.html#go'],b2:['查看匹配','match.html#go']},
+ sw:{score:'71',cls:'md',state:'已投标 · 更正关注',name:'水务集团 SCADA 系统采购项目',
+  tags:'<span class="tag">山东·滨州</span><span class="tag">水务</span><span class="tag correction">更正</span><span class="badge badge-low">低于下限 · 人工投标</span>',
+  ava:'<span class="av">李</span>',
+  infos:[['⏰','开标 · 08-20 周四 09:30（更正后剩 7 天）','hot'],['💰','预算 620 万'],['⚠','更正公告：开标由 08-13 变更为 08-20'],['✓','合规已通过 · 标书定稿']],
+  b1:['去跟踪 →','bidprojects.html'],b2:['查看变更','messages.html']}
+};
+function focusItem(k){
+  var d=FP[k];if(!d)return;
+  document.querySelectorAll('.tl-card').forEach(function(c){c.classList.remove('sel');});
+  var card=document.getElementById('tl-'+k);if(card)card.classList.add('sel');
+  document.getElementById('fpState').textContent=d.state;
+  document.getElementById('fpScoreN').textContent=d.score;
+  document.getElementById('fpScore').className='score '+d.cls;
+  document.getElementById('fpName').textContent=d.name;
+  document.getElementById('fpTags').innerHTML=d.tags;
+  document.getElementById('fpAva').innerHTML=d.ava;
+  var h='';for(var i=0;i<d.infos.length;i++){var it=d.infos[i];h+='<div class="fp-info'+(it[2]?' '+it[2]:'')+'"><span class="i">'+it[0]+'</span>'+it[1]+'</div>';}
+  document.getElementById('fpInfos').innerHTML=h;
+  var b1=document.getElementById('fpBtn1');b1.textContent=d.b1[0];b1.href=d.b1[1];
+  var b2=document.getElementById('fpBtn2');b2.textContent=d.b2[0];b2.href=d.b2[1];
+}
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>系统管理 - 寻标司南</title>
+<link rel="icon" href="images/logo.png">
+<link rel="stylesheet" href="styles.css">
+<style>
+.subtabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
+.subtabs a{padding:10px 18px;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.subtabs a.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.subtabs a:hover{color:var(--primary)}
+.role-dd{border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;background:#fff}
+.tpl-card{border:1px solid var(--border);border-radius:10px;padding:16px;background:#fff}
+.tpl-card .nm{font-weight:600;margin-bottom:6px}
+.tl{position:relative;padding-left:22px}
+.tl::before{content:"";position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--border)}
+.tl-item{position:relative;padding:0 0 18px}
+.tl-item::before{content:"";position:absolute;left:-21px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--primary);border:2px solid #fff;box-shadow:0 0 0 1px var(--border)}
+.tl-item.warn::before{background:var(--warning)}
+.tl-item.danger::before{background:var(--danger)}
+.ar-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--border);border-radius:999px;background:#fff;padding:5px 6px 5px 14px;font-size:13px;color:var(--text-2);margin:0 8px 8px 0}
+.ar-chip .tag-c{font-size:10px;color:var(--text-3);background:var(--low-bg);border-radius:999px;padding:1px 7px}
+.ar-chip .x{cursor:pointer;color:var(--text-3);font-weight:700;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%}
+.ar-chip .x:hover{color:var(--danger);background:var(--danger-bg)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo"><div class="mark"><img src="images/logo.png" alt="寻标司南"></div><div class="name">寻标司南<small>智能投标效能平台</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">
+        <a class="nav-item" href="index.html"><span class="ico">⌂</span>工作台</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">招标信息</div>
+        <a class="nav-item" href="list.html"><span class="ico">☰</span>推送标的</a>
+        <a class="nav-item" href="planlist.html"><span class="ico">✚</span>拟投标的<span class="nav-badge">3</span></a>
+        <a class="nav-item" href="bidprojects.html"><span class="ico">✎</span>投标标的<span class="nav-badge">2</span></a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">历史标的</div>
+        <a class="nav-item" href="archive.html"><span class="ico">▣</span>归档标的</a>
+      </div>
+            <div class="nav-group">
+        <div class="nav-title">企业画像</div>
+        <a class="nav-item" href="profile.html"><span class="ico">◆</span>本企业</a>
+        <a class="nav-item" href="profile.html#rival"><span class="ico">⚔</span>竞争对手</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">数据洞察</div>
+        <a class="nav-item" href="dashboard.html"><span class="ico">▤</span>效果看板</a>
+        <a class="nav-item" href="collectboard.html"><span class="ico">▦</span>采集看板</a>
+        <a class="nav-item" href="marketboard.html"><span class="ico">◈</span>市场看板</a>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">系统配置</div>
+        <a class="nav-item active" href="admin.html"><span class="ico">⚙</span>系统管理</a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="gsearch">🔍 全局搜索招标项目、订阅、标书…</div>
+      <div style="flex:1"></div>
+      <a class="bell" href="messages.html" title="消息中心">🔔<span class="dot">5</span></a>
+      <div class="user"><div class="avatar">周</div><span>周管理 · 租户管理员</span></div>
+    </header>
+
+    <div class="content">
+      <div class="crumb">系统配置 / <b>系统管理</b></div>
+      <div class="page-title">系统管理 <span class="note">租户管理员 / 管理员配置中心 · 按角色展示对应页签（RBAC）</span></div>
+
+      <!-- 子页签（成员/模板/字典/审计为同页 Tab 切换，数据源/规则库为独立页面） -->
+      <div class="subtabs">
+        <a class="on" href="#team">成员与角色</a>
+        <a href="datasources.html">数据源管理</a>
+        <a href="rules.html">匹配规则库</a>
+        <a href="#tpl">模板库</a>
+        <a href="#archDict">归档原因字典</a>
+        <a href="#audit">审计日志</a>
+      </div>
+
+      <!-- 成员与角色 -->
+      <div class="card" id="team">
+        <h3>成员与角色（6）<span class="note">六预置角色：租户管理员 / 管理员 / 商务市场 / 标书撰写 / 资料管理员 / 观察者</span><span class="more">✉ 邀请成员</span></h3>
+        <table class="tbl">
+          <thead><tr><th>成员</th><th>账号</th><th>角色</th><th>MFA</th><th>最近活跃</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr><td>周管理</td><td>zhou@huaxin.cn</td><td><span class="badge badge-mid">租户管理员</span></td><td><span class="badge badge-ok">已启用</span></td><td class="note">刚刚</td><td><span class="badge badge-ok">正常</span></td><td><span class="note">—</span></td></tr>
+            <tr><td>孙配置</td><td>sun@huaxin.cn</td><td>
+              <select class="role-dd"><option selected>管理员</option><option>商务/市场</option><option>标书撰写</option><option>资料管理员</option><option>观察者</option></select></td><td><span class="badge badge-ok">已启用</span></td><td class="note">2 小时前</td><td><span class="badge badge-ok">正常</span></td><td><span class="link">移除</span></td></tr>
+            <tr><td>李商务</td><td>li@huaxin.cn</td><td>
+              <select class="role-dd"><option>管理员</option><option selected>商务/市场</option><option>标书撰写</option><option>资料管理员</option><option>观察者</option></select></td><td><span class="badge badge-low">未要求</span></td><td class="note">10 分钟前</td><td><span class="badge badge-ok">正常</span></td><td><span class="link">移除</span></td></tr>
+            <tr><td>王标书</td><td>wang@huaxin.cn</td><td>
+              <select class="role-dd"><option>管理员</option><option>商务/市场</option><option selected>标书撰写</option><option>资料管理员</option><option>观察者</option></select></td><td><span class="badge badge-low">未要求</span></td><td class="note">25 分钟前</td><td><span class="badge badge-ok">正常</span></td><td><span class="link">移除</span></td></tr>
+            <tr><td>张资料</td><td>zhang@huaxin.cn</td><td>
+              <select class="role-dd"><option>管理员</option><option>商务/市场</option><option>标书撰写</option><option selected>资料管理员</option><option>观察者</option></select></td><td><span class="badge badge-low">未要求</span></td><td class="note">昨天 17:20</td><td><span class="badge badge-ok">正常</span></td><td><span class="link">移除</span></td></tr>
+            <tr><td>钱观察</td><td>qian@huaxin.cn</td><td>
+              <select class="role-dd"><option>管理员</option><option>商务/市场</option><option>标书撰写</option><option>资料管理员</option><option selected>观察者</option></select></td><td><span class="badge badge-low">未要求</span></td><td class="note">3 天前</td><td><span class="badge badge-warn">已停用</span></td><td><span class="link">启用</span></td></tr>
+          </tbody>
+        </table>
+        <div class="note" style="margin-top:8px">管理员及以上角色强制 MFA；观察者仅保留只读页面入口（写操作入口直接隐藏）；角色变更即时生效并写入审计日志。</div>
+      </div>
+
+      <!-- 模板库 -->
+      <div class="card" id="tpl">
+        <h3>模板库 <span class="more">⤒ 上传企业模板（历史中标标书）</span></h3>
+        <div class="grid" style="grid-template-columns:repeat(4,1fr)">
+          <div class="tpl-card"><span class="badge badge-mid">内置</span><div class="nm" style="margin-top:8px">信息化集成通用模板</div><div class="note">v3.2 · 官方维护 · 商务标/技术标/经济标三册结构</div></div>
+          <div class="tpl-card"><span class="badge badge-mid">内置</span><div class="nm" style="margin-top:8px">公文式标书排版模板</div><div class="note">v1.4 · 样式基准：仿宋_GB2312 / 标准页边距</div></div>
+          <div class="tpl-card" style="border-color:#D9CCFA"><span class="badge badge-ai">企业</span><div class="nm" style="margin-top:8px">智慧校园投标方案模板</div><div class="note">v2 · 来源：2025 年中标标书拆解 · 张资料维护</div></div>
+          <div class="tpl-card" style="border-color:#D9CCFA"><span class="badge badge-ai">企业</span><div class="nm" style="margin-top:8px">运维服务类投标模板</div><div class="note">v1 · 来源：市北政务云中标标书 · 待更新</div></div>
+        </div>
+        <div class="note" style="margin-top:10px">行业模板库（教育/政务/医疗…）为 V1.2 能力，当前版本暂不展示。</div>
+      </div>
+
+      <!-- 归档原因字典 -->
+      <div class="card" id="archDict">
+        <h3>归档原因字典<span class="note">「不投标 · 归档」与「未中标 · 归档」两类原因选项 · 与决策页/结果登记实时同步</span></h3>
+
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-no">不投标 · 归档</span>
+          <span class="note">原因选项（<span id="arCount">5</span>）· 与投标建议页（suggestion.html）决策操作同步</span>
+          <span class="more" style="margin-left:auto" onclick="arReset()">↺ 恢复默认原因</span>
+        </div>
+        <div id="arChips" style="margin:10px 0 12px"></div>
+        <div style="display:flex;gap:8px">
+          <input class="mini" id="arNew" style="flex:1;max-width:320px;padding:8px 12px" placeholder="输入新的归档原因">
+          <button class="btn sm primary" onclick="arAdd()">＋ 添加原因</button>
+        </div>
+
+        <div style="border-top:1px dashed var(--border);margin:16px 0 14px"></div>
+
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-warn">未中标 · 归档</span>
+          <span class="note">失分归因选项（<span id="lrCount">6</span>）· 与投标标的页（bidprojects.html）结果登记同步，回流效果看板失分归因</span>
+          <span class="more" style="margin-left:auto" onclick="lrReset()">↺ 恢复默认归因</span>
+        </div>
+        <div id="lrChips" style="margin:10px 0 12px"></div>
+        <div style="display:flex;gap:8px">
+          <input class="mini" id="lrNew" style="flex:1;max-width:320px;padding:8px 12px" placeholder="输入新的失分归因">
+          <button class="btn sm primary" onclick="lrAdd()">＋ 添加归因</button>
+        </div>
+
+        <div class="note" style="margin-top:10px">用户在决策/结果登记时自定义的原因会自动进入对应字典（标注「自定义」）；此处可统一增删；删除不影响已归档记录（留痕不可改），每类字典至少保留 1 项。</div>
+      </div>
+
+      <!-- 审计日志 -->
+      <div class="card" id="audit">
+        <h3>审计日志 <span class="note">只增不改 · 业务日志留存 12 个月（等保三级 ≥ 6 个月）</span>
+          <span class="more" style="color:var(--danger)">⇩ 导出日志（敏感操作 · 二次确认）</span></h3>
+        <div class="filter-bar">
+          <select class="mini" style="width:140px"><option>操作类型：全部</option><option>权重变更</option><option>导出</option><option>角色变更</option><option>数据源启停</option></select>
+          <select class="mini" style="width:120px"><option>操作人：全部</option><option>周管理</option><option>孙配置</option><option>王标书</option></select>
+          <select class="mini" style="width:140px"><option>时间：近 7 天</option><option>近 30 天</option><option>自定义</option></select>
+        </div>
+        <div class="tl">
+          <div class="tl-item danger">
+            <div style="font-weight:600;font-size:13px">标书导出 · 滨海新城智慧校园项目 v2（Word）<span class="badge badge-no" style="margin-left:8px">敏感操作</span></div>
+            <div class="note">王标书 · 2026-08-12 17:42 · IP 112.8.*.* · 合规检查已通过</div>
+          </div>
+          <div class="tl-item warn">
+            <div style="font-weight:600;font-size:13px">匹配权重调整 · 资质 25%→30%，技术 15%→10%（规则库 v7→v8）</div>
+            <div class="note">孙配置 · 2026-08-12 11:05 · 二次确认通过 · 仅影响后续新匹配</div>
+          </div>
+          <div class="tl-item">
+            <div style="font-weight:600;font-size:13px">成员角色变更 · 钱观察：商务/市场 → 观察者</div>
+            <div class="note">周管理 · 2026-08-11 09:30</div>
+          </div>
+          <div class="tl-item">
+            <div style="font-weight:600;font-size:13px">数据源启停 · 「某省公共资源交易中心」暂停采集（源站改版）</div>
+            <div class="note">孙配置 · 2026-08-10 16:22 · 触发告警 #A-0813</div>
+          </div>
+          <div class="tl-item">
+            <div style="font-weight:600;font-size:13px">登录成功（MFA 通过）· 周管理</div>
+            <div class="note">2026-08-13 08:55 · 设备指纹已记录</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2200);}
+/* ===== 归档原因字典（与投标建议页决策操作同源 localStorage） ===== */
+const DEF_REASONS=['时间不足','价格不具备竞争力','资质/业绩缺口','战略放弃','其他'];
+function getReasons(){try{const r=JSON.parse(localStorage.getItem('archReasons')||'null');return (Array.isArray(r)&&r.length)?r:DEF_REASONS.slice();}catch(e){return DEF_REASONS.slice();}}
+function saveReasons(list){localStorage.setItem('archReasons',JSON.stringify(list));}
+function arRender(){
+  const list=getReasons();
+  document.getElementById('arCount').textContent=list.length;
+  document.getElementById('arChips').innerHTML=list.map(r=>'<span class="ar-chip">'+r+(DEF_REASONS.indexOf(r)<0?'<span class="tag-c">自定义</span>':'')+'<span class="x" title="删除该原因" onclick="arDel(\''+r+'\')">✕</span></span>').join('');
+}
+function arAdd(){
+  const inp=document.getElementById('arNew'), v=(inp.value||'').trim();
+  if(!v){showToast('请输入归档原因');return;}
+  const list=getReasons();
+  if(list.indexOf(v)>=0){showToast('该原因已在字典中');return;}
+  list.push(v); saveReasons(list); inp.value=''; arRender();
+  showToast('已添加归档原因「'+v+'」，决策页立即可选');
+}
+function arDel(name){
+  const list=getReasons();
+  if(list.length<=1){showToast('字典至少保留 1 项归档原因');return;}
+  saveReasons(list.filter(r=>r!==name)); arRender();
+  showToast('已删除归档原因「'+name+'」，不影响已归档记录');
+}
+function arReset(){
+  saveReasons(DEF_REASONS.slice()); arRender();
+  showToast('已恢复默认归档原因（5 项）');
+}
+arRender();
+/* ===== 未中标 · 归档失分归因字典（与投标标的页结果登记同源 localStorage） ===== */
+const DEF_LOSE=['价格不具备竞争力','技术得分不足','资质/业绩缺口','竞争对手强势','商务条款','其他'];
+function getLose(){try{const r=JSON.parse(localStorage.getItem('loseReasons')||'null');return (Array.isArray(r)&&r.length)?r:DEF_LOSE.slice();}catch(e){return DEF_LOSE.slice();}}
+function saveLose(list){localStorage.setItem('loseReasons',JSON.stringify(list));}
+function lrRender(){
+  const list=getLose();
+  document.getElementById('lrCount').textContent=list.length;
+  document.getElementById('lrChips').innerHTML=list.map(r=>'<span class="ar-chip">'+r+(DEF_LOSE.indexOf(r)<0?'<span class="tag-c">自定义</span>':'')+'<span class="x" title="删除该归因" onclick="lrDel(\''+r+'\')">✕</span></span>').join('');
+}
+function lrAdd(){
+  const inp=document.getElementById('lrNew'), v=(inp.value||'').trim();
+  if(!v){showToast('请输入失分归因');return;}
+  const list=getLose();
+  if(list.indexOf(v)>=0){showToast('该归因已在字典中');return;}
+  list.push(v); saveLose(list); inp.value=''; lrRender();
+  showToast('已添加失分归因「'+v+'」，结果登记处立即可选');
+}
+function lrDel(name){
+  const list=getLose();
+  if(list.length<=1){showToast('字典至少保留 1 项失分归因');return;}
+  saveLose(list.filter(r=>r!==name)); lrRender();
+  showToast('已删除失分归因「'+name+'」，不影响已归档记录');
+}
+function lrReset(){
+  saveLose(DEF_LOSE.slice()); lrRender();
+  showToast('已恢复默认失分归因（6 项）');
+}
+lrRender();
+/* ===== 子页签 Tab 切换（hash 驱动，外链 admin.html#tpl 等直达对应面板） ===== */
+function switchTab(){
+  const h=location.hash||'#team';
+  document.querySelectorAll('.subtabs a').forEach(function(a){
+    a.classList.toggle('on',a.getAttribute('href')===h);
+  });
+  ['team','tpl','archDict','audit'].forEach(function(id){
+    const el=document.getElementById(id);
+    if(el) el.style.display=(h==='#'+id)?'':'none';
+  });
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('.subtabs a').forEach(function(a){
+  a.addEventListener('click',function(e){
+    const href=a.getAttribute('href');
+    if(href&&href.charAt(0)==='#'){
+      e.preventDefault();
+      if(location.hash===href){switchTab();}else{location.hash=href;}
+    }
+  });
+});
+window.addEventListener('hashchange',switchTab);
+switchTab();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
