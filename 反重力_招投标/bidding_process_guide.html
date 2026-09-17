@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>招投标与政府采购法定流程与时效手册</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      background-color: #0b1120;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.25);
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.45);
+    }
+    .badge-timeline {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .rule-card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(51, 65, 85, 0.7);
+      border-radius: 0.75rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .rule-card:hover {
+      border-color: rgba(99, 102, 241, 0.6);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    .nav-item-active {
+      background-color: rgba(99, 102, 241, 0.25) !important;
+      color: #c7d2fe !important;
+      border: 1px solid rgba(129, 140, 248, 0.5) !important;
+      font-weight: 600 !important;
+    }
+    .legal-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Top Global Header -->
+  <header class="h-16 sticky top-0 z-40 bg-slate-900/90 backdrop-blur border-b border-slate-800 px-6 flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <a href="index.html" class="flex items-center space-x-2 text-slate-300 hover:text-white transition">
+        <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center text-indigo-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        </div>
+        <span class="text-xs font-semibold tracking-wide hidden sm:inline">工作台中枢</span>
+      </a>
+      <span class="text-slate-600">/</span>
+      <div class="flex items-center space-x-2">
+        <h1 class="text-sm md:text-base font-bold text-white flex items-center gap-2">
+          <span>招投标实操流程与时效手册</span>
+          <span class="text-xs px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 font-normal">纯法定流程节点 · 法规依据确凿</span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- Right Navigation Bar -->
+    <nav class="flex items-center space-x-3 text-xs">
+      <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>返回首页</span>
+      </a>
+      <a href="bidding_knowledge_graph.html" class="px-3 py-1.5 rounded-lg bg-purple-900/40 hover:bg-purple-900/60 text-purple-200 border border-purple-700/50 transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        <span>全景知识图谱</span>
+      </a>
+      <a href="bidding_wiki.html" class="px-3 py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-900/60 text-cyan-200 border border-cyan-700/50 transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span>招投标百科Wiki</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Sticky Subheader: Dynamic Current Chapter Indicator & Instant Chapter Switcher Dropdown -->
+  <div class="h-11 sticky top-16 z-30 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-6 flex items-center justify-between text-xs">
+    <div class="flex items-center space-x-2 text-slate-300">
+      <span class="text-indigo-400 font-semibold flex items-center gap-1.5 shrink-0">
+        <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+        <span>当前阅读:</span>
+      </span>
+      <span id="currentChapterLabel" class="font-medium text-white truncate max-w-[200px] sm:max-w-md md:max-w-lg">0. 招投标与政府采购双轨法定程序总纲</span>
+    </div>
+
+    <!-- Quick Switcher Dropdown -->
+    <div class="flex items-center space-x-2">
+      <span class="text-slate-500 hidden md:inline">快速直达:</span>
+      <select id="quickChapterSelector" onchange="jumpToChapter(this.value)" class="bg-slate-950 border border-slate-700 text-slate-200 text-xs rounded-lg px-2.5 py-1 focus:outline-none focus:border-indigo-500 cursor-pointer">
+        <option value="#overview">0. 双轨法定程序总纲</option>
+        <option value="#step-approval">1. 项目立项审批与资金落实</option>
+        <option value="#step-intention">2. 招标计划预告与采购意向公开</option>
+        <option value="#step-demand">3. 采购需求调查与意见公示</option>
+        <option value="#step-singlesource">4. 单一来源论证意见公示</option>
+        <option value="#step-preeval">5. 资格预审公告与申请递交</option>
+        <option value="#step-announcement">6. 招标公告发布与标书发售</option>
+        <option value="#step-preparation">7. 标书编制与法定量化倒计时</option>
+        <option value="#step-clarify">8. 现场踏勘、答疑澄清与顺延</option>
+        <option value="#step-submission">9. 标书密封递交与修改撤回</option>
+        <option value="#step-opening">10. 开标唱标、在线解密与现场异议</option>
+        <option value="#step-evaluation">11. 评标专家封闭评审与废标判定</option>
+        <option value="#step-award">12. 中标候选人公示、定标与结果公告</option>
+        <option value="#step-contract">13. 中标通知书发出与合同订立备案</option>
+        <option value="#step-bond-return">14. 投标保证金退还与银行结息</option>
+        <option value="#step-payment">15. 履约担保、履约验收与资金支付</option>
+        <option value="#step-remedy">16. 异议质疑与行政投诉时效链</option>
+        <option value="#checklist">附录：全周期法定时间与法据速查总表</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Layout: Sidebar + Main Content -->
+  <div class="flex-1 flex w-full max-w-7xl mx-auto px-4 md:px-6 py-6 gap-8">
+    
+    <!-- Left Sticky Sidebar Menu -->
+    <aside class="w-64 shrink-0 hidden lg:block sticky self-start max-h-[calc(100vh-8rem)] overflow-y-auto custom-scrollbar pr-2 text-xs" style="top: 7.5rem;">
+      <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 shadow-lg space-y-1">
+        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2.5 flex items-center justify-between">
+          <span>法定16大流程节点</span>
+          <span class="text-[10px] text-indigo-400 font-normal">纯流程时效</span>
+        </div>
+        <nav class="space-y-1" id="processNav">
+          <a href="#overview" data-target="overview" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">0. 双轨法定程序总纲</a>
+          <a href="#step-approval" data-target="step-approval" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>1. 项目立项审批与资金</span>
+            <span class="badge-timeline bg-slate-900 text-slate-300 border border-slate-700">发标前完成</span>
+          </a>
+          <a href="#step-intention" data-target="step-intention" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>2. 招标预告与意向公开</span>
+            <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-800/50">提前≥30日</span>
+          </a>
+          <a href="#step-demand" data-target="step-demand" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>3. 采购需求调查与公示</span>
+            <span class="badge-timeline bg-cyan-950 text-cyan-300 border border-cyan-800/50">3-5工作日</span>
+          </a>
+          <a href="#step-singlesource" data-target="step-singlesource" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>4. 单一来源论证公示</span>
+            <span class="badge-timeline bg-amber-950 text-amber-300 border border-amber-800/50">不少于5工</span>
+          </a>
+          <a href="#step-preeval" data-target="step-preeval" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>5. 资格预审公告与递交</span>
+            <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-800/50">发5/交10</span>
+          </a>
+          <a href="#step-announcement" data-target="step-announcement" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>6. 招标公告发布与发售</span>
+            <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-800/50">发售≥5日</span>
+          </a>
+          <a href="#step-preparation" data-target="step-preparation" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>7. 标书编制与截标倒计</span>
+            <span class="badge-timeline bg-emerald-950 text-emerald-300 border border-emerald-800/50">≥20日刚性</span>
+          </a>
+          <a href="#step-clarify" data-target="step-clarify" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>8. 踏勘提疑与澄清顺延</span>
+            <span class="badge-timeline bg-amber-950 text-amber-300 border border-amber-800/50">&lt;15日顺延</span>
+          </a>
+          <a href="#step-submission" data-target="step-submission" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>9. 标书密封递交与撤回</span>
+            <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-800/50">准时拒收</span>
+          </a>
+          <a href="#step-opening" data-target="step-opening" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>10. 开标唱标与在线解密</span>
+            <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-800/50">同一时间解密</span>
+          </a>
+          <a href="#step-evaluation" data-target="step-evaluation" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>11. 专家封闭评审与废标</span>
+            <span class="badge-timeline bg-rose-950 text-rose-300 border border-rose-800/50">条例51条</span>
+          </a>
+          <a href="#step-award" data-target="step-award" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>12. 候选人公示定标发函</span>
+            <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-800/50">工≥3日/政1工</span>
+          </a>
+          <a href="#step-contract" data-target="step-contract" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>13. 合同订立与报告备案</span>
+            <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-800/50">≤30日签约</span>
+          </a>
+          <a href="#step-bond-return" data-target="step-bond-return" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>14. 投标保证金退还结息</span>
+            <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-800/50">双向5日退</span>
+          </a>
+          <a href="#step-payment" data-target="step-payment" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>15. 履约担保与款项支付</span>
+            <span class="badge-timeline bg-emerald-950 text-emerald-300 border border-emerald-800/50">原则≤30日付</span>
+          </a>
+          <a href="#step-remedy" data-target="step-remedy" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition flex items-center justify-between">
+            <span>16. 异议质疑与投诉时效</span>
+            <span class="badge-timeline bg-purple-950 text-purple-300 border border-purple-800/50">维权链条</span>
+          </a>
+          <a href="#checklist" data-target="checklist" class="nav-item block px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition">附录：全周期法据速查总表</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 space-y-10 text-slate-200">
+      
+      <!-- Section 0: Overview & Dual Laws -->
+      <section id="overview" class="rule-card p-6 border-indigo-500/30">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-xs px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">法定程序总纲</span>
+          <span class="text-xs text-slate-400">两套准据法体系与法定流程主线</span>
+        </div>
+        <h2 class="text-xl font-bold text-white mb-3">0. 招投标与政府采购双轨法定程序总纲</h2>
+        <p class="text-xs leading-relaxed text-slate-300 mb-4">
+          我国招投标实务实行**“工程招投标”**（《招标投标法》管辖）与**“政府采购”**（《政府采购法》管辖）双轨制管理。本手册严格依据国家法律、行政法规及部门规章，将全生命周期法定程序拆解为 <strong>16 个不可逆时序节点</strong>，精确界定时间起算点、计算规则（工作日 vs 日历日）、法条依据及逾期法律后果：
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="legal-box p-4">
+            <h3 class="font-bold text-sky-400 mb-2 flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              工程招投标法定程序轨（住建/交通/水利/发改）
+            </h3>
+            <ul class="space-y-1.5 text-slate-300">
+              <li>• **准据法典**：《招标投标法》+《实施条例》（国务院令第613号）</li>
+              <li>• **强制门槛**：国家发改委第16号令（施工≥400万、设备≥200万、勘察设计监理≥100万）</li>
+              <li>• **时效计算**：法定编制期计算原则上均为<strong>日历日</strong>（如发标到截标不少于20日）</li>
+              <li>• **异议前置**：对资格预审文件、招标文件、开标现场、评标结果有异议，**异议是行政投诉的法定必经前置程序**</li>
+              <li>• **定标原则**：通常以评标委员会推荐的第一中标候选人定标，或依规推行“评定分离”</li>
+            </ul>
+          </div>
+          <div class="legal-box p-4">
+            <h3 class="font-bold text-emerald-400 mb-2 flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+              政府采购法定程序轨（各级财政监管）
+            </h3>
+            <ul class="space-y-1.5 text-slate-300">
+              <li>• **准据法典**：《政府采购法》+《实施条例》（国务院令第658号）+ 财政部87/94号令</li>
+              <li>• **资金性质**：各级国家机关、事业单位和团体组织使用财政性资金采购货物与服务</li>
+              <li>• **时效计算**：质疑答复、投诉处理、合同公告等多以<strong>工作日</strong>为法定计量单位</li>
+              <li>• **救济链条**：知悉受损7个工作日内书面质疑 → 7个工作日内答复 → 15个工作日内财政投诉 → 30个工作日内行政裁决</li>
+              <li>• **政策扶持**：中小企业价格评审扣除（通常扣除10%~20%以扣除后价格评审）、强制节能环保清单</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1: Step Approval -->
+      <section id="step-approval" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">阶段 1 · 前期审批</span>
+          <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-700">招标公告发布前必须完备</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">1. 项目立项审批、核准与资金来源落实</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **前置完成点**：招标人必须在发布招标公告或发出投标邀请书**之前**，取得项目审批、核准手续；</li>
+                <li>• **资金落实时限**：相应资金或资金来源必须在**发标前已经落实**，并在招标文件中如实载明。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法》第9条；</li>
+                <li>• 《政府投资条例》（国务院令第712号）第9条、第14条、第23条；</li>
+                <li>• 《中华人民共和国预算法》第35条、第54条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>未履行审批核准手续或资金未落实即擅自招标的，属于“未批先建、虚假发包”，招投标程序自始无效；所签订的施工/供货合同在司法实践中极易被认定为无效合同；主管人员依法承担政务处分甚至违规举债追责。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：发改委立项批复/核准文件、可行性研究报告批复、规划许可与用地审批、财政预算指标下达通知书。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Step Intention -->
+      <section id="step-intention" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">阶段 2 · 计划与意向</span>
+          <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-700">政采提前 ≥ 30 日 · 工程提前 20~30 日</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">2. 招标计划预告与政府采购意向公开</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **政府采购意向公开**：采购人应在采购活动开展前公开，**提前不少于 30 日**（自省级以上财政采购网公开之日起至发标之日）；</li>
+                <li>• **工程招标计划预告**：依据各省市营商条例，招标人应在发布招标公告至少 **20 至 30 日前** 发布招标计划。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 财政部《关于开展政府采购意向公开工作的通知》（财库〔2020〕10号）；</li>
+                <li>• 各省市《优化营商环境条例》关于招标计划提前发布的刚性规定；</li>
+                <li>• 国务院令第783号《公平竞争审查条例》。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-amber-950/20 border border-amber-900/40 text-amber-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>未依法提前公开采购意向的政府采购项目，同级财政部门不予备案、不予下达采购执行指标；意向公开内容仅供参考，不作为要约邀请，潜在供应商不得仅凭意向公告提起政采质疑投诉。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：中国政府采购网/省政府采购网采购意向公开记录单、公共资源交易平台招标计划公示表（含采购需求概况、预算金额、预计采购时间）。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Step Demand -->
+      <section id="step-demand" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-semibold">阶段 3 · 需求调查</span>
+          <span class="badge-timeline bg-cyan-950 text-cyan-300 border border-cyan-700">意见征求公示 3~5 个工作日</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">3. 采购需求调查与征求意见公示</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-cyan-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **强制调查节点**：在确定采购需求和编制采购文件前完成；1000万元以上项目必须开展需求调查；</li>
+                <li>• **征求意见公示期**：采购需求征求意见公示期通常不少于 **3 至 5 个工作日**。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-cyan-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 财政部《政府采购需求管理办法》（财库〔2021〕22号）第10条、第11条、第13条；</li>
+                <li>• 《中华人民共和国政府采购法实施条例》第15条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-amber-950/20 border border-amber-900/40 text-amber-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>重点项目未开展需求调查导致参数设定违反公平竞争、出现排他性倾向性条款的，责令限期改正或重招；需求公示期是企业破除“萝卜标”壁垒成本最低的法定窗口期（非正式异议，采纳率极高）。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：采购需求调查报告、向市场主体征集意见公示单、反馈意见汇总表与专家审查意见书。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Step Singlesource -->
+      <section id="step-singlesource" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">阶段 4 · 单一来源公示</span>
+          <span class="badge-timeline bg-amber-950 text-amber-300 border border-amber-700">法定公示期不少于 5 个工作日</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">4. 单一来源采购专业论证意见公示与异议阻断</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-amber-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **公示期限**：达到公开招标数额标准拟采用单一来源方式的，公示期**不得少于 5 个工作日**；</li>
+                <li>• **异议提起时效**：潜在供应商对公示内容有异议的，应当在**公示期内以书面形式提出**。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-amber-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国政府采购法实施条例》（国务院令第658号）第38条；</li>
+                <li>• 财政部《政府采购非招标采购方式管理办法》（财政部令第74号）第38条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>公示期内有潜在供应商提出异议并能证明其产品/技术具备替代能力的，采购人必须重新组织专家论证；经论证不成立的，**必须转为公开招标**！未经法定公示擅自实施单一来源采购的，中标合同无效并依法追责。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：三名以上同行业专业人员出具的专业论证意见书、中国政府采购网单一来源公示单、供应商异议书及核实复函。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Step Preeval -->
+      <section id="step-preeval" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">阶段 5 · 资格预审</span>
+          <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-700">发售≥5日 · 提交最短≥10日 · 异议截止2日前</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">5. 资格预审公告发布、文件发售与申请递交</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **预审文件发售期**：自发售之日起**不得少于 5 日**（政府采购为不少于 5 个工作日）；</li>
+                <li>• **申请文件递交期**：自停止发售之日起至提交截止日，**最短不得少于 10 日**；</li>
+                <li>• **预审文件异议期**：潜在投标人对预审文件有异议，应在提交截止时间 **2 日前** 提出；</li>
+                <li>• **招标人答复时效**：招标人自收到异议之日起 **3 日内** 答复，答复前**必须暂停招投标程序**。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法》第18条；</li>
+                <li>• 《招标投标法实施条例》第17条、第19条、第22条；</li>
+                <li>• 财政部第87号令第18条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>发售期少于5日或提交申请期少于10日的，程序违法，评审结果无效；逾期送达申请文件的，招标人**必须拒收**；通过资格预审的申请人少于3个的，不得进行招标，必须重新组织资格预审或依法重新招标。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：资格预审公告、资格预审文件、资格审查报告、通过预审合格通知书、资审结果公示单。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Step Announcement -->
+      <section id="step-announcement" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">阶段 6 · 发标与发售</span>
+          <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-700">文件发售期不得少于 5 日 / 5个工作日</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">6. 招标公告发布与招标文件发售</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **招标文件发售期**：工程招投标**不得少于 5 日**（日历日）；政府采购货物服务为**不少于 5 个工作日**；</li>
+                <li>• **投标有效期起算**：自提交投标文件截止之日起计算，通常设定为 **60 ~ 90 日历天**；</li>
+                <li>• **媒介发布时间**：在不同媒介发布的同一招标公告内容与时间必须保持完全一致。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法》第16条；</li>
+                <li>• 《招标投标法实施条例》第16条；</li>
+                <li>• 财政部第87号令第18条；</li>
+                <li>• 国家发展改革委第10号令《招标公告和公示信息发布管理办法》。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>擅自缩短发售期、仅向特定潜在投标人发售、对资格预审合格者区别对待的，均属于限制排斥潜在投标人的违法行为，责令改正并可处中标合同金额千分之五以上千分之十以下罚款。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：招标公告刊发证明、中国招标投标公共服务平台/财网发布时间戳、招标文件发售登记册/交易平台下载授权回执。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Step Preparation -->
+      <section id="step-preparation" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold">阶段 7 · 编制与倒计时</span>
+          <span class="badge-timeline bg-emerald-950 text-emerald-300 border border-emerald-700">公开招标最短 ≥ 20 日刚性红线</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">7. 标书编制与法定量化截标倒计时</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-emerald-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **公开招标 / 邀请招标**：自招标文件开始发出之日起至递交标书截止之日止，**最短不得少于 20 日**（必须严格按日历日倒计）；</li>
+                <li>• **竞争性磋商**：自磋商文件发出之日起至首次响应文件递交截止，**不得少于 10 日**；</li>
+                <li>• **竞争性谈判 / 询价**：谈判/询价文件发出之日起至响应截止，**不得少于 3 个工作日**；</li>
+                <li>• **💡 内部决策节点**：投标人在获取标书后 **3~5 日内**，应当组织内部立项评审会（参见下方指引）。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-emerald-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法》第24条；</li>
+                <li>• 财政部第87号令第18条；</li>
+                <li>• 财库〔2014〕214号《竞争性磋商采购方式管理暂行办法》第6条；</li>
+                <li>• 财政部第74号令第29条、第45条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>将公开招标编制期人为压缩至 20 日以下的（如设定为15天截标），属于重大程序违法，招投标结果自始无效，所签订合同在司法裁判中一律确认为【无效合同】。</p>
+          </div>
+
+          <!-- Internal Decision Gate Link Card -->
+          <div class="p-3.5 rounded-lg bg-indigo-950/40 border border-indigo-800/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="space-y-0.5">
+              <div class="font-bold text-indigo-300 flex items-center gap-2">
+                <span>🎯 企业内部实操关键节点：标的契合度评估与投标立项决策 (3~5日内)</span>
+              </div>
+              <p class="text-[11px] text-slate-300">
+                发标初期切忌盲目编制。投标专班需在发标后3~5日内完成能力、商业、胜率、信用与战略五维打分，执行四色红绿灯裁决机制。
+              </p>
+            </div>
+            <div class="shrink-0 flex items-center gap-2">
+              <a href="bidding_wiki.html#sec-decision" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition flex items-center gap-1 shadow">
+                <span>查看Wiki决策模型</span>
+                <span>→</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：投标文件正副本、电子加密投标文件（CA数字证书签名）、投标保证金转账凭证/电子保函、法定代表人授权委托书。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 8: Step Clarify -->
+      <section id="step-clarify" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">阶段 8 · 答疑与顺延</span>
+          <span class="badge-timeline bg-amber-950 text-amber-300 border border-amber-700">提疑10日前 · 澄清15日前 · 不足15日强制顺延</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">8. 现场踏勘、答疑澄清与法定强制顺延机制</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-amber-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **投标人提疑时限**：潜在投标人对招标文件有异议，应当在投标截止时间 **至少 10 日前** 提出；</li>
+                <li>• **招标人澄清时限**：澄清或修改可能影响标书编制的，招标人应当在投标截止时间 **至少 15 日前** 发出；</li>
+                <li>• **强制顺延机制**：发出澄清距截标时间 **不足 15 日的，必须依法顺延提交投标文件的截止时间**！</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-amber-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法》第23条；</li>
+                <li>• 《招标投标法实施条例》第21条、第22条；</li>
+                <li>• 财政部第87号令第27条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>澄清通知发出距截标不足15日且未顺延开标的，整个招投标程序违法，中标结果直接撤销；严禁单独或分别组织个别投标人踏勘现场，否则涉嫌串标或歧视，处项目金额千分之五以上千分之十以下罚款。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：潜在投标人书面提疑函、招标人澄清修改文件（补遗书）、公共交易平台截标延期变更公告、现场踏勘答疑纪要。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 9: Step Submission -->
+      <section id="step-submission" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">阶段 9 · 递交与撤回</span>
+          <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-700">分秒不差准时拒收 · 截标前退保 / 截标后没收</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">9. 标书密封递交、书面修改与撤回撤销规则</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **递交截止点**：与招标公告载明的时间分秒不差，电子交易系统到期自动关闭上传通道；</li>
+                <li>• **截标前修改与撤回**：在投标截止时间**之前**可书面修改或撤回；招标人自收到撤回通知之日起 **5 日内退还投标保证金**；</li>
+                <li>• **截标后撤销（没收）**：投标截止后至投标有效期满前撤销投标的，招标人 **不予退还（直接没收）投标保证金**。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法》第28条、第29条；</li>
+                <li>• 《招标投标法实施条例》第35条、第36条；</li>
+                <li>• 六部委第20号令《电子招标投标办法》第28条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>逾期送达、未送达指定地点或者未按照招标文件要求密封加密的投标文件，招标人/交易平台**必须拒收**；开标后擅自撤销投标的除没收保函外，造成招标人损失的还应承担民事缔约过失赔偿责任并记入信用档案。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：投标文件签收凭证、电子交易平台上传成功回执与时间戳、书面修改补充文件或正式撤回申请函。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Step Opening -->
+      <section id="step-opening" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">阶段 10 · 开标解密</span>
+          <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-700">截标同一时间开标 · 在线解密 30~60 分钟</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">10. 开标唱标、在线解密与现场即时异议</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **开标时间点**：在提交投标文件截止时间的**同一时间公开进行**；</li>
+                <li>• **在线解密时限**：不见面电子开标预设 **30 至 60 分钟** 在线数字证书解密窗口；</li>
+                <li>• **开标现场异议**：投标人对开标有异议的，**应当在开标现场当场提出**；</li>
+                <li>• **当场答复时限**：招标人**必须当场作出答复并制作记录**。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法》第34条、第35条、第36条；</li>
+                <li>• 《招标投标法实施条例》第44条；</li>
+                <li>• 《电子招标投标办法》（六部委20号令）第30条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>工程招投标开标时有效投标人少于 3 家的，**依法不得开标，必须重新组织招标**；投标人非因系统原因未在限定时间内完成解密的，视为放弃投标；未在开标现场当场提出的开标异议，事后不再受理。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：开标记录表（开标一览表）、在线解密状态汇总清单、当场异议书与答复签字记录、开标全程音视频监控刻录光盘。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 11: Step Evaluation -->
+      <section id="step-evaluation" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-semibold">阶段 11 · 专家评审</span>
+          <span class="badge-timeline bg-rose-950 text-rose-300 border border-rose-700">专家≥2/3 · 条例51条初审否决</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">11. 评标委员会封闭评审与法定废标判定</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-rose-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **抽取保密时点**：评委专家名单在开标前从专家库**随机抽取**，严格保密直至评审结束；</li>
+                <li>• **澄清说明限时**：评委会要求投标人对模糊内容作书面澄清，通常给予 **0.5 ~ 2 小时** 限时回函；</li>
+                <li>• **报告签署节点**：评审结束评委会全体成员签字并当场出具书面评标报告。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-rose-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法》第37条、第40条；</li>
+                <li>• 《招标投标法实施条例》第46条、第51条（法定7大一票否决情形）；</li>
+                <li>• 财政部第87号令第44条、第55条、第60条（异常低价澄清说明）。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 条例第51条初审一票否决情形（红线）</span>
+            </div>
+            <p>有下列情形之一的，评标委员会应当否决其投标：①标书未经盖章和负责人签字；②无联合体协议；③不符合资格条件；④同一投标人提交两个以上不同报价；⑤报价低于成本或高于最高限价；⑥未响应★号实质性要求；⑦有串标、弄虚作假违法行为。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：评委会专家签到表与回避承诺书、符合性审查表、商务技术打分汇总表、书面澄清问答记录函、最终评标报告与推荐候选人名单。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 12: Step Award -->
+      <section id="step-award" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">阶段 12 · 公示与定标</span>
+          <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-700">工招候选人公示 ≥ 3 日 · 政采结果公告 1 个工作日</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">12. 中标候选人公示、定标与中标结果公告</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **提交公示时效**：招标人自收到评标报告之日起 **3 日内** 公示中标候选人；</li>
+                <li>• **工程候选人公示期**：公示期 **不得少于 3 日**（推荐1至3名并标明排序）；</li>
+                <li>• **公示期异议与答复**：对评审结果有异议在公示期内提出；招标人自收到之日起 **3 日内** 答复，答复前**暂停招投标活动**；</li>
+                <li>• **政采结果公告时限**：确定中标人之日起 **2 个工作日内** 发出通知书并在财网公告，公告期为 **1 个工作日**。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《招标投标法实施条例》第54条；</li>
+                <li>• 《政府采购法实施条例》第43条；</li>
+                <li>• 财政部第87号令第69条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>依法必须招标项目未依法公示中标候选人直接定标的，定标行为无效；在公示期收到异议未暂停程序强行发中标通知书的，发函无效；招标人无正当理由改变评标结果属于违规定标，依法追究缔约过失责任。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：中标候选人公示发布证明、异议与答复书面单、招标人定标审批决议书、中标（成交）结果公告发布记录。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 13: Step Contract -->
+      <section id="step-contract" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">阶段 13 · 签约与备案</span>
+          <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-700">发出通知书起 ≤ 30 日内签订书面合同</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">13. 中标通知书发出、合同订立与报告备案</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **书面签约时限**：自中标通知书发出之日起 **30 日内** 签订书面合同；</li>
+                <li>• **政采合同公告时效**：自合同签订之日起 **2 个工作日内** 在政府采购网公告；</li>
+                <li>• **行政备案时限**：自确定中标人之日起 **15 日内** 向行政监督部门提交书面招投标情况报告；建设工程合同订立后 **7 日内** 到住建部门备案。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法》第45条、第46条、第47条；</li>
+                <li>• 《中华人民共和国政府采购法》第46条、第47条；</li>
+                <li>• 最高人民法院《关于审理建设工程施工合同纠纷案件适用法律问题的解释（一）》（法释〔2020〕25号）第22条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>中标通知书发出即具要约承诺约束力，中标人拒绝签约没收保证金，招标人拒绝签约承担双倍返还与民事赔偿；私下订立背离招标文件实质性内容的“阴阳合同/抽屉协议”在司法裁判中一律认定无效，必须按备案的中标白合同结算工程款！</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：中标通知书原件、正本施工/采购合同、政府采购合同网上公告截屏、住建/发改主管部门合同备案核准备查表。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 14: Step Bond Return -->
+      <section id="step-bond-return" class="rule-card p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">阶段 14 · 保证金退还</span>
+          <span class="badge-timeline bg-indigo-950 text-indigo-300 border border-indigo-700">双向 5 日内退还 · 必须退付活期利息</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">14. 投标保证金退还时限与银行活期利息结算</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **未中标人退还时限**：中标通知书发出后 **5 日内**（政府采购为发出后 5 个工作日内）；</li>
+                <li>• **中标人退还时限**：在书面合同签订后 **5 日内**（政府采购为签订后 5 个工作日内）；</li>
+                <li>• **利息结算规则**：退还本金的同时，**必须同时结付银行同期活期存款利息**。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-indigo-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《中华人民共和国招标投标法实施条例》第57条；</li>
+                <li>• 财政部第87号令第38条；</li>
+                <li>• 《工程建设项目施工招标投标办法》（七部委30号令）第37条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-amber-950/20 border border-amber-900/40 text-amber-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>招标人或采购代理机构超期无故扣押投标保证金的，构成违法侵占投标企业资金，逾期不仅需退还本息，还须向投标人支付每日按万分之五或合同约定的逾期利息补偿，情节严重的暂停其招投标代理资格。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：保证金退付审批单、银行电汇转账回单（明确标注本金与利息明细）、电子保函/电子保证保险核销解锁凭据。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 15: Step Payment -->
+      <section id="step-payment" class="rule-card p-6 border-emerald-500/40">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-semibold">阶段 15 · 担保与支付</span>
+          <span class="badge-timeline bg-emerald-950 text-emerald-300 border border-emerald-700">履约担保≤10% · 验收合格原则上 ≤ 30 日内付款</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">15. 履约担保、履约验收与保障中小企业款项支付</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-emerald-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **履约担保额度上限**：**不得超过中标合同金额的 10%**（推行见索即付独立保函）；</li>
+                <li>• **法定期限付款红线**：机关、事业单位从货物、工程、服务交付验收之日起，**原则上应当在 30 日内付款**；合同另有约定的最长不得超过 **60 日**；</li>
+                <li>• **违约利息起算**：超过法定期限或约定账期的，自逾期之日起按日息万分之五或全国银行间LPR计算逾期利息。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-emerald-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 国务院令第728号《保障中小企业款项支付条例》第8条、第9条、第15条；</li>
+                <li>• 《中华人民共和国政府采购法》第41条；</li>
+                <li>• 《招标投标法实施条例》第58条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>严禁向中标人收取超过10%的履约担保；机关事业单位严禁以“未完成竣工审计”、“内部审批流程”、“领导更换”或“未收到上级财政拨款”等为由拒绝或迟延支付款项，违者对主要负责人依法追责。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：银行履约保函、多方签署盖章的履约验收报告、增值税专用发票、国库集中支付电汇凭证。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 16: Step Remedy -->
+      <section id="step-remedy" class="rule-card p-6 border-purple-500/40">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs px-2.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40 font-semibold">阶段 16 · 维权时效链</span>
+          <span class="badge-timeline bg-purple-950 text-purple-300 border border-purple-700">异议 3 日答复 · 政采质疑 7 工 / 投诉 15 工 / 裁决 30 工</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-2">16. 异议、质疑与行政投诉全流程法定救济时效链</h2>
+        <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="legal-box p-3">
+              <span class="text-purple-400 font-bold flex items-center gap-1.5">
+                <span>🏷️ 法定时间节点与起算点</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• **工程异议与投诉**：资审截止2日前、标书截止10日前、开标当场、候选人公示期内提出；招标人 **3 日内** 答复，答复前**暂停程序**；对答复不满自收到起 **10 日内** 向上级主管部门行政投诉；</li>
+                <li>• **政府采购质疑**：在知道或者应知自身权益受损之日起 **7 个工作日内** 提出书面质疑；</li>
+                <li>• **政府采购质疑答复**：采购人/代理机构自收到质疑之日起 **7 个工作日内** 作出书面答复；</li>
+                <li>• **政府采购行政投诉**：对答复不满或期满未答复的，在答复期满后 **15 个工作日内** 向财政部门投诉；</li>
+                <li>• **行政裁决处理决定**：监督部门受理之日起 **30 个工作日内** 作出书面处理决定。</li>
+              </ul>
+            </div>
+            <div class="legal-box p-3">
+              <span class="text-purple-400 font-bold flex items-center gap-1.5">
+                <span>📜 准确法律法规依据</span>
+              </span>
+              <ul class="mt-1.5 space-y-1 text-slate-300">
+                <li>• 《招标投标法实施条例》第22条、第44条、第54条、第60条；</li>
+                <li>• 财政部第94号令《政府采购质疑和投诉办法》第10条、第13条、第17条、第21条；</li>
+                <li>• 七部委第11号令《工程建设项目招标投标活动投诉处理办法》第20条。</li>
+              </ul>
+            </div>
+          </div>
+          <div class="p-3 rounded bg-rose-950/20 border border-rose-900/40 text-rose-300 space-y-1">
+            <div class="font-bold flex items-center gap-1">
+              <span>⏱️ 逾期与违规法律后果（红线）</span>
+            </div>
+            <p>工程招投标中“异议是投诉的法定前置程序”，未依法先提异议直接投诉的，行政监督部门不予受理；超过法定维权时效提起质疑或投诉的丧失胜诉实体权利；监督部门逾期未处理构成行政不作为，可提起行政复议或诉讼。</p>
+          </div>
+          <div class="text-[11px] text-slate-400">
+            📋 **实务交付物与核验**：实名异议书/质疑函（法定代表人签字并盖公章）、采购人书面答复书、行政投诉申请书、主管部门受理决定书与行政处罚/纠正裁决书。
+          </div>
+        </div>
+      </section>
+
+      <!-- Appendix: Checklist & Summary Table -->
+      <section id="checklist" class="rule-card p-6 bg-slate-900/90 border-slate-700">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-xs px-2.5 py-1 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-semibold">附录 · 速查总表</span>
+          <span class="text-xs text-slate-400">16 大阶段关键法定时间节点与法规依据全景速查</span>
+        </div>
+        <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          全周期关键时间节点与法规依据速查总表
+        </h2>
+        
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs border border-slate-800 rounded-lg overflow-hidden">
+            <thead class="bg-slate-950 text-slate-200 border-b border-slate-800 text-[11px]">
+              <tr>
+                <th class="p-2.5 font-semibold text-indigo-300">流程阶段</th>
+                <th class="p-2.5 font-semibold text-amber-300">法定关键时间节点</th>
+                <th class="p-2.5 font-semibold text-slate-300">计算规则 / 起算点</th>
+                <th class="p-2.5 font-semibold text-cyan-300">法定准据法条</th>
+                <th class="p-2.5 font-semibold text-rose-300">程序违规红线后果</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60 bg-slate-950/40 text-[11px]">
+              <tr>
+                <td class="p-2.5 font-bold text-white">1. 立项审批</td>
+                <td class="p-2.5 text-amber-300">发标前必须取得批复</td>
+                <td class="p-2.5 text-slate-400">自发改立项至发标前</td>
+                <td class="p-2.5 text-cyan-400">招标投标法第9条 / 令712号</td>
+                <td class="p-2.5 text-rose-400">未批先建、合同被判无效</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">2. 预告意向</td>
+                <td class="p-2.5 text-amber-300">提前不少于 30 日</td>
+                <td class="p-2.5 text-slate-400">意向发布至正式发标</td>
+                <td class="p-2.5 text-cyan-400">财库〔2020〕10号规范性文件</td>
+                <td class="p-2.5 text-rose-400">财政不予备案、不下达指标</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">3. 需求调查</td>
+                <td class="p-2.5 text-amber-300">征求意见 3~5 工作日</td>
+                <td class="p-2.5 text-slate-400">正式发标前完成审查</td>
+                <td class="p-2.5 text-cyan-400">财库〔2021〕22号第10/11条</td>
+                <td class="p-2.5 text-rose-400">设置排他条款责令改正重招</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">4. 单一来源</td>
+                <td class="p-2.5 text-amber-300">不少于 5 个工作日</td>
+                <td class="p-2.5 text-slate-400">指定财媒公示次日起算</td>
+                <td class="p-2.5 text-cyan-400">政采实施条例第38条 / 74号令</td>
+                <td class="p-2.5 text-rose-400">异议成立强制转公开招标</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">5. 资格预审</td>
+                <td class="p-2.5 text-amber-300">发售≥5日 / 提交≥10日</td>
+                <td class="p-2.5 text-slate-400">停止发售起至提交截止</td>
+                <td class="p-2.5 text-cyan-400">招标法实施条例第17条</td>
+                <td class="p-2.5 text-rose-400">压缩时限程序无效、合格不足3家重招</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">6. 发标发售</td>
+                <td class="p-2.5 text-amber-300">发售期不少于 5 日 / 5工作日</td>
+                <td class="p-2.5 text-slate-400">自公告刊发之日起算</td>
+                <td class="p-2.5 text-cyan-400">招标条例16条 / 87号令18条</td>
+                <td class="p-2.5 text-rose-400">排斥潜在投标人处千分之五罚款</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">7. 标书编制</td>
+                <td class="p-2.5 text-amber-300">公开招标最短 ≥ 20 日</td>
+                <td class="p-2.5 text-slate-400">文件发出至截标日历日</td>
+                <td class="p-2.5 text-cyan-400">招标投标法第24条 / 87号令</td>
+                <td class="p-2.5 text-rose-400">&lt;20日自始无效、合同被判无效</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">8. 澄清答疑</td>
+                <td class="p-2.5 text-amber-300">提疑10日前 / 澄清15日前</td>
+                <td class="p-2.5 text-slate-400">距截标不足15日强制顺延</td>
+                <td class="p-2.5 text-cyan-400">招标法第23条 / 条例第21条</td>
+                <td class="p-2.5 text-rose-400">不足15日未顺延评审结果无效</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">9. 密封递交</td>
+                <td class="p-2.5 text-amber-300">分秒不差截标 / 撤回5日退保</td>
+                <td class="p-2.5 text-slate-400">系统自动封盘拒收</td>
+                <td class="p-2.5 text-cyan-400">招标法28/29条 / 条例35/36条</td>
+                <td class="p-2.5 text-rose-400">逾期直接拒收、截标后撤销没收保函</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">10. 开标唱标</td>
+                <td class="p-2.5 text-amber-300">同一时间开标 / 解密30-60分</td>
+                <td class="p-2.5 text-slate-400">截标同时公开 / 当场答复</td>
+                <td class="p-2.5 text-cyan-400">招标法34条 / 电子招投标办法</td>
+                <td class="p-2.5 text-rose-400">不足3家禁开标、异议现场未提失权</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">11. 专家评审</td>
+                <td class="p-2.5 text-amber-300">专家≥2/3 / 限时澄清说明</td>
+                <td class="p-2.5 text-slate-400">开标前随机抽取并封闭</td>
+                <td class="p-2.5 text-cyan-400">条例第51条初审否决7项</td>
+                <td class="p-2.5 text-rose-400">违规评审撤销结果、追责责任专家</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">12. 候选人公示</td>
+                <td class="p-2.5 text-amber-300">收到报告3日内公示≥3日</td>
+                <td class="p-2.5 text-slate-400">异议公示期提，3日内答复</td>
+                <td class="p-2.5 text-cyan-400">招标条例54条 / 政采条例43条</td>
+                <td class="p-2.5 text-rose-400">异议期未暂停直接发函自始无效</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">13. 合同订立</td>
+                <td class="p-2.5 text-amber-300">通知书发出起 30 日内签约</td>
+                <td class="p-2.5 text-slate-400">签约后2工作日公告/7日备案</td>
+                <td class="p-2.5 text-cyan-400">招标法46条 / 最高法建工解释22条</td>
+                <td class="p-2.5 text-rose-400">阴阳合同司法无效、以中标合同结算</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">14. 保证金退还</td>
+                <td class="p-2.5 text-amber-300">未中标发通知后5日 / 中标人签约后5日</td>
+                <td class="p-2.5 text-slate-400">必须连同活期利息一并退还</td>
+                <td class="p-2.5 text-cyan-400">招标法实施条例第57条</td>
+                <td class="p-2.5 text-rose-400">逾期扣押支付滞纳金、暂停代理资格</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">15. 履约与支付</td>
+                <td class="p-2.5 text-amber-300">履约≤10% / 原则30日内付款</td>
+                <td class="p-2.5 text-slate-400">交付验收合格起算，最长60日</td>
+                <td class="p-2.5 text-cyan-400">令728号防拖欠条例第8/9条</td>
+                <td class="p-2.5 text-rose-400">严禁以审计未结拖欠、加收LPR罚息</td>
+              </tr>
+              <tr>
+                <td class="p-2.5 font-bold text-white">16. 维权时效链</td>
+                <td class="p-2.5 text-amber-300">知悉7工质疑 / 7工答复 / 15工投诉 / 30工裁决</td>
+                <td class="p-2.5 text-slate-400">工程异议前置，10日内行政投诉</td>
+                <td class="p-2.5 text-cyan-400">条例60条 / 财政部94号令</td>
+                <td class="p-2.5 text-rose-400">未按期异议失权不受理、责令纠偏重招</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4 p-3 rounded-lg bg-slate-950/70 border border-slate-800 space-y-1 text-xs text-slate-300">
+          <div class="font-semibold text-indigo-300">💡 投标企业关键避坑准绳：</div>
+          <p>1. **时间起算点界定**：“日”除特别注明工作日外，均按日历日计算；工作日不含法定公休日及节假日；以网络公告时间戳为准。</p>
+          <p>2. **异议前置刚性原则**：工程招标中对招标文件和评标结果不满，必须在法定期限内先向招标人提出异议。未经异议直接向行政监督部门投诉的，行政监督部门一律裁定驳回或不予受理！</p>
+          <p>3. **阴阳合同司法红线**：即便双方签字盖章的任何私下补充协议（涉及降低造价、垫资施工、缩短工期等），在法院审判中一律确认为无效，强制按备案的中标合同结算。</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="h-14 border-t border-slate-800 bg-slate-950 px-6 flex items-center justify-between text-xs text-slate-400 mt-12">
+    <div>招投标全领域知识与决策平台 · 实操流程手册</div>
+    <div class="flex items-center space-x-4">
+      <a href="index.html" class="hover:text-white transition">中枢首页</a>
+      <a href="bidding_knowledge_graph.html" class="hover:text-white transition">知识图谱</a>
+      <a href="bidding_wiki.html" class="hover:text-white transition">百科Wiki</a>
+    </div>
+  </footer>
+
+  <!-- Floating Action Buttons -->
+  <div class="fixed bottom-6 right-6 flex flex-col items-end space-y-3 z-50">
+    <button id="toc-btn" onclick="toggleChapterModal()" class="px-3.5 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white shadow-xl shadow-indigo-900/50 backdrop-blur text-xs font-semibold flex items-center gap-2 transition transform hover:scale-105 cursor-pointer" title="快速切换章节">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+      <span>📑 切换章节</span>
+    </button>
+
+    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="hidden p-3 rounded-full bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 shadow-xl transition transform hover:scale-105 cursor-pointer" title="返回顶部">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+    </button>
+  </div>
+
+  <!-- Floating Chapter Menu Modal -->
+  <div id="chapter-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onclick="if(event.target === this) toggleChapterModal()">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-sm font-bold text-white flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+          <span>全生命周期章节快速跳转</span>
+        </h3>
+        <button onclick="toggleChapterModal()" class="text-slate-400 hover:text-white text-base cursor-pointer">✕</button>
+      </div>
+      <div class="overflow-y-auto custom-scrollbar space-y-1.5 pr-1 flex-1 text-xs" id="modalChapterList">
+        <!-- Dynamically injected -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const CHAPTERS = [
+      { id: 'overview', title: '0. 招投标与政府采购双轨法定程序总纲', badge: '双轨总纲', badgeClass: 'bg-indigo-950 text-indigo-300 border-indigo-800/50' },
+      { id: 'step-approval', title: '1. 项目立项审批、核准与资金落实', badge: '发标前完成', badgeClass: 'bg-slate-900 text-slate-300 border-slate-700' },
+      { id: 'step-intention', title: '2. 招标计划预告与采购意向公开', badge: '提前≥30日', badgeClass: 'bg-indigo-950 text-indigo-300 border-indigo-800/50' },
+      { id: 'step-demand', title: '3. 采购需求调查与征求意见公示', badge: '3-5工作日', badgeClass: 'bg-cyan-950 text-cyan-300 border-cyan-800/50' },
+      { id: 'step-singlesource', title: '4. 单一来源采购专业论证意见公示', badge: '不少于5工', badgeClass: 'bg-amber-950 text-amber-300 border-amber-800/50' },
+      { id: 'step-preeval', title: '5. 资格预审公告与申请递交', badge: '发5/交10', badgeClass: 'bg-indigo-950 text-indigo-300 border-indigo-800/50' },
+      { id: 'step-announcement', title: '6. 招标公告发布与标书发售', badge: '发售≥5日', badgeClass: 'bg-indigo-950 text-indigo-300 border-indigo-800/50' },
+      { id: 'step-preparation', title: '7. 标书编制与法定量化倒计时', badge: '≥20日刚性', badgeClass: 'bg-emerald-950 text-emerald-300 border-emerald-800/50' },
+      { id: 'step-clarify', title: '8. 现场踏勘、答疑澄清与强制顺延', badge: '<15日顺延', badgeClass: 'bg-amber-950 text-amber-300 border-amber-800/50' },
+      { id: 'step-submission', title: '9. 标书密封递交与修改撤回', badge: '准时拒收', badgeClass: 'bg-indigo-950 text-indigo-300 border-indigo-800/50' },
+      { id: 'step-opening', title: '10. 开标唱标与在线解密', badge: '同一时间解密', badgeClass: 'bg-indigo-950 text-indigo-300 border-indigo-800/50' },
+      { id: 'step-evaluation', title: '11. 专家封闭评审与废标判定', badge: '条例51条', badgeClass: 'bg-rose-950 text-rose-300 border-rose-800/50' },
+      { id: 'step-award', title: '12. 候选人公示、定标与结果公告', badge: '工≥3日/政1工', badgeClass: 'bg-indigo-950 text-indigo-300 border-indigo-800/50' },
+      { id: 'step-contract', title: '13. 合同订立与报告备案', badge: '≤30日签约', badgeClass: 'bg-indigo-950 text-indigo-300 border-indigo-800/50' },
+      { id: 'step-bond-return', title: '14. 投标保证金退还结息', badge: '双向5日退', badgeClass: 'bg-indigo-950 text-indigo-300 border-indigo-800/50' },
+      { id: 'step-payment', title: '15. 履约担保与款项支付', badge: '原则≤30日付', badgeClass: 'bg-emerald-950 text-emerald-300 border-emerald-800/50' },
+      { id: 'step-remedy', title: '16. 异议质疑与投诉时效链', badge: '维权链条', badgeClass: 'bg-purple-950 text-purple-300 border-purple-800/50' },
+      { id: 'checklist', title: '附录：全周期法据速查总表', badge: '速查总表', badgeClass: 'bg-emerald-950 text-emerald-300 border-emerald-800/50' }
+    ];
+
+    function jumpToChapter(targetHash) {
+      if (!targetHash) return;
+      const targetId = targetHash.replace('#', '');
+      const el = document.getElementById(targetId);
+      if (el) {
+        const headerOffset = 130;
+        const elementPosition = el.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+        history.replaceState(null, null, targetHash);
+      }
+    }
+
+    function toggleChapterModal() {
+      const modal = document.getElementById('chapter-modal');
+      if (modal) modal.classList.toggle('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const modalList = document.getElementById('modalChapterList');
+      
+      CHAPTERS.forEach((ch, idx) => {
+        if (modalList) {
+          const btn = document.createElement('button');
+          btn.className = 'w-full px-3 py-2.5 rounded-lg bg-slate-950/70 hover:bg-slate-800 border border-slate-800/80 hover:border-indigo-500/50 flex items-center justify-between text-slate-300 hover:text-white transition text-left cursor-pointer';
+          btn.onclick = () => {
+            toggleChapterModal();
+            jumpToChapter('#' + ch.id);
+          };
+          btn.innerHTML = `
+            <span class="font-medium">${ch.title}</span>
+            <span class="badge-timeline ${ch.badgeClass} text-[10px]">${ch.badge}</span>
+          `;
+          modalList.appendChild(btn);
+        }
+
+        const sec = document.getElementById(ch.id);
+        if (sec) {
+          const prev = idx > 0 ? CHAPTERS[idx - 1] : null;
+          const next = idx < CHAPTERS.length - 1 ? CHAPTERS[idx + 1] : null;
+
+          const navBar = document.createElement('div');
+          navBar.className = 'mt-6 pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs';
+
+          let leftBtnHtml = '';
+          if (prev) {
+            leftBtnHtml = `
+              <button onclick="jumpToChapter('#${prev.id}')" class="w-full sm:w-auto px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white transition flex items-center gap-1.5 cursor-pointer">
+                <span>← 上一节:</span>
+                <span class="font-semibold text-indigo-300 truncate max-w-[140px] sm:max-w-[180px]">${prev.title}</span>
+              </button>
+            `;
+          } else {
+            leftBtnHtml = `<div class="hidden sm:block"></div>`;
+          }
+
+          let centerBtnHtml = `
+            <button onclick="toggleChapterModal()" class="px-3 py-1.5 rounded-lg bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-800/60 text-indigo-300 transition flex items-center gap-1 cursor-pointer">
+              <span>📑 章节目录</span>
+            </button>
+          `;
+
+          let rightBtnHtml = '';
+          if (next) {
+            rightBtnHtml = `
+              <button onclick="jumpToChapter('#${next.id}')" class="w-full sm:w-auto px-3.5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white transition flex items-center justify-end gap-1.5 cursor-pointer">
+                <span>下一节:</span>
+                <span class="font-semibold text-indigo-300 truncate max-w-[140px] sm:max-w-[180px]">${next.title}</span>
+                <span>→</span>
+              </button>
+            `;
+          } else {
+            rightBtnHtml = `
+              <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full sm:w-auto px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition flex items-center justify-center gap-1 cursor-pointer">
+                <span>↑ 回到顶部总览</span>
+              </button>
+            `;
+          }
+
+          navBar.innerHTML = leftBtnHtml + centerBtnHtml + rightBtnHtml;
+          sec.appendChild(navBar);
+        }
+      });
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            const chapterObj = CHAPTERS.find(c => c.id === id);
+            if (chapterObj) {
+              const label = document.getElementById('currentChapterLabel');
+              if (label) label.textContent = chapterObj.title;
+
+              const selector = document.getElementById('quickChapterSelector');
+              if (selector) selector.value = '#' + id;
+
+              document.querySelectorAll('#processNav .nav-item').forEach(item => {
+                item.classList.remove('nav-item-active');
+              });
+              const activeNav = document.querySelector(`#processNav [data-target="${id}"]`);
+              if (activeNav) {
+                activeNav.classList.add('nav-item-active');
+                activeNav.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+              }
+            }
+          }
+        });
+      }, {
+        rootMargin: '-15% 0px -65% 0px',
+        threshold: 0.1
+      });
+
+      CHAPTERS.forEach(ch => {
+        const el = document.getElementById(ch.id);
+        if (el) observer.observe(el);
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      const btt = document.getElementById('back-to-top');
+      if (btt) {
+        if (window.scrollY > 300) {
+          btt.classList.remove('hidden');
+        } else {
+          btt.classList.add('hidden');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
