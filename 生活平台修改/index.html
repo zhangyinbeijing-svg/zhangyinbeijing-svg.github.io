@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>服务跟踪功能原型演示系统 - 集体户籍首页借用与办公用品（方案一 & 方案二）</title>
+  
+  <!-- 样式文件引入 -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="stylesheet" href="css/mobile.css" />
+</head>
+<body>
+
+  <!-- 顶部演示控制栏 -->
+  <header class="top-controller-bar">
+    <div class="controller-brand">
+      <span class="brand-badge">PROTOTYPE</span>
+      <span class="brand-title">生活平台 · 服务跟踪功能原型系统</span>
+      <span class="brand-subtitle">（集体户籍首页借用 & 办公用品）</span>
+    </div>
+
+    <div class="controller-actions">
+      <!-- 方案切换 -->
+      <div class="control-group">
+        <button id="btn-scheme-1" class="control-btn active">
+          <span>方案一：标准固定模式</span>
+        </button>
+        <button id="btn-scheme-2" class="control-btn">
+          <span>方案二：模版配置+统计看板</span>
+        </button>
+      </div>
+
+      <!-- 终端/视图切换 -->
+      <div class="control-group">
+        <button id="btn-view-mobile" class="control-btn active">
+          <span class="device-badge-active"></span>
+          <span>📱 微信小程序端</span>
+        </button>
+        <button id="btn-view-admin" class="control-btn">
+          <span>💻 管理后台端</span>
+        </button>
+        <button id="btn-view-docs" class="control-btn">
+          <span>📋 方案对比与说明</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主视口内容容器 -->
+  <main class="app-viewport-container">
+    <div style="width: 100%; max-width: 1560px;">
+      
+      <!-- 方案当前特性提示横幅 -->
+      <div id="scheme-banner" class="scheme-indicator-banner">
+        <!-- 动态由 AppModule 渲染 -->
+      </div>
+
+      <!-- ================= 视图 1: 微信小程序用户端 ================= -->
+      <section id="view-mobile-container" class="mobile-simulator-wrapper" style="display: flex;">
+        <!-- 业务订单快捷切换工具条 -->
+        <div class="mobile-toolbar-tips">
+          <span>当前模拟业务：</span>
+          <button id="btn-order-hukou" 
+                  class="mobile-toolbar-btn active" 
+                  onclick="MobileModule.switchBiz('hukou')">
+            📑 集体户籍首页借用订单 (DB...A0001)
+          </button>
+          <button id="btn-order-supplies" 
+                  class="mobile-toolbar-btn" 
+                  style="background: #52c41a;" 
+                  onclick="MobileModule.switchBiz('supplies')">
+            📦 办公用品申领订单 (BG...B0089)
+          </button>
+          <span style="font-size: 11px; opacity: 0.8; margin-left: 8px;">
+            💡 提示：点击订单卡片下方的【服务跟踪】入口即可体验填空/选择/问答三类题型！
+          </span>
+        </div>
+
+        <!-- 真实比例手机模型 -->
+        <div class="mobile-device">
+          <!-- 顶部状态栏（对齐截图2） -->
+          <div class="mobile-status-bar">
+            <div class="status-left">
+              <span>14:12</span>
+              <span class="status-app-tag">Z</span>
+              <span style="font-size: 10px; color: #8c8c8c;">14:12:38</span>
+            </div>
+            <div class="status-right">
+              <span>5G</span>
+              <span>📶</span>
+              <span>🔋 100</span>
+            </div>
+          </div>
+
+          <!-- 微信小程序自定义胶囊导航条（对齐截图2） -->
+          <div class="mini-nav-bar">
+            <div class="nav-back-btn" id="mini-nav-back" style="visibility: hidden;">
+              <span>&lt;</span>
+            </div>
+            <div class="nav-title" id="mini-nav-title">历史订单详情</div>
+            <div class="wechat-capsule">
+              <span class="capsule-dots">···</span>
+              <span class="capsule-divider"></span>
+              <span class="capsule-circle"></span>
+            </div>
+          </div>
+
+          <!-- 小程序可滚动主内容体 -->
+          <div class="mobile-scroll-body" id="mobile-scroll-container">
+            <!-- 动态渲染订单或服务跟踪问卷 -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 视图 2: 管理后台系统端 ================= -->
+      <section id="view-admin-container" class="admin-wrapper" style="display: none;">
+        <!-- 左侧菜单（精准还原截图1） -->
+        <aside class="admin-sidebar">
+          <div class="sidebar-header">
+            <div class="sidebar-header-icon">🏛️</div>
+            <span>生活综合服务平台</span>
+          </div>
+
+          <div class="sidebar-menu">
+            <!-- 库学管理 -->
+            <div class="menu-group-title">
+              <span>📦 库房与超市管理</span>
+              <span class="menu-arrow">▼</span>
+            </div>
+
+            <!-- 系统公告 -->
+            <div class="menu-group-title">
+              <span>📢 系统公告</span>
+            </div>
+
+            <!-- 意见反馈（展开，对齐截图1并新增服务跟踪） -->
+            <div class="menu-group-title expanded">
+              <span style="color: #1890ff; font-weight: 600;">💬 意见反馈</span>
+              <span class="menu-arrow">▲</span>
+            </div>
+            <div class="submenu-list">
+              <a class="submenu-item">主任信箱</a>
+              <a class="submenu-item">信箱设置</a>
+              <a class="submenu-item">服务反馈</a>
+              <a class="submenu-item">服务处理</a>
+              <a class="submenu-item">服务分类</a>
+              <!-- 重点：根据需求与截图红框新增服务跟踪子栏目 -->
+              <a class="submenu-item active highlight-subitem" id="menu-sub-tracking" onclick="AdminModule.switchTab('list')">
+                <span>服务跟踪</span>
+                <span class="new-feature-badge">NEW</span>
+              </a>
+            </div>
+
+            <!-- 访客统计 -->
+            <div class="menu-group-title">
+              <span>📈 访客统计</span>
+            </div>
+
+            <!-- 日志审计 -->
+            <div class="menu-group-title">
+              <span>🛡️ 日志审计</span>
+              <span class="menu-arrow">▼</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- 右侧工作区 -->
+        <main class="admin-main">
+          <!-- 面包屑导航（对齐截图1） -->
+          <div class="admin-breadcrumb">
+            <span class="breadcrumb-item">🏠 首页</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item">意见反馈</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">服务跟踪</span>
+          </div>
+
+          <!-- 顶部业务功能 Tab 栏 -->
+          <div class="admin-tabs-bar" id="admin-tabs-container">
+            <!-- 由 AdminModule 动态渲染 -->
+          </div>
+
+          <!-- 后台主体内容区 -->
+          <div id="admin-tab-body" style="flex: 1; display: flex; flex-direction: column;">
+            <!-- 动态渲染列表、模版设计器、业务绑定或统计大屏 -->
+          </div>
+        </main>
+      </section>
+
+      <!-- ================= 视图 3: 方案对比与设计说明 ================= -->
+      <section id="view-docs-container" style="display: none;">
+        <!-- 由 AppModule 动态渲染 -->
+      </section>
+
+    </div>
+  </main>
+
+  <!-- 后台详情抽屉挂载容器 -->
+  <div class="admin-drawer-mask" id="admin-drawer-container" style="display: none;" onclick="if(event.target === this) AdminModule.closeDrawer();">
+    <!-- 动态载入详情抽屉 -->
+  </div>
+
+  <!-- 问卷模版题型统计弹窗容器 -->
+  <div class="admin-modal-mask" id="admin-stats-modal-container" style="display: none;" onclick="if(event.target === this) AdminModule.closeStatsModal();">
+    <!-- 动态载入模版各题型统计弹窗 -->
+  </div>
+
+  <!-- 全局轻提示 Toast -->
+  <div id="global-toast" class="custom-toast">操作提示</div>
+
+  <!-- 脚本引入 -->
+  <script src="js/data.js"></script>
+  <script src="js/mobile.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // 初始化应用
+    window.addEventListener('DOMContentLoaded', () => {
+      AppModule.init();
+      MobileModule.init();
+      AdminModule.init();
+    });
+  </script>
+</body>
+</html>
