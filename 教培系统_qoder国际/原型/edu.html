@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教务组织 · 干部培训学院教务管理系统 原型 V1.0</title>
+<style>
+:root{--primary:#1F4E79;--primary-2:#2E75B6;--success:#2E7D32;--warning:#F57F17;--danger:#C62828;
+ --text:#333;--text-2:#595959;--text-3:#8a9099;--bg:#F5F6F8;--card:#fff;--line:#e5e8ec;
+ --topbar-h:56px;--nav-w:220px;--nav-w-c:64px;--r:4px;--r-card:8px;--r-modal:12px;--shadow:0 2px 8px rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{text-decoration:none;color:var(--primary-2);cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2dc;border-radius:4px}
+.btn{height:32px;padding:0 16px;border-radius:var(--r);font-size:14px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#173e61}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-text{background:none;border:none;color:var(--primary-2);cursor:pointer;font-size:13px;padding:0 4px}
+.btn-text:hover{text-decoration:underline}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+.tag-blue{background:rgba(46,117,182,.12);color:var(--primary-2)}
+.tag-green{background:rgba(46,125,50,.12);color:var(--success)}
+.tag-orange{background:rgba(247,127,23,.12);color:var(--warning)}
+.tag-red{background:rgba(198,40,40,.12);color:var(--danger)}
+.tag-gray{background:rgba(89,95,105,.1);color:var(--text-2)}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card-body{padding:16px}
+.input,.sel{height:32px;border:1px solid var(--line);border-radius:var(--r);padding:0 10px;font-size:13px;outline:none;background:#fff;color:var(--text)}
+.input:focus,.sel:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+/* 顶部栏/导航 */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--primary);color:#fff;display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{display:flex;align-items:center;gap:10px;min-width:230px}
+.tb-logo .mark{width:32px;height:32px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.tb-logo .name{font-size:16px;font-weight:700;white-space:nowrap}
+.tb-search{flex:1;max-width:460px}.tb-search .input{width:100%;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;height:34px}
+.tb-search .input::placeholder{color:rgba(255,255,255,.6)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tb-icon{position:relative;width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px}
+.tb-icon:hover{background:rgba(255,255,255,.15)}
+.tb-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.tb-ver{font-size:12px;color:rgba(255,255,255,.65);margin:0 4px}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tb-user:hover{background:rgba(255,255,255,.15)}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sidenav{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--nav-w);background:#fff;border-right:1px solid var(--line);overflow-y:auto;z-index:90;transition:width .2s}
+.nav-parent{display:flex;align-items:center;gap:10px;padding:0 16px;height:44px;cursor:pointer;color:var(--text-2);font-size:14px;position:relative}
+.nav-parent:hover{background:#f2f6fa;color:var(--primary)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex:none}
+.nav-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-caret{font-size:11px;color:var(--text-3);transition:transform .2s}
+.nav-group.open .nav-caret{transform:rotate(90deg)}
+.nav-group.open>.nav-parent{color:var(--primary);font-weight:700}
+.nav-children{display:none;background:#fafbfc}
+.nav-group.open .nav-children{display:block}
+.nav-child{padding:0 16px 0 44px;height:36px;display:flex;align-items:center;font-size:13px;color:var(--text-2);cursor:pointer;position:relative}
+.nav-child:hover{color:var(--primary);background:#f2f6fa}
+.nav-child.active{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-child.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.nav-collapse{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:var(--text-3);cursor:pointer;display:flex;gap:8px;align-items:center}
+body.nav-collapsed .sidenav{width:var(--nav-w-c)}
+body.nav-collapsed .nav-label,body.nav-collapsed .nav-caret,body.nav-collapsed .nav-children,body.nav-collapsed .nav-collapse span{display:none}
+body.nav-collapsed .nav-parent{justify-content:center;padding:0}
+body.nav-collapsed .nav-collapse{justify-content:center}
+.content{margin-left:var(--nav-w);margin-top:var(--topbar-h);padding:24px;min-height:calc(100vh - var(--topbar-h));transition:margin-left .2s}
+body.nav-collapsed .content{margin-left:var(--nav-w-c)}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+.breadcrumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+.page-title{font-size:20px;font-weight:700}
+.page-ops{display:flex;gap:8px;flex-wrap:wrap}
+/* 页内子Tab */
+.sub-tabs{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:16px;flex-wrap:wrap}
+.sub-tab{padding:9px 18px;font-size:14px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.sub-tab:hover{color:var(--primary)}
+.sub-tab.active{color:var(--primary);font-weight:700;border-bottom-color:var(--primary)}
+/* 统计卡 */
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#f7f9fc;border-radius:var(--r);padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:700;font-family:Consolas,monospace;color:var(--primary)}
+.stat .n.g{color:var(--success)}.stat .n.o{color:var(--warning)}.stat .n.r{color:var(--danger)}
+.stat .l{font-size:12px;color:var(--text-3);margin-top:2px}
+/* 表格 */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th,.data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.data-table th{background:#fafbfc;color:var(--text-2);font-size:12px;font-weight:400;white-space:nowrap}
+.data-table tbody tr:hover{background:#f7fafd}
+.data-table .c-name{font-weight:700;color:var(--primary);cursor:pointer}
+.data-table .c-name:hover{text-decoration:underline}
+.score-high{color:var(--success);font-weight:700}
+.score-low{color:var(--danger);font-weight:700}
+/* 进度条 */
+.bar{background:#edf0f3;border-radius:999px;height:8px;overflow:hidden;min-width:90px}
+.bar i{display:block;height:100%;border-radius:999px;background:var(--primary-2)}
+.bar i.g{background:var(--success)}.bar i.o{background:var(--warning)}.bar i.r{background:var(--danger)}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-row span{font-size:12px;color:var(--text-2);width:38px;text-align:right;flex:none}
+.sec-title{font-size:15px;font-weight:700;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sec-title:first-child{margin-top:0}
+.mini-note{font-size:12px;color:var(--text-3);margin-top:10px;line-height:1.7}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+/* 报表/模板/集成卡片 */
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:14px}
+.res-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-card);padding:16px;transition:box-shadow .15s,transform .15s;position:relative}
+.res-card:hover{box-shadow:0 6px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.res-card .rc-icon{font-size:24px;margin-bottom:8px}
+.res-card .rc-title{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:6px}
+.res-card .rc-meta{font-size:12px;color:var(--text-3);line-height:1.9}
+.res-card .rc-ops{display:flex;gap:4px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);flex-wrap:wrap}
+.corner{position:absolute;top:12px;right:12px}
+/* 预警列表 */
+.warn-item{display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--warning);background:#fffdf5;border-radius:var(--r);padding:12px 14px;margin-bottom:10px;font-size:13px}
+.warn-item.red{border-left-color:var(--danger);background:#fdf5f5}
+.warn-item .w-title{font-weight:700;margin-bottom:3px}
+.warn-item .w-sub{color:var(--text-3);font-size:12px;line-height:1.7}
+/* 月份调度卡 */
+.month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.month-card{border:1px solid var(--line);border-radius:var(--r-card);padding:14px;background:#fff;cursor:pointer;transition:box-shadow .15s}
+.month-card:hover{box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.month-card.cur{border-color:var(--primary);background:rgba(31,78,121,.03)}
+.month-card .m-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.month-card .m-t{font-size:15px;font-weight:700}
+.month-card .m-list{font-size:12px;color:var(--text-2);line-height:1.9}
+/* 弹窗/抽屉/Toast */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{width:520px;max-height:86vh;background:#fff;border-radius:var(--r-modal);box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden;display:flex;flex-direction:column}
+.modal-head{padding:14px 18px;font-size:16px;font-weight:700;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.modal-body{padding:18px;overflow-y:auto}
+.modal-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.f-row{margin-bottom:14px}
+.f-row label{display:block;font-size:13px;color:var(--text-2);margin-bottom:6px}
+.f-row label .req{color:var(--danger);margin-right:2px}
+.f-row .input,.f-row .sel,.f-row textarea{width:100%}
+textarea.input{height:auto;padding:8px 10px;resize:vertical}
+.drawer-mask{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:210}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:520px;background:#fff;box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:220;display:flex;flex-direction:column}
+.drawer-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.drawer-head h3{font-size:16px;font-weight:700}
+.drawer-body{flex:1;overflow-y:auto;padding:20px}
+.drawer-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.d-sec{font-size:14px;font-weight:700;margin:18px 0 10px;padding-left:8px;border-left:3px solid var(--primary)}
+.d-sec:first-child{margin-top:0}
+.d-grid{display:grid;grid-template-columns:110px 1fr;gap:8px 12px;font-size:13px}
+.d-grid .k{color:var(--text-3)}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(40,45,52,.92);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:300;box-shadow:var(--shadow);max-width:70%}
+@media (max-width:1100px){.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo"><div class="mark">院</div><div class="name">干部培训学院教务管理系统</div></div>
+  <div class="tb-search"><input class="input" id="tbSearch" placeholder="🔍 全局搜索：班次 / 学员 / 师资 / 课程…"></div>
+  <div class="tb-right">
+    <span class="tb-ver">V1.0 原型</span>
+    <div class="tb-icon" onclick="toast('跳转消息中心（原型占位）')" title="站内信">🔔<span class="tb-badge">5</span></div>
+    <div class="tb-icon" onclick="toast('帮助中心为原型占位')" title="帮助中心">❓</div>
+    <div class="tb-user" id="tbUser"><div class="tb-avatar">张</div><span>张三</span><span style="font-size:10px">▼</span></div>
+  </div>
+</header>
+
+<aside class="sidenav" id="sidenav"></aside>
+
+<main class="content">
+  <div class="page-head">
+    <div><div class="breadcrumb" id="crumb">首页 / 教务组织 / 教学计划管理</div><h2 class="page-title" id="pageTitle">教学计划管理</h2></div>
+    <div class="page-ops" id="pageOps"></div>
+  </div>
+  <div id="viewBody"></div>
+</main>
+
+<!-- 详情抽屉 -->
+<div class="drawer-mask hidden" id="drawerMask" onclick="closeDrawer()"></div>
+<div class="drawer hidden" id="drawer">
+  <div class="drawer-head"><h3 id="dwTitle">详情</h3><span class="btn-text" onclick="closeDrawer()">✕ 关闭</span></div>
+  <div class="drawer-body" id="dwBody"></div>
+  <div class="drawer-foot" id="dwFoot"></div>
+</div>
+
+<!-- 集体备课申请弹窗 -->
+<div class="mask hidden" id="bpModal"><div class="modal">
+  <div class="modal-head"><span>集体备课申请</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-row"><label><span class="req">*</span>备课主题</label><input class="input" id="bpName" placeholder="如：《宏观经济形势分析》集体备课"></div>
+    <div class="f-row"><label><span class="req">*</span>关联课程</label><select class="sel"><option>宏观经济形势分析</option><option>习近平外交思想概论</option><option>党性修养与理想信念教育</option><option>国际谈判实务与模拟演练</option></select></div>
+    <div class="f-row"><label>参加人员</label><input class="input" placeholder="选择教研教师（可多选）"></div>
+    <div class="f-row"><label>拟备课时间</label><input class="input" type="date" value="2026-09-28"></div>
+    <div class="f-row"><label>申请说明</label><textarea class="input" rows="3" placeholder="说明备课目的、分工安排等"></textarea></div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="bpSave()">提交申请（走审批）</button></div>
+</div></div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+document.querySelectorAll('.js-close').forEach(b=>b.onclick=e=>e.target.closest('.mask').classList.add('hidden'));
+
+/* ============ 导航（全站共享数据） ============ */
+const NAV=[
+ {id:'workbench',icon:'🏠',name:'工作台',direct:true},
+ {id:'teach',icon:'📚',name:'教学管理',children:[{id:'teach-system',name:'课程体系',pg:'4.2-P01'},{id:'teach-course',name:'课程管理',pg:'4.2-P02'}]},
+ {id:'train',icon:'🎓',name:'培训管理',children:[
+   {id:'train-class',name:'培训班管理',pg:'4.3-P01'},{id:'train-stu',name:'培训考生',pg:'4.3-P03'},
+   {id:'train-schedule',name:'培训排课（拖拽）',pg:'4.3-P04'},{id:'train-grade',name:'课程成绩',pg:'4.3-P06'},
+   {id:'train-cert',name:'电子证书',pg:'4.3-P07'},{id:'train-eval',name:'教学评估',pg:'4.3-P08'},
+   {id:'train-exam',name:'考务管理',pg:'4.3-P09'},{id:'train-cycle',name:'学员全周期',pg:'4.3-P10'},
+   {id:'train-stay',name:'住宿安排',pg:'4.3-P11'},{id:'train-budget',name:'预算管理',pg:'4.3-P12'},
+   {id:'train-report',name:'结班报告',pg:'4.3-P13'},{id:'train-attend',name:'考勤管理',pg:'4.3-P14'},
+   {id:'train-track',name:'训后跟踪',pg:'4.3-P15'}]},
+ {id:'resource',icon:'🗂️',name:'资源管理',children:[
+   {id:'res-plan',name:'教案库',pg:'4.4-P01'},{id:'res-book',name:'教材库',pg:'4.4-P02'},
+   {id:'res-case',name:'案例库',pg:'4.4-P03'},{id:'res-self',name:'自他资源库',pg:'4.4-P04'},
+   {id:'res-bank',name:'题库试卷库',pg:'4.4-P05'},{id:'res-tag',name:'标签管理',pg:'4.4-P06'}]},
+ {id:'edu',icon:'📊',name:'教务组织',children:[{id:'edu-plan',name:'教学计划管理',pg:'4.5-P01'},{id:'edu-data',name:'教务数据管理',pg:'4.5-P02'},{id:'edu-report',name:'多维度报表',pg:'4.5-P03'},{id:'edu-export',name:'数据导出与集成',pg:'4.5-P04'},{id:'edu-settle',name:'结算报告模板',pg:'4.5-P05'}]},
+ {id:'teacher',icon:'👥',name:'师资库',children:[{id:'tea-list',name:'师资信息',pg:'4.6-P01'},{id:'tea-tag',name:'分级分类标签',pg:'4.6-P03'},{id:'tea-archive',name:'授课质量档案',pg:'4.6-P02'},{id:'tea-invite',name:'授课邀请函',pg:'4.6-P04'},{id:'tea-report',name:'综合评价报告',pg:'4.6-P05'}]},
+ {id:'student',icon:'✪',name:'学员库',children:[{id:'stu-list',name:'学员信息',pg:'4.7-P01'},{id:'stu-query',name:'个人综合查询',pg:'4.7-P02'},{id:'stu-archive',name:'参训档案',pg:'4.7-P03'}]},
+ {id:'room',icon:'🏫',name:'教室管理',children:[{id:'room-point',name:'教学点管理',pg:'4.8-P01'},{id:'room-room',name:'教室管理',pg:'4.8-P02'},{id:'room-device',name:'人脸考勤设备',pg:'4.8-P03'}]},
+ {id:'approve',icon:'✅',name:'审批管理',children:[{id:'apv-schedule',name:'排课审批',pg:'4.9-P01'},{id:'apv-budget',name:'预算审批',pg:'4.9-P01'},{id:'apv-leave',name:'请假/调停课审批',pg:'4.9-P01'},{id:'apv-record',name:'审批记录',pg:'4.9-P03'}]},
+ {id:'org',icon:'🏛️',name:'组织管理',children:[{id:'org-structure',name:'组织架构',pg:'4.10-P01'},{id:'org-account',name:'账户管理',pg:'4.10-P02'},{id:'org-user',name:'用户权限',pg:'4.10-P03'},{id:'org-data',name:'数据权限',pg:'4.10-P04'},{id:'org-three',name:'三员管理',pg:'4.10-P05'}]},
+ {id:'base',icon:'⚙️',name:'基础设置',children:[{id:'base-category',name:'培训类别',pg:'4.11-P01'},{id:'base-course',name:'课程分类',pg:'4.11-P02'},{id:'base-log',name:'系统日志',pg:'4.11-P03'},{id:'base-rule',name:'经费规则库',pg:'4.11-P04'}]},
+ {id:'screen',icon:'📈',name:'可视化大屏',children:[{id:'scr-overview',name:'总览大屏',pg:'4.12'},{id:'scr-study',name:'学情大屏',pg:'4.12'},{id:'scr-resource',name:'资源大屏',pg:'4.12'}]}
+];
+$('sidenav').innerHTML=NAV.map(g=>`
+ <div class="nav-group ${g.id==='edu'?'open':''}" data-group="${g.id}">
+   <div class="nav-parent" data-id="${g.id}"><span class="nav-icon">${g.icon}</span><span class="nav-label">${g.name}</span>${g.children?'<span class="nav-caret">▸</span>':''}</div>
+   ${g.children?`<div class="nav-children">${g.children.map(c=>`<div class="nav-child" data-id="${c.id}" data-name="${c.name}" data-pg="${c.pg||''}"><span class="nav-label">${c.name}</span></div>`).join('')}</div>`:''}
+ </div>`).join('')+`<div class="nav-collapse" id="navCollapse">⇤<span>收起导航</span></div>`;
+$('sidenav').addEventListener('click',e=>{
+  if(e.target.closest('#navCollapse')){document.body.classList.toggle('nav-collapsed');return}
+  const child=e.target.closest('.nav-child'),parent=e.target.closest('.nav-parent');
+  if(child){
+    const id=child.dataset.id,pg=child.dataset.pg||'';
+    if(pg.indexOf('4.5')===0){showView(id);setNavActive(child);return}
+    if(id==='train-schedule'){location.href='training-schedule.html';return}
+    if(pg.indexOf('4.3')===0){location.href='training.html?page='+id;return}
+    if(pg.indexOf('4.2')===0){location.href='teaching.html?page='+id;return}
+    if(pg.indexOf('4.4')===0){location.href='resource.html?page='+id;return}
+    if(pg.indexOf('4.6')===0){location.href='teacher-lib.html?page='+id;return}
+    if(pg.indexOf('4.7')===0){location.href='student-lib.html?page='+id;return}
+    if(pg.indexOf('4.8')===0){location.href='room.html?page='+id;return}
+    if(pg.indexOf('4.9')===0){location.href='approve.html?page='+id;return}
+        if(pg.indexOf('4.10')===0){location.href='org.html?page='+id;return}
+        if(pg.indexOf('4.12')===0){location.href='screen.html?scr='+id;return}
+    toast('「'+child.dataset.name+'」（'+pg+'）为原型占位');return}
+  if(parent){const g=NAV.find(x=>x.id===parent.dataset.id);
+    if(g.direct){location.href='workbench.html';return}
+    parent.closest('.nav-group').classList.toggle('open');}
+});
+function setNavActive(el){document.querySelectorAll('.nav-child').forEach(n=>n.classList.remove('active'));el&&el.classList.add('active')}
+$('tbUser').onclick=()=>toast('个人信息 / 修改密码见 workbench.html 账户入口');
+$('tbSearch').onkeydown=e=>{if(e.key==='Enter')toast('全局搜索（原型占位）：'+e.target.value.trim())};
+
+/* ============ 视图定义 ============ */
+const VIEW_NAME={'edu-plan':'教学计划管理','edu-data':'教务数据管理','edu-report':'多维度报表','edu-export':'数据导出与集成','edu-settle':'结算报告模板管理'};
+const VIEW_OPS={
+ 'edu-plan':['＋ 教学方案编制','集体备课申请','合班授课调配','现场教学点调配'],
+ 'edu-data':['导出培训台账','带班情况统计'],
+ 'edu-report':['🔄 生成报表','导出汇总表（月）'],
+ 'edu-export':['＋ 新建导出任务','对接配置'],
+ 'edu-settle':['＋ 新建模板']};
+let curView='edu-plan',planTab='annual',dataTab='ledger',planYear='2026';
+
+function showView(id){
+  curView=id;
+  $('crumb').textContent='首页 / 教务组织 / '+VIEW_NAME[id];
+  $('pageTitle').textContent=VIEW_NAME[id];
+  $('pageOps').innerHTML=(VIEW_OPS[id]||[]).map((o,i)=>`<button class="btn ${i===0?'btn-primary':'btn-ghost'}" onclick="opClick('${o}')">${o}</button>`).join('');
+  render();
+}
+function opClick(o){
+  if(o==='集体备课申请'){$('bpModal').classList.remove('hidden');return}
+  if(o.indexOf('导出')>=0){toast('已创建导出任务，可在「数据导出与集成」查看进度');return}
+  if(o.indexOf('生成')>=0){toast('报表生成中，完成后可导出 Word/PDF/Excel（原型占位）');return}
+  toast('「'+o+'」（原型占位）');
+}
+function bpSave(){
+  const n=$('bpName').value.trim();
+  if(!n){toast('备课主题不能为空');return}
+  $('bpModal').classList.add('hidden');$('bpName').value='';
+  toast('「'+n+'」已提交，待二级管理员审批（审批留痕）');
+}
+function render(){
+  const b=$('viewBody');
+  if(curView==='edu-plan')b.innerHTML=vPlan();
+  else if(curView==='edu-data')b.innerHTML=vData();
+  else if(curView==='edu-report')b.innerHTML=vReport();
+  else if(curView==='edu-export')b.innerHTML=vExport();
+  else b.innerHTML=vSettle();
+}
+function subTabs(arr,active,fn){return `<div class="sub-tabs">${arr.map(t=>`<div class="sub-tab ${t[0]===active?'active':''}" onclick="${fn}('${t[0]}')">${t[1]}</div>`).join('')}</div>`}
+
+/* ============ 4.5-P01 教学计划管理 ============ */
+const ANNUAL=[
+ {y:'2026',name:'2026年度学院培训计划',type:'学院计划',dept:'教务部',status:'已发布',classes:18,courses:42,hours:1260},
+ {y:'2026',name:'2026年度教学工作要点',type:'教学计划',dept:'教研部',status:'已发布',classes:'—',courses:42,hours:'—'},
+ {y:'2027',name:'2027年度学院培训计划',type:'学院计划',dept:'教务部',status:'编制中',classes:'—',courses:'—',hours:'—'},
+ {y:'2025',name:'2025年度学院培训计划',type:'学院计划',dept:'教务部',status:'已归档',classes:16,courses:38,hours:1120}];
+const TERM=[
+ {term:'2026 春季学期（3–7月）',rows:[['3月','党校班（第25期）','习近平外交思想概论 等6门','240课时','已执行'],['4月','政能班（第8期）','宏观经济形势分析 等5门','180课时','已执行'],['5月','外事骨干班','国际谈判实务与模拟演练 等4门','120课时','已执行'],['6–7月','涉外法治专题班','结课考核+现场教学','90课时','已执行']]},
+ {term:'2026 秋季学期（9–12月）',rows:[['9月','党校班（第26期）','习近平外交思想概论 等6门','240课时','进行中'],['10月','政能班（第9期）','宏观经济形势分析 等5门','180课时','筹备'],['11月','驻外干部轮训班','外交礼仪与礼宾实务 等3门','90课时','筹备'],['12月','全院大课表核对/年度归档','—','—','待启动']]}];
+const MONTHS=[
+ {m:'2026-09',cur:true,items:['党校班（第26期）开班','集体备课×2','现场教学：使馆参观×1','月度教学调度会']},
+ {m:'2026-10',items:['政能班（第9期）开班','合班授课：大国外交专题','教学方案编制×3']},
+ {m:'2026-11',items:['驻外干部轮训班','训前需求调研×2','期中教学检查']},
+ {m:'2026-12',items:['年度教学评估汇总','全院大课表归档','结算报告集中导出']},
+ {m:'2027-01',items:['寒假教学准备','2027年度计划评审']},
+ {m:'2027-02',items:['春季学期排课集中审批']}];
+const NEEDS=[
+ {name:'第26期党校班训前需求调研',cls:'党校班（第26期）',target:60,got:52,deadline:'2026-09-10',status:'已完成'},
+ {name:'第9期政能班训前需求调研',cls:'政能班（第9期）',target:45,got:31,deadline:'2026-09-30',status:'进行中'},
+ {name:'驻外干部轮训班需求征集',cls:'驻外干部轮训班',target:38,got:6,deadline:'2026-10-15',status:'进行中'},
+ {name:'2027年度培训需求摸底',cls:'全院',target:220,got:0,deadline:'2026-11-30',status:'未开始'}];
+const ST_CLS={'已发布':'tag-green','编制中':'tag-orange','已归档':'tag-gray','审批中':'tag-orange','已完成':'tag-green','进行中':'tag-blue','未开始':'tag-gray','已执行':'tag-gray','筹备':'tag-orange','待启动':'tag-gray','已结算':'tag-green','执行中':'tag-blue','结算中':'tag-orange','成功':'tag-green','失败':'tag-red','生成中':'tag-orange','已对接':'tag-green','对接中':'tag-orange','未对接':'tag-gray'};
+function vPlan(){
+  let body='';
+  if(planTab==='annual'){
+    body=`<div class="card"><div class="card-body">
+     <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px">
+       <select class="sel" onchange="planYear=this.value;render()" style="width:120px">
+        ${['2025','2026','2027'].map(y=>`<option ${y===planYear?'selected':''}>${y}</option>`).join('')}</select>
+       <span style="font-size:12px;color:var(--text-3)">按年度查看学院计划 / 教学计划，支持学年课表生成与维护</span></div>
+     <table class="data-table"><thead><tr><th>计划名称</th><th>类型</th><th>年度</th><th>归口部门</th><th>班次数</th><th>课程数</th><th>总课时</th><th>状态</th><th>操作</th></tr></thead><tbody>
+     ${ANNUAL.filter(p=>p.y===planYear).map(p=>`<tr><td class="c-name" onclick="planDrawer('${p.name}')">${p.name}</td><td><span class="tag tag-blue">${p.type}</span></td><td>${p.y}</td><td>${p.dept}</td><td>${p.classes}</td><td>${p.courses}</td><td>${p.hours}</td>
+      <td><span class="tag ${ST_CLS[p.status]||'tag-gray'}">${p.status}</span></td>
+      <td><button class="btn-text" onclick="planDrawer('${p.name}')">查看</button><button class="btn-text" onclick="toast('生成学年课表（原型占位）')">生成学年课表</button></td></tr>`).join('')||'<tr><td colspan="9" style="text-align:center;color:var(--text-3);padding:28px">该年度暂无计划</td></tr>'}
+     </tbody></table></div></div>`;
+  }else if(planTab==='term'){
+    body=TERM.map(t=>`<div class="card" style="margin-bottom:16px"><div class="card-body">
+     <div class="sec-title">📅 ${t.term}</div>
+     <table class="data-table"><thead><tr><th>月份</th><th>班次/事项</th><th>课程安排</th><th>课时量</th><th>执行状态</th><th>操作</th></tr></thead><tbody>
+     ${t.rows.map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><span class="tag ${ST_CLS[r[4]]||'tag-gray'}">${r[4]}</span></td>
+      <td><button class="btn-text" onclick="location.href='training-schedule.html'">进入排课</button><button class="btn-text" onclick="toast('教学方案编制（原型占位）')">教学方案</button></td></tr>`).join('')}
+     </tbody></table></div></div>`).join('');
+  }else if(planTab==='month'){
+    body=`<div class="month-grid">${MONTHS.map(m=>`
+     <div class="month-card ${m.cur?'cur':''}" onclick="toast('${m.m} 月度教学工作调度详情（原型占位）')">
+      <div class="m-h"><span class="m-t">${m.m}</span>${m.cur?'<span class="tag tag-blue">本月</span>':'<span class="tag tag-gray">计划</span>'}</div>
+      <div class="m-list">${m.items.map(i=>'· '+i).join('<br>')}</div>
+     </div>`).join('')}</div>
+     <p class="mini-note">支持月度教学工作调度、教学方案编制、集体备课申请、合班授课调配、现场教学点资源调配。</p>`;
+  }else if(planTab==='allsched'){
+    body=`<div class="card"><div class="card-body">
+     <div class="sec-title">🗓 全院大课表（2026 秋季 · 第39教学周）
+      <button class="btn btn-ghost" style="margin-left:auto;height:28px;font-size:13px" onclick="toast('导出全院大课表 Excel（原型占位）')">导出</button></div>
+     <table class="data-table"><thead><tr><th>节次</th><th>周一</th><th>周二</th><th>周三</th><th>周四</th><th>周五</th></tr></thead><tbody>
+     ${[['第1-2节','党校班·概论（101）','政能班·宏观（203）','党校班·党性（101）','—','轮训班·礼仪（305）'],
+        ['第3-4节','党校班·概论（101）','—','党校班·研讨（102）','政能班·宏观（203）','—'],
+        ['第5-6节','集体备课（会议室）','现场教学·使馆参观','—','合班授课·大国外交（报告厅）','教学调度会'],
+        ['晚 间','分组研讨（各班教室）','—','分组研讨（各班教室）','—','—']]
+       .map(r=>`<tr>${r.map((c,i)=>i===0?`<td><b>${c}</b></td>`:`<td style="${c==='—'?'color:var(--text-3)':''}">${c}</td>`).join('')}</tr>`).join('')}
+     </tbody></table>
+     <p class="mini-note">全院大课表由各班次审批通过的排课申请单自动汇总生成，含教师课表、教室占用表双视图核对入口。</p></div></div>`;
+  }else{
+    body=`<div class="card"><div class="card-body">
+     <div class="sec-title">📋 训前需求调研<button class="btn btn-primary" style="margin-left:auto;height:28px;font-size:13px" onclick="toast('新建调研问卷（原型占位）')">＋ 新建调研</button></div>
+     <table class="data-table"><thead><tr><th>调研名称</th><th>面向班次</th><th>发放/回收</th><th>回收率</th><th>截止日期</th><th>状态</th><th>操作</th></tr></thead><tbody>
+     ${NEEDS.map(n=>{const p=Math.round(n.got/n.target*100);return `<tr><td class="c-name" onclick="toast('调研结果分析（原型占位）')">${n.name}</td><td>${n.cls}</td><td>${n.got}/${n.target}</td>
+      <td><div class="bar-row"><div class="bar"><i class="${p>=80?'g':p>=40?'o':'r'}" style="width:${p}%"></i></div><span>${p}%</span></div></td>
+      <td>${n.deadline}</td><td><span class="tag ${ST_CLS[n.status]||'tag-gray'}">${n.status}</span></td>
+      <td><button class="btn-text" onclick="toast('催办提醒（站内信/短信导出）')">催办</button><button class="btn-text" onclick="toast('调研结果分析（原型占位）')">分析</button></td></tr>`}).join('')}
+     </tbody></table>
+     <p class="mini-note">培训需求管理（训前需求调研）：调研结果作为教学方案编制与课程优化输入。</p></div></div>`;
+  }
+  return subTabs([['annual','学院/教学计划'],['term','学年课表'],['month','月度教学调度'],['allsched','全院大课表'],['needs','培训需求调研']],planTab,'switchTabPlan')+body;
+}
+function switchTabPlan(t){planTab=t;render()}
+function planDrawer(name){
+  const p=ANNUAL.find(x=>x.name===name)||{name};
+  $('dwTitle').textContent='计划详情';
+  $('dwBody').innerHTML=`<div class="d-sec">基本信息</div>
+   <div class="d-grid"><span class="k">计划名称</span><span>${p.name}</span><span class="k">类型</span><span>${p.type||'学院计划'}</span>
+   <span class="k">年度</span><span>${p.y||planYear}</span><span class="k">归口部门</span><span>${p.dept||'教务部'}</span>
+   <span class="k">状态</span><span>${p.status||'—'}</span><span class="k">班次数</span><span>${p.classes||'—'}</span>
+   <span class="k">课程数</span><span>${p.courses||'—'}</span><span class="k">总课时</span><span>${p.hours||'—'}</span></div>
+   <div class="d-sec">计划要点</div>
+   <div style="font-size:13px;color:var(--text-2);line-height:2">· 围绕课程体系建设，突出理论教育与党性教育主课地位<br>· 新增涉外法治、数字经济专题课程<br>· 现场教学点资源统筹调配<br>· 训前需求调研全覆盖</div>
+   <div class="d-sec">操作日志</div>
+   <div style="font-size:12px;color:var(--text-3);line-height:2">2026-08-20 教务部 发布计划<br>2026-08-15 院领导 审批通过<br>2026-07-30 教务部 编制完成</div>`;
+  $('dwFoot').innerHTML=`<button class="btn btn-ghost" onclick="toast('导出计划 PDF（原型占位）')">导出</button><button class="btn btn-primary" onclick="toast('生成学年课表（原型占位）')">生成学年课表</button>`;
+  $('drawerMask').classList.remove('hidden');$('drawer').classList.remove('hidden');
+}
+function closeDrawer(){$('drawerMask').classList.add('hidden');$('drawer').classList.add('hidden')}
+
+/* ============ 4.5-P02 教务数据管理 ============ */
+const LEDGER=[
+ {cls:'党校班（第26期）',dept:'教务部',budget:680000,exec:412000,settle:'执行中',admin:'张三'},
+ {cls:'政能班（第8期）',dept:'培训一部',budget:420000,exec:420000,settle:'已结算',admin:'李四'},
+ {cls:'外事骨干班（第3期）',dept:'培训二部',budget:310000,exec:286500,settle:'结算中',admin:'王五'},
+ {cls:'驻外干部轮训班',dept:'教务部',budget:260000,exec:0,settle:'未开始',admin:'张三'},
+ {cls:'涉外法治专题班',dept:'培训一部',budget:180000,exec:171200,settle:'已结算',admin:'赵六'}];
+const DUTY=[
+ {t:'张三',n:3,cls:'第26期党校班 / 外事骨干班 / 轮训班',days:52,hours:'612 工时',rank:1},
+ {t:'李四',n:2,cls:'第8期政能班 / 涉外法治专题班',days:38,hours:'446 工时',rank:2},
+ {t:'王五',n:2,cls:'外事骨干班 / 第9期政能班（筹）',days:31,hours:'370 工时',rank:3},
+ {t:'赵六',n:1,cls:'涉外法治专题班',days:14,hours:'168 工时',rank:4}];
+const STUDY=[
+ {cls:'党校班（第26期）',hours:82,attend:96.5,eval:92.3},
+ {cls:'政能班（第8期）',hours:100,attend:98.1,eval:94.6},
+ {cls:'外事骨干班（第3期）',hours:96,attend:88.2,eval:86.4},
+ {cls:'涉外法治专题班',hours:100,attend:93.7,eval:90.8}];
+const TEACHER_TOP=[['王教授',96],['李教授',82],['陈教授',74],['张教授',60],['赵副教授',48]];
+const ROOM_USE=[['101 报告厅',92],['203 教室',78],['305 教室',65],['102 研讨室',54],['报告厅（合班）',46]];
+const WARNS=[
+ {lv:'red',type:'培训质量预警',title:'外事骨干班（第3期）考勤率 88.2%，低于 90% 阈值',sub:'连续两周出勤下滑，建议组织员核实缺勤原因并通报派出单位'},
+ {lv:'red',type:'资源瓶颈预警',title:'10月第2周 101 报告厅占用率 92%，接近饱和',sub:'政能班与轮训班排课意向冲突，建议启用合班授课或调整至 305 教室'},
+ {lv:'orange',type:'资源瓶颈预警',title:'王教授 10 月授课 18 课时，超月度建议上限（16）',sub:'建议调剂同领域教师（李教授空闲），避免师资过载'},
+ {lv:'orange',type:'调训应训尽训缺口',title:'驻外使领馆干部：应训 120 人，已训 86 人，缺口 34 人',sub:'建议 2027 春季学期增设驻外干部轮训班次'},
+ {lv:'orange',type:'培训质量预警',title:'《国际谈判实务》课程满意度 82.1，环比下降 5.3',sub:'评教反馈集中于案例陈旧，建议更新案例库并集体备课'}];
+function vData(){
+  let body='';
+  if(dataTab==='ledger'){
+    body=`<div class="stat-cards">
+     <div class="stat"><div class="n">5</div><div class="l">台账班次数</div></div>
+     <div class="stat"><div class="n">185.0万</div><div class="l">预算总额</div></div>
+     <div class="stat"><div class="n">128.97万</div><div class="l">已执行</div></div>
+     <div class="stat"><div class="n o">69.7%</div><div class="l">平均执行率</div></div></div>
+    <div class="card"><div class="card-body">
+     <div class="sec-title">培训预算台账（全部培训班）
+      <button class="btn btn-ghost" style="margin-left:auto;height:28px;font-size:13px" onclick="toast('按规范格式导出台账 Excel（原型占位）')">按格式导出</button></div>
+     <table class="data-table"><thead><tr><th>班次名称</th><th>承办部门</th><th>班次管理员</th><th>预算金额</th><th>已执行</th><th>执行率</th><th>结算状态</th><th>操作</th></tr></thead><tbody>
+     ${LEDGER.map(l=>{const p=Math.round(l.exec/l.budget*100);return `<tr>
+      <td class="c-name" onclick="ledgerDrawer('${l.cls}')">${l.cls}</td><td>${l.dept}</td><td>${l.admin}</td>
+      <td>¥${l.budget.toLocaleString()}</td><td>¥${l.exec.toLocaleString()}</td>
+      <td><div class="bar-row"><div class="bar"><i class="${p>=100?'g':p>80?'o':''}" style="width:${Math.min(p,100)}%"></i></div><span>${p}%</span></div></td>
+      <td><span class="tag ${ST_CLS[l.settle]||'tag-gray'}">${l.settle}</span></td>
+      <td><button class="btn-text" onclick="ledgerDrawer('${l.cls}')">明细</button><button class="btn-text" onclick="location.href='training.html?page=train-budget'">班次预算</button></td></tr>`}).join('')}
+     </tbody></table></div></div>`;
+  }else if(dataTab==='duty'){
+    body=`<div class="card"><div class="card-body">
+     <div class="sec-title">带班情况统计（培训班内精准统计工作量）</div>
+     <table class="data-table"><thead><tr><th>排名</th><th>带班老师（组织员）</th><th>带班数</th><th>所带班次</th><th>带班天数</th><th>工作量</th><th>操作</th></tr></thead><tbody>
+     ${DUTY.map(d=>`<tr><td><b style="color:${d.rank<=3?'var(--warning)':'var(--text-3)'}">${d.rank}</b></td><td><b>${d.t}</b></td><td>${d.n}</td><td>${d.cls}</td><td>${d.days} 天</td><td>${d.hours}</td>
+      <td><button class="btn-text" onclick="toast('带班明细（原型占位）')">明细</button><button class="btn-text" onclick="toast('导出个人工作量表（原型占位）')">导出</button></td></tr>`).join('')}
+     </tbody></table>
+     <p class="mini-note">工作量按带班天数×标准工时折算，可作为绩效考核依据；数据每日自动汇总。</p></div></div>`;
+  }else if(dataTab==='study'){
+    body=`<div class="card"><div class="card-body">
+     <div class="sec-title">学情统计（学时完成 / 考勤情况 / 教学评估质量汇总）</div>
+     <table class="data-table"><thead><tr><th>班次</th><th>学时完成率</th><th>考勤率</th><th>教学评估均分</th><th>操作</th></tr></thead><tbody>
+     ${STUDY.map(s=>`<tr><td><b>${s.cls}</b></td>
+      <td><div class="bar-row"><div class="bar"><i class="${s.hours>=95?'g':s.hours>=90?'o':'r'}" style="width:${s.hours}%"></i></div><span>${s.hours}%</span></div></td>
+      <td><span class="${s.attend>=95?'score-high':s.attend<90?'score-low':''}">${s.attend}%</span></td>
+      <td><span class="${s.eval>=90?'score-high':s.eval<85?'score-low':''}">${s.eval}</span></td>
+      <td><button class="btn-text" onclick="location.href='training.html?page=train-attend'">考勤明细</button><button class="btn-text" onclick="location.href='training.html?page=train-eval'">评估明细</button></td></tr>`).join('')}
+     </tbody></table>
+     <p class="mini-note">分数高亮规则：高分（≥90/95%）自动标绿、低分（&lt;85/90%）自动标红，阈值可在基础设置自定义。</p></div></div>`;
+  }else if(dataTab==='resource'){
+    body=`<div class="grid-2">
+     <div class="card"><div class="card-body"><div class="sec-title">师资授课量 TOP5（近90天课时）</div>
+      ${TEACHER_TOP.map(t=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px">
+       <span style="width:64px">${t[0]}</span><div class="bar" style="flex:1"><i style="width:${Math.round(t[1]/96*100)}%"></i></div><span style="width:44px;text-align:right">${t[1]}课时</span></div>`).join('')}
+      <p class="mini-note">点击师资姓名可跳转师资库授课质量档案。</p></div></div>
+     <div class="card"><div class="card-body"><div class="sec-title">教室使用率（近30天）</div>
+      ${ROOM_USE.map(r=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px">
+       <span style="width:110px">${r[0]}</span><div class="bar" style="flex:1"><i class="${r[1]>=90?'r':r[1]>=75?'o':'g'}" style="width:${r[1]}%"></i></div><span style="width:38px;text-align:right">${r[1]}%</span></div>`).join('')}
+      <p class="mini-note">使用率≥90% 触发资源瓶颈预警（红色），≥75% 提示关注（橙色）。</p></div></div></div>`;
+  }else{
+    body=WARNS.map(w=>`<div class="warn-item ${w.lv==='red'?'red':''}">
+     <span style="font-size:18px">${w.lv==='red'?'🔴':'🟠'}</span>
+     <div style="flex:1"><div class="w-title">[${w.type}] ${w.title}</div><div class="w-sub">${w.sub}</div></div>
+     <button class="btn btn-ghost" style="height:28px;font-size:12px" onclick="toast('已生成处置待办并站内信提醒责任人')">生成待办</button></div>`).join('')
+     +`<p class="mini-note">预警类型：培训质量预警 / 资源瓶颈预警 / 调训应训尽训缺口分析，规则阈值可配置，预警同步推送工作台与站内信。</p>`;
+  }
+  const cards=`<div class="stat-cards">
+    <div class="stat"><div class="n g">2</div><div class="l">在办班次</div></div>
+    <div class="stat"><div class="n o">2</div><div class="l">筹备班次</div></div>
+    <div class="stat"><div class="n">12</div><div class="l">本年结业班次</div></div>
+    <div class="stat"><div class="n r">34</div><div class="l">应训尽训缺口（人）</div></div></div>`;
+  return cards+subTabs([['ledger','培训预算台账'],['duty','带班情况统计'],['study','学情统计'],['resource','师资/教室资源'],['warn','预警与缺口分析']],dataTab,'switchTabData')+body;
+}
+function switchTabData(t){dataTab=t;render()}
+function ledgerDrawer(cls){
+  const l=LEDGER.find(x=>x.cls===cls);if(!l)return;
+  const p=Math.round(l.exec/l.budget*100);
+  $('dwTitle').textContent='台账明细 · '+l.cls;
+  $('dwBody').innerHTML=`<div class="d-sec">预算执行概览</div>
+   <div class="d-grid"><span class="k">班次名称</span><span>${l.cls}</span><span class="k">承办部门</span><span>${l.dept}</span>
+   <span class="k">班次管理员</span><span>${l.admin}</span><span class="k">预算金额</span><span>¥${l.budget.toLocaleString()}</span>
+   <span class="k">已执行</span><span>¥${l.exec.toLocaleString()}（${p}%）</span><span class="k">结算状态</span><span>${l.settle}</span></div>
+   <div class="d-sec">费用构成（按预算类型）</div>
+   <table class="data-table"><thead><tr><th>类型</th><th>预算</th><th>执行</th></tr></thead><tbody>
+   <tr><td>师资费</td><td>¥52,000</td><td>¥49,600</td></tr><tr><td>用车费</td><td>¥18,000</td><td>¥15,200</td></tr>
+   <tr><td>宿舍费</td><td>¥60,000</td><td>¥52,000</td></tr><tr><td>食堂费</td><td>¥45,000</td><td>¥41,300</td></tr>
+   <tr><td>教学资料费</td><td>¥20,000</td><td>¥18,400</td></tr></tbody></table>
+   <div class="d-sec">关联票据文件</div>
+   <div style="font-size:13px;color:var(--text-2);line-height:2">📎 师资费合同（3份）· 📎 用车签收单（5份）· 📎 食堂结算凭证（2份）</div>`;
+  $('dwFoot').innerHTML=`<button class="btn btn-ghost" onclick="toast('导出台账明细 Excel（原型占位）')">导出</button><button class="btn btn-primary" onclick="location.href='training.html?page=train-budget'">进入班次预算</button>`;
+  $('drawerMask').classList.remove('hidden');$('drawer').classList.remove('hidden');
+}
+
+/* ============ 4.5-P03 多维度报表 ============ */
+const REPORTS=[
+ {icon:'📊',name:'教务统计报表',items:['考勤率统计','结业率统计','班次实施情况'],n:12},
+ {icon:'📈',name:'教学统计报表',items:['课程满意度','师资评分排名','教学评估质量'],n:8},
+ {icon:'🧑‍🎓',name:'学员统计报表',items:['参训记录','成绩分布','学时学分汇总'],n:10},
+ {icon:'🏆',name:'成果统计报表',items:['转化案例','课程教案','课件数量'],n:6}];
+const SUMMARY=[
+ {cls:'党校班（第26期）',host:'院教务部',time:'2026-09',size:60,hours:240,finish:'—',sat:'—',settle:'执行中'},
+ {cls:'政能班（第8期）',host:'培训一部',time:'2026-04',size:45,hours:180,finish:100,sat:94.6,settle:'已结算'},
+ {cls:'外事骨干班（第3期）',host:'培训二部',time:'2026-05',size:38,hours:120,finish:97.4,sat:86.4,settle:'结算中'},
+ {cls:'涉外法治专题班',host:'培训一部',time:'2026-07',size:32,hours:90,finish:100,sat:90.8,settle:'已结算'},
+ {cls:'党校班（第25期）',host:'院教务部',time:'2026-03',size:58,hours:240,finish:98.3,sat:92.1,settle:'已结算'}];
+function vReport(){
+  return `<div class="res-grid" style="margin-bottom:16px">${REPORTS.map(r=>`
+   <div class="res-card"><span class="corner tag tag-blue">${r.n} 张报表</span>
+    <div class="rc-icon">${r.icon}</div><div class="rc-title">${r.name}</div>
+    <div class="rc-meta">${r.items.map(i=>'· '+i).join('<br>')}</div>
+    <div class="rc-ops"><button class="btn-text" onclick="toast('自动生成${r.name}（原型占位）')">自动生成</button><button class="btn-text" onclick="toast('导出 Word/PDF/Excel（原型占位）')">导出</button></div>
+   </div>`).join('')}</div>
+  <div class="card"><div class="card-body">
+   <div class="sec-title">📋 培训班次实施情况汇总表（月）
+    <select class="sel" style="margin-left:auto;width:130px;height:28px" onchange="toast('切换月份（原型演示固定展示）')"><option>2026-09</option><option>2026-08</option><option>2026-07</option></select>
+    <button class="btn btn-primary" style="height:28px;font-size:13px" onclick="toast('导出汇总表 Excel（原型占位）')">导出</button></div>
+   <table class="data-table"><thead><tr><th>班次名称</th><th>主办单位</th><th>举办时间</th><th>规模（人）</th><th>总课时</th><th>结业率</th><th>满意度</th><th>结算状态</th></tr></thead><tbody>
+   ${SUMMARY.map(s=>`<tr><td class="c-name" onclick="location.href='training.html?page=train-report'">${s.cls}</td><td>${s.host}</td><td>${s.time}</td><td>${s.size}</td><td>${s.hours}</td>
+    <td>${s.finish==='—'?'<span style="color:var(--text-3)">在办</span>':'<span class="'+(s.finish>=98?'score-high':'')+'">'+s.finish+'%</span>'}</td>
+    <td>${s.sat==='—'?'<span style="color:var(--text-3)">—</span>':'<span class="'+(s.sat>=90?'score-high':s.sat<88?'score-low':'')+'">'+s.sat+'</span>'}</td>
+    <td><span class="tag ${ST_CLS[s.settle]||'tag-gray'}">${s.settle}</span></td></tr>`).join('')}
+   </tbody></table>
+   <p class="mini-note">报表由系统自动生成，支持按月份、班次类型筛选；分数高亮规则全局统一（高分标绿 / 低分标红）。</p></div></div>`;
+}
+
+/* ============ 4.5-P04 数据导出与集成 ============ */
+const EXPORTS=[
+ {f:'培训班次实施情况汇总表_202609.xlsx',mod:'多维度报表',fmt:'Excel',by:'张三',time:'2026-09-25 09:32',st:'成功'},
+ {f:'党校班26期_培训档案.zip',mod:'培训管理',fmt:'ZIP',by:'李四',time:'2026-09-24 16:10',st:'成功'},
+ {f:'培训预算台账_2026Q3.xlsx',mod:'教务数据',fmt:'Excel',by:'张三',time:'2026-09-24 10:05',st:'成功'},
+ {f:'结班报告_涉外法治专题班.pdf',mod:'结班报告',fmt:'PDF',by:'赵六',time:'2026-09-23 15:44',st:'成功'},
+ {f:'学员成绩批量导出_0922.xlsx',mod:'课程成绩',fmt:'Excel',by:'王五',time:'2026-09-22 11:20',st:'失败'}];
+const INTEG=[
+ {icon:'🏛',name:'部人事业务系统',desc:'学员职级、部门等基础信息自动覆盖更新，减少人工重复录入',way:'内网接口 · 每日增量同步',st:'已对接',last:'2026-09-25 06:00'},
+ {icon:'📑',name:'OA 系统',desc:'审批流程状态互通、公文待办同步、短信待发送通知导出',way:'内网接口 · 实时',st:'已对接',last:'2026-09-25 09:30'},
+ {icon:'🚩',name:'党校系统',desc:'培训档案、课程资源共享与数据互通',way:'文件交换 · 每周',st:'对接中',last:'2026-09-20 22:00'}];
+function vExport(){
+  return `<div class="grid-2">
+   <div class="card"><div class="card-body">
+    <div class="sec-title">导出任务记录<button class="btn btn-primary" style="margin-left:auto;height:28px;font-size:13px" onclick="toast('新建导出任务：选择模块/范围/格式（原型占位）')">＋ 新建导出任务</button></div>
+    <table class="data-table"><thead><tr><th>文件名</th><th>来源模块</th><th>格式</th><th>操作人</th><th>时间</th><th>状态</th><th>操作</th></tr></thead><tbody>
+    ${EXPORTS.map(x=>`<tr><td><b>${x.f}</b></td><td>${x.mod}</td><td><span class="tag tag-blue">${x.fmt}</span></td><td>${x.by}</td><td>${x.time}</td>
+     <td><span class="tag ${ST_CLS[x.st]}">${x.st}</span></td>
+     <td>${x.st==='成功'?'<button class="btn-text" onclick="toast(\'下载文件（原型占位）\')">下载</button>':'<button class="btn-text" onclick="toast(\'失败原因：数据量超限，建议分批导出（原型占位）\')">重试</button>'}</td></tr>`).join('')}
+    </tbody></table>
+    <p class="mini-note">报表、档案等数据按规范格式导出；导出行为记入系统日志，满足等保审计要求；涉密数据导出自动脱敏处理。</p></div></div>
+   <div class="card"><div class="card-body">
+    <div class="sec-title">第三方系统对接<button class="btn btn-ghost" style="margin-left:auto;height:28px;font-size:13px" onclick="toast('对接配置：接口地址/密钥/同步策略（原型占位）')">对接配置</button></div>
+    ${INTEG.map(g=>`<div style="border:1px solid var(--line);border-radius:var(--r-card);padding:14px;margin-bottom:12px">
+     <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><span style="font-size:20px">${g.icon}</span><b>${g.name}</b>
+      <span class="tag ${ST_CLS[g.st]}" style="margin-left:auto">${g.st}</span></div>
+     <div style="font-size:12px;color:var(--text-2);line-height:1.9">${g.desc}<br>同步方式：${g.way} · 最近同步：${g.last}</div>
+     <div style="display:flex;gap:6px;margin-top:8px">
+      <button class="btn-text" onclick="toast('立即同步（原型占位）')">立即同步</button>
+      <button class="btn-text" onclick="toast('同步日志（原型占位）')">同步日志</button>
+      <button class="btn-text" onclick="toast('数据映射配置（原型占位）')">映射配置</button></div>
+    </div>`).join('')}
+    <p class="mini-note">本地化内网部署，以适当方式与部人事业务系统、OA 系统、党校系统等第三方数据对接，实现数据互通共享。</p></div></div></div>`;
+}
+
+/* ============ 4.5-P05 结算报告模板管理 ============ */
+const TPLS=[
+ {icon:'📄',name:'培训班结算报告（标准版）',scene:'班次结业结算',fmts:['Word','PDF','Excel'],ver:'V3',def:true,time:'2026-09-01'},
+ {icon:'📄',name:'结算报告（财务审计版）',scene:'财务审计与事后备查',fmts:['Word','PDF'],ver:'V2',def:false,time:'2026-08-15'},
+ {icon:'📄',name:'年度培训经费结算汇总',scene:'年度经费汇总上报',fmts:['Excel','PDF'],ver:'V1',def:false,time:'2026-07-20'},
+ {icon:'📄',name:'后勤费用结算单（用车/宿舍/食堂）',scene:'后勤分类结算',fmts:['Excel'],ver:'V2',def:false,time:'2026-09-10'}];
+function vSettle(){
+  return `<div class="res-grid">${TPLS.map((t,i)=>`
+   <div class="res-card">${t.def?'<span class="corner tag tag-green">默认模板</span>':''}
+    <div class="rc-icon">${t.icon}</div><div class="rc-title">${t.name}</div>
+    <div class="rc-meta">适用场景：${t.scene}<br>导出版本：${t.ver} · 更新：${t.time}</div>
+    <div style="display:flex;gap:4px;margin-top:8px">${t.fmts.map(f=>'<span class="tag tag-blue">'+f+'</span>').join('')}</div>
+    <div class="rc-ops">
+     <button class="btn-text" onclick="toast('模板预览（原型占位）')">预览</button>
+     <button class="btn-text" onclick="toast('模板编辑：固定格式占位符维护（原型占位）')">编辑</button>
+     <button class="btn-text" onclick="toast('选择班次按此模板导出结算报告（原型占位）')">套用导出</button>
+     ${t.def?'':`<button class="btn-text" onclick="setDefaultTpl(${i})">设为默认</button>`}
+    </div></div>`).join('')}</div>
+  <div class="card" style="margin-top:16px"><div class="card-body">
+   <div class="sec-title">模板使用说明</div>
+   <p class="mini-note" style="margin-top:0">· 结算报告按固定模板格式导出，导出格式支持 Word、PDF、Excel 等多种文件类型；<br>
+   · 模板占位符（班次名称、费用构成、票据清单等）在导出时自动填充台账数据；<br>
+   · 票据、合同、凭证、签收单等后勤文件与培训班次绑定关联，随结算报告归档备查；<br>
+   · 模板变更留痕，纳入系统日志管理。</p></div></div>`;
+}
+function setDefaultTpl(i){TPLS.forEach((t,k)=>t.def=(k===i));render();toast('已将「'+TPLS[i].name+'」设为默认模板')}
+
+/* ============ 初始化 ============ */
+const q=new URLSearchParams(location.search).get('page');
+const init=q&&VIEW_NAME[q]?q:'edu-plan';
+showView(init);
+setNavActive(document.querySelector('.nav-child[data-id="'+init+'"]'));
+</script>
+</body>
+</html>

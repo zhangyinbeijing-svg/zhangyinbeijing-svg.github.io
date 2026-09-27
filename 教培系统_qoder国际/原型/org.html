@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>组织管理 · 干部培训学院教务管理系统 原型 V1.0</title>
+<style>
+:root{--primary:#1F4E79;--primary-2:#2E75B6;--success:#2E7D32;--warning:#F57F17;--danger:#C62828;
+ --text:#333;--text-2:#595959;--text-3:#8a9099;--bg:#F5F6F8;--card:#fff;--line:#e5e8ec;
+ --topbar-h:56px;--nav-w:220px;--nav-w-c:64px;--r:4px;--r-card:8px;--r-modal:12px;--shadow:0 2px 8px rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{text-decoration:none;color:var(--primary-2);cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2dc;border-radius:4px}
+.btn{height:32px;padding:0 16px;border-radius:var(--r);font-size:14px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#173e61}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-text{background:none;border:none;color:var(--primary-2);cursor:pointer;font-size:13px;padding:0 4px}
+.btn-text:hover{text-decoration:underline}
+.btn-text.danger{color:var(--danger)}
+.btn-sm{height:26px;padding:0 10px;font-size:12px}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+.tag-blue{background:rgba(46,117,182,.12);color:var(--primary-2)}
+.tag-green{background:rgba(46,125,50,.12);color:var(--success)}
+.tag-orange{background:rgba(247,127,23,.12);color:var(--warning)}
+.tag-red{background:rgba(198,40,40,.12);color:var(--danger)}
+.tag-purple{background:rgba(123,80,160,.12);color:#7B50A0}
+.tag-cyan{background:rgba(0,137,123,.12);color:#00897B}
+.tag-gray{background:rgba(89,95,105,.1);color:var(--text-2)}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card-body{padding:16px}
+.input,.sel{height:32px;border:1px solid var(--line);border-radius:var(--r);padding:0 10px;font-size:13px;outline:none;background:#fff;color:var(--text)}
+.input:focus,.sel:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+/* 顶部栏/导航 */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--primary);color:#fff;display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{display:flex;align-items:center;gap:10px;min-width:230px}
+.tb-logo .mark{width:32px;height:32px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.tb-logo .name{font-size:16px;font-weight:700;white-space:nowrap}
+.tb-search{flex:1;max-width:460px}.tb-search .input{width:100%;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;height:34px}
+.tb-search .input::placeholder{color:rgba(255,255,255,.6)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tb-icon{position:relative;width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px}
+.tb-icon:hover{background:rgba(255,255,255,.15)}
+.tb-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.tb-ver{font-size:12px;color:rgba(255,255,255,.65);margin:0 4px}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tb-user:hover{background:rgba(255,255,255,.15)}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sidenav{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--nav-w);background:#fff;border-right:1px solid var(--line);overflow-y:auto;z-index:90;transition:width .2s}
+.nav-parent{display:flex;align-items:center;gap:10px;padding:0 16px;height:44px;cursor:pointer;color:var(--text-2);font-size:14px;position:relative}
+.nav-parent:hover{background:#f2f6fa;color:var(--primary)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex:none}
+.nav-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-caret{font-size:11px;color:var(--text-3);transition:transform .2s}
+.nav-group.open .nav-caret{transform:rotate(90deg)}
+.nav-group.open>.nav-parent{color:var(--primary);font-weight:700}
+.nav-children{display:none;background:#fafbfc}
+.nav-group.open .nav-children{display:block}
+.nav-child{padding:0 16px 0 44px;height:36px;display:flex;align-items:center;font-size:13px;color:var(--text-2);cursor:pointer;position:relative}
+.nav-child:hover{color:var(--primary);background:#f2f6fa}
+.nav-child.active{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-child.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.nav-collapse{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:var(--text-3);cursor:pointer;display:flex;gap:8px;align-items:center}
+body.nav-collapsed .sidenav{width:var(--nav-w-c)}
+body.nav-collapsed .nav-label,body.nav-collapsed .nav-caret,body.nav-collapsed .nav-children,body.nav-collapsed .nav-collapse span{display:none}
+body.nav-collapsed .nav-parent{justify-content:center;padding:0}
+body.nav-collapsed .nav-collapse{justify-content:center}
+.content{margin-left:var(--nav-w);margin-top:var(--topbar-h);padding:24px;min-height:calc(100vh - var(--topbar-h));transition:margin-left .2s}
+body.nav-collapsed .content{margin-left:var(--nav-w-c)}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+.breadcrumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+.page-title{font-size:20px;font-weight:700}
+.page-ops{display:flex;gap:8px;flex-wrap:wrap}
+/* 筛选/统计/表格 */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.filter-bar .input{width:200px}.filter-bar .sel{width:150px}
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#f7f9fc;border-radius:var(--r);padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:700;font-family:Consolas,monospace;color:var(--primary)}
+.stat .n.g{color:var(--success)}.stat .n.o{color:var(--warning)}.stat .n.r{color:var(--danger)}
+.stat .l{font-size:12px;color:var(--text-3);margin-top:2px}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th,.data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.data-table th{background:#fafbfc;color:var(--text-2);font-size:12px;font-weight:400;white-space:nowrap}
+.data-table tbody tr:hover{background:#f7fafd}
+.data-table .c-name{font-weight:700;color:var(--primary);cursor:pointer}
+.data-table .c-name:hover{text-decoration:underline}
+.sec-title{font-size:15px;font-weight:700;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sec-title:first-child{margin-top:0}
+.mini-note{font-size:12px;color:var(--text-3);margin-top:10px;line-height:1.7}
+.alert{border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;gap:8px;align-items:flex-start;background:rgba(46,117,182,.07);border:1px solid rgba(46,117,182,.2);color:var(--primary);line-height:1.7}
+.alert.warn{background:rgba(247,127,23,.08);border-color:rgba(247,127,23,.25);color:#b06a10}
+.alert.danger{background:rgba(198,40,40,.07);border-color:rgba(198,40,40,.22);color:var(--danger)}
+.sub-tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:14px}
+.sub-tab{padding:8px 16px;font-size:13px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.sub-tab.active{color:var(--primary);font-weight:700;border-bottom-color:var(--primary)}
+/* 左右分栏 + 树 */
+.split{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
+.tree-panel{background:#fff;border-radius:var(--r-card);box-shadow:var(--shadow);padding:12px;max-height:calc(100vh - 190px);overflow-y:auto}
+.tree-panel .tp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.tree-panel .tp-head b{font-size:14px}
+.tree-node{position:relative}
+.tn-row{display:flex;align-items:center;gap:4px;padding:6px 6px;border-radius:var(--r);cursor:pointer;font-size:13px}
+.tn-row:hover{background:#f2f6fa}
+.tn-row.active{background:rgba(31,78,121,.1);color:var(--primary);font-weight:700}
+.tn-caret{width:14px;text-align:center;font-size:10px;color:var(--text-3);flex:none;transition:transform .15s}
+.tn-caret.open{transform:rotate(90deg)}
+.tn-caret.leaf{visibility:hidden}
+.tn-ico{flex:none}
+.tn-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tn-cnt{font-size:11px;color:var(--text-3);background:#f0f2f5;border-radius:999px;padding:0 6px}
+.tn-children{margin-left:16px;border-left:1px dashed var(--line);padding-left:4px}
+/* 权限树（复选） */
+.perm-tree{font-size:13px}
+.pt-mod{margin-bottom:6px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.pt-mod-head{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fafbfc;font-weight:700}
+.pt-mod-body{padding:6px 12px 8px 34px;display:flex;flex-wrap:wrap;gap:6px 16px}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2);cursor:pointer}
+.chk input{cursor:pointer}
+/* 三员矩阵 */
+.matrix{width:100%;border-collapse:collapse;font-size:13px;text-align:center}
+.matrix th,.matrix td{border:1px solid var(--line);padding:9px 10px}
+.matrix th{background:#fafbfc;color:var(--text-2);font-weight:700}
+.matrix td:first-child,.matrix th:first-child{text-align:left;background:#fafbfc}
+.matrix .yes{color:var(--success);font-weight:700;font-size:16px}
+.matrix .no{color:#c2c7cd;font-size:16px}
+.role-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.role-card{background:#fff;border-radius:var(--r-card);box-shadow:var(--shadow);padding:16px;border-top:3px solid var(--primary)}
+.role-card.sec{border-top-color:var(--success)}
+.role-card.aud{border-top-color:var(--warning)}
+.role-card h4{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.role-card .rc-sub{font-size:12px;color:var(--text-3);margin-bottom:10px}
+.role-card .rc-users{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.avatar-sm{width:24px;height:24px;border-radius:50%;background:var(--primary-2);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;margin-right:4px}
+.pill{display:inline-flex;align-items:center;gap:4px;background:#f2f5f8;border-radius:999px;padding:3px 10px;font-size:12px;color:var(--text-2)}
+/* 抽屉/弹窗/Toast */
+.drawer-mask{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:210}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:600px;background:#fff;box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:220;display:flex;flex-direction:column}
+.drawer-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.drawer-head h3{font-size:16px;font-weight:700}
+.drawer-body{flex:1;overflow-y:auto;padding:20px}
+.drawer-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.d-sec{font-size:14px;font-weight:700;margin:18px 0 10px;padding-left:8px;border-left:3px solid var(--primary)}
+.d-sec:first-child{margin-top:0}
+.d-grid{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;font-size:13px}
+.d-grid .k{color:var(--text-3)}
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{width:560px;max-height:86vh;background:#fff;border-radius:var(--r-modal);box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden;display:flex;flex-direction:column}
+.modal.wide{width:680px}
+.modal-head{padding:14px 18px;font-size:16px;font-weight:700;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.modal-body{padding:18px;overflow-y:auto}
+.modal-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.f-row{margin-bottom:14px}
+.f-row label{display:block;font-size:13px;color:var(--text-2);margin-bottom:6px}
+.f-row label .req{color:var(--danger);margin-right:2px}
+.f-row .input,.f-row .sel,.f-row textarea{width:100%}
+textarea.input{height:auto;padding:8px 10px;resize:vertical}
+.f-2col{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(40,45,52,.92);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:300;box-shadow:var(--shadow);max-width:70%}
+@media (max-width:1100px){.split{grid-template-columns:1fr}.role-cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo"><div class="mark">院</div><div class="name">干部培训学院教务管理系统</div></div>
+  <div class="tb-search"><input class="input" placeholder="🔍 全局搜索：账户 / 部门 / 角色…"></div>
+  <div class="tb-right">
+    <span class="tb-ver">V1.0 原型</span>
+    <div class="tb-icon" onclick="toast('跳转消息中心（原型占位）')" title="站内信">🔔<span class="tb-badge">5</span></div>
+    <div class="tb-icon" onclick="toast('帮助中心为原型占位')" title="帮助中心">❓</div>
+    <div class="tb-user" id="tbUser"><div class="tb-avatar">系</div><span>系统管理员</span><span style="font-size:10px">▼</span></div>
+  </div>
+</header>
+
+<aside class="sidenav" id="sidenav"></aside>
+
+<main class="content">
+  <div class="page-head">
+    <div><div class="breadcrumb" id="crumb">首页 / 组织管理 / 组织架构</div><h2 class="page-title" id="pageTitle">组织架构管理</h2></div>
+    <div class="page-ops" id="pageOps"></div>
+  </div>
+  <div id="viewBody"></div>
+</main>
+
+<!-- 详情抽屉 -->
+<div class="drawer-mask hidden" id="drawerMask" onclick="closeDrawer()"></div>
+<div class="drawer hidden" id="drawer">
+  <div class="drawer-head"><h3 id="dwTitle">详情</h3><span class="btn-text" onclick="closeDrawer()">✕ 关闭</span></div>
+  <div class="drawer-body" id="dwBody"></div>
+  <div class="drawer-foot" id="dwFoot"></div>
+</div>
+
+<!-- 部门 新增/编辑 弹窗 -->
+<div class="mask hidden" id="deptModal"><div class="modal">
+  <div class="modal-head"><span id="deptModalTitle">新增部门</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-2col">
+     <div class="f-row"><label><span class="req">*</span>部门名称</label><input class="input" id="dfName" placeholder="如：教务处"></div>
+     <div class="f-row"><label><span class="req">*</span>部门编码</label><input class="input" id="dfCode" placeholder="如：JWC（唯一）"></div>
+     <div class="f-row"><label><span class="req">*</span>上级部门</label><select class="sel" id="dfParent"></select></div>
+     <div class="f-row"><label>部门类型</label><select class="sel" id="dfType"><option>职能部门</option><option>教研部门</option><option>院领导</option><option>后勤保障</option></select></div>
+     <div class="f-row"><label>负责人</label><input class="input" id="dfLeader" placeholder="负责人姓名"></div>
+     <div class="f-row"><label>联系电话</label><input class="input" id="dfPhone" placeholder="内线/办公电话"></div>
+     <div class="f-row"><label>排序号</label><input class="input" id="dfSort" type="number" min="1" value="1"></div>
+     <div class="f-row"><label>状态</label><select class="sel" id="dfStatus"><option>启用</option><option>停用</option></select></div>
+    </div>
+    <p class="mini-note">部门被账户或班次引用后不可删除，仅可停用；调整上级部门将同步影响数据权限归属范围。</p>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="deptSave()">保存</button></div>
+</div></div>
+
+<!-- 账户 新增/编辑 弹窗 -->
+<div class="mask hidden" id="acctModal"><div class="modal">
+  <div class="modal-head"><span id="acctModalTitle">新增账户</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-2col">
+     <div class="f-row"><label><span class="req">*</span>登录账户</label><input class="input" id="afUser" placeholder="如：zhangsan（唯一）"></div>
+     <div class="f-row"><label><span class="req">*</span>姓名</label><input class="input" id="afName" placeholder="真实姓名"></div>
+     <div class="f-row"><label><span class="req">*</span>所属部门</label><select class="sel" id="afDept"></select></div>
+     <div class="f-row"><label><span class="req">*</span>分配角色</label><select class="sel" id="afRole"></select></div>
+     <div class="f-row"><label>手机号码</label><input class="input" id="afPhone" placeholder="用于找回/通知"></div>
+     <div class="f-row"><label>电子邮箱</label><input class="input" id="afMail" placeholder="选填"></div>
+     <div class="f-row"><label>初始密码策略</label><select class="sel" id="afPwd"><option>系统随机生成并短信告知</option><option>统一初始密码，首登强制修改</option></select></div>
+     <div class="f-row"><label>账户状态</label><select class="sel" id="afStatus"><option>启用</option><option>停用</option></select></div>
+    </div>
+    <div class="alert" style="margin:0">🔒 账户创建由「系统管理员」负责；角色授权须由「安全保密管理员」在用户权限管理中完成（三员分立，见 4.10-P05）。</div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="acctSave()">保存</button></div>
+</div></div>
+
+<!-- 重置密码弹窗 -->
+<div class="mask hidden" id="pwdModal"><div class="modal" style="width:440px">
+  <div class="modal-head"><span>重置密码</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <p style="font-size:13px;color:var(--text-2);margin-bottom:12px">为账户 <b id="pfAcctName">—</b> 重置登录密码：</p>
+    <div class="f-row"><label>重置方式</label><select class="sel" id="pfWay"><option>系统随机生成并短信告知本人</option><option>重置为统一初始密码（首登强制修改）</option></select></div>
+    <div class="f-row"><label class="chk"><input type="checkbox" id="pfForce" checked> 强制下次登录修改密码</label></div>
+    <div class="f-row"><label class="chk"><input type="checkbox" id="pfKick" checked> 同时强制下线该账户当前会话</label></div>
+    <div class="alert warn" style="margin:0">⚠ 重置密码属关键操作，将记入操作日志并由安全审计员事后复核。</div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="pwdSave()">确认重置</button></div>
+</div></div>
+
+<!-- 角色授权用户弹窗 -->
+<div class="mask hidden" id="grantModal"><div class="modal">
+  <div class="modal-head"><span id="grantTitle">角色授权</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="filter-bar" style="margin-bottom:10px"><input class="input" id="grantSearch" placeholder="搜索姓名/账户…" style="width:100%"></div>
+    <div id="grantList" style="max-height:320px;overflow-y:auto"></div>
+    <div class="alert warn" style="margin:12px 0 0">⚠ 三员角色（系统/安全保密/安全审计）互斥：同一自然人不得兼任两员，勾选时系统强制校验。</div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="grantSave()">保存授权</button></div>
+</div></div>
+
+<!-- 班次数据权限（配置班次管理员）弹窗 -->
+<div class="mask hidden" id="clsPermModal"><div class="modal">
+  <div class="modal-head"><span>配置班次数据权限</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-row"><label>培训班次</label><input class="input" id="cpCls" disabled></div>
+    <div class="f-row"><label><span class="req">*</span>班次管理员（可多人，创建者默认在列）</label><div id="cpAdmins"></div></div>
+    <div class="f-row"><label>数据范围</label><select class="sel" id="cpScope"><option>本班全部数据（查看+修改排课/成绩/考勤）</option><option>仅查看本班数据</option></select></div>
+    <p class="mini-note">规则：培训班次数据查看不设限；但修改排课等须班次管理员操作。创建班次用户默认为班次管理员，可增设其他管理员。</p>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="cpSave()">保存</button></div>
+</div></div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+document.querySelectorAll('.js-close').forEach(b=>b.onclick=e=>e.target.closest('.mask').classList.add('hidden'));
+
+/* ============ 导航（全站共享数据） ============ */
+const NAV=[
+ {id:'workbench',icon:'🏠',name:'工作台',direct:true},
+ {id:'teach',icon:'📚',name:'教学管理',children:[{id:'teach-system',name:'课程体系',pg:'4.2-P01'},{id:'teach-course',name:'课程管理',pg:'4.2-P02'}]},
+ {id:'train',icon:'🎓',name:'培训管理',children:[
+   {id:'train-class',name:'培训班管理',pg:'4.3-P01'},{id:'train-stu',name:'培训考生',pg:'4.3-P03'},
+   {id:'train-schedule',name:'培训排课（拖拽）',pg:'4.3-P04'},{id:'train-grade',name:'课程成绩',pg:'4.3-P06'},
+   {id:'train-cert',name:'电子证书',pg:'4.3-P07'},{id:'train-eval',name:'教学评估',pg:'4.3-P08'},
+   {id:'train-exam',name:'考务管理',pg:'4.3-P09'},{id:'train-cycle',name:'学员全周期',pg:'4.3-P10'},
+   {id:'train-stay',name:'住宿安排',pg:'4.3-P11'},{id:'train-budget',name:'预算管理',pg:'4.3-P12'},
+   {id:'train-report',name:'结班报告',pg:'4.3-P13'},{id:'train-attend',name:'考勤管理',pg:'4.3-P14'},
+   {id:'train-track',name:'训后跟踪',pg:'4.3-P15'}]},
+ {id:'resource',icon:'🗂️',name:'资源管理',children:[
+   {id:'res-plan',name:'教案库',pg:'4.4-P01'},{id:'res-book',name:'教材库',pg:'4.4-P02'},
+   {id:'res-case',name:'案例库',pg:'4.4-P03'},{id:'res-self',name:'自他资源库',pg:'4.4-P04'},
+   {id:'res-bank',name:'题库试卷库',pg:'4.4-P05'},{id:'res-tag',name:'标签管理',pg:'4.4-P06'}]},
+ {id:'edu',icon:'📊',name:'教务组织',children:[{id:'edu-plan',name:'教学计划管理',pg:'4.5-P01'},{id:'edu-data',name:'教务数据管理',pg:'4.5-P02'},{id:'edu-report',name:'多维度报表',pg:'4.5-P03'},{id:'edu-export',name:'数据导出与集成',pg:'4.5-P04'},{id:'edu-settle',name:'结算报告模板',pg:'4.5-P05'}]},
+ {id:'teacher',icon:'👥',name:'师资库',children:[{id:'tea-list',name:'师资信息',pg:'4.6-P01'},{id:'tea-tag',name:'分级分类标签',pg:'4.6-P03'},{id:'tea-archive',name:'授课质量档案',pg:'4.6-P02'},{id:'tea-invite',name:'授课邀请函',pg:'4.6-P04'},{id:'tea-report',name:'综合评价报告',pg:'4.6-P05'}]},
+ {id:'student',icon:'✪',name:'学员库',children:[{id:'stu-list',name:'学员信息',pg:'4.7-P01'},{id:'stu-query',name:'个人综合查询',pg:'4.7-P02'},{id:'stu-archive',name:'参训档案',pg:'4.7-P03'}]},
+ {id:'room',icon:'🏫',name:'教室管理',children:[{id:'room-point',name:'教学点管理',pg:'4.8-P01'},{id:'room-room',name:'教室管理',pg:'4.8-P02'},{id:'room-device',name:'人脸考勤设备',pg:'4.8-P03'}]},
+ {id:'approve',icon:'✅',name:'审批管理',children:[{id:'apv-schedule',name:'排课审批',pg:'4.9-P01'},{id:'apv-budget',name:'预算审批',pg:'4.9-P01'},{id:'apv-leave',name:'请假/调停课审批',pg:'4.9-P01'},{id:'apv-record',name:'审批记录',pg:'4.9-P03'}]},
+ {id:'org',icon:'🏛️',name:'组织管理',children:[{id:'org-structure',name:'组织架构',pg:'4.10-P01'},{id:'org-account',name:'账户管理',pg:'4.10-P02'},{id:'org-user',name:'用户权限',pg:'4.10-P03'},{id:'org-data',name:'数据权限',pg:'4.10-P04'},{id:'org-three',name:'三员管理',pg:'4.10-P05'}]},
+ {id:'base',icon:'⚙️',name:'基础设置',children:[{id:'base-category',name:'培训类别',pg:'4.11-P01'},{id:'base-course',name:'课程分类',pg:'4.11-P02'},{id:'base-log',name:'系统日志',pg:'4.11-P03'},{id:'base-rule',name:'经费规则库',pg:'4.11-P04'}]},
+ {id:'screen',icon:'📈',name:'可视化大屏',children:[{id:'scr-overview',name:'总览大屏',pg:'4.12'},{id:'scr-study',name:'学情大屏',pg:'4.12'},{id:'scr-resource',name:'资源大屏',pg:'4.12'}]}
+];
+$('sidenav').innerHTML=NAV.map(g=>`
+ <div class="nav-group ${g.id==='org'?'open':''}" data-group="${g.id}">
+   <div class="nav-parent" data-id="${g.id}"><span class="nav-icon">${g.icon}</span><span class="nav-label">${g.name}</span>${g.children?'<span class="nav-caret">▸</span>':''}</div>
+   ${g.children?`<div class="nav-children">${g.children.map(c=>`<div class="nav-child" data-id="${c.id}" data-name="${c.name}" data-pg="${c.pg||''}"><span class="nav-label">${c.name}</span></div>`).join('')}</div>`:''}
+ </div>`).join('')+`<div class="nav-collapse" id="navCollapse">⇤<span>收起导航</span></div>`;
+$('sidenav').addEventListener('click',e=>{
+  if(e.target.closest('#navCollapse')){document.body.classList.toggle('nav-collapsed');return}
+  const child=e.target.closest('.nav-child'),parent=e.target.closest('.nav-parent');
+  if(child){
+    const id=child.dataset.id,pg=child.dataset.pg||'';
+    if(pg.indexOf('4.10')===0){showView(id);setNavActive(child);return}
+    if(pg.indexOf('4.12')===0){location.href='screen.html?scr='+id;return}
+    if(id==='train-schedule'){location.href='training-schedule.html';return}
+    if(pg.indexOf('4.2')===0){location.href='teaching.html?page='+id;return}
+    if(pg.indexOf('4.3')===0){location.href='training.html?page='+id;return}
+    if(pg.indexOf('4.4')===0){location.href='resource.html?page='+id;return}
+    if(pg.indexOf('4.5')===0){location.href='edu.html?page='+id;return}
+    if(pg.indexOf('4.6')===0){location.href='teacher-lib.html?page='+id;return}
+    if(pg.indexOf('4.7')===0){location.href='student-lib.html?page='+id;return}
+    if(pg.indexOf('4.8')===0){location.href='room.html?page='+id;return}
+    if(pg.indexOf('4.9')===0){location.href='approve.html?page='+id;return}
+    if(pg.indexOf('4.11')===0){toast('「'+child.dataset.name+'」（'+pg+'）为原型占位');return}
+    toast('「'+child.dataset.name+'」（'+pg+'）为原型占位');return}
+  if(parent){const g=NAV.find(x=>x.id===parent.dataset.id);
+    if(g.direct){location.href='workbench.html';return}
+    parent.closest('.nav-group').classList.toggle('open');}
+});
+function setNavActive(el){document.querySelectorAll('.nav-child').forEach(n=>n.classList.remove('active'));el&&el.classList.add('active')}
+$('tbUser').onclick=()=>toast('当前登录：系统管理员（三员之一）· 个人信息见 workbench.html');
+
+/* ============ 视图路由 ============ */
+let curView='org-structure';
+const VIEW_NAME={'org-structure':'组织架构管理','org-account':'账户管理','org-user':'用户权限管理','org-data':'数据权限管理','org-three':'三员管理'};
+const VIEW_OPS={
+ 'org-structure':['展开全部','＋ 新增部门'],
+ 'org-account':['＋ 新增账户','批量导入','导出'],
+ 'org-user':['＋ 新增自定义角色'],
+ 'org-data':['敏感档案授权','导出授权清单'],
+ 'org-three':['互斥校验','复核记录']
+};
+function showView(id){
+  curView=id;
+  $('crumb').textContent='首页 / 组织管理 / '+VIEW_NAME[id].replace('管理','');
+  $('pageTitle').textContent=VIEW_NAME[id];
+  $('pageOps').innerHTML=(VIEW_OPS[id]||[]).map(o=>{
+    const primary=(o.indexOf('＋')===0||o==='敏感档案授权');
+    return `<button class="btn ${primary?'btn-primary':'btn-ghost'}" onclick="opClick('${o}')">${o}</button>`}).join('');
+  render();
+}
+function opClick(o){
+  if(o==='+ 新增部门'){openDeptModal(null,ROOT);return}
+  if(o==='展开全部'){expandAll=!expandAll;render();toast(expandAll?'已展开全部部门':'已收起全部部门');return}
+  if(o==='+ 新增账户'){openAcctModal(null);return}
+  if(o==='+ 新增自定义角色'){toast('新增自定义角色：填写角色名/数据范围/描述，勾选菜单权限（原型演示，见左侧角色卡）');openRoleModal&&openRoleModal();return}
+  if(o==='批量导入'){toast('批量导入账户：下载模板→填写→上传校验→生成账户（原型占位）');return}
+  if(o==='敏感档案授权'){showView('org-data');dataTab='archive';render();toast('请在「敏感档案分级授权」中配置');return}
+  if(o==='互斥校验'){runMutexCheck();return}
+  if(o==='复核记录'){showView('org-three');threeTab='review';render();return}
+  toast('「'+o+'」已创建任务（原型占位）');
+}
+function render(){
+  const b=$('viewBody');
+  if(curView==='org-structure')b.innerHTML=vStructure();
+  else if(curView==='org-account')b.innerHTML=vAccount();
+  else if(curView==='org-user')b.innerHTML=vUser();
+  else if(curView==='org-data')b.innerHTML=vData();
+  else b.innerHTML=vThree();
+}
+function closeDrawer(){$('drawerMask').classList.add('hidden');$('drawer').classList.add('hidden')}
+
+/* ============ 基础数据（PRD 4.10 / V3.2 五-9 / 6.3 三员分立） ============ */
+const ROOT='ROOT';
+let expandAll=true;
+let DEPTS=[
+ {id:'ROOT',name:'外交干部培训学院',code:'XY',parent:null,type:'院领导',leader:'院长 李国强',phone:'010-88880000',sort:1,status:'启用'},
+ {id:'D01',name:'院办公室',code:'YBGS',parent:'ROOT',type:'职能部门',leader:'王主任',phone:'010-88880001',sort:1,status:'启用'},
+ {id:'D02',name:'教务处',code:'JWC',parent:'ROOT',type:'职能部门',leader:'张处长',phone:'010-88880002',sort:2,status:'启用'},
+ {id:'D0201',name:'培训管理办',code:'JWC-PX',parent:'D02',type:'职能部门',leader:'赵主任',phone:'010-88880021',sort:1,status:'启用'},
+ {id:'D0202',name:'教务管理办',code:'JWC-JW',parent:'D02',type:'职能部门',leader:'钱主任',phone:'010-88880022',sort:2,status:'启用'},
+ {id:'D0203',name:'教学质量评估办',code:'JWC-PG',parent:'D02',type:'职能部门',leader:'孙主任',phone:'010-88880023',sort:3,status:'启用'},
+ {id:'D03',name:'科研处',code:'KYC',parent:'ROOT',type:'教研部门',leader:'周处长',phone:'010-88880003',sort:3,status:'启用'},
+ {id:'D04',name:'学员工作处',code:'XGC',parent:'ROOT',type:'职能部门',leader:'吴处长',phone:'010-88880004',sort:4,status:'启用'},
+ {id:'D0401',name:'组织员办公室',code:'XGC-ZZ',parent:'D04',type:'职能部门',leader:'郑主任',phone:'010-88880041',sort:1,status:'启用'},
+ {id:'D05',name:'财务处',code:'CWC',parent:'ROOT',type:'职能部门',leader:'冯处长',phone:'010-88880005',sort:5,status:'启用'},
+ {id:'D06',name:'人事处',code:'RSC',parent:'ROOT',type:'职能部门',leader:'陈处长',phone:'010-88880006',sort:6,status:'启用'},
+ {id:'D07',name:'信息中心',code:'XXZX',parent:'ROOT',type:'职能部门',leader:'褚主任',phone:'010-88880007',sort:7,status:'启用'},
+ {id:'D08',name:'后勤保障处',code:'HQ',parent:'ROOT',type:'后勤保障',leader:'卫处长',phone:'010-88880008',sort:8,status:'启用'}
+];
+const ROLES=[
+ {id:'R1',name:'一级管理员（院领导）',type:'预设',scope:'全院数据',builtin:true,users:['李国强'],desc:'统筹全局，查看/授权全院数据、权限配置、大额预算审批'},
+ {id:'R2',name:'二级管理员（处领导）',type:'预设',scope:'本部门数据',builtin:true,users:['张处长','周处长'],desc:'分管部门项目管理、排课审批、预算审批、监督三级操作'},
+ {id:'R3',name:'三级管理员（办训/带班）',type:'预设',scope:'本部门/本班数据',builtin:true,users:['张三','钱主任','赵主任'],desc:'录入维护培训数据、提交排课/预算申请、学员信息维护、桌签打印'},
+ {id:'R4',name:'组织员',type:'预设',scope:'所带班次',builtin:true,users:['郑主任','林婉如'],desc:'考勤核查、请假登记、班级通知、消息推送、补签'},
+ {id:'R5',name:'教员',type:'预设',scope:'本人课程',builtin:true,users:['王教授','李教授'],desc:'备课、课件上传、查看学员评教、提交咨政材料、查看个人课表'},
+ {id:'R6',name:'财务管理员',type:'预设',scope:'全院经费',builtin:true,users:['冯处长'],desc:'经费规则库维护、预算审核、结算报告'},
+ {id:'R7',name:'系统管理员',type:'三员',scope:'系统配置',builtin:true,three:'sys',users:['系统管理员·褚主任'],desc:'组织架构/账户创建、角色模板/菜单/参数配置'},
+ {id:'R8',name:'安全保密管理员',type:'三员',scope:'授权与密级',builtin:true,three:'sec',users:['安全保密员·蒋工'],desc:'用户权限授权/回收、数据密级标定、敏感档案与门禁/人脸底库授权'},
+ {id:'R9',name:'安全审计员',type:'三员',scope:'全量日志',builtin:true,three:'aud',users:['安全审计员·沈工'],desc:'全量操作日志审计、告警处置、关键操作事后复核'},
+ {id:'R10',name:'对外授权查询员',type:'自定义',scope:'授权档案只读',builtin:false,users:['组织部·韩主任'],desc:'上级组织部门通过授权入口只读查询培训档案、上报数据'}
+];
+const ACCTS=[
+ {user:'liguoqiang',name:'李国强',dept:'D01',role:'R1',phone:'138****0001',mail:'ligq@xy.gov',status:'启用',login:'2026-09-25 08:20',three:''},
+ {user:'zhangchu',name:'张处长',dept:'D02',role:'R2',phone:'138****0002',mail:'zhangc@xy.gov',status:'启用',login:'2026-09-25 09:01',three:''},
+ {user:'zhangsan',name:'张三',dept:'D0202',role:'R3',phone:'138****0003',mail:'zhangs@xy.gov',status:'启用',login:'2026-09-25 09:12',three:''},
+ {user:'zhaozr',name:'赵主任',dept:'D0201',role:'R3',phone:'138****0004',mail:'zhaozr@xy.gov',status:'启用',login:'2026-09-24 17:30',three:''},
+ {user:'zhengzr',name:'郑主任',dept:'D0401',role:'R4',phone:'138****0005',mail:'zhengzr@xy.gov',status:'启用',login:'2026-09-25 07:55',three:''},
+ {user:'linwanru',name:'林婉如',dept:'D0401',role:'R4',phone:'138****0006',mail:'linwr@xy.gov',status:'启用',login:'2026-09-25 08:47',three:''},
+ {user:'wangjs',name:'王教授',dept:'D03',role:'R5',phone:'138****0007',mail:'wangjs@xy.gov',status:'启用',login:'2026-09-24 15:10',three:''},
+ {user:'fengchu',name:'冯处长',dept:'D05',role:'R6',phone:'138****0008',mail:'fengc@xy.gov',status:'启用',login:'2026-09-25 08:33',three:''},
+ {user:'jiangg',name:'蒋工',dept:'D07',role:'R8',phone:'138****0009',mail:'jiangg@xy.gov',status:'启用',login:'2026-09-25 09:05',three:'sec'},
+ {user:'shengong',name:'沈工',dept:'D07',role:'R9',phone:'138****0010',mail:'sheng@xy.gov',status:'启用',login:'2026-09-25 09:20',three:'aud'},
+ {user:'chuzr',name:'褚主任',dept:'D07',role:'R7',phone:'138****0011',mail:'chuzr@xy.gov',status:'启用',login:'2026-09-25 09:00',three:'sys'},
+ {user:'hanzr',name:'韩主任',dept:'D06',role:'R10',phone:'138****0012',mail:'hanzr@zzb.gov',status:'停用',login:'2026-08-30 10:00',three:''},
+ {user:'qianzr',name:'钱主任',dept:'D0202',role:'R3',phone:'138****0013',mail:'qianzr@xy.gov',status:'锁定',login:'2026-09-20 11:00',three:''}
+];
+const CLS_PERM=[
+ {cls:'2503期处级干部进修班',creator:'张三',admins:['张三','赵主任'],scope:'本班全部数据',stu:45},
+ {cls:'2505期青年干部培训班',creator:'张三',admins:['张三','林婉如'],scope:'本班全部数据',stu:48},
+ {cls:'2498期专题研讨班',creator:'钱主任',admins:['钱主任','郑主任'],scope:'本班全部数据',stu:40}
+];
+const SECRET_LEVELS=[
+ {lv:'机密',cls:'tag-red',desc:'干部人事敏感档案、组织鉴定、涉密培训方案',grantees:['李国强','张处长'],rule:'需安全保密管理员逐人授权，访问全程留痕并双人复核'},
+ {lv:'秘密',cls:'tag-orange',desc:'未公开评估结论、内部咨政材料',grantees:['李国强','张处长','周处长','冯处长'],rule:'按角色/部门授权，访问留痕审计'},
+ {lv:'内部',cls:'tag-blue',desc:'学员名册、课表、成绩、考勤',grantees:['按角色：三级管理员/组织员/教员'],rule:'菜单角色可控，跨部门只读'},
+ {lv:'公开',cls:'tag-green',desc:'课程库、教材库、师资公开信息、教学点',grantees:['全部登录用户'],rule:'不限制访问及修改（按角色菜单控制）'}
+];
+const REVIEW_LOGS=[
+ {time:'2026-09-25 09:20',op:'安全审计员·沈工',act:'复核：蒋工 授予「张三」三级管理员角色',res:'通过',type:'权限授权'},
+ {time:'2026-09-24 16:40',op:'安全审计员·沈工',act:'复核：褚主任 批量导入 12 个组织员账户',res:'通过',type:'账户创建'},
+ {time:'2026-09-23 10:12',op:'安全审计员·沈工',act:'复核：蒋工 标定 2498 班鉴定材料为「机密」',res:'通过',type:'密级变更'},
+ {time:'2026-09-22 14:05',op:'双人复核（沈工+蒋工）',act:'导出全量操作日志（审计取证）',res:'通过',type:'日志导出'},
+ {time:'2026-09-20 11:30',op:'安全审计员·沈工',act:'告警处置：账户 qianzr 连续 5 次密码错误已锁定',res:'已处置',type:'告警处置'}
+];
+const MUTEX=[
+ {name:'褚主任',acct:'chuzr',roles:['系统管理员'],ok:true},
+ {name:'蒋工',acct:'jiangg',roles:['安全保密管理员'],ok:true},
+ {name:'沈工',acct:'shengong',roles:['安全审计员'],ok:true},
+ {name:'冯处长',acct:'fengchu',roles:['财务管理员','系统管理员'],ok:true,note:'业务角色+单员，允许'}
+];
+const MENU_PERM=[
+ {mod:'工作台',items:['个人待办','今日课表','我的班次','预警提醒','快捷入口']},
+ {mod:'教学管理',items:['课程体系','课程管理']},
+ {mod:'培训管理',items:['培训班管理','培训考生','培训排课','课程成绩','电子证书','教学评估','考务管理','学员全周期','住宿安排','预算管理','结班报告','考勤管理','训后跟踪']},
+ {mod:'资源管理',items:['教案库','教材库','案例库','自他资源库','题库试卷库','标签管理']},
+ {mod:'教务组织',items:['教学计划管理','教务数据管理','多维度报表','数据导出与集成','结算报告模板']},
+ {mod:'师资库',items:['师资信息','分级分类标签','授课质量档案','邀请函']},
+ {mod:'学员库',items:['学员信息','个人综合查询','参训档案']},
+ {mod:'教室管理',items:['教学点管理','教室管理','人脸考勤设备']},
+ {mod:'审批管理',items:['排课审批','预算审批','请假/调停课审批','审批记录']},
+ {mod:'组织管理',items:['组织架构','账户管理','用户权限','数据权限','三员管理']},
+ {mod:'基础设置',items:['培训类别','课程分类','系统日志','经费规则库']}
+];
+function deptName(id){const d=DEPTS.find(x=>x.id===id);return d?d.name:'—'}
+function roleName(id){const r=ROLES.find(x=>x.id===id);return r?r.name:'—'}
+function childrenOf(pid){return DEPTS.filter(d=>d.parent===pid).sort((a,b)=>a.sort-b.sort)}
+function acctCount(deptId){
+  const ids=[deptId];const stack=[deptId];
+  while(stack.length){const c=childrenOf(stack.pop());c.forEach(x=>{ids.push(x.id);stack.push(x.id)})}
+  return ACCTS.filter(a=>ids.includes(a.dept)).length;
+}
+const ST_CLS={'启用':'tag-green','停用':'tag-gray','锁定':'tag-red'};
+const DEPT_TYPE_CLS={'院领导':'tag-purple','职能部门':'tag-blue','教研部门':'tag-cyan','后勤保障':'tag-orange'};
+let curDept='ROOT';
+const collapsed={};
+
+/* ============ 4.10-P01 组织架构管理 ============ */
+function vStructure(){
+  const total=DEPTS.length-1,enabled=DEPTS.filter(d=>d.id!==ROOT&&d.status==='启用').length;
+  const stats=`<div class="stat-cards">
+   <div class="stat"><div class="n">${total}</div><div class="l">部门总数</div></div>
+   <div class="stat"><div class="n g">${enabled}</div><div class="l">启用部门</div></div>
+   <div class="stat"><div class="n o">${total-enabled}</div><div class="l">停用部门</div></div>
+   <div class="stat"><div class="n">${ACCTS.length}</div><div class="l">在职账户</div></div></div>`;
+  const body=`<div class="split">
+   <div class="tree-panel">
+     <div class="tp-head"><b>部门树</b><span class="btn-text" onclick="expandAll=!expandAll;Object.keys(collapsed).forEach(k=>delete collapsed[k]);render()">${expandAll?'收起':'展开'}</span></div>
+     <input class="input" placeholder="🔍 搜索部门…" style="width:100%;margin-bottom:8px" onkeydown="if(event.key==='Enter')toast('搜索部门：'+this.value.trim()+'（原型占位）')">
+     ${treeHtml(ROOT)}
+   </div>
+   <div>${deptDetail(curDept)}</div>
+  </div>`;
+  return stats+body;
+}
+function treeHtml(pid){
+  const kids=childrenOf(pid);
+  if(!kids.length)return '';
+  return `<div class="tn-children" style="${pid===ROOT?'margin-left:0;border:none;padding-left:0':''}">`+kids.map(d=>{
+    const hasKids=childrenOf(d.id).length>0;
+    const isCollapsed=collapsed[d.id]===true||(expandAll?false:collapsed[d.id]!==false);
+    const showKids=hasKids&&!isCollapsed;
+    return `<div class="tree-node">
+     <div class="tn-row ${curDept===d.id?'active':''}" onclick="selectDept('${d.id}')">
+       <span class="tn-caret ${hasKids?'':'leaf'} ${showKids?'open':''}" onclick="event.stopPropagation();toggleDept('${d.id}')">▸</span>
+       <span class="tn-ico">${hasKids?'🗂️':'📁'}</span>
+       <span class="tn-name">${d.name}</span>
+       <span class="tn-cnt">${acctCount(d.id)}</span>
+     </div>
+     ${showKids?treeHtml(d.id):''}
+    </div>`}).join('')+`</div>`;
+}
+function toggleDept(id){collapsed[id]=collapsed[id]===true?false:true;render()}
+function selectDept(id){curDept=id;render()}
+function deptDetail(id){
+  const d=DEPTS.find(x=>x.id===id);if(!d)return '';
+  const kids=childrenOf(id);
+  const accts=ACCTS.filter(a=>a.dept===id);
+  return `<div class="card" style="margin-bottom:16px"><div class="card-body">
+   <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+    <div><h3 style="font-size:17px">${d.name} <span class="tag ${DEPT_TYPE_CLS[d.type]}">${d.type}</span> <span class="tag ${ST_CLS[d.status]}">${d.status}</span></h3>
+     <p style="font-size:12px;color:var(--text-3);margin-top:4px">部门编码 ${d.code} · 负责人 ${d.leader} · ${d.phone}</p></div>
+    <div style="display:flex;gap:8px">
+     <button class="btn btn-ghost btn-sm" onclick="openDeptModal(null,'${d.id}')">＋ 新增下级</button>
+     ${d.id!==ROOT?`<button class="btn btn-ghost btn-sm" onclick="openDeptModal('${d.id}')">编辑</button>
+     <button class="btn btn-ghost btn-sm" onclick="deptToggle('${d.id}')">${d.status==='停用'?'启用':'停用'}</button>
+     <button class="btn btn-ghost btn-sm" style="color:var(--danger);border-color:var(--danger)" onclick="deptDel('${d.id}')">删除</button>`:''}
+    </div></div>
+   <div class="d-grid" style="margin-top:14px">
+    <span class="k">上级部门</span><span>${d.parent?deptName(d.parent):'—（顶级）'}</span>
+    <span class="k">在职账户</span><span>${acctCount(id)} 人（含下级 ${accts.length} 人直属）</span>
+    <span class="k">下级部门</span><span>${kids.length} 个</span>
+    <span class="k">数据权限范围</span><span>${id===ROOT?'全院数据':'本部门及下级部门数据'}</span>
+   </div></div></div>
+   <div class="card"><div class="card-body">
+    <div class="sec-title">下级部门（${kids.length}）</div>
+    ${kids.length?`<table class="data-table"><thead><tr><th>部门名称</th><th>编码</th><th>类型</th><th>负责人</th><th>在职账户</th><th>状态</th><th>操作</th></tr></thead><tbody>
+     ${kids.map(k=>`<tr><td class="c-name" onclick="selectDept('${k.id}')">${k.name}</td><td>${k.code}</td>
+      <td><span class="tag ${DEPT_TYPE_CLS[k.type]}">${k.type}</span></td><td>${k.leader}</td>
+      <td>${acctCount(k.id)} 人</td><td><span class="tag ${ST_CLS[k.status]}">${k.status}</span></td>
+      <td><button class="btn-text" onclick="openDeptModal('${k.id}')">编辑</button>
+       <button class="btn-text" onclick="openDeptModal(null,'${k.id}')">新增下级</button></td></tr>`).join('')}
+     </tbody></table>`:'<p class="mini-note">该部门暂无下级部门。</p>'}
+    <div class="sec-title">直属账户（${accts.length}）</div>
+    ${accts.length?`<table class="data-table"><thead><tr><th>账户</th><th>姓名</th><th>角色</th><th>状态</th></tr></thead><tbody>
+     ${accts.map(a=>`<tr><td>${a.user}</td><td><b>${a.name}</b></td><td>${roleName(a.role)}</td><td><span class="tag ${ST_CLS[a.status]}">${a.status}</span></td></tr>`).join('')}
+     </tbody></table>`:'<p class="mini-note">该部门暂无直属账户。</p>'}
+   </div></div>`;
+}
+let editDeptId=null;
+function openDeptModal(id,parent){
+  editDeptId=id||null;
+  $('deptModalTitle').textContent=id?'编辑部门':'新增部门';
+  const opts=DEPTS.map(d=>`<option value="${d.id}">${d.id===ROOT?d.name:'　'.repeat((function depth(x){let n=0,p=DEPTS.find(y=>y.id===x);while(p&&p.parent){n++;p=DEPTS.find(y=>y.id===p.parent)}return n})(d.id))+'└ '+d.name}</option>`).join('');
+  $('dfParent').innerHTML=opts;
+  if(id){const d=DEPTS.find(x=>x.id===id);$('dfName').value=d.name;$('dfCode').value=d.code;$('dfParent').value=d.parent;$('dfType').value=d.type;$('dfLeader').value=d.leader;$('dfPhone').value=d.phone;$('dfSort').value=d.sort;$('dfStatus').value=d.status;}
+  else{$('dfName').value='';$('dfCode').value='';$('dfParent').value=parent||ROOT;$('dfLeader').value='';$('dfPhone').value='';$('dfSort').value=1;$('dfStatus').value='启用';}
+  $('deptModal').classList.remove('hidden');
+}
+function deptSave(){
+  const name=$('dfName').value.trim(),code=$('dfCode').value.trim();
+  if(!name){toast('部门名称不能为空');return}
+  if(!code){toast('部门编码不能为空');return}
+  if(DEPTS.some(d=>d.code===code&&d.id!==editDeptId)){toast('部门编码已存在，请更换');return}
+  const obj={name,code,parent:$('dfParent').value,type:$('dfType').value,leader:$('dfLeader').value||'—',phone:$('dfPhone').value||'—',sort:parseInt($('dfSort').value)||1,status:$('dfStatus').value};
+  if(editDeptId){Object.assign(DEPTS.find(x=>x.id===editDeptId),obj);toast('部门「'+name+'」已更新');}
+  else{const id='D'+Date.now()%10000;DEPTS.push(Object.assign({id},obj));curDept=obj.parent;toast('部门「'+name+'」已新增');}
+  $('deptModal').classList.add('hidden');render();
+}
+function deptToggle(id){const d=DEPTS.find(x=>x.id===id);d.status=d.status==='停用'?'启用':'停用';render();toast('「'+d.name+'」已'+d.status)}
+function deptDel(id){
+  const d=DEPTS.find(x=>x.id===id);
+  if(childrenOf(id).length){toast('该部门存在下级部门，不可删除，请先处理下级');return}
+  if(ACCTS.some(a=>a.dept===id)){toast('该部门下存在账户，不可删除，仅可停用');return}
+  if(!confirm('确认删除部门「'+d.name+'」？'))return;
+  DEPTS=DEPTS.filter(x=>x.id!==id);curDept=d.parent||ROOT;render();toast('部门「'+d.name+'」已删除');
+}
+
+/* ============ 4.10-P02 账户管理 ============ */
+const acctFilter={kw:'',dept:'',role:'',status:''};
+function vAccount(){
+  const en=ACCTS.filter(a=>a.status==='启用').length,dis=ACCTS.filter(a=>a.status==='停用').length,lk=ACCTS.filter(a=>a.status==='锁定').length;
+  const stats=`<div class="stat-cards">
+   <div class="stat"><div class="n">${ACCTS.length}</div><div class="l">账户总数</div></div>
+   <div class="stat"><div class="n g">${en}</div><div class="l">启用</div></div>
+   <div class="stat"><div class="n o">${dis}</div><div class="l">停用</div></div>
+   <div class="stat"><div class="n r">${lk}</div><div class="l">锁定</div></div></div>`;
+  const list=ACCTS.filter(a=>{
+    if(acctFilter.kw&&!(a.name.includes(acctFilter.kw)||a.user.includes(acctFilter.kw)))return false;
+    if(acctFilter.dept&&a.dept!==acctFilter.dept)return false;
+    if(acctFilter.role&&a.role!==acctFilter.role)return false;
+    if(acctFilter.status&&a.status!==acctFilter.status)return false;
+    return true;});
+  const filter=`<div class="card"><div class="card-body">
+   <div class="filter-bar">
+    <input class="input" placeholder="搜索姓名/账户，回车确认…" value="${acctFilter.kw}" onkeydown="if(event.key==='Enter'){acctFilter.kw=this.value.trim();render()}">
+    <select class="sel" onchange="acctFilter.dept=this.value;render()"><option value="">全部部门</option>${DEPTS.filter(d=>d.id!==ROOT).map(d=>`<option value="${d.id}" ${acctFilter.dept===d.id?'selected':''}>${d.name}</option>`).join('')}</select>
+    <select class="sel" onchange="acctFilter.role=this.value;render()"><option value="">全部角色</option>${ROLES.map(r=>`<option value="${r.id}" ${acctFilter.role===r.id?'selected':''}>${r.name}</option>`).join('')}</select>
+    <select class="sel" onchange="acctFilter.status=this.value;render()"><option value="">全部状态</option><option ${acctFilter.status==='启用'?'selected':''}>启用</option><option ${acctFilter.status==='停用'?'selected':''}>停用</option><option ${acctFilter.status==='锁定'?'selected':''}>锁定</option></select>
+    <button class="btn btn-ghost" onclick="acctFilter.kw='';acctFilter.dept='';acctFilter.role='';acctFilter.status='';render()">重置</button>
+    <span style="margin-left:auto;font-size:12px;color:var(--text-3)">共 ${list.length} 个账户</span>
+   </div>
+   <div class="alert">🔒 三员分立：账户的创建/删除由「系统管理员」操作；角色授权/回收由「安全保密管理员」操作；全部关键操作留痕并由「安全审计员」复核。</div>
+   <table class="data-table"><thead><tr><th>登录账户</th><th>姓名</th><th>所属部门</th><th>角色</th><th>手机</th><th>状态</th><th>最近登录</th><th>操作</th></tr></thead><tbody>
+    ${list.map(a=>{const r=ROLES.find(x=>x.id===a.role);const threeTag=r&&r.type==='三员'?`<span class="tag tag-purple">三员</span>`:'';
+     return `<tr><td class="c-name" onclick="openAcct('${a.user}')">${a.user}</td>
+     <td><b>${a.name}</b>${a.three?` <span class="tag tag-cyan">${a.three==='sys'?'系统员':a.three==='sec'?'保密员':'审计员'}</span>`:''}</td>
+     <td>${deptName(a.dept)}</td><td>${r?r.name:'—'} ${threeTag}</td><td>${a.phone}</td>
+     <td><span class="tag ${ST_CLS[a.status]}">${a.status}</span></td><td style="font-size:12px;color:var(--text-3)">${a.login}</td>
+     <td><button class="btn-text" onclick="openAcct('${a.user}')">详情</button>
+      <button class="btn-text" onclick="openAcctModal('${a.user}')">编辑</button>
+      <button class="btn-text" onclick="openPwdModal('${a.user}')">重置密码</button>
+      <button class="btn-text ${a.status==='启用'?'danger':''}" onclick="acctToggle('${a.user}')">${a.status==='启用'?'停用':'启用'}</button></td></tr>`}).join('')}
+   </tbody></table>
+   ${list.length?'':'<p class="mini-note">无符合条件的账户。</p>'}
+  </div></div>`;
+  return stats+filter;
+}
+function acctToggle(user){const a=ACCTS.find(x=>x.user===user);if(a.status==='锁定'){a.status='启用';toast('账户已解锁');}else a.status=a.status==='启用'?'停用':'启用';render();toast('「'+a.name+'」已'+a.status)}
+let editAcct=null;
+function openAcctModal(user){
+  editAcct=user||null;
+  $('acctModalTitle').textContent=user?'编辑账户':'新增账户';
+  $('afDept').innerHTML=DEPTS.filter(d=>d.id!==ROOT).map(d=>`<option value="${d.id}">${d.name}</option>`).join('');
+  $('afRole').innerHTML=ROLES.filter(r=>r.type!=='三员').map(r=>`<option value="${r.id}">${r.name}</option>`).join('')+`<option value="">（暂不分配角色，待保密员授权）</option>`;
+  if(user){const a=ACCTS.find(x=>x.user===user);$('afUser').value=a.user;$('afUser').disabled=true;$('afName').value=a.name;$('afDept').value=a.dept;$('afRole').value=a.role;$('afPhone').value=a.phone;$('afMail').value=a.mail;$('afStatus').value=a.status;}
+  else{$('afUser').disabled=false;['afUser','afName','afPhone','afMail'].forEach(i=>$(i).value='');$('afStatus').value='启用';}
+  $('acctModal').classList.remove('hidden');
+}
+function acctSave(){
+  const user=$('afUser').value.trim(),name=$('afName').value.trim();
+  if(!user){toast('登录账户不能为空');return}
+  if(!name){toast('姓名不能为空');return}
+  if(!editAcct&&ACCTS.some(a=>a.user===user)){toast('登录账户已存在');return}
+  if(editAcct){Object.assign(ACCTS.find(x=>x.user===editAcct),{name,dept:$('afDept').value,role:$('afRole').value||ACCTS.find(x=>x.user===editAcct).role,phone:$('afPhone').value||'—',mail:$('afMail').value||'—',status:$('afStatus').value});toast('账户「'+name+'」已更新');}
+  else{ACCTS.push({user,name,dept:$('afDept').value,role:$('afRole').value||'',phone:$('afPhone').value||'—',mail:$('afMail').value||'—',status:$('afStatus').value,login:'—',three:''});toast('账户「'+name+'」已创建'+($('afRole').value?'':'（待安全保密管理员授权角色）'));}
+  $('acctModal').classList.add('hidden');render();
+}
+let pwdAcct=null;
+function openPwdModal(user){pwdAcct=user;const a=ACCTS.find(x=>x.user===user);$('pfAcctName').textContent=a.name+'（'+a.user+'）';$('pwdModal').classList.remove('hidden')}
+function pwdSave(){$('pwdModal').classList.add('hidden');const a=ACCTS.find(x=>x.user===pwdAcct);if(a)a.status='启用';render();toast('密码已重置并告知本人，操作已记入审计日志')}
+function openAcct(user){
+  const a=ACCTS.find(x=>x.user===user);if(!a)return;const r=ROLES.find(x=>x.id===a.role);
+  $('dwTitle').textContent=a.name+' · 账户详情';
+  $('dwBody').innerHTML=`<div class="d-grid">
+    <span class="k">登录账户</span><span>${a.user}</span>
+    <span class="k">姓名</span><span>${a.name}</span>
+    <span class="k">所属部门</span><span>${deptName(a.dept)}</span>
+    <span class="k">分配角色</span><span>${r?r.name:'未授权'} ${r&&r.type==='三员'?'<span class="tag tag-purple">三员</span>':''}</span>
+    <span class="k">数据范围</span><span>${r?r.scope:'—'}</span>
+    <span class="k">手机/邮箱</span><span>${a.phone} · ${a.mail}</span>
+    <span class="k">账户状态</span><span><span class="tag ${ST_CLS[a.status]}">${a.status}</span></span>
+    <span class="k">最近登录</span><span>${a.login}</span></div>
+   <div class="d-sec">登录/操作日志（最近）</div>
+   <p class="mini-note">${a.login} 登录成功（内网终端 T3-05）<br>2026-09-24 修改个人信息<br>2026-09-01 系统管理员 重置密码</p>`;
+  $('dwFoot').innerHTML=`<button class="btn btn-ghost" onclick="closeDrawer();openPwdModal('${a.user}')">重置密码</button>
+   <button class="btn btn-ghost" onclick="closeDrawer();openAcctModal('${a.user}')">编辑</button>
+   <button class="btn btn-primary" onclick="closeDrawer();showView('org-user');toast('前往用户权限管理为「${a.name}」授权')">去授权</button>`;
+  $('drawerMask').classList.remove('hidden');$('drawer').classList.remove('hidden');
+}
+
+/* ============ 4.10-P03 用户权限管理 ============ */
+let curRole='R3';
+const rolePerm={};
+function vUser(){
+  const roleList=`<div class="tree-panel">
+   <div class="tp-head"><b>角色列表</b><span class="btn-text" onclick="openRoleModal()">＋ 新增</span></div>
+   ${ROLES.map(r=>`<div class="tn-row ${curRole===r.id?'active':''}" onclick="curRole='${r.id}';render()">
+     <span class="tn-ico">${r.type==='三员'?'🛡️':r.type==='预设'?'👤':'⚙️'}</span>
+     <span class="tn-name">${r.name}</span>
+     <span class="tn-cnt">${r.users.length}</span></div>`).join('')}
+  </div>`;
+  const r=ROLES.find(x=>x.id===curRole);
+  const detail=`<div>
+   <div class="card" style="margin-bottom:16px"><div class="card-body">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+     <div><h3 style="font-size:17px">${r.name} <span class="tag ${r.type==='三员'?'tag-purple':r.type==='预设'?'tag-blue':'tag-gray'}">${r.type}角色</span></h3>
+      <p style="font-size:12px;color:var(--text-3);margin-top:4px">${r.desc}</p></div>
+     <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="toast('编辑角色基本信息（原型占位）')">编辑角色</button>
+      <button class="btn btn-primary btn-sm" onclick="openGrant('${r.id}')">授权用户</button>
+      ${!r.builtin?`<button class="btn btn-ghost btn-sm" style="color:var(--danger);border-color:var(--danger)" onclick="toast('删除自定义角色「${r.name}」')">删除</button>`:''}
+     </div></div>
+    <div class="d-grid" style="margin-top:12px">
+     <span class="k">数据范围</span><span>${r.scope}</span>
+     <span class="k">角色属性</span><span>${r.builtin?'内置角色（不可删除/合并，三员核心权限集不可改）':'自定义角色（可自由配置）'}</span>
+     <span class="k">已授权用户</span><span>${r.users.length} 人</span>
+    </div></div></div>
+   <div class="card" style="margin-bottom:16px"><div class="card-body">
+    <div class="sec-title" style="justify-content:space-between">菜单功能权限（RBAC）<span><button class="btn btn-ghost btn-sm" onclick="permAll(true)">全选</button> <button class="btn btn-ghost btn-sm" onclick="permAll(false)">清空</button> <button class="btn btn-primary btn-sm" onclick="toast('权限配置已保存，变更留痕并待安全审计员复核')">保存权限</button></span></div>
+    <div class="alert" style="margin-bottom:10px">ℹ 勾选该角色可访问的菜单与操作；保存后对该角色下所有用户生效（会话鉴权实时下发）。</div>
+    <div class="perm-tree" id="permTree">${permTreeHtml(r.id)}</div>
+   </div></div>
+   <div class="card"><div class="card-body">
+    <div class="sec-title" style="justify-content:space-between">已授权用户（${r.users.length}）<span><button class="btn btn-ghost btn-sm" onclick="openGrant('${r.id}')">＋ 授权/回收</button></span></div>
+    ${r.users.length?`<div style="display:flex;flex-wrap:wrap;gap:10px">${r.users.map(u=>`<span class="pill"><span class="avatar-sm">${u.slice(0,1)}</span>${u}<span class="btn-text danger" style="margin-left:4px" onclick="toast('回收「${u}」的「${r.name}」角色（需安全保密管理员操作）')">✕</span></span>`).join('')}</div>`:'<p class="mini-note">该角色暂无授权用户，点击右上角“授权用户”分配。</p>'}
+    <p class="mini-note">授权/回收由「安全保密管理员」操作，强制留痕并由「安全审计员」事后复核（见 4.10-P05）。</p>
+   </div></div>
+  </div>`;
+  return `<div class="split">${roleList}${detail}</div>`;
+}
+function permTreeHtml(rid){
+  const r=ROLES.find(x=>x.id===rid);
+  const full=r.type!=='三员'&&(r.id==='R1'||r.id==='R2');
+  const seed=(rolePerm[rid]!==undefined)?rolePerm[rid]:null;
+  return MENU_PERM.map((m,mi)=>{
+    const items=m.items.map((it,ii)=>{
+      const key=mi+'-'+ii;
+      const checked=seed?seed.includes(key):(full?true:defaultPerm(rid,mi,ii));
+      const locked=(r.type==='三员');
+      return `<label class="chk"><input type="checkbox" data-key="${key}" ${checked?'checked':''} ${locked?'disabled':''} onchange="permChange('${rid}',this)">${it}</label>`}).join('');
+    return `<div class="pt-mod"><div class="pt-mod-head"><span class="chk"><input type="checkbox" ${full&&!seed?'checked':''} ${r.type==='三员'?'disabled':''} onchange="permMod(this,'${rid}',${mi})"><b>${m.mod}</b></span></div><div class="pt-mod-body">${items}</div></div>`}).join('');
+}
+function defaultPerm(rid,mi,ii){
+  const r=ROLES.find(x=>x.id===rid);const mod=MENU_PERM[mi].mod;
+  if(r.type==='三员')return mod==='组织管理'||mod==='基础设置';
+  if(rid==='R3')return !['可视化大屏'].includes(mod);
+  if(rid==='R4')return ['培训管理','学员库','工作台'].includes(mod);
+  if(rid==='R5')return ['工作台','教学管理','资源管理'].includes(mod);
+  if(rid==='R6')return ['培训管理','教务组织','基础设置'].includes(mod);
+  if(rid==='R10')return ['学员库','资源管理'].includes(mod);
+  return false;
+}
+function permChange(rid,el){
+  if(!rolePerm[rid])rolePerm[rid]=[...document.querySelectorAll('#permTree input[data-key]:checked')].map(i=>i.dataset.key);
+  const k=el.dataset.key;
+  if(el.checked){if(!rolePerm[rid].includes(k))rolePerm[rid].push(k)}
+  else rolePerm[rid]=rolePerm[rid].filter(x=>x!==k);
+}
+function permMod(el,rid,mi){
+  const boxes=[...document.querySelectorAll('#permTree .pt-mod')][mi].querySelectorAll('input[data-key]');
+  boxes.forEach(b=>{b.checked=el.checked;permChange(rid,b)});
+}
+function permAll(on){
+  document.querySelectorAll('#permTree input[data-key]:not([disabled])').forEach(b=>{b.checked=on;permChange(curRole,b)});
+}
+function openRoleModal(){toast('新增自定义角色：填写角色名称/数据范围/描述，保存后在右侧勾选菜单权限（原型演示）');}
+let grantRole=null;
+function openGrant(rid){
+  grantRole=rid;const r=ROLES.find(x=>x.id===rid);
+  $('grantTitle').textContent='为「'+r.name+'」授权用户';
+  const isThree=r.type==='三员';
+  $('grantList').innerHTML=ACCTS.map(a=>{
+    const has=r.users.includes(a.name);
+    const conflict=isThree&&a.three&&a.three!==r.three;
+    return `<label class="chk" style="display:flex;padding:7px 4px;border-bottom:1px dashed var(--line)" ${conflict?'title="已担任其他三员角色，互斥不可兼任"':''}>
+     <input type="checkbox" value="${a.name}" ${has?'checked':''} ${conflict?'disabled':''}>
+     <span class="avatar-sm">${a.name.slice(0,1)}</span><b style="min-width:70px">${a.name}</b>
+     <span style="color:var(--text-3)">${a.user} · ${deptName(a.dept)}</span>
+     ${conflict?'<span class="tag tag-red" style="margin-left:auto">三员互斥</span>':''}</label>`}).join('');
+  $('grantModal').classList.remove('hidden');
+}
+function grantSave(){
+  const r=ROLES.find(x=>x.id===grantRole);
+  const picked=[...document.querySelectorAll('#grantList input:checked')].map(i=>i.value);
+  if(r.type==='三员'){
+    const bad=picked.filter(n=>{const a=ACCTS.find(x=>x.name===n);return a&&a.three&&a.three!==r.three});
+    if(bad.length){toast('互斥校验失败：'+bad.join('、')+' 已担任其他三员角色，不得兼任');return}
+  }
+  r.users=picked;$('grantModal').classList.add('hidden');render();
+  toast('「'+r.name+'」授权已更新（共 '+picked.length+' 人），操作留痕待审计复核');
+}
+
+/* ============ 4.10-P04 数据权限管理 ============ */
+let dataTab='class';
+function vData(){
+  const tabs=`<div class="sub-tabs">
+   <div class="sub-tab ${dataTab==='class'?'active':''}" onclick="dataTab='class';render()">班次数据权限</div>
+   <div class="sub-tab ${dataTab==='archive'?'active':''}" onclick="dataTab='archive';render()">敏感档案分级授权</div></div>`;
+  return dataTab==='class'?tabs+dataClass():tabs+dataArchive();
+}
+function dataClass(){
+  return `<div class="card"><div class="card-body">
+   <div class="alert">ℹ 规则：培训班次数据查看不设限；但修改排课等须班次管理员操作。创建班次用户默认为班次管理员，可增设其他管理员。课程/资源库/教员/学员库等数据不限制访问及修改（按角色菜单控制）。</div>
+   <div class="filter-bar"><input class="input" placeholder="搜索班次名称…" onkeydown="if(event.key==='Enter')toast('检索：'+this.value.trim()+'（原型占位）')">
+    <span style="margin-left:auto;font-size:12px;color:var(--text-3)">共 ${CLS_PERM.length} 个在办/待结班次</span></div>
+   <table class="data-table"><thead><tr><th>培训班次</th><th>学员数</th><th>创建人</th><th>班次管理员</th><th>数据范围</th><th>操作</th></tr></thead><tbody>
+    ${CLS_PERM.map((c,i)=>`<tr><td class="c-name" onclick="location.href='training.html?page=train-class'">${c.cls}</td>
+     <td>${c.stu} 人</td><td>${c.creator}<span class="tag tag-blue" style="margin-left:6px">默认管理员</span></td>
+     <td>${c.admins.map(a=>`<span class="pill" style="margin-right:4px">${a}</span>`).join('')}</td>
+     <td>${c.scope}</td>
+     <td><button class="btn-text" onclick="openClsPerm(${i})">配置管理员</button>
+      <button class="btn-text" onclick="toast('查看「${c.cls}」数据访问日志（原型占位）')">访问日志</button></td></tr>`).join('')}
+   </tbody></table>
+   <p class="mini-note">说明：非班次管理员可查看班次数据但无法修改排课/成绩/考勤；如需临时协作，可由创建人或二级管理员增设班次管理员。</p>
+  </div></div>`;
+}
+function dataArchive(){
+  return `<div class="card"><div class="card-body">
+   <div class="alert danger">🔐 干部敏感档案实行分级分类授权访问，访问行为全程留痕审计；密级标定与授权由「安全保密管理员」操作，「安全审计员」可回溯全部访问记录。</div>
+   <table class="data-table"><thead><tr><th>密级</th><th>涵盖档案</th><th>授权对象</th><th>授权规则</th><th>操作</th></tr></thead><tbody>
+    ${SECRET_LEVELS.map((s,i)=>`<tr><td><span class="tag ${s.cls}">${s.lv}</span></td>
+     <td style="max-width:260px">${s.desc}</td>
+     <td>${s.grantees.map(g=>`<span class="pill" style="margin:2px 4px 2px 0">${g}</span>`).join('')}</td>
+     <td style="font-size:12px;color:var(--text-2)">${s.rule}</td>
+     <td>${i<2?`<button class="btn-text" onclick="openSecretAuth('${s.lv}')">授权</button>`:'<span style="color:var(--text-3)">—</span>'}
+      <button class="btn-text" onclick="toast('查看「${s.lv}」级档案访问审计日志（原型占位）')">访问审计</button></td></tr>`).join('')}
+   </tbody></table>
+   <div class="sec-title">敏感档案访问审计（最近）</div>
+   <table class="data-table"><thead><tr><th>时间</th><th>访问人</th><th>档案</th><th>密级</th><th>操作</th><th>结果</th></tr></thead><tbody>
+    <tr><td>2026-09-25 09:18</td><td>张处长</td><td>2503班学员组织鉴定</td><td><span class="tag tag-red">机密</span></td><td>在线预览</td><td><span class="tag tag-green">已授权</span></td></tr>
+    <tr><td>2026-09-24 16:02</td><td>张三</td><td>2503班学员名册</td><td><span class="tag tag-blue">内部</span></td><td>导出</td><td><span class="tag tag-green">已授权</span></td></tr>
+    <tr><td>2026-09-24 11:30</td><td>王教授</td><td>2503班组织鉴定</td><td><span class="tag tag-red">机密</span></td><td>尝试访问</td><td><span class="tag tag-red">无权限拦截</span></td></tr>
+   </tbody></table>
+   <p class="mini-note">任何无权访问敏感档案的请求均被拦截并记录，纳入安全审计员告警处置。</p>
+  </div></div>`;
+}
+let cpIdx=null;
+function openClsPerm(i){
+  cpIdx=i;const c=CLS_PERM[i];
+  $('cpCls').value=c.cls;
+  $('cpAdmins').innerHTML=ACCTS.filter(a=>['R1','R2','R3','R4'].includes(a.role)).map(a=>`<label class="chk"><input type="checkbox" value="${a.name}" ${c.admins.includes(a.name)?'checked':''} ${a.name===c.creator?'disabled':''}> ${a.name}${a.name===c.creator?'（创建人）':''} · ${deptName(a.dept)}</label>`).join('');
+  $('clsPermModal').classList.remove('hidden');
+}
+function cpSave(){
+  const c=CLS_PERM[cpIdx];
+  const picked=[...document.querySelectorAll('#cpAdmins input:checked')].map(i=>i.value);
+  if(!picked.includes(c.creator))picked.push(c.creator);
+  c.admins=[...new Set(picked)];$('clsPermModal').classList.add('hidden');render();
+  toast('「'+c.cls+'」班次管理员已更新（'+c.admins.length+' 人）');
+}
+function openSecretAuth(lv){
+  toast('敏感档案授权（'+lv+'级）：由安全保密管理员逐人/按角色授权，系统强制留痕并需双人复核（原型占位）');
+}
+
+/* ============ 4.10-P05 三员管理 ============ */
+let threeTab='roster';
+const THREE=[
+ {key:'sys',name:'系统管理员',icon:'🛠️',cls:'',duty:'建而不予',desc:'组织架构/账户创建、角色模板/菜单/参数配置',rid:'R7'},
+ {key:'sec',name:'安全保密管理员',icon:'🔐',cls:'sec',duty:'予而不建',desc:'用户权限授权/回收、数据密级标定、敏感档案与门禁/人脸底库授权',rid:'R8'},
+ {key:'aud',name:'安全审计员',icon:'📜',cls:'aud',duty:'审而不改',desc:'全量操作日志审计、告警处置、关键操作事后复核',rid:'R9'}
+];
+const MATRIX=[
+ {cap:'组织架构/账户创建',sys:1,sec:0,aud:0},
+ {cap:'角色模板/菜单/参数配置',sys:1,sec:0,aud:0},
+ {cap:'用户权限授权/回收',sys:0,sec:1,aud:0},
+ {cap:'数据密级标定/敏感档案授权',sys:0,sec:1,aud:0},
+ {cap:'门禁/人脸底库授权',sys:0,sec:1,aud:0},
+ {cap:'全量操作日志审计/告警处置',sys:0,sec:0,aud:1},
+ {cap:'业务数据操作（建班/排课等）',sys:0,sec:0,aud:0}
+];
+let mutexResult=null;
+function vThree(){
+  const tabs=`<div class="sub-tabs">
+   <div class="sub-tab ${threeTab==='roster'?'active':''}" onclick="threeTab='roster';render()">三员账户与职责矩阵</div>
+   <div class="sub-tab ${threeTab==='review'?'active':''}" onclick="threeTab='review';render()">关键操作复核记录</div></div>`;
+  return threeTab==='roster'?tabs+threeRoster():tabs+threeReview();
+}
+function threeRoster(){
+  const cards=`<div class="role-cards">${THREE.map(t=>{
+    const users=ACCTS.filter(a=>a.three===t.key);
+    return `<div class="role-card ${t.cls}">
+     <h4>${t.icon} ${t.name} <span class="tag tag-gray">${t.duty}</span></h4>
+     <div class="rc-sub">${t.desc}</div>
+     <div style="font-size:12px;color:var(--text-3)">当前任职 ${users.length} 人</div>
+     <div class="rc-users">${users.length?users.map(u=>`<span class="pill"><span class="avatar-sm">${u.name.slice(0,1)}</span>${u.name}</span>`).join(''):'<span class="tag tag-orange">未配置，存在安全风险</span>'}</div>
+     <div style="margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="openGrant('${t.rid}')">配置人员</button></div>
+    </div>`}).join('')}</div>`;
+  const alert=`<div class="alert warn">⚖ 三员分立：系统管理职能拆分为系统管理员、安全保密管理员、安全审计员三类互斥角色，形成“建而不予、予而不建、审而不改”的制约机制。三员账户互斥：同一自然人不得兼任两员，授权时系统强制校验。</div>`;
+  const matrix=`<div class="card" style="margin-bottom:16px"><div class="card-body">
+   <div class="sec-title">职责与制约矩阵（PRD 6.3.2）</div>
+   <table class="matrix"><thead><tr><th style="min-width:240px">能力</th><th>系统管理员</th><th>安全保密管理员</th><th>安全审计员</th></tr></thead><tbody>
+    ${MATRIX.map(m=>`<tr><td>${m.cap}</td>
+     <td class="${m.sys?'yes':'no'}">${m.sys?'√':'×'}</td>
+     <td class="${m.sec?'yes':'no'}">${m.sec?'√':'×'}</td>
+     <td class="${m.aud?'yes':'no'}">${m.aud?'√':'×'}</td></tr>`).join('')}
+   </tbody></table>
+   <p class="mini-note">系统预置三个内置角色，不可删除、不可合并、不可修改其核心权限集；三员均不得从事业务数据操作。</p>
+  </div></div>`;
+  const mutex=`<div class="card"><div class="card-body">
+   <div class="sec-title" style="justify-content:space-between">互斥校验结果<span><button class="btn btn-primary btn-sm" onclick="runMutexCheck()">🔍 重新校验</button></span></div>
+   ${mutexResult?`<div class="alert ${mutexResult.bad?'danger':''}" style="margin-bottom:10px">${mutexResult.bad?'❌ 校验发现 '+mutexResult.bad+' 项兼任冲突，请立即整改！':'✅ 校验通过：未发现同一自然人兼任两员，共 '+mutexResult.total+' 个三员账户均合规。'}</div>`:'<div class="alert" style="margin-bottom:10px">ℹ 点击“重新校验”对全部三员账户执行互斥校验（授权时系统也会自动强制校验）。</div>'}
+   <table class="data-table"><thead><tr><th>姓名</th><th>账户</th><th>担任三员角色</th><th>互斥校验</th><th>说明</th></tr></thead><tbody>
+    ${MUTEX.map(m=>`<tr><td><b>${m.name}</b></td><td>${m.acct}</td>
+     <td>${m.roles.map(r=>`<span class="tag tag-purple" style="margin-right:4px">${r}</span>`).join('')}</td>
+     <td>${m.ok?'<span class="tag tag-green">✓ 合规</span>':'<span class="tag tag-red">✗ 冲突</span>'}</td>
+     <td style="font-size:12px;color:var(--text-3)">${m.note||'仅担任单一三员角色'}</td></tr>`).join('')}
+   </tbody></table>
+  </div></div>`;
+  return alert+cards+matrix+mutex;
+}
+function threeReview(){
+  const typeCls={'权限授权':'tag-blue','账户创建':'tag-cyan','密级变更':'tag-orange','日志导出':'tag-purple','告警处置':'tag-red'};
+  return `<div class="card"><div class="card-body">
+   <div class="alert">📜 关键操作（权限授权、密级变更、日志清理/导出）强制留痕，并由安全审计员事后复核或双人复核。以下为复核记录（可由安全审计员导出归档）。</div>
+   <div class="filter-bar"><select class="sel" onchange="toast('按类型筛选复核记录（原型占位）')"><option>全部类型</option><option>权限授权</option><option>密级变更</option><option>日志导出</option><option>告警处置</option></select>
+    <button class="btn btn-ghost" onclick="toast('导出复核记录（仅安全审计员可操作，导出行为双人复核）')">导出复核记录</button>
+    <span style="margin-left:auto;font-size:12px;color:var(--text-3)">共 ${REVIEW_LOGS.length} 条复核记录</span></div>
+   <table class="data-table"><thead><tr><th>时间</th><th>复核人</th><th>关键操作内容</th><th>类型</th><th>复核结果</th></tr></thead><tbody>
+    ${REVIEW_LOGS.map(l=>`<tr><td style="font-size:12px;color:var(--text-2)">${l.time}</td><td>${l.op}</td>
+     <td>${l.act}</td><td><span class="tag ${typeCls[l.type]||'tag-gray'}">${l.type}</span></td>
+     <td><span class="tag tag-green">${l.res}</span></td></tr>`).join('')}
+   </tbody></table>
+   <p class="mini-note">审计日志不可篡改；日志清理/导出属高危操作，需安全审计员发起并由另一名管理员双人复核。</p>
+  </div></div>`;
+}
+function runMutexCheck(){
+  threeTab='roster';
+  const byPerson={};
+  ACCTS.forEach(a=>{if(a.three){byPerson[a.name]=(byPerson[a.name]||0)+1}});
+  const bad=Object.keys(byPerson).filter(k=>byPerson[k]>1).length;
+  const total=Object.keys(byPerson).length;
+  mutexResult={bad,total};render();
+  toast(bad?'❌ 互斥校验发现 '+bad+' 项兼任冲突！':'✅ 互斥校验通过：'+total+' 个三员账户均无兼任');
+}
+
+/* ============ 初始化 ============ */
+const q=new URLSearchParams(location.search).get('page');
+const init=q&&VIEW_NAME[q]?q:'org-structure';
+showView(init);
+setNavActive(document.querySelector('.nav-child[data-id="'+init+'"]'));
+</script>
+</body>
+</html>

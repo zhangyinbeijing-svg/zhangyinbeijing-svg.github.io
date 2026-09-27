@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人待办工作台 · 干部培训学院教务管理系统 原型 V1.0</title>
+<style>
+/* ============ PRD 3.1 设计变量 ============ */
+:root{
+  --primary:#1F4E79; --primary-2:#2E75B6; --success:#2E7D32; --warning:#F57F17; --danger:#C62828;
+  --text:#333; --text-2:#595959; --text-3:#8a9099; --bg:#F5F6F8; --card:#fff; --line:#e5e8ec;
+  --topbar-h:56px; --nav-w:220px; --nav-w-c:64px;
+  --r:4px; --r-card:8px; --r-modal:12px;
+  --shadow:0 2px 8px rgba(0,0,0,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{text-decoration:none;color:var(--primary-2);cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2dc;border-radius:4px}
+
+/* ============ 通用组件（PRD 3.4） ============ */
+.btn{height:32px;padding:0 16px;border-radius:var(--r);font-size:14px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#173e61}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-text{background:none;border:none;color:var(--primary-2);cursor:pointer;font-size:13px;padding:0 4px}
+.btn-text:hover{text-decoration:underline}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+.tag-blue{background:rgba(46,117,182,.12);color:var(--primary-2)}
+.tag-green{background:rgba(46,125,50,.12);color:var(--success)}
+.tag-orange{background:rgba(247,127,23,.12);color:var(--warning)}
+.tag-red{background:rgba(198,40,40,.12);color:var(--danger)}
+.tag-gray{background:rgba(89,95,105,.1);color:var(--text-2)}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+.card-head h3{font-size:16px;font-weight:700}
+.card-body{padding:16px}
+.link{font-size:13px}
+.input{height:32px;border:1px solid var(--line);border-radius:var(--r);padding:0 10px;font-size:14px;outline:none}
+.input:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+
+/* ============ 顶部栏（PRD 3.2） ============ */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--primary);color:#fff;
+  display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{display:flex;align-items:center;gap:10px;min-width:230px}
+.tb-logo .mark{width:32px;height:32px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.tb-logo .name{font-size:16px;font-weight:700;white-space:nowrap}
+.tb-search{flex:1;max-width:460px}
+.tb-search .input{width:100%;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;height:34px}
+.tb-search .input::placeholder{color:rgba(255,255,255,.6)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px;position:relative}
+.tb-icon{position:relative;width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px}
+.tb-icon:hover{background:rgba(255,255,255,.15)}
+.tb-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.tb-ver{font-size:12px;color:rgba(255,255,255,.65);margin:0 4px}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tb-user:hover{background:rgba(255,255,255,.15)}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.dropdown{position:absolute;top:50px;right:0;width:180px;background:#fff;border-radius:var(--r);box-shadow:0 6px 24px rgba(0,0,0,.18);overflow:hidden;z-index:120}
+.dropdown .dd-head{padding:12px 14px;border-bottom:1px solid var(--line);font-size:13px;color:var(--text-2)}
+.dropdown .dd-item{padding:10px 14px;font-size:14px;color:var(--text);cursor:pointer;display:flex;gap:8px;align-items:center}
+.dropdown .dd-item:hover{background:rgba(31,78,121,.06);color:var(--primary)}
+.bell-pop{position:absolute;top:50px;right:44px;width:320px;background:#fff;border-radius:var(--r-card);box-shadow:0 6px 24px rgba(0,0,0,.18);z-index:120;overflow:hidden}
+.bell-pop .bp-head{padding:10px 14px;border-bottom:1px solid var(--line);font-size:14px;font-weight:700;display:flex;justify-content:space-between}
+.bp-item{padding:10px 14px;border-bottom:1px dashed var(--line);font-size:13px;cursor:pointer}
+.bp-item:hover{background:#f7f9fc}
+.bp-item .t{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bp-item .m{font-size:12px;color:var(--text-3);margin-top:2px}
+.bp-foot{padding:8px;text-align:center;font-size:13px}
+
+/* ============ 左侧导航 ============ */
+.sidenav{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--nav-w);background:#fff;border-right:1px solid var(--line);overflow-y:auto;z-index:90;transition:width .2s}
+.nav-parent{display:flex;align-items:center;gap:10px;padding:0 16px;height:44px;cursor:pointer;color:var(--text-2);font-size:14px;position:relative}
+.nav-parent:hover{background:#f2f6fa;color:var(--primary)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex:none}
+.nav-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-caret{font-size:11px;color:var(--text-3);transition:transform .2s}
+.nav-group.open .nav-caret{transform:rotate(90deg)}
+.nav-group.open>.nav-parent{color:var(--primary);font-weight:700}
+.nav-children{display:none;background:#fafbfc}
+.nav-group.open .nav-children{display:block}
+.nav-child{padding:0 16px 0 44px;height:38px;display:flex;align-items:center;font-size:13px;color:var(--text-2);cursor:pointer;position:relative}
+.nav-child:hover{color:var(--primary);background:#f2f6fa}
+.nav-child.active{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-child.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.nav-parent.active-direct{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-parent.active-direct::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.nav-collapse{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:var(--text-3);cursor:pointer;display:flex;gap:8px;align-items:center}
+.nav-collapse:hover{color:var(--primary)}
+body.nav-collapsed .sidenav{width:var(--nav-w-c)}
+body.nav-collapsed .nav-label,body.nav-collapsed .nav-caret,body.nav-collapsed .nav-children,body.nav-collapsed .nav-collapse span{display:none}
+body.nav-collapsed .nav-parent{justify-content:center;padding:0}
+body.nav-collapsed .nav-collapse{justify-content:center}
+
+/* ============ 内容区 ============ */
+.content{margin-left:var(--nav-w);margin-top:var(--topbar-h);padding:24px;min-height:calc(100vh - var(--topbar-h));transition:margin-left .2s}
+body.nav-collapsed .content{margin-left:var(--nav-w-c)}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+.breadcrumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+.page-title{font-size:20px;font-weight:700}
+.page-ops{display:flex;gap:8px}
+
+/* 角色视图切换 */
+.view-tabs{display:flex;gap:4px;background:#e9edf2;padding:4px;border-radius:var(--r)}
+.view-tab{padding:6px 18px;border-radius:var(--r);font-size:14px;color:var(--text-2);cursor:pointer}
+.view-tab.active{background:#fff;color:var(--primary);font-weight:700;box-shadow:var(--shadow)}
+
+/* 欢迎横幅 */
+.banner{background:linear-gradient(120deg,var(--primary),var(--primary-2));border-radius:var(--r-card);color:#fff;
+  padding:20px 24px;margin-bottom:16px;display:flex;align-items:center;gap:24px;box-shadow:var(--shadow)}
+.banner .greet{font-size:20px;font-weight:700}
+.banner .date{font-size:13px;opacity:.85;margin-top:4px}
+.banner .roles{margin-top:8px;display:flex;gap:6px}
+.banner .roles span{background:rgba(255,255,255,.18);border-radius:999px;padding:2px 10px;font-size:12px}
+.banner-stats{margin-left:auto;display:flex;gap:28px}
+.bs{text-align:center}
+.bs .n{font-size:28px;font-weight:700;font-family:Consolas,monospace}
+.bs .l{font-size:12px;opacity:.85;margin-top:2px}
+
+/* ① 待办卡片区 */
+.sec-title{font-size:14px;font-weight:700;color:var(--text-2);margin:0 0 10px;display:flex;justify-content:space-between;align-items:center}
+.todo-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:16px}
+.todo-card{position:relative;background:#fff;border-radius:var(--r-card);box-shadow:var(--shadow);padding:18px 16px 14px;cursor:grab;text-align:center;transition:transform .15s}
+.todo-card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.12)}
+.todo-card.dragging{opacity:.5}
+.todo-badge{position:absolute;top:8px;right:8px;min-width:20px;height:20px;border-radius:999px;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.b-blue{background:var(--primary-2)}.b-orange{background:var(--warning)}.b-red{background:var(--danger)}.b-green{background:var(--success)}
+.todo-icon{font-size:22px;margin-bottom:6px}
+.todo-name{font-size:14px;font-weight:700}
+.todo-sub{font-size:12px;color:var(--text-3);margin-top:2px}
+
+/* ②③ 中部两栏 */
+.wb-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+.timeline{padding:6px 0}
+.tl-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.tl-item:last-child{border-bottom:none}
+.tl-time{font-size:12px;color:var(--text-3);width:88px;flex:none;padding-top:2px}
+.tl-body{flex:1}
+.tl-title{font-size:14px;font-weight:700}
+.tl-meta{font-size:12px;color:var(--text-3);margin-top:2px}
+.card-sub-head{font-size:14px;font-weight:700;margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+.mini-table{width:100%;border-collapse:collapse;font-size:13px}
+.mini-table th,.mini-table td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+.mini-table th{color:var(--text-3);font-weight:400;font-size:12px;background:#fafbfc}
+.warn-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+.warn-item:last-child{border-bottom:none}
+.warn-item:hover .warn-title{color:var(--primary)}
+.warn-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex:none}
+.w-red .warn-dot{background:var(--danger)}.w-orange .warn-dot{background:var(--warning)}
+.warn-title{font-size:14px;font-weight:700}
+.warn-meta{font-size:12px;color:var(--text-3);margin-top:2px}
+.warn-item>div{flex:1}
+.msg-mini{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}
+.msg-mini .mm{display:flex;gap:8px;align-items:center;padding:7px 0;font-size:13px;cursor:pointer;border-bottom:1px dashed var(--line)}
+.msg-mini .mm:last-child{border-bottom:none}
+.msg-mini .dot{width:6px;height:6px;border-radius:50%;background:var(--danger);flex:none}
+.msg-mini .mm.read .dot{background:#d4d9de}
+.msg-mini .t{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-mini .tm{font-size:12px;color:var(--text-3)}
+
+/* ④ 快捷入口 */
+.quick-tiles{display:grid;grid-template-columns:repeat(8,1fr);gap:12px}
+.tile{background:#f7f9fc;border-radius:var(--r);padding:16px 8px;text-align:center;cursor:pointer;font-size:13px;color:var(--text-2)}
+.tile:hover{background:rgba(46,117,182,.1);color:var(--primary)}
+.tile .ti{font-size:20px;display:block;margin-bottom:6px}
+
+/* ============ 教研教师工作台（PRD 4.1.5） ============ */
+.teacher-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.course-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.course-item:last-child{border-bottom:none}
+.course-item .ci-main{flex:1}
+.ci-title{font-size:14px;font-weight:700}
+.ci-meta{font-size:12px;color:var(--text-3);margin-top:3px}
+.eval-row{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13px;border-bottom:1px dashed var(--line)}
+.eval-row:last-child{border-bottom:none}
+.eval-row .name{width:150px;flex:none}
+.eval-bar{flex:1;height:8px;background:#eef1f4;border-radius:999px;overflow:hidden}
+.eval-bar i{display:block;height:100%;border-radius:999px;background:var(--success)}
+.eval-bar.mid i{background:var(--primary-2)}
+.eval-bar.low i{background:var(--danger)}
+.eval-row .score{width:44px;text-align:right;font-weight:700;font-family:Consolas,monospace}
+.score.high{color:var(--success)}.score.low{color:var(--danger)}
+.week{display:grid;grid-template-columns:56px repeat(5,1fr);gap:6px;font-size:12px}
+.week .hd{text-align:center;color:var(--text-3);padding:4px 0}
+.week .slot{background:#fafbfc;border-radius:var(--r);min-height:52px;padding:4px;position:relative}
+.week .tcell{text-align:right;color:var(--text-3);padding-top:4px}
+.week .cls{background:rgba(46,117,182,.12);border-left:3px solid var(--primary-2);border-radius:var(--r);padding:4px 6px;font-size:12px;color:var(--primary);margin-bottom:4px;cursor:pointer}
+.week .cls:hover{background:rgba(46,117,182,.22)}
+
+/* ============ 弹窗 / Toast ============ */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{width:440px;background:#fff;border-radius:var(--r-modal);box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden}
+.modal-head{padding:14px 18px;font-size:16px;font-weight:700;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.modal-body{padding:18px}
+.modal-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.chk-row{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:14px}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(40,45,52,.92);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:300;box-shadow:var(--shadow)}
+</style>
+</head>
+<body>
+
+<!-- ================= 顶部栏 ================= -->
+<header class="topbar">
+  <div class="tb-logo"><div class="mark">院</div><div class="name">干部培训学院教务管理系统</div></div>
+  <div class="tb-search"><input class="input" id="tbSearch" placeholder="🔍 全局搜索：班次 / 学员 / 师资 / 课程…"></div>
+  <div class="tb-right">
+    <span class="tb-ver">V1.0 原型</span>
+    <div class="tb-icon" id="tbBell" title="站内信">🔔<span class="tb-badge" id="bellBadge">5</span></div>
+    <div class="tb-icon" onclick="toast('帮助中心为原型占位')" title="帮助中心">❓</div>
+    <div class="tb-user" id="tbUser">
+      <div class="tb-avatar">张</div><span>张三</span><span style="font-size:10px">▼</span>
+    </div>
+    <!-- 用户下拉 -->
+    <div class="dropdown hidden" id="userDrop">
+      <div class="dd-head">张三 · 教务管理办<br><span style="color:var(--text-3)">三级管理员 / 班次管理员</span></div>
+      <div class="dd-item" onclick="toast('跳转个人信息页（原型占位）')">👤 个人信息</div>
+      <div class="dd-item" onclick="toast('跳转修改密码页（原型占位）')">🔑 修改密码</div>
+      <div class="dd-item" onclick="toast('跳转消息中心（原型占位）')">🔔 我的站内信</div>
+      <div class="dd-item" style="color:var(--danger)" onclick="toast('已退出登录（原型占位）')">⏻ 退出登录</div>
+    </div>
+    <!-- 铃铛消息速览 -->
+    <div class="bell-pop hidden" id="bellPop">
+      <div class="bp-head">站内信速览<a class="link" onclick="toast('跳转消息中心（原型占位）');closePops()">全部 ›</a></div>
+      <div class="bp-item"><div class="t">【审批通知】2503班排课申请待您审批</div><div class="m">教务管理 · 09:12</div></div>
+      <div class="bp-item"><div class="t">【预警通知】2503班师资费超标准12%</div><div class="m">预算管理 · 08:47</div></div>
+      <div class="bp-item"><div class="t">【催收通知】2502班教学评估数据未提交</div><div class="m">教学评估 · 昨天 17:30</div></div>
+      <div class="bp-foot"><a onclick="toast('全部标记已读（原型占位）');closePops()">全部标记已读</a></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= 左侧导航 ================= -->
+<aside class="sidenav" id="sidenav"></aside>
+
+<!-- ================= 内容区：工作台 ================= -->
+<main class="content">
+  <div class="page-head">
+    <div><div class="breadcrumb">首页 / 工作台</div><h2 class="page-title">个人待办工作台</h2></div>
+    <div style="display:flex;gap:12px;align-items:center">
+      <div class="view-tabs" id="viewTabs">
+        <div class="view-tab active" data-v="admin">管理/组织员视图</div>
+        <div class="view-tab" data-v="teacher">教研教师视图</div>
+      </div>
+      <div class="page-ops">
+        <button class="btn btn-ghost" id="layoutBtn">⚙ 自定义布局</button>
+        <button class="btn btn-primary" onclick="toast('新建班次向导见 4.3-P01')">＋ 新建班次</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 欢迎横幅 -->
+  <div class="banner">
+    <div>
+      <div class="greet">上午好，张三！</div>
+      <div class="date">2026年9月25日 星期五 · 农历八月十五 · 内网终端 T3-05</div>
+      <div class="roles"><span>三级管理员</span><span>班次管理员（2503/2505）</span><span>组织员</span></div>
+    </div>
+    <div class="banner-stats">
+      <div class="bs"><div class="n">17</div><div class="l">待办事项</div></div>
+      <div class="bs"><div class="n">3</div><div class="l">今日课程</div></div>
+      <div class="bs"><div class="n">2</div><div class="l">在办班次</div></div>
+      <div class="bs"><div class="n">4</div><div class="l">预警提醒</div></div>
+    </div>
+  </div>
+
+  <!-- ============ 视图一：个人待办工作台（PRD 4.1.4） ============ -->
+  <div id="view-admin">
+    <!-- ① 待办卡片区（可拖拽排序） -->
+    <div class="sec-title" data-sec="todo">① 待办卡片（可拖拽排序）<a class="link" onclick="toast('进入审批中心（原型占位）')">全部待办 ›</a></div>
+    <div class="todo-cards" id="todoCards" data-sec-body="todo">
+      <div class="todo-card" draggable="true"><span class="todo-badge b-blue">3</span><div class="todo-icon">📝</div><div class="todo-name">排课审批</div><div class="todo-sub">待我办理</div></div>
+      <div class="todo-card" draggable="true"><span class="todo-badge b-orange">2</span><div class="todo-icon">📅</div><div class="todo-name">请假审批</div><div class="todo-sub">待我办理</div></div>
+      <div class="todo-card" draggable="true"><span class="todo-badge b-orange">1</span><div class="todo-icon">🔁</div><div class="todo-name">调停课</div><div class="todo-sub">待我办理</div></div>
+      <div class="todo-card" draggable="true"><span class="todo-badge b-red">4</span><div class="todo-icon">💰</div><div class="todo-name">预算审批</div><div class="todo-sub">含超标特批</div></div>
+      <div class="todo-card" draggable="true"><span class="todo-badge b-green">2</span><div class="todo-icon">🎓</div><div class="todo-name">结班/证书</div><div class="todo-sub">待确认</div></div>
+      <div class="todo-card" draggable="true"><span class="todo-badge b-red">5</span><div class="todo-icon">📣</div><div class="todo-name">评估催收</div><div class="todo-sub">待提交</div></div>
+    </div>
+
+    <!-- ②③ 今日课表/我的班次 + 预警提醒 -->
+    <div class="wb-grid">
+      <div class="card" data-sec-body="today"><div class="card-body">
+        <div class="card-head" style="padding:0 0 10px;border-bottom:1px solid var(--line)"><h3>② 今日课表 / 我的班次</h3><a class="link" onclick="toast('全部课表见 4.5-P01')">查看全部 ›</a></div>
+        <div class="timeline">
+          <div class="tl-item"><span class="tl-time">08:30-10:00</span><div class="tl-body"><div class="tl-title">新时代中国特色社会主义思想概论 · 2503班</div><div class="tl-meta">教室301 · 王教授 · 应到45人 · 实到43人</div></div><span class="tag tag-blue">进行中</span></div>
+          <div class="tl-item"><span class="tl-time">10:15-11:45</span><div class="tl-body"><div class="tl-title">宏观经济形势分析 · 2503/2505班合班</div><div class="tl-meta">报告厅 · 李教授 · 应到90人</div></div><span class="tag tag-gray">待上课</span></div>
+          <div class="tl-item"><span class="tl-time">14:00-17:00</span><div class="tl-body"><div class="tl-title">分组研讨：高质量发展实践 · 2503班</div><div class="tl-meta">研讨室201-203 · 组织员带队 · 3个小组</div></div><span class="tag tag-gray">待上课</span></div>
+        </div>
+        <div class="card-sub-head">我的班次<a class="link" onclick="toast('跳转培训班管理 4.3-P01')">管理班次 ›</a></div>
+        <table class="mini-table">
+          <tr><th>班次名称</th><th>起止日期</th><th>学员数</th><th>进度</th><th>状态</th><th>操作</th></tr>
+          <tr><td>2503期处级干部进修班</td><td>09-01 至 09-30</td><td>45</td><td>62%</td><td><span class="tag tag-blue">在办</span></td><td><a class="btn-text" onclick="toast('班次详情 4.3-P02')">详情</a><a class="btn-text" onclick="toast('考勤看板 4.3-P14')">考勤</a></td></tr>
+          <tr><td>2505期青年干部培训班</td><td>09-08 至 10-20</td><td>48</td><td>40%</td><td><span class="tag tag-blue">在办</span></td><td><a class="btn-text" onclick="toast('班次详情 4.3-P02')">详情</a><a class="btn-text" onclick="toast('考勤看板 4.3-P14')">考勤</a></td></tr>
+          <tr><td>2498期专题研讨班</td><td>08-01 至 08-20</td><td>40</td><td>100%</td><td><span class="tag tag-green">待结班</span></td><td><a class="btn-text" onclick="toast('结班报告 4.3-P13')">结班报告</a></td></tr>
+        </table>
+      </div></div>
+
+      <div class="card" data-sec-body="warn"><div class="card-body">
+        <div class="card-head" style="padding:0 0 10px;border-bottom:1px solid var(--line)"><h3>③ 预警提醒</h3><a class="link" onclick="toast('预警下钻为原型占位')">下钻 ›</a></div>
+        <div class="warn-item w-red" onclick="toast('下钻预算明细（4.3-P12）')"><span class="warn-dot"></span><div><div class="warn-title">预算超支预警</div><div class="warn-meta">2503班 · 师资费超标准12%，禁止提交</div></div><span class="tag tag-red">紧急</span></div>
+        <div class="warn-item w-red" onclick="toast('下钻缺口清单（原型占位）')"><span class="warn-dot"></span><div><div class="warn-title">应训尽训缺口</div><div class="warn-meta">本季度3名干部未纳入培训计划</div></div><span class="tag tag-red">紧急</span></div>
+        <div class="warn-item w-orange" onclick="toast('下钻教室占用（4.8-P02）')"><span class="warn-dot"></span><div><div class="warn-title">资源瓶颈预警</div><div class="warn-meta">报告厅下周占用率已达90%</div></div><span class="tag tag-orange">关注</span></div>
+        <div class="warn-item w-orange" onclick="toast('下钻评估报告（4.3-P08）')"><span class="warn-dot"></span><div><div class="warn-title">培训质量预警</div><div class="warn-meta">2501班课程满意度低于80%</div></div><span class="tag tag-orange">关注</span></div>
+        <div class="msg-mini">
+          <div class="card-sub-head" style="margin-top:4px;border:none;padding-top:0">最新站内信<a class="link" onclick="toast('跳转消息中心（原型占位）')">全部 ›</a></div>
+          <div class="mm"><span class="dot"></span><span class="t">2503班排课申请待您审批</span><span class="tm">09:12</span></div>
+          <div class="mm"><span class="dot"></span><span class="t">2502班教学评估数据未提交</span><span class="tm">昨天</span></div>
+          <div class="mm read"><span class="dot"></span><span class="t">系统今晚23:00升级维护</span><span class="tm">昨天</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ④ 快捷入口 -->
+    <div class="card" data-sec-body="quick"><div class="card-body">
+      <div class="card-head" style="padding:0 0 10px;border-bottom:1px solid var(--line)"><h3>④ 快捷入口</h3><a class="link" onclick="openLayout()">管理磁贴</a></div>
+      <div class="quick-tiles" style="margin-top:12px">
+        <div class="tile" onclick="location.href='training.html?page=train-class'"><span class="ti">🆕</span>新建班次</div>
+        <div class="tile" onclick="location.href='training-schedule.html'"><span class="ti">🧲</span>拖拽排课</div>
+        <div class="tile" onclick="location.href='training.html?page=train-stu'"><span class="ti">📥</span>录入考生</div>
+        <div class="tile" onclick="toast('照片采集（人脸底库 6.6）')"><span class="ti">🖼</span>照片采集</div>
+        <div class="tile" onclick="location.href='training.html?page=train-attend'"><span class="ti">✅</span>考勤看板</div>
+        <div class="tile" onclick="toast('生成报表 4.5-P03')"><span class="ti">📑</span>生成报表</div>
+        <div class="tile" onclick="toast('数据导出 4.5-P04')"><span class="ti">📤</span>数据导出</div>
+        <div class="tile" onclick="location.href='screen.html'"><span class="ti">📈</span>大屏入口</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- ============ 视图二：教研教师工作台（PRD 4.1.5） ============ -->
+  <div id="view-teacher" class="hidden">
+    <div class="teacher-grid">
+      <div>
+        <!-- 备课区 -->
+        <div class="card" style="margin-bottom:16px"><div class="card-body">
+          <div class="card-head" style="padding:0 0 10px;border-bottom:1px solid var(--line)"><h3>备课区 · 我的课程与教案草稿</h3><a class="link" onclick="toast('教案库 4.4-P01')">进入教案库 ›</a></div>
+          <div class="course-item"><span class="todo-icon">📘</span><div class="ci-main"><div class="ci-title">新时代中国特色社会主义思想概论</div><div class="ci-meta">2503班 · 9月25日 08:30 · 教室301 · 教案状态：<span style="color:var(--success)">已定稿</span></div></div><button class="btn btn-ghost" onclick="toast('在线编辑教案（原型占位）')">查看教案</button></div>
+          <div class="course-item"><span class="todo-icon">📗</span><div class="ci-main"><div class="ci-title">高质量发展政策解读</div><div class="ci-meta">2505班 · 9月28日 14:00 · 报告厅 · 教案状态：<span style="color:var(--warning)">草稿（完成60%）</span></div></div><button class="btn btn-primary" onclick="toast('在线编辑教案（原型占位）')">继续编辑</button></div>
+          <div class="course-item"><span class="todo-icon">📙</span><div class="ci-main"><div class="ci-title">基层治理案例分析</div><div class="ci-meta">2506班（筹备） · 10月12日 · 教案状态：<span style="color:var(--text-3)">未开始</span></div></div><button class="btn btn-ghost" onclick="toast('新建教案（原型占位）')">新建教案</button></div>
+        </div></div>
+        <!-- 课件管理 -->
+        <div class="card" style="margin-bottom:16px"><div class="card-body">
+          <div class="card-head" style="padding:0 0 10px;border-bottom:1px solid var(--line)"><h3>课件管理</h3><button class="btn btn-primary" onclick="toast('上传课件（原型占位）')">⬆ 上传课件</button></div>
+          <table class="mini-table">
+            <tr><th>课件名称</th><th>关联课程/课时</th><th>版本</th><th>更新时间</th><th>状态</th><th>操作</th></tr>
+            <tr><td>概论课主课件.pptx</td><td>概论 · 第1讲</td><td>V3</td><td>09-20</td><td><span class="tag tag-green">已发布</span></td><td><a class="btn-text" onclick="toast('更新课件（原型占位）')">更新</a><a class="btn-text" onclick="toast('下载课件（原型占位）')">下载</a></td></tr>
+            <tr><td>政策解读课件.pptx</td><td>高质量发展 · 第2讲</td><td>V1</td><td>09-22</td><td><span class="tag tag-orange">待审核</span></td><td><a class="btn-text" onclick="toast('更新课件（原型占位）')">更新</a></td></tr>
+            <tr><td>案例集.pdf</td><td>基层治理 · 全课程</td><td>V2</td><td>09-18</td><td><span class="tag tag-green">已发布</span></td><td><a class="btn-text" onclick="toast('更新课件（原型占位）')">更新</a><a class="btn-text" onclick="toast('下载课件（原型占位）')">下载</a></td></tr>
+          </table>
+        </div></div>
+        <!-- 我的课表（周视图） -->
+        <div class="card"><div class="card-body">
+          <div class="card-head" style="padding:0 0 10px;border-bottom:1px solid var(--line)"><h3>我的课表（周视图）</h3><a class="link" onclick="toast('个人课表打印（原型占位）')">打印课表</a></div>
+          <div class="week" style="margin-top:10px">
+            <div class="hd"></div><div class="hd">周一</div><div class="hd">周二</div><div class="hd">周三</div><div class="hd">周四</div><div class="hd">周五</div>
+            <div class="tcell">上午</div>
+            <div class="slot"></div>
+            <div class="slot"><div class="cls" onclick="toast('2503班 概论课')">2503 概论</div></div>
+            <div class="slot"></div>
+            <div class="slot"><div class="cls" onclick="toast('2505班 合班课')">2503/05 合班</div></div>
+            <div class="slot"><div class="cls" onclick="toast('2503班 概论课')">2503 概论</div></div>
+            <div class="tcell">下午</div>
+            <div class="slot"><div class="cls" onclick="toast('2505班 政策解读')">2505 政策</div></div>
+            <div class="slot"></div>
+            <div class="slot"><div class="cls" onclick="toast('2503班 分组研讨指导')">2503 研讨</div></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+        </div></div>
+      </div>
+      <div>
+        <!-- 学员评教结果（只读，分数高亮 PRD 3.6） -->
+        <div class="card" style="margin-bottom:16px"><div class="card-body">
+          <div class="card-head" style="padding:0 0 10px;border-bottom:1px solid var(--line)"><h3>学员评教结果（只读）</h3><a class="link" onclick="toast('教学评估 4.3-P08')">评估报告 ›</a></div>
+          <div class="eval-row"><span class="name">概论课（2502班）</span><div class="eval-bar"><i style="width:95%"></i></div><span class="score high">95.2</span></div>
+          <div class="eval-row"><span class="name">政策解读（2501班）</span><div class="eval-bar mid"><i style="width:88%"></i></div><span class="score">88.4</span></div>
+          <div class="eval-row"><span class="name">案例分析（2498班）</span><div class="eval-bar mid"><i style="width:82%"></i></div><span class="score">82.1</span></div>
+          <div class="eval-row"><span class="name">专题研讨（2495班）</span><div class="eval-bar low"><i style="width:58%"></i></div><span class="score low">58.7</span></div>
+          <p style="font-size:12px;color:var(--text-3);margin-top:10px">≥90 自动标绿 · ≤60 自动标红（阈值可配置）；异常值醒目提示，详见 PRD 3.6。</p>
+        </div></div>
+        <!-- 咨政材料 -->
+        <div class="card"><div class="card-body">
+          <div class="card-head" style="padding:0 0 10px;border-bottom:1px solid var(--line)"><h3>咨政材料</h3><button class="btn btn-primary" onclick="toast('提交咨政材料（原型占位）')">＋ 提交</button></div>
+          <div class="warn-item" style="cursor:default"><span class="warn-dot" style="background:var(--success)"></span><div><div class="warn-title" style="font-size:13px">关于完善基层干部轮训机制的建议</div><div class="warn-meta">提交于 09-10 · 已采纳</div></div><span class="tag tag-green">已采纳</span></div>
+          <div class="warn-item" style="cursor:default"><span class="warn-dot" style="background:var(--warning)"></span><div><div class="warn-title" style="font-size:13px">干部数字化能力培养路径研究</div><div class="warn-meta">提交于 09-18 · 审核中</div></div><span class="tag tag-orange">审核中</span></div>
+          <div class="warn-item" style="cursor:default"><span class="warn-dot" style="background:var(--text-3)"></span><div><div class="warn-title" style="font-size:13px">现场教学点建设情况调研</div><div class="warn-meta">草稿 · 未提交</div></div><span class="tag tag-gray">草稿</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ================= 自定义布局弹窗 ================= -->
+<div class="mask hidden" id="modal-layout"><div class="modal">
+  <div class="modal-head">自定义布局<span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <p style="font-size:13px;color:var(--text-3);margin-bottom:8px">勾选需要在工作台展示的区块（配置保存至用户偏好）：</p>
+    <div class="chk-row"><input type="checkbox" id="ck-todo" checked> 待办卡片区</div>
+    <div class="chk-row"><input type="checkbox" id="ck-today" checked> 今日课表 / 我的班次</div>
+    <div class="chk-row"><input type="checkbox" id="ck-warn" checked> 预警提醒</div>
+    <div class="chk-row"><input type="checkbox" id="ck-quick" checked> 快捷入口</div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" id="layoutSave">保存布局</button></div>
+</div></div>
+
+<script>
+/* ============ 工具 ============ */
+function $(id){return document.getElementById(id)}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+document.querySelectorAll('.js-close').forEach(b=>b.onclick=e=>e.target.closest('.mask').classList.add('hidden'));
+
+/* ============ 完整导航数据（PRD 2.4） ============ */
+const NAV=[
+ {id:'workbench',icon:'🏠',name:'工作台',direct:true},
+ {id:'teach',icon:'📚',name:'教学管理',children:[
+   {id:'teach-system',name:'课程体系',pg:'4.2-P01'},{id:'teach-course',name:'课程管理',pg:'4.2-P02'}]},
+ {id:'train',icon:'🎓',name:'培训管理',children:[{id:'train-class',name:'培训班管理',pg:'4.3-P01'},{id:'base-category',name:'培训类别',pg:'4.11-P01'},{id:'base-course',name:'课程分类',pg:'4.11-P02'}]},
+ {id:'resource',icon:'🗂️',name:'资源管理',children:[
+   {id:'res-plan',name:'教案库',pg:'4.4-P01'},{id:'res-book',name:'教材库',pg:'4.4-P02'},
+   {id:'res-case',name:'案例库',pg:'4.4-P03'},{id:'res-self',name:'自他资源库',pg:'4.4-P04'},
+   {id:'res-bank',name:'题库试卷库',pg:'4.4-P05'},{id:'res-tag',name:'标签管理',pg:'4.4-P06'}]},
+ {id:'edu',icon:'📊',name:'教务组织',children:[
+   {id:'edu-plan',name:'教学计划管理',pg:'4.5-P01'},{id:'edu-data',name:'教务数据管理',pg:'4.5-P02'},
+   {id:'edu-report',name:'多维度报表',pg:'4.5-P03'},{id:'edu-export',name:'数据导出与集成',pg:'4.5-P04'},
+   {id:'edu-settle',name:'结算报告模板',pg:'4.5-P05'}]},
+ {id:'teacher',icon:'👥',name:'师资库',children:[
+   {id:'tea-list',name:'师资信息',pg:'4.6-P01'},{id:'tea-tag',name:'分级分类标签',pg:'4.6-P03'},
+   {id:'tea-archive',name:'授课质量档案',pg:'4.6-P02'},{id:'tea-invite',name:'授课邀请函',pg:'4.6-P04'},
+   {id:'tea-report',name:'综合评价报告',pg:'4.6-P05'}]},
+ {id:'student',icon:'✪',name:'学员库',children:[
+   {id:'stu-list',name:'学员信息',pg:'4.7-P01'},{id:'stu-query',name:'个人综合查询',pg:'4.7-P02'},
+   {id:'stu-archive',name:'参训档案',pg:'4.7-P03'}]},
+ {id:'room',icon:'🏫',name:'教室管理',children:[
+   {id:'room-point',name:'教学点管理',pg:'4.8-P01'},{id:'room-room',name:'教室管理',pg:'4.8-P02'},
+   {id:'room-device',name:'人脸考勤设备',pg:'4.8-P03'}]},
+ {id:'approve',icon:'✅',name:'审批管理',children:[
+   {id:'apv-schedule',name:'排课审批',pg:'4.9-P01'},{id:'apv-budget',name:'预算审批',pg:'4.9-P01'},
+   {id:'apv-leave',name:'请假/调停课审批',pg:'4.9-P01'},{id:'apv-record',name:'审批记录',pg:'4.9-P03'}]},
+ {id:'org',icon:'🏛️',name:'组织管理',children:[
+   {id:'org-structure',name:'组织架构',pg:'4.10-P01'},{id:'org-account',name:'账户管理',pg:'4.10-P02'},
+   {id:'org-user',name:'用户权限',pg:'4.10-P03'},{id:'org-data',name:'数据权限',pg:'4.10-P04'},
+   {id:'org-three',name:'三员管理',pg:'4.10-P05'}]},
+ {id:'base',icon:'⚙️',name:'基础设置',children:[
+   {id:'base-log',name:'系统日志',pg:'4.11-P03'},{id:'base-rule',name:'经费规则库',pg:'4.11-P04'}]},
+ {id:'screen',icon:'📈',name:'可视化大屏',children:[
+   {id:'scr-overview',name:'总览大屏',pg:'4.12'},{id:'scr-study',name:'学情大屏',pg:'4.12'},{id:'scr-resource',name:'资源大屏',pg:'4.12'}]}
+];
+$('sidenav').innerHTML=NAV.map(g=>`
+ <div class="nav-group" data-group="${g.id}">
+   <div class="nav-parent ${g.direct?'active-direct':''}" data-id="${g.id}">
+     <span class="nav-icon">${g.icon}</span><span class="nav-label">${g.name}</span>
+     ${g.children?'<span class="nav-caret">▸</span>':''}
+   </div>
+   ${g.children?`<div class="nav-children">${g.children.map(c=>`<div class="nav-child" data-id="${c.id}" data-name="${c.name}" data-pg="${c.pg||''}"><span class="nav-label">${c.name}</span></div>`).join('')}</div>`:''}
+ </div>`).join('')+`<div class="nav-collapse" id="navCollapse">⇤<span>收起导航</span></div>`;
+
+$('sidenav').addEventListener('click',e=>{
+  if(e.target.closest('#navCollapse')){document.body.classList.toggle('nav-collapsed');return}
+  const child=e.target.closest('.nav-child'),parent=e.target.closest('.nav-parent');
+  if(child){
+    if(child.dataset.pg&&child.dataset.pg.indexOf('4.2')===0){location.href='teaching.html?page='+child.dataset.id;return}
+    if(child.dataset.id==='train-schedule'){location.href='training-schedule.html';return}
+    if(child.dataset.pg&&child.dataset.pg.indexOf('4.3')===0){location.href='training.html?page='+child.dataset.id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.4')===0){location.href='resource.html?page='+child.dataset.id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.5')===0){location.href='edu.html?page='+child.dataset.id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.6')===0){location.href='teacher-lib.html?page='+child.dataset.id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.7')===0){location.href='student-lib.html?page='+child.dataset.id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.8')===0){location.href='room.html?page='+child.dataset.id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.9')===0){location.href='approve.html?page='+child.dataset.id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.10')===0){location.href='org.html?page='+child.dataset.id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.11')===0){location.href='base.html?page='+child.dataset.id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.12')===0){location.href='screen.html?scr='+child.dataset.id;return}
+    toast('「'+child.dataset.name+'」（'+child.dataset.pg+'）为原型占位，将在高保真阶段补充');return}
+  if(parent){const g=NAV.find(x=>x.id===parent.dataset.id);
+    if(g.direct){toast('当前已在工作台');return}
+    parent.closest('.nav-group').classList.toggle('open');}
+});
+
+/* ============ 视图切换：管理员 / 教研教师 ============ */
+$('viewTabs').addEventListener('click',e=>{
+  const t=e.target.closest('.view-tab');if(!t)return;
+  document.querySelectorAll('.view-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');
+  const v=t.dataset.v;
+  $('view-admin').classList.toggle('hidden',v!=='admin');
+  $('view-teacher').classList.toggle('hidden',v!=='teacher');
+  document.querySelector('.page-title').textContent=v==='admin'?'个人待办工作台':'教研教师工作台';
+});
+
+/* ============ 顶部栏交互 ============ */
+$('tbUser').onclick=e=>{e.stopPropagation();closePops();$('userDrop').classList.remove('hidden')};
+$('tbBell').onclick=e=>{e.stopPropagation();closePops();$('bellPop').classList.remove('hidden')};
+$('tbSearch').onkeydown=e=>{if(e.key==='Enter')toast('全局搜索为原型占位：'+e.target.value)};
+document.addEventListener('click',closePops);
+function closePops(){$('userDrop').classList.add('hidden');$('bellPop').classList.add('hidden')}
+
+/* ============ 待办卡片拖拽排序（PRD 4.1.4） ============ */
+let dragEl=null;const wrap=$('todoCards');
+wrap.addEventListener('dragstart',e=>{dragEl=e.target.closest('.todo-card');dragEl.classList.add('dragging')});
+wrap.addEventListener('dragend',()=>{dragEl&&dragEl.classList.remove('dragging');dragEl=null;toast('待办卡片顺序已保存至个人偏好')});
+wrap.addEventListener('dragover',e=>{e.preventDefault();const t=e.target.closest('.todo-card');
+  if(t&&t!==dragEl){const r=t.getBoundingClientRect();wrap.insertBefore(dragEl,(e.clientY-r.top)>r.height/2?t.nextSibling:t)}});
+wrap.addEventListener('click',e=>{const c=e.target.closest('.todo-card');if(c&&!dragEl)toast('抽屉内直接办理「'+c.querySelector('.todo-name').textContent+'」（原型占位）')});
+
+/* ============ 自定义布局 ============ */
+function openLayout(){$('modal-layout').classList.remove('hidden')}
+$('layoutBtn').onclick=openLayout;
+$('layoutSave').onclick=()=>{
+  ['todo','today','warn','quick'].forEach(k=>{
+    const on=$('ck-'+k).checked;
+    const body=document.querySelector('[data-sec-body="'+k+'"]');
+    if(body)body.closest('.card,.wb-grid,.todo-cards')&&body.style&&(body.style.display=on?'':'none');
+    const sec=document.querySelector('.sec-title[data-sec="'+k+'"]');
+    if(sec)sec.style.display=on?'':'none';
+    if(k==='todo'){const g=$('todoCards');g.style.display=on?'grid':'none'}
+  });
+  $('modal-layout').classList.add('hidden');toast('工作台布局已保存');
+};
+</script>
+</body>
+</html>

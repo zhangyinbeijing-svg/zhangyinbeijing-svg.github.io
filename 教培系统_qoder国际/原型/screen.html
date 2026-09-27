@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据可视化大屏 · 外交培训学院教培系统 原型 V1.0</title>
+<style>
+/* ============ PRD 3.1.1 色彩（大屏暗色科技风，图表配色沿用品牌色系） ============ */
+:root{
+  --primary:#1F4E79; --primary-2:#2E75B6;
+  --c-blue:#4facfe; --c-cyan:#22d3ee; --c-green:#43c463; --c-orange:#F5A623;
+  --c-red:#ff6b6b; --c-purple:#a78bfa; --c-teal:#2dd4bf;
+  --success:#2E7D32; --warning:#F57F17; --danger:#C62828;
+  --bg-0:#040d1f; --bg-1:#0a1c3d; --panel:rgba(14,38,74,.55); --panel-bd:rgba(79,172,254,.28);
+  --text:#d6e6ff; --text-2:#8fb0d9; --text-3:#5f7ea6; --line:rgba(79,172,254,.18);
+  --r:6px; --r-card:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);
+  background:radial-gradient(1200px 700px at 50% -10%,#123a6e 0%,var(--bg-1) 45%,var(--bg-0) 100%);
+  overflow:hidden;
+}
+.num{font-family:"DIN Alternate","DIN",Consolas,"Courier New",monospace;font-weight:700;letter-spacing:.5px}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:rgba(79,172,254,.35);border-radius:3px}
+
+/* ============ 顶部标题栏（PRD 4.12：标题 + 实时时间 + 全屏/轮播） ============ */
+.scr-top{position:relative;height:70px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,rgba(10,30,64,.9),rgba(10,30,64,0));}
+.scr-top::after{content:"";position:absolute;left:2%;right:2%;bottom:6px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--c-blue),var(--c-cyan),var(--c-blue),transparent);opacity:.7}
+.scr-title{font-size:30px;font-weight:800;letter-spacing:4px;
+  background:linear-gradient(180deg,#ffffff,#9fd4ff);-webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 22px rgba(79,172,254,.35)}
+.scr-sub{position:absolute;left:24px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:10px}
+.scr-sub .back{cursor:pointer;color:var(--text-2);border:1px solid var(--panel-bd);border-radius:var(--r);
+  padding:6px 12px;font-size:13px;background:rgba(14,38,74,.5)}
+.scr-sub .back:hover{color:#fff;border-color:var(--c-blue)}
+.scr-clock{position:absolute;right:24px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:16px}
+.clock-time{text-align:right}
+.clock-time .t{font-size:24px;color:#fff}
+.clock-time .d{font-size:12px;color:var(--text-2)}
+.scr-tools{display:flex;gap:8px}
+.tool{cursor:pointer;color:var(--text-2);border:1px solid var(--panel-bd);border-radius:var(--r);
+  padding:6px 10px;font-size:13px;background:rgba(14,38,74,.5);white-space:nowrap}
+.tool:hover{color:#fff;border-color:var(--c-blue)}
+.tool.on{color:#04122b;background:linear-gradient(180deg,var(--c-cyan),var(--c-blue));border-color:transparent;font-weight:700}
+
+/* ============ 屏切换 Tab ============ */
+.scr-tabs{display:flex;justify-content:center;gap:12px;padding:6px 0 12px}
+.scr-tab{cursor:pointer;padding:8px 30px;font-size:16px;color:var(--text-2);border-radius:var(--r);
+  border:1px solid var(--panel-bd);background:rgba(14,38,74,.4);position:relative;transition:.2s}
+.scr-tab:hover{color:#fff}
+.scr-tab.active{color:#fff;font-weight:700;border-color:var(--c-blue);
+  background:linear-gradient(180deg,rgba(79,172,254,.25),rgba(79,172,254,.06));box-shadow:0 0 18px rgba(79,172,254,.3) inset}
+.scr-tab.active::after{content:"";position:absolute;left:20%;right:20%;bottom:-1px;height:2px;background:var(--c-cyan)}
+
+/* ============ 筛选栏（时间段 / 班次类型，PRD 4.12） ============ */
+.scr-filter{display:flex;justify-content:center;align-items:center;gap:14px;padding-bottom:12px;flex-wrap:wrap}
+.f-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2)}
+.sel{height:32px;border:1px solid var(--panel-bd);border-radius:var(--r);background:rgba(10,28,58,.85);
+  color:var(--text);padding:0 10px;font-size:13px;outline:none;cursor:pointer}
+.sel:focus{border-color:var(--c-blue)}
+.f-seg{display:flex;border:1px solid var(--panel-bd);border-radius:var(--r);overflow:hidden}
+.f-seg span{padding:6px 14px;font-size:13px;color:var(--text-2);cursor:pointer;border-right:1px solid var(--line)}
+.f-seg span:last-child{border-right:none}
+.f-seg span.on{background:linear-gradient(180deg,var(--c-blue),var(--primary-2));color:#fff;font-weight:700}
+
+/* ============ 主体舞台 ============ */
+.stage{position:absolute;left:0;right:0;top:0;bottom:0;padding:0 20px 54px;overflow:hidden}
+.screen{position:absolute;inset:0;padding:190px 20px 60px;overflow:auto;opacity:0;visibility:hidden;transition:opacity .5s}
+.screen.active{opacity:1;visibility:visible}
+.grid{display:grid;gap:14px;height:100%}
+.g-ov{grid-template-columns:1fr 1.35fr 1fr;grid-template-rows:auto 1fr 1fr}
+.g-st{grid-template-columns:1fr 1fr 1fr;grid-template-rows:auto 1fr 1fr}
+.g-rs{grid-template-columns:1fr 1.2fr 1fr;grid-template-rows:auto 1fr 1fr}
+
+/* KPI 行跨列 */
+.kpi-row{grid-column:1/-1;display:grid;gap:14px}
+.kpi-6{grid-template-columns:repeat(6,1fr)}
+.kpi-4{grid-template-columns:repeat(4,1fr)}
+
+/* ============ 面板 ============ */
+.panel{position:relative;background:var(--panel);border:1px solid var(--panel-bd);border-radius:var(--r-card);
+  padding:12px 14px;display:flex;flex-direction:column;min-height:0;backdrop-filter:blur(2px)}
+.panel::before,.panel::after{content:"";position:absolute;width:12px;height:12px;border-color:var(--c-cyan);opacity:.75}
+.panel::before{left:-1px;top:-1px;border-left:2px solid;border-top:2px solid;border-radius:var(--r-card) 0 0 0}
+.panel::after{right:-1px;bottom:-1px;border-right:2px solid;border-bottom:2px solid;border-radius:0 0 var(--r-card) 0}
+.p-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex:none}
+.p-title{font-size:15px;font-weight:700;color:#eaf4ff;padding-left:12px;position:relative}
+.p-title::before{content:"";position:absolute;left:0;top:2px;bottom:2px;width:4px;border-radius:2px;
+  background:linear-gradient(180deg,var(--c-cyan),var(--c-blue))}
+.p-more{font-size:12px;color:var(--text-3);cursor:pointer}
+.p-more:hover{color:var(--c-cyan)}
+.p-body{flex:1;min-height:0;display:flex;flex-direction:column}
+
+/* KPI 卡 */
+.kpi{position:relative;background:linear-gradient(160deg,rgba(24,58,110,.7),rgba(12,32,66,.5));
+  border:1px solid var(--panel-bd);border-radius:var(--r-card);padding:14px 16px;overflow:hidden}
+.kpi .k-ico{position:absolute;right:12px;top:12px;font-size:26px;opacity:.28}
+.kpi .k-label{font-size:13px;color:var(--text-2)}
+.kpi .k-val{font-size:40px;line-height:1.15;margin-top:6px;color:#fff;text-shadow:0 0 18px rgba(79,172,254,.45)}
+.kpi .k-val small{font-size:15px;color:var(--text-2);margin-left:4px;font-weight:400}
+.kpi .k-foot{font-size:12px;color:var(--text-3);margin-top:6px}
+.kpi .k-foot b{font-weight:700}
+.up{color:var(--c-green)}.down{color:var(--c-red)}
+.kpi::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;
+  background:linear-gradient(90deg,var(--c-blue),var(--c-cyan),transparent)}
+
+/* 图表容器 */
+.chart{flex:1;min-height:0;width:100%}
+svg{display:block;width:100%;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:10px 16px;font-size:12px;color:var(--text-2);margin-top:6px;justify-content:center}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+
+/* 排名条 */
+.rank{display:flex;flex-direction:column;gap:10px;flex:1;justify-content:center}
+.rank-item{display:flex;align-items:center;gap:10px;font-size:13px}
+.rank-no{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;background:rgba(79,172,254,.18);color:var(--c-blue);flex:none}
+.rank-item:nth-child(1) .rank-no{background:linear-gradient(180deg,#ffd76a,#f5a623);color:#4a2c00}
+.rank-item:nth-child(2) .rank-no{background:linear-gradient(180deg,#e6f0ff,#a9c6ea);color:#2a3d55}
+.rank-item:nth-child(3) .rank-no{background:linear-gradient(180deg,#ffc79a,#e08a4a);color:#4a2400}
+.rank-name{width:110px;flex:none;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-bar{flex:1;height:10px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden}
+.rank-bar i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--primary-2),var(--c-cyan))}
+.rank-val{width:52px;text-align:right;color:#fff;flex:none}
+
+/* 预警滚动列表 */
+.warn-list{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px}
+.warn-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--r);cursor:pointer;
+  background:rgba(255,255,255,.04);border-left:3px solid var(--c-orange);font-size:13px}
+.warn-row:hover{background:rgba(255,255,255,.09)}
+.warn-row.lv-red{border-left-color:var(--c-red)}
+.warn-row.lv-orange{border-left-color:var(--c-orange)}
+.warn-row .w-t{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.warn-row .w-m{font-size:11px;color:var(--text-3);flex:none}
+.w-badge{font-size:11px;padding:1px 8px;border-radius:999px;flex:none}
+.w-badge.red{background:rgba(255,107,107,.18);color:#ff9d9d}
+.w-badge.orange{background:rgba(245,166,35,.18);color:#ffcf7a}
+
+/* 底部预警滚动条（跑马灯） */
+.ticker{position:absolute;left:0;right:0;bottom:0;height:44px;display:flex;align-items:center;
+  background:linear-gradient(180deg,rgba(8,22,48,.4),rgba(8,22,48,.92));border-top:1px solid var(--line);overflow:hidden}
+.ticker .tk-tag{flex:none;height:100%;display:flex;align-items:center;padding:0 16px;font-size:13px;font-weight:700;
+  color:#04122b;background:linear-gradient(180deg,var(--c-orange),#e08a00);gap:6px}
+.tk-view{flex:1;overflow:hidden;position:relative;height:100%}
+.tk-track{position:absolute;white-space:nowrap;display:flex;align-items:center;height:100%;animation:marquee 38s linear infinite}
+.tk-track:hover{animation-play-state:paused}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tk-item{display:inline-flex;align-items:center;gap:8px;padding:0 34px;font-size:13px;color:var(--text-2);cursor:pointer}
+.tk-item:hover{color:#fff}
+.tk-dot{width:7px;height:7px;border-radius:50%}
+
+/* 下钻弹层 */
+.mask{position:fixed;inset:0;background:rgba(2,8,20,.7);z-index:200;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.dlg{width:640px;max-width:92vw;background:linear-gradient(160deg,#0e2a52,#0a1c3d);border:1px solid var(--c-blue);
+  border-radius:var(--r-card);box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden}
+.dlg-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.dlg-head h3{font-size:16px;color:#fff}
+.dlg-head .x{cursor:pointer;color:var(--text-2);font-size:18px}
+.dlg-head .x:hover{color:#fff}
+.dlg-body{padding:18px;max-height:60vh;overflow:auto}
+.dlg-body table{width:100%;border-collapse:collapse;font-size:13px}
+.dlg-body th,.dlg-body td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line)}
+.dlg-body th{color:var(--text-3);font-weight:400;background:rgba(255,255,255,.04)}
+.dlg-body td{color:var(--text)}
+.tip{font-size:12px;color:var(--text-3);margin-top:10px}
+
+/* 轮播进度点 */
+.dots{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:20}
+.dot{width:22px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);cursor:pointer}
+.dot.on{background:var(--c-cyan);box-shadow:0 0 8px var(--c-cyan)}
+</style>
+</head>
+<body>
+
+<!-- ================= 顶部标题栏 ================= -->
+<header class="scr-top">
+  <div class="scr-sub">
+    <div class="back" onclick="location.href='workbench.html'">‹ 返回管理端</div>
+  </div>
+  <div class="scr-title">外交培训学院教培系统 · 数据可视化大屏</div>
+  <div class="scr-clock">
+    <div class="clock-time"><div class="t num" id="ckTime">--:--:--</div><div class="d" id="ckDate">----</div></div>
+    <div class="scr-tools">
+      <div class="tool on" id="btnCarousel" onclick="toggleCarousel()">◉ 自动轮播</div>
+      <div class="tool" onclick="toggleFull()">⛶ 全屏</div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= 屏切换 ================= -->
+<nav class="scr-tabs" id="scrTabs">
+  <div class="scr-tab active" data-scr="overview">总览大屏</div>
+  <div class="scr-tab" data-scr="study">学情大屏</div>
+  <div class="scr-tab" data-scr="resource">资源大屏</div>
+</nav>
+
+<!-- ================= 筛选栏 ================= -->
+<div class="scr-filter">
+  <div class="f-item">时间段
+    <div class="f-seg" id="segRange">
+      <span data-r="month">本月</span><span class="on" data-r="quarter">本季度</span>
+      <span data-r="year">本年度</span><span data-r="all">全部</span>
+    </div>
+  </div>
+  <div class="f-item">班次类型
+    <select class="sel" id="selType">
+      <option value="all">全部类型</option><option>党校班</option><option>政能班</option>
+      <option>专题研讨班</option><option>青年干部班</option><option>外事业务班</option>
+    </select>
+  </div>
+  <div class="f-item">主办单位
+    <select class="sel" id="selOrg"><option value="all">全部单位</option><option>外交培训学院</option><option>干部教育局</option><option>外事管理司</option></select>
+  </div>
+  <div class="f-item" style="color:var(--text-3)">数据更新至 <b class="num" style="color:var(--c-cyan)" id="updTime">2026-09-25 09:00</b></div>
+</div>
+
+<!-- ================= 舞台：三屏 ================= -->
+<div class="stage">
+
+  <!-- ============ 屏一：总览大屏（PRD 4.12） ============ -->
+  <section class="screen active" id="scr-overview">
+    <div class="grid g-ov">
+      <div class="kpi-row kpi-6">
+        <div class="kpi"><div class="k-ico">🎓</div><div class="k-label">在办班次</div><div class="k-val num" data-cnt="12">0</div><div class="k-foot">较上月 <b class="up">+2</b></div></div>
+        <div class="kpi"><div class="k-ico">📝</div><div class="k-label">筹备班次</div><div class="k-val num" data-cnt="8">0</div><div class="k-foot">待开班 <b>8</b> 个</div></div>
+        <div class="kpi"><div class="k-ico">✅</div><div class="k-label">结业班次</div><div class="k-val num" data-cnt="46">0</div><div class="k-foot">本年度累计</div></div>
+        <div class="kpi"><div class="k-ico">👥</div><div class="k-label">参训人次</div><div class="k-val num" data-cnt="2860">0</div><div class="k-foot">较上年 <b class="up">+12.6%</b></div></div>
+        <div class="kpi"><div class="k-ico">⏱</div><div class="k-label">学时总量</div><div class="k-val num" data-cnt="18640">0</div><div class="k-foot">课时 <b>1240</b> 节</div></div>
+        <div class="kpi"><div class="k-ico">🏫</div><div class="k-label">在库师资</div><div class="k-val num" data-cnt="326">0</div><div class="k-foot">部委级 <b>58</b> 人</div></div>
+      </div>
+
+      <div class="panel" style="grid-column:2/3;grid-row:2/4">
+        <div class="p-head"><div class="p-title">培训规模趋势（近12个月）</div><div class="p-more" onclick="drill('trend')">下钻明细 ›</div></div>
+        <div class="p-body"><div class="chart" id="chTrend"></div>
+          <div class="legend"><span><i style="background:var(--c-blue)"></i>开班数</span><span><i style="background:var(--c-cyan)"></i>参训人次</span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="p-head"><div class="p-title">班次类型分布</div><div class="p-more" onclick="drill('type')">下钻 ›</div></div>
+        <div class="p-body"><div class="chart" id="chType"></div></div>
+      </div>
+      <div class="panel">
+        <div class="p-head"><div class="p-title">培训人次地域来源 TOP8</div><div class="p-more" onclick="drill('region')">下钻 ›</div></div>
+        <div class="p-body"><div class="rank" id="rkRegion"></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="p-head"><div class="p-title">主办单位办班排行</div><div class="p-more" onclick="drill('org')">下钻 ›</div></div>
+        <div class="p-body"><div class="chart" id="chOrg"></div></div>
+      </div>
+      <div class="panel">
+        <div class="p-head"><div class="p-title">课程体系覆盖</div><div class="p-more" onclick="drill('system')">下钻 ›</div></div>
+        <div class="p-body"><div class="rank" id="rkSystem"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 屏二：学情大屏 ============ -->
+  <section class="screen" id="scr-study">
+    <div class="grid g-st">
+      <div class="kpi-row kpi-4">
+        <div class="kpi"><div class="k-ico">📊</div><div class="k-label">平均出勤率</div><div class="k-val num" data-cnt="96" data-suffix="%">0</div><div class="k-foot">目标 ≥ 95%</div></div>
+        <div class="kpi"><div class="k-ico">⏱</div><div class="k-label">学时完成率</div><div class="k-val num" data-cnt="93" data-suffix="%">0</div><div class="k-foot">未完成 <b class="down">7%</b></div></div>
+        <div class="kpi"><div class="k-ico">🎓</div><div class="k-label">结业率</div><div class="k-val num" data-cnt="98" data-suffix="%">0</div><div class="k-foot">优秀学员 <b>164</b> 人</div></div>
+        <div class="kpi"><div class="k-ico">⭐</div><div class="k-label">教学满意度</div><div class="k-val num" data-cnt="94" data-suffix=".2">0</div><div class="k-foot">较上期 <b class="up">+1.8</b></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="p-head"><div class="p-title">考勤情况（本月各状态）</div><div class="p-more" onclick="drill('attend')">下钻 ›</div></div>
+        <div class="p-body"><div class="chart" id="chAttend"></div></div>
+      </div>
+      <div class="panel" style="grid-column:2/4">
+        <div class="p-head"><div class="p-title">课程满意度 / 教师评分排名</div><div class="p-more" onclick="drill('eval')">下钻 ›</div></div>
+        <div class="p-body"><div class="rank" id="rkEval"></div></div>
+      </div>
+
+      <div class="panel" style="grid-column:1/3">
+        <div class="p-head"><div class="p-title">学员成绩分布</div><div class="p-more" onclick="drill('score')">下钻 ›</div></div>
+        <div class="p-body"><div class="chart" id="chScore"></div></div>
+      </div>
+      <div class="panel">
+        <div class="p-head"><div class="p-title">学员能力提升曲线</div><div class="p-more" onclick="drill('ability')">下钻 ›</div></div>
+        <div class="p-body"><div class="chart" id="chAbility"></div>
+          <div class="legend"><span><i style="background:var(--c-cyan)"></i>训前</span><span><i style="background:var(--c-green)"></i>训后</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 屏三：资源大屏 ============ -->
+  <section class="screen" id="scr-resource">
+    <div class="grid g-rs">
+      <div class="kpi-row kpi-4">
+        <div class="kpi"><div class="k-ico">🏫</div><div class="k-label">教室总数</div><div class="k-val num" data-cnt="32">0</div><div class="k-foot">在用 <b>28</b> 间</div></div>
+        <div class="kpi"><div class="k-ico">📈</div><div class="k-label">教室占用率</div><div class="k-val num" data-cnt="78" data-suffix="%">0</div><div class="k-foot">高峰时段 <b class="down">92%</b></div></div>
+        <div class="kpi"><div class="k-ico">👨‍🏫</div><div class="k-label">师资利用率</div><div class="k-val num" data-cnt="64" data-suffix="%">0</div><div class="k-foot">本月授课 <b>186</b> 人次</div></div>
+        <div class="kpi"><div class="k-ico">📍</div><div class="k-label">现场教学点</div><div class="k-val num" data-cnt="15">0</div><div class="k-foot">覆盖 <b>9</b> 省市</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="p-head"><div class="p-title">师资分级分类结构</div><div class="p-more" onclick="drill('teaTag')">下钻 ›</div></div>
+        <div class="p-body"><div class="chart" id="chTeaTag"></div></div>
+      </div>
+      <div class="panel" style="grid-column:2/3;grid-row:2/4">
+        <div class="p-head"><div class="p-title">教室资源使用热力（本周 · 时段×教室）</div><div class="p-more" onclick="drill('roomHeat')">下钻 ›</div></div>
+        <div class="p-body"><div class="chart" id="chRoom"></div></div>
+      </div>
+      <div class="panel">
+        <div class="p-head"><div class="p-title">师资授课量 TOP6</div><div class="p-more" onclick="drill('teaLoad')">下钻 ›</div></div>
+        <div class="p-body"><div class="rank" id="rkTea"></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="p-head"><div class="p-title">教室占用率排行</div><div class="p-more" onclick="drill('roomRank')">下钻 ›</div></div>
+        <div class="p-body"><div class="rank" id="rkRoom"></div></div>
+      </div>
+      <div class="panel">
+        <div class="p-head"><div class="p-title">预警信息（质量 / 瓶颈 / 缺口）</div><div class="p-more" onclick="drill('warn')">全部 ›</div></div>
+        <div class="p-body"><div class="warn-list" id="warnList"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 轮播进度点 -->
+  <div class="dots" id="dots">
+    <div class="dot on" data-scr="overview"></div><div class="dot" data-scr="study"></div><div class="dot" data-scr="resource"></div>
+  </div>
+</div>
+
+<!-- ================= 底部预警跑马灯 ================= -->
+<div class="ticker">
+  <div class="tk-tag">⚠ 实时预警</div>
+  <div class="tk-view"><div class="tk-track" id="tkTrack"></div></div>
+</div>
+
+<!-- ================= 下钻弹层 ================= -->
+<div class="mask hidden" id="mask"><div class="dlg">
+  <div class="dlg-head"><h3 id="dlgTitle">明细下钻</h3><span class="x" onclick="closeDrill()">✕</span></div>
+  <div class="dlg-body" id="dlgBody"></div>
+</div></div>
+
+<script src="screen.js"></script>
+</body>
+</html>

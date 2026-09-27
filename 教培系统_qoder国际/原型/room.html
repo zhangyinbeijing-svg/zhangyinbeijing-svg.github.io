@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教室管理 · 干部培训学院教务管理系统 原型 V1.0</title>
+<style>
+:root{--primary:#1F4E79;--primary-2:#2E75B6;--success:#2E7D32;--warning:#F57F17;--danger:#C62828;
+ --text:#333;--text-2:#595959;--text-3:#8a9099;--bg:#F5F6F8;--card:#fff;--line:#e5e8ec;
+ --topbar-h:56px;--nav-w:220px;--nav-w-c:64px;--r:4px;--r-card:8px;--r-modal:12px;--shadow:0 2px 8px rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{text-decoration:none;color:var(--primary-2);cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2dc;border-radius:4px}
+.btn{height:32px;padding:0 16px;border-radius:var(--r);font-size:14px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#173e61}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-text{background:none;border:none;color:var(--primary-2);cursor:pointer;font-size:13px;padding:0 4px}
+.btn-text:hover{text-decoration:underline}
+.btn-text.danger{color:var(--danger)}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+.tag-blue{background:rgba(46,117,182,.12);color:var(--primary-2)}
+.tag-green{background:rgba(46,125,50,.12);color:var(--success)}
+.tag-orange{background:rgba(247,127,23,.12);color:var(--warning)}
+.tag-red{background:rgba(198,40,40,.12);color:var(--danger)}
+.tag-purple{background:rgba(123,80,160,.12);color:#7B50A0}
+.tag-cyan{background:rgba(0,137,123,.12);color:#00897B}
+.tag-gray{background:rgba(89,95,105,.1);color:var(--text-2)}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card-body{padding:16px}
+.input,.sel{height:32px;border:1px solid var(--line);border-radius:var(--r);padding:0 10px;font-size:13px;outline:none;background:#fff;color:var(--text)}
+.input:focus,.sel:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+/* 顶部栏/导航 */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--primary);color:#fff;display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{display:flex;align-items:center;gap:10px;min-width:230px}
+.tb-logo .mark{width:32px;height:32px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.tb-logo .name{font-size:16px;font-weight:700;white-space:nowrap}
+.tb-search{flex:1;max-width:460px}.tb-search .input{width:100%;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;height:34px}
+.tb-search .input::placeholder{color:rgba(255,255,255,.6)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tb-icon{position:relative;width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px}
+.tb-icon:hover{background:rgba(255,255,255,.15)}
+.tb-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.tb-ver{font-size:12px;color:rgba(255,255,255,.65);margin:0 4px}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tb-user:hover{background:rgba(255,255,255,.15)}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sidenav{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--nav-w);background:#fff;border-right:1px solid var(--line);overflow-y:auto;z-index:90;transition:width .2s}
+.nav-parent{display:flex;align-items:center;gap:10px;padding:0 16px;height:44px;cursor:pointer;color:var(--text-2);font-size:14px;position:relative}
+.nav-parent:hover{background:#f2f6fa;color:var(--primary)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex:none}
+.nav-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-caret{font-size:11px;color:var(--text-3);transition:transform .2s}
+.nav-group.open .nav-caret{transform:rotate(90deg)}
+.nav-group.open>.nav-parent{color:var(--primary);font-weight:700}
+.nav-children{display:none;background:#fafbfc}
+.nav-group.open .nav-children{display:block}
+.nav-child{padding:0 16px 0 44px;height:36px;display:flex;align-items:center;font-size:13px;color:var(--text-2);cursor:pointer;position:relative}
+.nav-child:hover{color:var(--primary);background:#f2f6fa}
+.nav-child.active{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-child.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.nav-collapse{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:var(--text-3);cursor:pointer;display:flex;gap:8px;align-items:center}
+body.nav-collapsed .sidenav{width:var(--nav-w-c)}
+body.nav-collapsed .nav-label,body.nav-collapsed .nav-caret,body.nav-collapsed .nav-children,body.nav-collapsed .nav-collapse span{display:none}
+body.nav-collapsed .nav-parent{justify-content:center;padding:0}
+body.nav-collapsed .nav-collapse{justify-content:center}
+.content{margin-left:var(--nav-w);margin-top:var(--topbar-h);padding:24px;min-height:calc(100vh - var(--topbar-h));transition:margin-left .2s}
+body.nav-collapsed .content{margin-left:var(--nav-w-c)}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+.breadcrumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+.page-title{font-size:20px;font-weight:700}
+.page-ops{display:flex;gap:8px;flex-wrap:wrap}
+/* 筛选/统计/表格 */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.filter-bar .input{width:180px}.filter-bar .sel{width:150px}
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#f7f9fc;border-radius:var(--r);padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:700;font-family:Consolas,monospace;color:var(--primary)}
+.stat .n.g{color:var(--success)}.stat .n.o{color:var(--warning)}.stat .n.r{color:var(--danger)}
+.stat .l{font-size:12px;color:var(--text-3);margin-top:2px}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th,.data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.data-table th{background:#fafbfc;color:var(--text-2);font-size:12px;font-weight:400;white-space:nowrap}
+.data-table tbody tr:hover{background:#f7fafd}
+.data-table .c-name{font-weight:700;color:var(--primary);cursor:pointer}
+.data-table .c-name:hover{text-decoration:underline}
+.bar{background:#edf0f3;border-radius:999px;height:8px;overflow:hidden;min-width:90px}
+.bar i{display:block;height:100%;border-radius:999px;background:var(--primary-2)}
+.bar i.g{background:var(--success)}.bar i.o{background:var(--warning)}.bar i.r{background:var(--danger)}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-row span{font-size:12px;color:var(--text-2);width:44px;text-align:right;flex:none}
+.sec-title{font-size:15px;font-weight:700;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sec-title:first-child{margin-top:0}
+.mini-note{font-size:12px;color:var(--text-3);margin-top:10px;line-height:1.7}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.view-switch{display:flex;gap:0}
+.view-switch .btn{border-radius:0}
+.view-switch .btn:first-child{border-radius:var(--r) 0 0 var(--r)}
+.view-switch .btn:last-child{border-radius:0 var(--r) var(--r) 0}
+.alert{border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;gap:8px;align-items:center;background:rgba(46,117,182,.07);border:1px solid rgba(46,117,182,.2);color:var(--primary)}
+.sub-tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:14px}
+.sub-tab{padding:8px 16px;font-size:13px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.sub-tab.active{color:var(--primary);font-weight:700;border-bottom-color:var(--primary)}
+/* 教室卡片 */
+.rm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.rm-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-card);padding:16px;position:relative;cursor:pointer;transition:box-shadow .15s,transform .15s}
+.rm-card:hover{box-shadow:0 6px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.rm-card .rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.rm-name{font-size:15px;font-weight:700}
+.rm-sub{font-size:12px;color:var(--text-3)}
+.rm-meta{font-size:12px;color:var(--text-2);line-height:2}
+.rm-devs{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.dot.g{background:var(--success)}.dot.o{background:var(--warning)}.dot.r{background:var(--danger)}.dot.gray{background:#b9c0c9}
+/* 座位排布 */
+.seat-wrap{background:#f7f9fc;border-radius:var(--r);padding:14px;overflow-x:auto}
+.seat-podium{text-align:center;font-size:12px;color:var(--text-3);margin-bottom:10px}
+.seat-podium b{display:inline-block;background:var(--primary);color:#fff;padding:3px 26px;border-radius:var(--r);font-size:12px}
+.seat-row{display:flex;gap:6px;justify-content:center;margin-bottom:6px}
+.seat{width:34px;height:28px;border-radius:4px 4px 2px 2px;background:#fff;border:1px solid var(--line);font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--text-3);cursor:default;flex:none}
+.seat.taken{background:rgba(46,117,182,.14);border-color:rgba(46,117,182,.4);color:var(--primary);font-weight:700}
+.seat.vip{background:rgba(247,127,23,.14);border-color:rgba(247,127,23,.45);color:var(--warning);font-weight:700}
+.seat:hover{border-color:var(--primary)}
+/* 抽屉/弹窗/Toast */
+.drawer-mask{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:210}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:600px;background:#fff;box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:220;display:flex;flex-direction:column}
+.drawer-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.drawer-head h3{font-size:16px;font-weight:700}
+.drawer-body{flex:1;overflow-y:auto;padding:20px}
+.drawer-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.d-sec{font-size:14px;font-weight:700;margin:18px 0 10px;padding-left:8px;border-left:3px solid var(--primary)}
+.d-sec:first-child{margin-top:0}
+.d-grid{display:grid;grid-template-columns:110px 1fr;gap:8px 12px;font-size:13px}
+.d-grid .k{color:var(--text-3)}
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{width:560px;max-height:86vh;background:#fff;border-radius:var(--r-modal);box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden;display:flex;flex-direction:column}
+.modal-head{padding:14px 18px;font-size:16px;font-weight:700;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.modal-body{padding:18px;overflow-y:auto}
+.modal-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.f-row{margin-bottom:14px}
+.f-row label{display:block;font-size:13px;color:var(--text-2);margin-bottom:6px}
+.f-row label .req{color:var(--danger);margin-right:2px}
+.f-row .input,.f-row .sel,.f-row textarea{width:100%}
+textarea.input{height:auto;padding:8px 10px;resize:vertical}
+.f-2col{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-2);margin-right:14px;cursor:pointer}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(40,45,52,.92);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:300;box-shadow:var(--shadow);max-width:70%}
+@media (max-width:1100px){.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo"><div class="mark">院</div><div class="name">干部培训学院教务管理系统</div></div>
+  <div class="tb-search"><input class="input" placeholder="🔍 全局搜索：教室 / 教学点 / 设备编号…"></div>
+  <div class="tb-right">
+    <span class="tb-ver">V1.0 原型</span>
+    <div class="tb-icon" onclick="toast('跳转消息中心（原型占位）')" title="站内信">🔔<span class="tb-badge">5</span></div>
+    <div class="tb-icon" onclick="toast('帮助中心为原型占位')" title="帮助中心">❓</div>
+    <div class="tb-user" id="tbUser"><div class="tb-avatar">张</div><span>张三</span><span style="font-size:10px">▼</span></div>
+  </div>
+</header>
+
+<aside class="sidenav" id="sidenav"></aside>
+
+<main class="content">
+  <div class="page-head">
+    <div><div class="breadcrumb" id="crumb">首页 / 教室管理 / 教学点管理</div><h2 class="page-title" id="pageTitle">教学点管理</h2></div>
+    <div class="page-ops" id="pageOps"></div>
+  </div>
+  <div id="viewBody"></div>
+</main>
+
+<!-- 详情抽屉 -->
+<div class="drawer-mask hidden" id="drawerMask" onclick="closeDrawer()"></div>
+<div class="drawer hidden" id="drawer">
+  <div class="drawer-head"><h3 id="dwTitle">详情</h3><span class="btn-text" onclick="closeDrawer()">✕ 关闭</span></div>
+  <div class="drawer-body" id="dwBody"></div>
+  <div class="drawer-foot" id="dwFoot"></div>
+</div>
+
+<!-- 新增/编辑教学点弹窗 -->
+<div class="mask hidden" id="ptModal"><div class="modal">
+  <div class="modal-head"><span id="ptModalTitle">新增教学点</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-2col">
+     <div class="f-row"><label><span class="req">*</span>教学点名称</label><input class="input" id="pfName" placeholder="如：学院报告厅"></div>
+     <div class="f-row"><label><span class="req">*</span>类型</label><select class="sel" id="pfType"><option>现场教学点</option><option>院内场地</option><option>共建基地</option></select></div>
+     <div class="f-row"><label><span class="req">*</span>地址</label><input class="input" id="pfAddr" placeholder="详细地址"></div>
+     <div class="f-row"><label>容纳人数</label><input class="input" id="pfCap" type="number" min="1" placeholder="如：120"></div>
+     <div class="f-row"><label>联系人</label><input class="input" id="pfContact" placeholder="联系人姓名"></div>
+     <div class="f-row"><label>联系电话</label><input class="input" id="pfPhone" placeholder="联系电话"></div>
+    </div>
+    <div class="f-row"><label>教学点简介</label><textarea class="input" id="pfIntro" rows="3" placeholder="教学点资源特色、适用课程方向等"></textarea></div>
+    <p class="mini-note">教学点为基础数据，支持自定义维护；被教学计划或排课引用后不可删除，仅可停用。</p>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="ptSave()">保存</button></div>
+</div></div>
+
+<!-- 教室规格弹窗 -->
+<div class="mask hidden" id="rmModal"><div class="modal">
+  <div class="modal-head"><span id="rmModalTitle">教室规格设置</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-2col">
+     <div class="f-row"><label><span class="req">*</span>排数（行）</label><input class="input" id="rfRows" type="number" min="1" max="30" oninput="rfPreview()"></div>
+     <div class="f-row"><label><span class="req">*</span>每排座位数（列）</label><input class="input" id="rfCols" type="number" min="1" max="30" oninput="rfPreview()"></div>
+    </div>
+    <div class="f-row"><label>容量 = 行 × 列 = <b id="rfCap" style="color:var(--primary)">—</b></label></div>
+    <div class="f-row"><label>设备配置（多选）</label><div id="rfDevs"></div></div>
+    <div class="f-row"><label>绑定人脸考勤/门禁设备</label><select class="sel" id="rfDev"></select>
+     <p class="mini-note">绑定后实现刷脸自动开门 + 自动考勤联动（专项六）。</p></div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="rmSave()">保存</button></div>
+</div></div>
+
+<!-- 人脸底库下发弹窗 -->
+<div class="mask hidden" id="dvModal"><div class="modal">
+  <div class="modal-head"><span>人脸底库下发</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-row"><label><span class="req">*</span>选择班次</label><select class="sel" id="dfCls"></select></div>
+    <div class="f-row"><label><span class="req">*</span>勾选门禁点（教室/门禁）</label><div id="dfPoints"></div></div>
+    <div class="alert" style="margin-bottom:10px">🔒 人脸特征值加密存储于内网；下发内容仅含本班时段权限，照片仅用于考勤/门禁，访问留痕。</div>
+    <div class="f-row hidden" id="dfProg"><label>下发进度</label><div class="bar" style="height:12px"><i id="dfBar" style="width:0%"></i></div><p class="mini-note" id="dfMsg"></p></div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">关闭</button><button class="btn btn-primary" id="dfGo" onclick="dvSend()">开始下发</button></div>
+</div></div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+document.querySelectorAll('.js-close').forEach(b=>b.onclick=e=>e.target.closest('.mask').classList.add('hidden'));
+
+/* ============ 导航（全站共享数据） ============ */
+const NAV=[
+ {id:'workbench',icon:'🏠',name:'工作台',direct:true},
+ {id:'teach',icon:'📚',name:'教学管理',children:[{id:'teach-system',name:'课程体系',pg:'4.2-P01'},{id:'teach-course',name:'课程管理',pg:'4.2-P02'}]},
+ {id:'train',icon:'🎓',name:'培训管理',children:[
+   {id:'train-class',name:'培训班管理',pg:'4.3-P01'},{id:'train-stu',name:'培训考生',pg:'4.3-P03'},
+   {id:'train-schedule',name:'培训排课（拖拽）',pg:'4.3-P04'},{id:'train-grade',name:'课程成绩',pg:'4.3-P06'},
+   {id:'train-cert',name:'电子证书',pg:'4.3-P07'},{id:'train-eval',name:'教学评估',pg:'4.3-P08'},
+   {id:'train-exam',name:'考务管理',pg:'4.3-P09'},{id:'train-cycle',name:'学员全周期',pg:'4.3-P10'},
+   {id:'train-stay',name:'住宿安排',pg:'4.3-P11'},{id:'train-budget',name:'预算管理',pg:'4.3-P12'},
+   {id:'train-report',name:'结班报告',pg:'4.3-P13'},{id:'train-attend',name:'考勤管理',pg:'4.3-P14'},
+   {id:'train-track',name:'训后跟踪',pg:'4.3-P15'}]},
+ {id:'resource',icon:'🗂️',name:'资源管理',children:[
+   {id:'res-plan',name:'教案库',pg:'4.4-P01'},{id:'res-book',name:'教材库',pg:'4.4-P02'},
+   {id:'res-case',name:'案例库',pg:'4.4-P03'},{id:'res-self',name:'自他资源库',pg:'4.4-P04'},
+   {id:'res-bank',name:'题库试卷库',pg:'4.4-P05'},{id:'res-tag',name:'标签管理',pg:'4.4-P06'}]},
+ {id:'edu',icon:'📊',name:'教务组织',children:[{id:'edu-plan',name:'教学计划管理',pg:'4.5-P01'},{id:'edu-data',name:'教务数据管理',pg:'4.5-P02'},{id:'edu-report',name:'多维度报表',pg:'4.5-P03'},{id:'edu-export',name:'数据导出与集成',pg:'4.5-P04'},{id:'edu-settle',name:'结算报告模板',pg:'4.5-P05'}]},
+ {id:'teacher',icon:'👥',name:'师资库',children:[{id:'tea-list',name:'师资信息',pg:'4.6-P01'},{id:'tea-tag',name:'分级分类标签',pg:'4.6-P03'},{id:'tea-archive',name:'授课质量档案',pg:'4.6-P02'},{id:'tea-invite',name:'授课邀请函',pg:'4.6-P04'},{id:'tea-report',name:'综合评价报告',pg:'4.6-P05'}]},
+ {id:'student',icon:'✪',name:'学员库',children:[{id:'stu-list',name:'学员信息',pg:'4.7-P01'},{id:'stu-query',name:'个人综合查询',pg:'4.7-P02'},{id:'stu-archive',name:'参训档案',pg:'4.7-P03'}]},
+ {id:'room',icon:'🏫',name:'教室管理',children:[{id:'room-point',name:'教学点管理',pg:'4.8-P01'},{id:'room-room',name:'教室管理',pg:'4.8-P02'},{id:'room-device',name:'人脸考勤设备',pg:'4.8-P03'}]},
+ {id:'approve',icon:'✅',name:'审批管理',children:[{id:'apv-schedule',name:'排课审批',pg:'4.9-P01'},{id:'apv-budget',name:'预算审批',pg:'4.9-P01'},{id:'apv-leave',name:'请假/调停课审批',pg:'4.9-P01'},{id:'apv-record',name:'审批记录',pg:'4.9-P03'}]},
+ {id:'org',icon:'🏛️',name:'组织管理',children:[{id:'org-structure',name:'组织架构',pg:'4.10-P01'},{id:'org-account',name:'账户管理',pg:'4.10-P02'},{id:'org-user',name:'用户权限',pg:'4.10-P03'},{id:'org-data',name:'数据权限',pg:'4.10-P04'},{id:'org-three',name:'三员管理',pg:'4.10-P05'}]},
+ {id:'base',icon:'⚙️',name:'基础设置',children:[{id:'base-category',name:'培训类别',pg:'4.11-P01'},{id:'base-course',name:'课程分类',pg:'4.11-P02'},{id:'base-log',name:'系统日志',pg:'4.11-P03'},{id:'base-rule',name:'经费规则库',pg:'4.11-P04'}]},
+ {id:'screen',icon:'📈',name:'可视化大屏',children:[{id:'scr-overview',name:'总览大屏',pg:'4.12'},{id:'scr-study',name:'学情大屏',pg:'4.12'},{id:'scr-resource',name:'资源大屏',pg:'4.12'}]}
+];
+$('sidenav').innerHTML=NAV.map(g=>`
+ <div class="nav-group ${g.id==='room'?'open':''}" data-group="${g.id}">
+   <div class="nav-parent" data-id="${g.id}"><span class="nav-icon">${g.icon}</span><span class="nav-label">${g.name}</span>${g.children?'<span class="nav-caret">▸</span>':''}</div>
+   ${g.children?`<div class="nav-children">${g.children.map(c=>`<div class="nav-child" data-id="${c.id}" data-name="${c.name}" data-pg="${c.pg||''}"><span class="nav-label">${c.name}</span></div>`).join('')}</div>`:''}
+ </div>`).join('')+`<div class="nav-collapse" id="navCollapse">⇤<span>收起导航</span></div>`;
+$('sidenav').addEventListener('click',e=>{
+  if(e.target.closest('#navCollapse')){document.body.classList.toggle('nav-collapsed');return}
+  const child=e.target.closest('.nav-child'),parent=e.target.closest('.nav-parent');
+  if(child){
+    const id=child.dataset.id,pg=child.dataset.pg||'';
+    if(pg.indexOf('4.8')===0){showView(id);setNavActive(child);return}
+        if(pg.indexOf('4.9')===0){location.href='approve.html?page='+id;return}
+            if(pg.indexOf('4.10')===0){location.href='org.html?page='+id;return}
+            if(pg.indexOf('4.12')===0){location.href='screen.html?scr='+id;return}
+    if(id==='train-schedule'){location.href='training-schedule.html';return}
+    if(pg.indexOf('4.2')===0){location.href='teaching.html?page='+id;return}
+    if(pg.indexOf('4.3')===0){location.href='training.html?page='+id;return}
+    if(pg.indexOf('4.4')===0){location.href='resource.html?page='+id;return}
+    if(pg.indexOf('4.5')===0){location.href='edu.html?page='+id;return}
+    if(pg.indexOf('4.6')===0){location.href='teacher-lib.html?page='+id;return}
+    if(pg.indexOf('4.7')===0){location.href='student-lib.html?page='+id;return}
+    toast('「'+child.dataset.name+'」（'+pg+'）为原型占位');return}
+  if(parent){const g=NAV.find(x=>x.id===parent.dataset.id);
+    if(g.direct){location.href='workbench.html';return}
+    parent.closest('.nav-group').classList.toggle('open');}
+});
+function setNavActive(el){document.querySelectorAll('.nav-child').forEach(n=>n.classList.remove('active'));el&&el.classList.add('active')}
+$('tbUser').onclick=()=>toast('个人信息 / 修改密码见 workbench.html 账户入口');
+
+/* ============ 基础数据（V3.2 五-(一)-7 / PRD 4.8） ============ */
+const PT_CLS={'现场教学点':'tag-blue','院内场地':'tag-green','共建基地':'tag-purple'};
+const ST_CLS={'启用':'tag-green','占用中':'tag-blue','维护中':'tag-orange','停用':'tag-gray'};
+const DEV_ALL=['投影仪','视频会议','研讨桌','电子白板','录播系统'];
+let POINTS=[
+ {id:'P01',name:'学院学术报告厅',type:'院内场地',addr:'学院主楼5层',cap:320,contact:'行政处 刘工',phone:'010-8888**01',status:'启用',courses:26,intro:'全院性大会课、开学典礼、结业仪式主场地，配录播系统。'},
+ {id:'P02',name:'学院第一研讨教室',type:'院内场地',addr:'学院主楼6层601',cap:40,contact:'行政处 刘工',phone:'010-8888**02',status:'占用中',courses:18,intro:'环形研讨桌布局，适用于分组研讨、案例教学。'},
+ {id:'P03',name:'外交史陈列馆现场教学点',type:'现场教学点',addr:'东城区外交部街',cap:60,contact:'陈列馆 王老师',phone:'010-6666**03',status:'启用',courses:9,intro:'新中国外交史现场教学，配套讲解与实物展陈。'},
+ {id:'P04',name:'某革命传统教育基地',type:'共建基地',addr:'河北省西柏坡',cap:120,contact:'基地办 张主任',phone:'0311-8888**04',status:'启用',courses:6,intro:'党性教育现场教学共建基地，支持2天教学行程。'},
+ {id:'P05',name:'涉外法治实践基地',type:'共建基地',addr:'朝阳区某仲裁中心',cap:50,contact:'基地办 陈秘书',phone:'010-5555**05',status:'维护中',courses:4,intro:'涉外法治观摩教学：仲裁庭审旁听、模拟谈判。场地维护中（9月底前恢复）。'},
+ {id:'P06',name:'学院多媒体教室A',type:'院内场地',addr:'学院主楼5层508',cap:80,contact:'行政处 刘工',phone:'010-8888**06',status:'启用',courses:22,intro:'标准多媒体教室，适用于理论授课与专题讲授。'}];
+let ROOMS=[
+ {id:'R501',name:'501教室',floor:'5层',rows:8,cols:10,devs:['投影仪','电子白板'],status:'占用中',bind:'EQ-01',use:75,
+  sched:[{t:'09:00-12:00',cls:'党校班（第26期）',c:'党性修养与理想信念教育'},{t:'14:00-17:00',cls:'党校班（第26期）',c:'国际战略专题'}]},
+ {id:'R502',name:'502教室',floor:'5层',rows:6,cols:8,devs:['投影仪','视频会议'],status:'空闲',bind:'EQ-02',use:20,
+  sched:[{t:'14:00-17:00',cls:'外事骨干班（第4期）',c:'外交礼仪与礼宾实务'}]},
+ {id:'R601',name:'601研讨教室',floor:'6层',rows:4,cols:10,devs:['研讨桌','投影仪','录播系统'],status:'占用中',bind:'EQ-03',use:90,
+  sched:[{t:'09:00-12:00',cls:'党校班（第26期）',c:'分组研讨（第一组）'},{t:'14:00-17:00',cls:'政能班（第9期）',c:'案例教学：多边外交实务'},{t:'18:30-20:30',cls:'驻外干部轮训班',c:'专题研讨'}]},
+ {id:'R602',name:'602教室',floor:'6层',rows:6,cols:9,devs:['投影仪','电子白板'],status:'空闲',bind:'',use:0,sched:[]},
+ {id:'R603',name:'603教室',floor:'6层',rows:5,cols:8,devs:['投影仪','视频会议'],status:'维护中',bind:'EQ-04',use:0,sched:[]},
+ {id:'R604',name:'604研讨教室',floor:'6层',rows:4,cols:8,devs:['研讨桌','投影仪'],status:'空闲',bind:'',use:10,
+  sched:[{t:'09:00-12:00',cls:'涉外法治专题班',c:'模拟仲裁演练'}]},
+ {id:'R508',name:'508多媒体教室',floor:'5层',rows:10,cols:8,devs:['投影仪','录播系统','电子白板'],status:'占用中',bind:'EQ-05',use:60,
+  sched:[{t:'09:00-12:00',cls:'政能班（第9期）',c:'宏观经济形势分析'}]},
+ {id:'RHALL',name:'学术报告厅',floor:'5层',rows:16,cols:20,devs:['投影仪','录播系统','视频会议','电子白板'],status:'空闲',bind:'EQ-06',use:30,
+  sched:[{t:'14:00-16:00',cls:'全院',c:'全院大课：形势政策报告'}]}];
+let DEVICES=[
+ {id:'EQ-01',loc:'501教室门禁点',model:'FaceRec F5',online:true,ver:'v2026.09.20',room:'R501'},
+ {id:'EQ-02',loc:'502教室门禁点',model:'FaceRec F5',online:true,ver:'v2026.09.20',room:'R502'},
+ {id:'EQ-03',loc:'601研讨教室门禁点',model:'FaceRec F5-Pro',online:true,ver:'v2026.09.12',room:'R601'},
+ {id:'EQ-04',loc:'603教室门禁点',model:'FaceRec F3',online:false,ver:'v2026.08.30',room:'R603'},
+ {id:'EQ-05',loc:'508多媒体教室门禁点',model:'FaceRec F5',online:true,ver:'v2026.09.20',room:'R508'},
+ {id:'EQ-06',loc:'学术报告厅入口',model:'GatePass G2（闸机）',online:true,ver:'v2026.09.20',room:'RHALL'},
+ {id:'EQ-07',loc:'学院主楼一层大厅门禁',model:'GatePass G1',online:true,ver:'v2026.09.12',room:''}];
+const CLASSES=['党校班（第26期）','政能班（第9期）','外事骨干班（第4期）','驻外干部轮训班','涉外法治专题班'];
+let RLOGS=[
+ {time:'2026-09-25 08:52:31',name:'陈明远',res:'成功',act:'已开门',dev:'EQ-01'},
+ {time:'2026-09-25 08:52:47',name:'林婉如',res:'成功',act:'已开门',dev:'EQ-01'},
+ {time:'2026-09-25 08:53:02',name:'未知人员',res:'失败（非底库）',act:'拒绝开门',dev:'EQ-01'},
+ {time:'2026-09-25 08:53:20',name:'赵晓晴',res:'成功',act:'已开门',dev:'EQ-03'},
+ {time:'2026-09-25 08:54:11',name:'何俊杰',res:'成功',act:'已开门',dev:'EQ-01'},
+ {time:'2026-09-25 08:55:40',name:'郑雅文',res:'失败（识别超时）',act:'拒绝开门→组织员补签',dev:'EQ-05'},
+ {time:'2026-09-25 08:56:05',name:'吴国强',res:'成功',act:'已开门',dev:'EQ-03'},
+ {time:'2026-09-25 08:57:22',name:'孙立军',res:'成功',act:'已开门',dev:'EQ-06'}];
+/* 座位排布示例学员（职级从高到低） */
+const SEAT_DEMO=[
+ {n:'孙',r:'副司级'},{n:'王',r:'正处级'},{n:'陈',r:'正处级'},{n:'何',r:'正处级'},{n:'吴',r:'正处级'},
+ {n:'林',r:'副处级'},{n:'郑',r:'副处级'},{n:'赵',r:'一级主任科员'},{n:'周',r:'二级主任科员'},{n:'马',r:'其他'},
+ {n:'李',r:'副处级'},{n:'刘',r:'正处级'}];
+const RANK_CLS={'正司级':'vip','副司级':'vip','正处级':'taken','副处级':'taken','一级主任科员':'taken','二级主任科员':'taken','其他':'taken'};
+
+let curView='room-point',devTab='ledger';
+const VIEW_NAME={'room-point':'教学点管理','room-room':'教室管理','room-device':'人脸考勤设备管理'};
+const VIEW_OPS={'room-point':['＋ 新增教学点','导出'],'room-room':['占用总览','＋ 新增教室'],'room-device':['＋ 新增设备','下发底库','设备联调']};
+
+function showView(id){
+  curView=id;
+  $('crumb').textContent='首页 / 教室管理 / '+VIEW_NAME[id];
+  $('pageTitle').textContent=VIEW_NAME[id];
+  $('pageOps').innerHTML=(VIEW_OPS[id]||[]).map((o,i)=>`<button class="btn ${(o==='＋ 新增教学点'||o==='下发底库')?'btn-primary':'btn-ghost'}" onclick="opClick('${o}')">${o}</button>`).join('');
+  render();
+}
+function opClick(o){
+  if(o==='+ 新增教学点'){openPtModal();return}
+  if(o==='＋ 新增教室'){openRmModal(null);return}
+  if(o==='＋ 新增设备'){toast('新增设备：录入设备编号/安装位置/型号，由系统管理员操作（原型占位）');return}
+  if(o==='下发底库'){openDvModal();return}
+  if(o==='设备联调'){toast('设备联调：向在线设备发送测试指令，检查网络/摄像头/门禁继电器（原型占位）');return}
+  if(o==='占用总览'){toast('教室占用总览：全院教室周占用甘特图（原型占位，可跳转教务组织-全院大课表）');return}
+  toast('「'+o+'」已创建导出任务（原型占位）');
+}
+function render(){
+  const b=$('viewBody');
+  if(curView==='room-point')b.innerHTML=vPoint();
+  else if(curView==='room-room')b.innerHTML=vRoom();
+  else b.innerHTML=vDevice();
+}
+function closeDrawer(){$('drawerMask').classList.add('hidden');$('drawer').classList.add('hidden')}
+function rmFind(id){return ROOMS.find(r=>r.id===id)}
+function stDot(st){const c=st==='空闲'?'g':st==='占用中'?'r':st==='维护中'?'o':'gray';return `<span class="dot ${c}"></span>`}
+
+/* ============ 4.8-P01 教学点管理 ============ */
+function vPoint(){
+  const stats=`<div class="stat-cards">
+   <div class="stat"><div class="n">${POINTS.length}</div><div class="l">教学点总数</div></div>
+   <div class="stat"><div class="n g">${POINTS.filter(p=>p.status==='启用').length}</div><div class="l">启用中</div></div>
+   <div class="stat"><div class="n o">${POINTS.filter(p=>p.status==='维护中').length}</div><div class="l">维护中</div></div>
+   <div class="stat"><div class="n">${POINTS.reduce((a,p)=>a+p.courses,0)}</div><div class="l">关联课程（累计）</div></div></div>`;
+  const rows=`<div class="card"><div class="card-body">
+   <div class="alert">📍 教学点为基础数据自定义维护；现场教学点资源调配请在「教务组织-教学计划管理」发起，被教学计划/排课引用后不可删除、仅可停用。</div>
+   <table class="data-table"><thead><tr><th>教学点名称</th><th>类型</th><th>地址</th><th>容纳人数</th><th>联系人</th><th>关联课程</th><th>状态</th><th>操作</th></tr></thead><tbody>
+   ${POINTS.map(p=>`<tr><td class="c-name" onclick="openPoint('${p.id}')">${p.name}</td>
+    <td><span class="tag ${PT_CLS[p.type]}">${p.type}</span></td><td>${p.addr}</td><td>${p.cap}</td>
+    <td>${p.contact}<br><span style="color:var(--text-3);font-size:12px">${p.phone}</span></td>
+    <td><b>${p.courses}</b> 门</td><td><span class="tag ${ST_CLS[p.status]}">${p.status}</span></td>
+    <td><button class="btn-text" onclick="openPoint('${p.id}')">详情</button>
+     <button class="btn-text" onclick="openPtModal('${p.id}')">编辑</button>
+     <button class="btn-text ${p.status==='停用'?'':'danger'}" onclick="ptToggle('${p.id}')">${p.status==='停用'?'启用':'停用'}</button></td></tr>`).join('')}
+   </tbody></table></div></div>`;
+  return stats+rows;
+}
+function openPoint(id){
+  const p=POINTS.find(x=>x.id===id);if(!p)return;
+  $('dwTitle').textContent=p.name;
+  $('dwBody').innerHTML=`
+   <div class="d-grid">
+    <span class="k">类型</span><span><span class="tag ${PT_CLS[p.type]}">${p.type}</span></span>
+    <span class="k">地址</span><span>${p.addr}</span>
+    <span class="k">容纳人数</span><span>${p.cap} 人</span>
+    <span class="k">联系人</span><span>${p.contact} · ${p.phone}</span>
+    <span class="k">状态</span><span><span class="tag ${ST_CLS[p.status]}">${p.status}</span></span>
+    <span class="k">关联课程</span><span>${p.courses} 门（现场教学课程引用）</span>
+    <span class="k">简介</span><span>${p.intro}</span></div>
+   <div class="d-sec">操作日志</div>
+   <p class="mini-note">2026-09-10 14:22 行政处刘工 编辑教学点信息<br>2026-08-02 09:15 教务处 关联课程《涉外法治专题现场教学》<br>2026-03-01 10:00 系统管理员 创建教学点</p>`;
+  $('dwFoot').innerHTML=`
+   <button class="btn btn-ghost" onclick="closeDrawer();openPtModal('${p.id}')">编辑</button>
+   <button class="btn btn-primary" onclick="toast('在教学计划中调配该现场教学点（跳转教务组织占位）')">资源调配</button>`;
+  $('drawerMask').classList.remove('hidden');$('drawer').classList.remove('hidden');
+}
+let editPid=null;
+function openPtModal(id){
+  editPid=id||null;
+  $('ptModalTitle').textContent=id?'编辑教学点':'新增教学点';
+  if(id){const p=POINTS.find(x=>x.id===id);$('pfName').value=p.name;$('pfType').value=p.type;$('pfAddr').value=p.addr;$('pfCap').value=p.cap;$('pfContact').value=p.contact;$('pfPhone').value=p.phone;$('pfIntro').value=p.intro;}
+  else{['pfName','pfAddr','pfCap','pfContact','pfPhone','pfIntro'].forEach(i=>$(i).value='')}
+  $('ptModal').classList.remove('hidden');
+}
+function ptSave(){
+  const name=$('pfName').value.trim();
+  if(!name){toast('教学点名称不能为空');return}
+  const cap=parseInt($('pfCap').value)||0;
+  if(cap<1){toast('容纳人数须为正整数');return}
+  if(editPid){Object.assign(POINTS.find(x=>x.id===editPid),{name,type:$('pfType').value,addr:$('pfAddr').value,cap,contact:$('pfContact').value,phone:$('pfPhone').value,intro:$('pfIntro').value});}
+  else{POINTS.push({id:'P'+Date.now()%1000,name,type:$('pfType').value,addr:$('pfAddr').value,cap,contact:$('pfContact').value||'—',phone:$('pfPhone').value||'—',status:'启用',courses:0,intro:$('pfIntro').value||'—'});}
+  $('ptModal').classList.add('hidden');render();toast(editPid?'教学点已更新':'「'+name+'」已新增');
+}
+function ptToggle(id){
+  const p=POINTS.find(x=>x.id===id);
+  if(p.status!=='停用'&&p.courses>0){toast('该教学点被 '+p.courses+' 门课程引用，不可停用，请先解除引用');return}
+  p.status=p.status==='停用'?'启用':'停用';render();toast('「'+p.name+'」已'+p.status);
+}
+
+/* ============ 4.8-P02 教室管理 ============ */
+function vRoom(){
+  const free=ROOMS.filter(r=>r.status==='空闲').length;
+  const stats=`<div class="stat-cards">
+   <div class="stat"><div class="n">${ROOMS.length}</div><div class="l">教室总数</div></div>
+   <div class="stat"><div class="n g">${free}</div><div class="l">当前空闲</div></div>
+   <div class="stat"><div class="n r">${ROOMS.filter(r=>r.status==='占用中').length}</div><div class="l">占用中</div></div>
+   <div class="stat"><div class="n o">${ROOMS.filter(r=>r.status==='维护中').length}</div><div class="l">维护中</div></div>
+   <div class="stat"><div class="n">${ROOMS.reduce((a,r)=>a+r.rows*r.cols,0)}</div><div class="l">座位总容量</div></div></div>`;
+  const cards=`<div class="rm-grid">${ROOMS.map(r=>{
+    const cap=r.rows*r.cols;
+    const useCls=r.use>=80?'r':r.use>=40?'o':'g';
+    return `<div class="rm-card" onclick="openRoom('${r.id}')">
+     <div class="rh"><div><div class="rm-name">${r.name}</div><div class="rm-sub">${r.floor} · 规格 ${r.rows}行×${r.cols}列 · 容量 ${cap} 人</div></div>
+      <span class="tag ${ST_CLS[r.status]}">${stDot(r.status)}${r.status}</span></div>
+     <div class="rm-devs">${r.devs.map(d=>`<span class="tag tag-gray">${d}</span>`).join('')}
+      ${r.bind?`<span class="tag tag-cyan">📷 ${r.bind}</span>`:'<span class="tag tag-orange">未绑定考勤设备</span>'}</div>
+     <div class="rm-meta" style="margin-top:8px">今日占用率 <div class="bar-row" style="display:inline-flex;width:160px;vertical-align:middle"><div class="bar" style="flex:1"><i class="${useCls}" style="width:${r.use}%"></i></div><span>${r.use}%</span></div></div>
+     ${r.sched.length?`<div class="rm-sub" style="margin-top:6px">今日：${r.sched.map(s=>s.t).join(' / ')}</div>`:'<div class="rm-sub" style="margin-top:6px">今日无排课</div>'}
+     <div style="display:flex;gap:2px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)">
+      <button class="btn-text" onclick="event.stopPropagation();openRoom('${r.id}')">详情/座位</button>
+      <button class="btn-text" onclick="event.stopPropagation();openRmModal('${r.id}')">规格设置</button>
+      <button class="btn-text" onclick="event.stopPropagation();location.href='training-schedule.html'">去排课</button></div>
+    </div>`}).join('')}</div>`;
+  return stats+cards;
+}
+/* 座位排布：职级从高到低、从中间到两侧、从前到后 */
+function seatOrder(rows,cols){
+  const mid=(cols-1)/2,order=[];
+  const colIdx=[...Array(cols).keys()].sort((a,b)=>Math.abs(a-mid)-Math.abs(b-mid));
+  for(let r=0;r<rows;r++)for(const c of colIdx)order.push(r*cols+c);
+  return order;
+}
+function seatGrid(r){
+  const cap=r.rows*r.cols,order=seatOrder(r.rows,r.cols);
+  const seats=new Array(cap).fill(null);
+  SEAT_DEMO.forEach((p,i)=>{if(i<cap)seats[order[i]]=p});
+  let html=`<div class="seat-wrap"><div class="seat-podium"><b>讲 台</b></div>`;
+  for(let row=0;row<r.rows;row++){
+    html+=`<div class="seat-row">`;
+    for(let col=0;col<r.cols;col++){
+      const p=seats[row*r.cols+col];
+      const cls=p?(RANK_CLS[p.r]||'taken'):'';
+      html+=`<div class="seat ${cls}" title="${p?p.n+' · '+p.r:'空位'}">${p?p.n:''}</div>`;
+    }
+    html+=`</div>`;
+  }
+  html+=`<div style="display:flex;gap:14px;font-size:11px;color:var(--text-3);margin-top:8px;justify-content:center">
+   <span><span class="seat vip" style="display:inline-block;width:14px;height:12px"></span> 司局级</span>
+   <span><span class="seat taken" style="display:inline-block;width:14px;height:12px"></span> 处级及以下</span>
+   <span><span class="seat" style="display:inline-block;width:14px;height:12px"></span> 空位</span></div></div>`;
+  return html;
+}
+function openRoom(id){
+  const r=rmFind(id);if(!r)return;
+  const cap=r.rows*r.cols;
+  const dev=DEVICES.find(d=>d.id===r.bind);
+  $('dwTitle').textContent=r.name+' · 教室详情';
+  $('dwBody').innerHTML=`
+   <div class="d-grid">
+    <span class="k">位置</span><span>${r.floor}</span>
+    <span class="k">规格（行×列）</span><span>${r.rows} 行 × ${r.cols} 列 · 容量 <b>${cap}</b> 人</span>
+    <span class="k">设备</span><span>${r.devs.map(d=>`<span class="tag tag-gray">${d}</span>`).join(' ')||'—'}</span>
+    <span class="k">考勤/门禁设备</span><span>${dev?`${dev.id} · ${dev.model} · <span class="tag ${dev.online?'tag-green':'tag-red'}">${dev.online?'在线':'离线'}</span> · 底库 ${dev.ver}`:'<span class="tag tag-orange">未绑定</span>'}</span>
+    <span class="k">状态</span><span><span class="tag ${ST_CLS[r.status]}">${stDot(r.status)}${r.status}</span>　今日占用率 ${r.use}%</span>
+   </div>
+   <div class="d-sec">座位排布预览（一键生成：职级从高到低、从中间到两侧、从前到后）</div>
+   ${seatGrid(r)}
+   <p class="mini-note">支持手动拖拽调整座位，与桌签打印功能联动；实际排座以班级学员名册按礼宾顺序生成（演示数据为示例学员）。</p>
+   <div class="d-sec">今日课程安排（${r.sched.length}）</div>
+   ${r.sched.length?`<table class="data-table"><thead><tr><th>时间</th><th>班次</th><th>课程</th></tr></thead><tbody>
+   ${r.sched.map(s=>`<tr><td>${s.t}</td><td>${s.cls}</td><td>${s.c}</td></tr>`).join('')}</tbody></table>`:'<p class="mini-note">今日无排课，教室空闲可预约</p>'}`;
+  $('dwFoot').innerHTML=`
+   <button class="btn btn-ghost" onclick="closeDrawer();openRmModal('${r.id}')">规格设置</button>
+   <button class="btn btn-ghost" onclick="toast('已按职级一键生成座位排布，可拖拽微调并打印桌签（原型占位）')">一键生成座位</button>
+   <button class="btn btn-ghost" onclick="toast('桌签打印：按当前座位排布生成桌签版式（原型占位）')">桌签打印</button>
+   <button class="btn btn-primary" onclick="closeDrawer();location.href='training-schedule.html'">去拖拽排课</button>`;
+  $('drawerMask').classList.remove('hidden');$('drawer').classList.remove('hidden');
+}
+let editRid=null;
+function openRmModal(id){
+  editRid=id;
+  const r=id?rmFind(id):null;
+  $('rmModalTitle').textContent=r?r.name+' · 规格设置':'新增教室';
+  $('rfRows').value=r?r.rows:6;$('rfCols').value=r?r.cols:8;
+  $('rfDevs').innerHTML=DEV_ALL.map(d=>`<label class="chk"><input type="checkbox" value="${d}" ${r&&r.devs.includes(d)?'checked':''}>${d}</label>`).join('');
+  $('rfDev').innerHTML='<option value="">不绑定</option>'+DEVICES.map(d=>`<option value="${d.id}" ${r&&r.bind===d.id?'selected':''}>${d.id}（${d.loc}）</option>`).join('');
+  rfPreview();
+  $('rmModal').classList.remove('hidden');
+}
+function rfPreview(){
+  const rows=parseInt($('rfRows').value)||0,cols=parseInt($('rfCols').value)||0;
+  $('rfCap').textContent=(rows>0&&cols>0)?rows*cols+' 人':'—';
+}
+function rmSave(){
+  const rows=parseInt($('rfRows').value),cols=parseInt($('rfCols').value);
+  if(!rows||!cols||rows<1||cols<1){toast('行列数须为正整数');return}
+  if(rows>30||cols>30){toast('单维不超过30，报告厅请选用大厅模板');return}
+  const devs=[...document.querySelectorAll('#rfDevs input:checked')].map(i=>i.value);
+  const bind=$('rfDev').value;
+  if(editRid){const r=rmFind(editRid);Object.assign(r,{rows,cols,devs,bind});toast(r.name+' 规格已更新，容量 '+(rows*cols)+' 人');}
+  else{const id='R'+Date.now()%1000;ROOMS.push({id,name:'新教室'+id.slice(1),floor:'待完善',rows,cols,devs,status:'空闲',bind,use:0,sched:[]});toast('教室已新增，可前往拖拽排课选用');}
+  $('rmModal').classList.add('hidden');render();
+}
+
+/* ============ 4.8-P03 人脸考勤设备管理 ============ */
+function vDevice(){
+  const on=DEVICES.filter(d=>d.online).length;
+  const old=DEVICES.filter(d=>d.ver!=='v2026.09.20').length;
+  const stats=`<div class="stat-cards">
+   <div class="stat"><div class="n">${DEVICES.length}</div><div class="l">设备总数</div></div>
+   <div class="stat"><div class="n g">${on}</div><div class="l">在线</div></div>
+   <div class="stat"><div class="n r">${DEVICES.length-on}</div><div class="l">离线（本地缓存中）</div></div>
+   <div class="stat"><div class="n o">${old}</div><div class="l">底库待更新</div></div>
+   <div class="stat"><div class="n g">${RLOGS.filter(l=>l.res==='成功').length}/${RLOGS.length}</div><div class="l">今日识别成功</div></div></div>`;
+  const tabs=`<div class="sub-tabs">
+   <div class="sub-tab ${devTab==='ledger'?'active':''}" onclick="devTab='ledger';render()">设备台账</div>
+   <div class="sub-tab ${devTab==='log'?'active':''}" onclick="devTab='log';render()">识别日志</div></div>`;
+  let body;
+  if(devTab==='ledger'){
+    body=`<div class="card"><div class="card-body">
+    <div class="alert">📷 人脸考勤设备与门禁系统打通，刷脸自动开门+自动考勤；设备离线时本地缓存识别记录，恢复后自动补传；人脸特征值加密存储于内网。</div>
+    <table class="data-table"><thead><tr><th>设备编号</th><th>安装位置</th><th>型号</th><th>在线状态</th><th>底库版本</th><th>绑定教室</th><th>操作</th></tr></thead><tbody>
+    ${DEVICES.map(d=>{const rm=d.room?rmFind(d.room):null;const oldVer=d.ver!=='v2026.09.20';
+      return `<tr><td><b>${d.id}</b></td><td>${d.loc}</td><td>${d.model}</td>
+     <td><span class="tag ${d.online?'tag-green':'tag-red'}">${stDot(d.online?'空闲':'维护中')}${d.online?'在线':'离线'}</span></td>
+     <td>${d.ver}${oldVer?' <span class="tag tag-orange">待更新</span>':''}</td>
+     <td>${rm?rm.name:'—'}</td>
+     <td><button class="btn-text" onclick="toast('联调 ${d.id}：网络✓ 摄像头✓ 门禁继电器✓（模拟）')">联调</button>
+      <button class="btn-text" onclick="openDvModal('${d.id}')">下发底库</button>
+      <button class="btn-text" onclick="devTab='log';render()">识别日志</button>
+      <button class="btn-text danger" onclick="toast('移除设备需系统管理员权限并双人复核（三员分立，原型占位）')">移除</button></td></tr>`}).join('')}
+    </tbody></table></div></div>`;
+  }else{
+    body=`<div class="card"><div class="card-body">
+    <div class="filter-bar"><input class="input" placeholder="姓名/设备号检索，回车确认…" onkeydown="if(event.key==='Enter')toast('检索：'+this.value.trim()+'（原型占位）')">
+     <select class="sel"><option>全部结果</option><option>成功</option><option>失败</option></select>
+     <button class="btn btn-primary" onclick="toast('已创建导出任务：考勤数据表（原型占位）')">导出日志</button>
+     <span style="font-size:12px;color:var(--text-3);margin-left:auto">识别时间 <1 秒；抓拍图点击可放大复核</span></div>
+    <table class="data-table"><thead><tr><th>时间</th><th>姓名</th><th>识别结果</th><th>开门动作</th><th>设备</th><th>抓拍图</th></tr></thead><tbody>
+    ${RLOGS.map(l=>`<tr><td>${l.time}</td>
+     <td>${l.name==='未知人员'?'<span style="color:var(--danger);font-weight:700">未知人员</span>':'<b>'+l.name+'</b>'}</td>
+     <td><span class="tag ${l.res==='成功'?'tag-green':'tag-red'}">${l.res}</span></td>
+     <td>${l.act}</td><td>${l.dev}</td>
+     <td><a onclick="toast('抓拍图放大查看，用于考勤争议复核（原型占位）')">🖼 缩略图</a></td></tr>`).join('')}
+    </tbody></table>
+    <p class="mini-note">异常处理：识别失败/非本时段→门禁不开门、记录异常，组织员核实后手工补签或登记请假（见培训管理-考勤管理）。</p></div></div>`;
+  }
+  return stats+tabs+body;
+}
+let dvOnly='';
+function openDvModal(devId){
+  dvOnly=devId||'';
+  $('dfCls').innerHTML=CLASSES.map(c=>`<option>${c}</option>`).join('');
+  const pts=DEVICES.filter(d=>!dvOnly||d.id===dvOnly);
+  $('dfPoints').innerHTML=pts.map(d=>`<label class="chk"><input type="checkbox" value="${d.id}" checked> ${d.id}（${d.loc}）</label>`).join('');
+  $('dfProg').classList.add('hidden');$('dfGo').disabled=false;$('dfGo').textContent='开始下发';
+  $('dvModal').classList.remove('hidden');
+}
+function dvSend(){
+  const cls=$('dfCls').value;
+  const devs=[...document.querySelectorAll('#dfPoints input:checked')].map(i=>i.value);
+  if(!devs.length){toast('请至少勾选一个门禁点');return}
+  $('dfGo').disabled=true;$('dfProg').classList.remove('hidden');
+  let p=0;
+  const timer=setInterval(()=>{
+    p+=Math.random()*22;
+    if(p>=100){p=100;clearInterval(timer);
+      $('dfMsg').textContent='下发完成：'+devs.length+' 个门禁点全部成功（'+cls+'）';
+      $('dfGo').disabled=false;$('dfGo').textContent='完成';
+      devs.forEach(id=>{const d=DEVICES.find(x=>x.id===id);if(d)d.ver='v2026.09.20'});
+      toast('「'+cls+'」人脸底库已下发至 '+devs.length+' 个门禁点');
+    }else{$('dfMsg').textContent='正在下发（'+Math.floor(p)+'%）：加密传输本班时段门禁权限…';}
+    $('dfBar').style.width=p+'%';
+  },400);
+}
+
+/* ============ 初始化 ============ */
+const q=new URLSearchParams(location.search).get('page');
+const init=q&&VIEW_NAME[q]?q:'room-point';
+showView(init);
+setNavActive(document.querySelector('.nav-child[data-id="'+init+'"]'));
+</script>
+</body>
+</html>

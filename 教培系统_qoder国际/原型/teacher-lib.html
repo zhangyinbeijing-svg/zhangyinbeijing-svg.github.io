@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>师资库 · 干部培训学院教务管理系统 原型 V1.0</title>
+<style>
+:root{--primary:#1F4E79;--primary-2:#2E75B6;--success:#2E7D32;--warning:#F57F17;--danger:#C62828;
+ --text:#333;--text-2:#595959;--text-3:#8a9099;--bg:#F5F6F8;--card:#fff;--line:#e5e8ec;
+ --topbar-h:56px;--nav-w:220px;--nav-w-c:64px;--r:4px;--r-card:8px;--r-modal:12px;--shadow:0 2px 8px rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{text-decoration:none;color:var(--primary-2);cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2dc;border-radius:4px}
+.btn{height:32px;padding:0 16px;border-radius:var(--r);font-size:14px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#173e61}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-text{background:none;border:none;color:var(--primary-2);cursor:pointer;font-size:13px;padding:0 4px}
+.btn-text:hover{text-decoration:underline}
+.btn-text.danger{color:var(--danger)}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+.tag-blue{background:rgba(46,117,182,.12);color:var(--primary-2)}
+.tag-green{background:rgba(46,125,50,.12);color:var(--success)}
+.tag-orange{background:rgba(247,127,23,.12);color:var(--warning)}
+.tag-red{background:rgba(198,40,40,.12);color:var(--danger)}
+.tag-purple{background:rgba(123,80,160,.12);color:#7B50A0}
+.tag-gold{background:rgba(191,144,0,.14);color:#9a7400}
+.tag-gray{background:rgba(89,95,105,.1);color:var(--text-2)}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card-body{padding:16px}
+.input,.sel{height:32px;border:1px solid var(--line);border-radius:var(--r);padding:0 10px;font-size:13px;outline:none;background:#fff;color:var(--text)}
+.input:focus,.sel:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+/* 顶部栏/导航 */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--primary);color:#fff;display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{display:flex;align-items:center;gap:10px;min-width:230px}
+.tb-logo .mark{width:32px;height:32px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.tb-logo .name{font-size:16px;font-weight:700;white-space:nowrap}
+.tb-search{flex:1;max-width:460px}.tb-search .input{width:100%;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;height:34px}
+.tb-search .input::placeholder{color:rgba(255,255,255,.6)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tb-icon{position:relative;width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px}
+.tb-icon:hover{background:rgba(255,255,255,.15)}
+.tb-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.tb-ver{font-size:12px;color:rgba(255,255,255,.65);margin:0 4px}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tb-user:hover{background:rgba(255,255,255,.15)}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sidenav{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--nav-w);background:#fff;border-right:1px solid var(--line);overflow-y:auto;z-index:90;transition:width .2s}
+.nav-parent{display:flex;align-items:center;gap:10px;padding:0 16px;height:44px;cursor:pointer;color:var(--text-2);font-size:14px;position:relative}
+.nav-parent:hover{background:#f2f6fa;color:var(--primary)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex:none}
+.nav-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-caret{font-size:11px;color:var(--text-3);transition:transform .2s}
+.nav-group.open .nav-caret{transform:rotate(90deg)}
+.nav-group.open>.nav-parent{color:var(--primary);font-weight:700}
+.nav-children{display:none;background:#fafbfc}
+.nav-group.open .nav-children{display:block}
+.nav-child{padding:0 16px 0 44px;height:36px;display:flex;align-items:center;font-size:13px;color:var(--text-2);cursor:pointer;position:relative}
+.nav-child:hover{color:var(--primary);background:#f2f6fa}
+.nav-child.active{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-child.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.nav-collapse{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:var(--text-3);cursor:pointer;display:flex;gap:8px;align-items:center}
+body.nav-collapsed .sidenav{width:var(--nav-w-c)}
+body.nav-collapsed .nav-label,body.nav-collapsed .nav-caret,body.nav-collapsed .nav-children,body.nav-collapsed .nav-collapse span{display:none}
+body.nav-collapsed .nav-parent{justify-content:center;padding:0}
+body.nav-collapsed .nav-collapse{justify-content:center}
+.content{margin-left:var(--nav-w);margin-top:var(--topbar-h);padding:24px;min-height:calc(100vh - var(--topbar-h));transition:margin-left .2s}
+body.nav-collapsed .content{margin-left:var(--nav-w-c)}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+.breadcrumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+.page-title{font-size:20px;font-weight:700}
+.page-ops{display:flex;gap:8px;flex-wrap:wrap}
+/* 筛选/子Tab/统计卡 */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.filter-bar .input{width:190px}.filter-bar .sel{width:140px}
+.sub-tabs{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:16px;flex-wrap:wrap}
+.sub-tab{padding:9px 18px;font-size:14px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.sub-tab:hover{color:var(--primary)}
+.sub-tab.active{color:var(--primary);font-weight:700;border-bottom-color:var(--primary)}
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#f7f9fc;border-radius:var(--r);padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:700;font-family:Consolas,monospace;color:var(--primary)}
+.stat .n.g{color:var(--success)}.stat .n.o{color:var(--warning)}.stat .n.r{color:var(--danger)}
+.stat .l{font-size:12px;color:var(--text-3);margin-top:2px}
+/* 表格 */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th,.data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.data-table th{background:#fafbfc;color:var(--text-2);font-size:12px;font-weight:400;white-space:nowrap}
+.data-table tbody tr:hover{background:#f7fafd}
+.data-table .c-name{font-weight:700;color:var(--primary);cursor:pointer}
+.data-table .c-name:hover{text-decoration:underline}
+.score-high{color:var(--success);font-weight:700}
+.score-low{color:var(--danger);font-weight:700}
+/* 进度条 */
+.bar{background:#edf0f3;border-radius:999px;height:8px;overflow:hidden;min-width:90px}
+.bar i{display:block;height:100%;border-radius:999px;background:var(--primary-2)}
+.bar i.g{background:var(--success)}.bar i.o{background:var(--warning)}.bar i.r{background:var(--danger)}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-row span{font-size:12px;color:var(--text-2);width:44px;text-align:right;flex:none}
+.sec-title{font-size:15px;font-weight:700;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sec-title:first-child{margin-top:0}
+.mini-note{font-size:12px;color:var(--text-3);margin-top:10px;line-height:1.7}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.view-switch{display:flex;gap:0}
+.view-switch .btn{border-radius:0}
+.view-switch .btn:first-child{border-radius:var(--r) 0 0 var(--r)}
+.view-switch .btn:last-child{border-radius:0 var(--r) var(--r) 0}
+/* 师资卡片 */
+.t-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.t-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-card);padding:16px;transition:box-shadow .15s,transform .15s;position:relative}
+.t-card:hover{box-shadow:0 6px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.t-card .th{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.t-ava{width:48px;height:48px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex:none}
+.t-card .t-name{font-size:15px;font-weight:700}
+.t-card .t-pos{font-size:12px;color:var(--text-3);margin-top:2px}
+.t-card .t-meta{font-size:12px;color:var(--text-2);line-height:1.9}
+.t-card .t-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.t-card .t-score{display:flex;gap:16px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12px;color:var(--text-3)}
+.t-card .t-score b{font-size:17px;font-family:Consolas,monospace;display:block;text-align:center}
+.t-card .t-ops{display:flex;gap:2px;margin-top:10px}
+.lvl{position:absolute;top:14px;right:14px}
+/* 评价标签云 */
+.tag-cloud{display:flex;gap:8px;flex-wrap:wrap}
+.tag-cloud .tc{border:1px solid var(--line);border-radius:999px;padding:5px 14px;font-size:13px;cursor:default;display:flex;gap:6px;align-items:center}
+.tag-cloud .tc b{color:var(--primary);font-family:Consolas,monospace}
+/* 预警/提示 */
+.alert{border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;gap:8px;align-items:center;background:rgba(46,117,182,.07);border:1px solid rgba(46,117,182,.2);color:var(--primary)}
+/* 抽屉/弹窗/Toast */
+.drawer-mask{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:210}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:560px;background:#fff;box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:220;display:flex;flex-direction:column}
+.drawer-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.drawer-head h3{font-size:16px;font-weight:700}
+.drawer-body{flex:1;overflow-y:auto;padding:20px}
+.drawer-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.d-sec{font-size:14px;font-weight:700;margin:18px 0 10px;padding-left:8px;border-left:3px solid var(--primary)}
+.d-sec:first-child{margin-top:0}
+.d-grid{display:grid;grid-template-columns:96px 1fr;gap:8px 12px;font-size:13px}
+.d-grid .k{color:var(--text-3)}
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{width:540px;max-height:86vh;background:#fff;border-radius:var(--r-modal);box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden;display:flex;flex-direction:column}
+.modal-head{padding:14px 18px;font-size:16px;font-weight:700;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.modal-body{padding:18px;overflow-y:auto}
+.modal-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.f-row{margin-bottom:14px}
+.f-row label{display:block;font-size:13px;color:var(--text-2);margin-bottom:6px}
+.f-row label .req{color:var(--danger);margin-right:2px}
+.f-row .input,.f-row .sel,.f-row textarea{width:100%}
+textarea.input{height:auto;padding:8px 10px;resize:vertical}
+.f-2col{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.chk-line{display:flex;gap:12px;flex-wrap:wrap;padding:4px 0}
+.chk-line label{display:flex;align-items:center;gap:5px;font-size:13px;margin:0}
+.match-box{background:#f2f8f2;border:1px solid rgba(46,125,50,.3);border-radius:var(--r);padding:10px 12px;font-size:12px;color:var(--success);margin-top:6px;line-height:1.8}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(40,45,52,.92);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:300;box-shadow:var(--shadow);max-width:70%}
+@media (max-width:1100px){.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo"><div class="mark">院</div><div class="name">干部培训学院教务管理系统</div></div>
+  <div class="tb-search"><input class="input" id="tbSearch" placeholder="🔍 全局搜索：师资姓名 / 教学领域 / 课程…"></div>
+  <div class="tb-right">
+    <span class="tb-ver">V1.0 原型</span>
+    <div class="tb-icon" onclick="toast('跳转消息中心（原型占位）')" title="站内信">🔔<span class="tb-badge">5</span></div>
+    <div class="tb-icon" onclick="toast('帮助中心为原型占位')" title="帮助中心">❓</div>
+    <div class="tb-user" id="tbUser"><div class="tb-avatar">张</div><span>张三</span><span style="font-size:10px">▼</span></div>
+  </div>
+</header>
+
+<aside class="sidenav" id="sidenav"></aside>
+
+<main class="content">
+  <div class="page-head">
+    <div><div class="breadcrumb" id="crumb">首页 / 师资库 / 师资信息</div><h2 class="page-title" id="pageTitle">师资信息</h2></div>
+    <div class="page-ops" id="pageOps"></div>
+  </div>
+  <div id="viewBody"></div>
+</main>
+
+<!-- 师资详情抽屉 -->
+<div class="drawer-mask hidden" id="drawerMask" onclick="closeDrawer()"></div>
+<div class="drawer hidden" id="drawer">
+  <div class="drawer-head"><h3 id="dwTitle">师资详情</h3><span class="btn-text" onclick="closeDrawer()">✕ 关闭</span></div>
+  <div class="drawer-body" id="dwBody"></div>
+  <div class="drawer-foot" id="dwFoot"></div>
+</div>
+
+<!-- 新增/编辑师资弹窗 -->
+<div class="mask hidden" id="tModal"><div class="modal">
+  <div class="modal-head"><span id="tModalTitle">新增师资</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-2col">
+     <div class="f-row"><label><span class="req">*</span>教员姓名</label><input class="input" id="tfName" placeholder="请输入姓名"></div>
+     <div class="f-row"><label><span class="req">*</span>教员来源</label><select class="sel" id="tfSrc"><option>院内教师</option><option>外聘专家</option><option>部委专家</option><option>兄弟干院</option></select></div>
+     <div class="f-row"><label>所在单位</label><input class="input" id="tfUnit" placeholder="如：外交学院"></div>
+     <div class="f-row"><label>职务/职称</label><input class="input" id="tfPos" placeholder="如：教授"></div>
+     <div class="f-row"><label>联系电话</label><input class="input" id="tfPhone" placeholder="内线或手机号"></div>
+     <div class="f-row"><label><span class="req">*</span>教学领域（分类）</label><select class="sel" id="tfField"></select></div>
+     <div class="f-row"><label><span class="req">*</span>教学等级（分级）</label><select class="sel" id="tfLevel"></select></div>
+     <div class="f-row"><label>研究方向</label><input class="input" id="tfDir" placeholder="研究方向"></div>
+    </div>
+    <div class="f-row"><label>评价标签（可多选，后续可在「分级分类标签」页维护）</label><div class="chk-line" id="tfTags"></div></div>
+    <div class="f-row"><label>个人简介</label><textarea class="input" rows="2" id="tfIntro" placeholder="个人简介"></textarea></div>
+    <div class="f-row"><label>教学成果</label><textarea class="input" rows="2" id="tfAch" placeholder="获奖、课题、精品课程等"></textarea></div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="tSave()">保存</button></div>
+</div></div>
+
+<!-- 授课邀请函弹窗 -->
+<div class="mask hidden" id="invModal"><div class="modal">
+  <div class="modal-head"><span>新建授课邀请函</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-row"><label><span class="req">*</span>邀请教师</label><select class="sel" id="invT" onchange="invMatch()"></select></div>
+    <div class="f-row"><label><span class="req">*</span>邀请课程</label><select class="sel" id="invC" onchange="invMatch()">
+      <option data-field="理论教育" data-level="一级 · 名师">习近平外交思想概论</option>
+      <option data-field="经济金融" data-level="二级 · 资深">宏观经济形势分析</option>
+      <option data-field="党性教育" data-level="二级 · 资深">党性修养与理想信念教育</option>
+      <option data-field="外交实务" data-level="三级 · 骨干">国际谈判实务与模拟演练</option>
+      <option data-field="技能实训" data-level="三级 · 骨干">外交礼仪与礼宾实务</option></select></div>
+    <div class="match-box hidden" id="invMatchBox"></div>
+    <div class="f-2col">
+     <div class="f-row"><label><span class="req">*</span>培训班次</label><select class="sel" id="invCls"><option>党校班（第26期）</option><option>政能班（第9期）</option><option>驻外干部轮训班</option></select></div>
+     <div class="f-row"><label><span class="req">*</span>拟授课时间</label><input class="input" id="invDate" type="date" value="2026-10-12"></div>
+     <div class="f-row"><label>课时数</label><input class="input" id="invHours" type="number" value="4" min="1"></div>
+     <div class="f-row"><label>课酬标准</label><select class="sel" id="invFee"><option>正高级：1500元/课时</option><option>副高级：1000元/课时</option><option>其他：600元/课时</option></select></div>
+    </div>
+    <div class="f-row"><label>邀请函附言</label><textarea class="input" rows="2" id="invMsg" placeholder="尊敬的××教授，诚邀您为…"></textarea></div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-ghost" onclick="invSave(false)">存为待发送</button><button class="btn btn-primary" onclick="invSave(true)">发送邀请</button></div>
+</div></div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+document.querySelectorAll('.js-close').forEach(b=>b.onclick=e=>e.target.closest('.mask').classList.add('hidden'));
+
+/* ============ 导航（全站共享数据） ============ */
+const NAV=[
+ {id:'workbench',icon:'🏠',name:'工作台',direct:true},
+ {id:'teach',icon:'📚',name:'教学管理',children:[{id:'teach-system',name:'课程体系',pg:'4.2-P01'},{id:'teach-course',name:'课程管理',pg:'4.2-P02'}]},
+ {id:'train',icon:'🎓',name:'培训管理',children:[
+   {id:'train-class',name:'培训班管理',pg:'4.3-P01'},{id:'train-stu',name:'培训考生',pg:'4.3-P03'},
+   {id:'train-schedule',name:'培训排课（拖拽）',pg:'4.3-P04'},{id:'train-grade',name:'课程成绩',pg:'4.3-P06'},
+   {id:'train-cert',name:'电子证书',pg:'4.3-P07'},{id:'train-eval',name:'教学评估',pg:'4.3-P08'},
+   {id:'train-exam',name:'考务管理',pg:'4.3-P09'},{id:'train-cycle',name:'学员全周期',pg:'4.3-P10'},
+   {id:'train-stay',name:'住宿安排',pg:'4.3-P11'},{id:'train-budget',name:'预算管理',pg:'4.3-P12'},
+   {id:'train-report',name:'结班报告',pg:'4.3-P13'},{id:'train-attend',name:'考勤管理',pg:'4.3-P14'},
+   {id:'train-track',name:'训后跟踪',pg:'4.3-P15'}]},
+ {id:'resource',icon:'🗂️',name:'资源管理',children:[
+   {id:'res-plan',name:'教案库',pg:'4.4-P01'},{id:'res-book',name:'教材库',pg:'4.4-P02'},
+   {id:'res-case',name:'案例库',pg:'4.4-P03'},{id:'res-self',name:'自他资源库',pg:'4.4-P04'},
+   {id:'res-bank',name:'题库试卷库',pg:'4.4-P05'},{id:'res-tag',name:'标签管理',pg:'4.4-P06'}]},
+ {id:'edu',icon:'📊',name:'教务组织',children:[{id:'edu-plan',name:'教学计划管理',pg:'4.5-P01'},{id:'edu-data',name:'教务数据管理',pg:'4.5-P02'},{id:'edu-report',name:'多维度报表',pg:'4.5-P03'},{id:'edu-export',name:'数据导出与集成',pg:'4.5-P04'},{id:'edu-settle',name:'结算报告模板',pg:'4.5-P05'}]},
+ {id:'teacher',icon:'👥',name:'师资库',children:[{id:'tea-list',name:'师资信息',pg:'4.6-P01'},{id:'tea-tag',name:'分级分类标签',pg:'4.6-P03'},{id:'tea-archive',name:'授课质量档案',pg:'4.6-P02'},{id:'tea-invite',name:'授课邀请函',pg:'4.6-P04'},{id:'tea-report',name:'综合评价报告',pg:'4.6-P05'}]},
+ {id:'student',icon:'✪',name:'学员库',children:[{id:'stu-list',name:'学员信息',pg:'4.7-P01'},{id:'stu-query',name:'个人综合查询',pg:'4.7-P02'},{id:'stu-archive',name:'参训档案',pg:'4.7-P03'}]},
+ {id:'room',icon:'🏫',name:'教室管理',children:[{id:'room-point',name:'教学点管理',pg:'4.8-P01'},{id:'room-room',name:'教室管理',pg:'4.8-P02'},{id:'room-device',name:'人脸考勤设备',pg:'4.8-P03'}]},
+ {id:'approve',icon:'✅',name:'审批管理',children:[{id:'apv-schedule',name:'排课审批',pg:'4.9-P01'},{id:'apv-budget',name:'预算审批',pg:'4.9-P01'},{id:'apv-leave',name:'请假/调停课审批',pg:'4.9-P01'},{id:'apv-record',name:'审批记录',pg:'4.9-P03'}]},
+ {id:'org',icon:'🏛️',name:'组织管理',children:[{id:'org-structure',name:'组织架构',pg:'4.10-P01'},{id:'org-account',name:'账户管理',pg:'4.10-P02'},{id:'org-user',name:'用户权限',pg:'4.10-P03'},{id:'org-data',name:'数据权限',pg:'4.10-P04'},{id:'org-three',name:'三员管理',pg:'4.10-P05'}]},
+ {id:'base',icon:'⚙️',name:'基础设置',children:[{id:'base-category',name:'培训类别',pg:'4.11-P01'},{id:'base-course',name:'课程分类',pg:'4.11-P02'},{id:'base-log',name:'系统日志',pg:'4.11-P03'},{id:'base-rule',name:'经费规则库',pg:'4.11-P04'}]},
+ {id:'screen',icon:'📈',name:'可视化大屏',children:[{id:'scr-overview',name:'总览大屏',pg:'4.12'},{id:'scr-study',name:'学情大屏',pg:'4.12'},{id:'scr-resource',name:'资源大屏',pg:'4.12'}]}
+];
+$('sidenav').innerHTML=NAV.map(g=>`
+ <div class="nav-group ${g.id==='teacher'?'open':''}" data-group="${g.id}">
+   <div class="nav-parent" data-id="${g.id}"><span class="nav-icon">${g.icon}</span><span class="nav-label">${g.name}</span>${g.children?'<span class="nav-caret">▸</span>':''}</div>
+   ${g.children?`<div class="nav-children">${g.children.map(c=>`<div class="nav-child" data-id="${c.id}" data-name="${c.name}" data-pg="${c.pg||''}"><span class="nav-label">${c.name}</span></div>`).join('')}</div>`:''}
+ </div>`).join('')+`<div class="nav-collapse" id="navCollapse">⇤<span>收起导航</span></div>`;
+$('sidenav').addEventListener('click',e=>{
+  if(e.target.closest('#navCollapse')){document.body.classList.toggle('nav-collapsed');return}
+  const child=e.target.closest('.nav-child'),parent=e.target.closest('.nav-parent');
+  if(child){
+    const id=child.dataset.id,pg=child.dataset.pg||'';
+    if(pg.indexOf('4.6')===0){showView(id);setNavActive(child);return}
+        if(pg.indexOf('4.7')===0){location.href='student-lib.html?page='+id;return}
+            if(pg.indexOf('4.8')===0){location.href='room.html?page='+id;return}
+    if(pg.indexOf('4.9')===0){location.href='approve.html?page='+id;return}
+        if(pg.indexOf('4.10')===0){location.href='org.html?page='+id;return}
+        if(pg.indexOf('4.12')===0){location.href='screen.html?scr='+id;return}
+    if(id==='train-schedule'){location.href='training-schedule.html';return}
+    if(pg.indexOf('4.3')===0){location.href='training.html?page='+id;return}
+    if(pg.indexOf('4.2')===0){location.href='teaching.html?page='+id;return}
+    if(pg.indexOf('4.4')===0){location.href='resource.html?page='+id;return}
+    if(pg.indexOf('4.5')===0){location.href='edu.html?page='+id;return}
+    toast('「'+child.dataset.name+'」（'+pg+'）为原型占位');return}
+  if(parent){const g=NAV.find(x=>x.id===parent.dataset.id);
+    if(g.direct){location.href='workbench.html';return}
+    parent.closest('.nav-group').classList.toggle('open');}
+});
+function setNavActive(el){document.querySelectorAll('.nav-child').forEach(n=>n.classList.remove('active'));el&&el.classList.add('active')}
+$('tbUser').onclick=()=>toast('个人信息 / 修改密码见 workbench.html 账户入口');
+$('tbSearch').onkeydown=e=>{if(e.key==='Enter'){showView('tea-list');FILTER.kw=e.target.value.trim();render();toast('已在师资库检索：'+e.target.value.trim())}};
+
+/* ============ 师资数据（V3.2 五-(一)-5） ============ */
+const LEVELS=['一级 · 名师','二级 · 资深','三级 · 骨干','四级 · 新锐'];
+const LVL_CLS={'一级 · 名师':'tag-gold','二级 · 资深':'tag-blue','三级 · 骨干':'tag-green','四级 · 新锐':'tag-gray'};
+const FIELDS=['理论教育','党性教育','外交实务','经济金融','涉外法治','技能实训'];
+const ST_CLS={'待发送':'tag-gray','待确认':'tag-orange','已确认':'tag-green','已婉拒':'tag-red','已取消':'tag-gray','启用':'tag-green','停用':'tag-gray'};
+const EVAL_TAGS=[['观点正确紧扣主题',42],['内容丰富信息量大',38],['案例生动贴近实战',31],['互动性强气氛活跃',26],['逻辑清晰结构严谨',24],['理论功底深厚',18],['语速偏快',6],['课件制作精良',12]];
+let TEACHERS=[
+ {id:'T01',name:'王建国',src:'院内教师',unit:'外交培训学院教研部',pos:'教授 / 副主任',phone:'010-8888 1001',field:'理论教育',level:'一级 · 名师',dir:'新时代中国特色社会主义外交思想',hours:286,stu:94.5,sup:96,intro:'长期从事外交理论研究与干部培训教学，主讲概论课逾百场。',ach:'省部级教学成果一等奖；主持国家级精品课程2门',tags:['观点正确紧扣主题','理论功底深厚','内容丰富信息量大'],
+  courses:[['习近平外交思想概论','党校班（第25期）',95.2,'优秀'],['习近平外交思想概论','政能班（第8期）',93.8,'优秀'],['大国外交专题（合班）','全院大课',94.5,'优秀']]},
+ {id:'T02',name:'李文华',src:'院内教师',unit:'外交培训学院教研部',pos:'教授',phone:'010-8888 1002',field:'经济金融',level:'二级 · 资深',dir:'国际经济与宏观经济政策',hours:198,stu:91.2,sup:92,intro:'宏观经济领域资深专家，长期承担政能班主干课程。',ach:'院级精品课程1门；发表核心期刊论文20余篇',tags:['内容丰富信息量大','逻辑清晰结构严谨'],
+  courses:[['宏观经济形势分析','政能班（第8期）',91.8,'优秀'],['宏观经济形势分析','外事骨干班',89.6,'良好'],['国际经济专题','涉外法治专题班',92.1,'优秀']]},
+ {id:'T03',name:'张志明',src:'部委专家',unit:'外交部政策规划司',pos:'参赞',phone:'010-6596 xxxx',field:'外交实务',level:'一级 · 名师',dir:'外交政策规划与多边外交',hours:156,stu:95.8,sup:97,intro:'资深外交官，多次参与多边谈判，实战经验丰富。',ach:'荣立个人三等功2次',tags:['案例生动贴近实战','观点正确紧扣主题','互动性强气氛活跃'],
+  courses:[['多边外交实务','党校班（第25期）',96.2,'优秀'],['国际谈判案例分析','外事骨干班',95.4,'优秀']]},
+ {id:'T04',name:'陈丽娟',src:'院内教师',unit:'外交培训学院培训一部',pos:'副教授',phone:'010-8888 1004',field:'党性教育',level:'二级 · 资深',dir:'党的建设与理想信念教育',hours:172,stu:92.6,sup:93,intro:'党性教育骨干教师，教学风格感染力较强。',ach:'院级教学比赛一等奖',tags:['观点正确紧扣主题','互动性强气氛活跃'],
+  courses:[['党性修养与理想信念教育','党校班（第26期）',92.6,'优秀'],['党建实务','党校班（第25期）',91.4,'优秀']]},
+ {id:'T05',name:'赵国强',src:'外聘专家',unit:'中国国际问题研究院',pos:'研究员',phone:'010-6280 xxxx',field:'外交实务',level:'二级 · 资深',dir:'地区安全问题研究',hours:96,stu:88.4,sup:89,intro:'地区安全领域知名学者，受邀讲授专题课程。',ach:'国家级智库成果要情批示3篇',tags:['理论功底深厚','案例生动贴近实战'],
+  courses:[['国际谈判实务与模拟演练','外事骨干班',88.4,'良好'],['地区安全形势','政能班（第8期）',87.2,'良好']]},
+ {id:'T06',name:'刘晓芸',src:'院内教师',unit:'外交培训学院培训二部',pos:'讲师',phone:'010-8888 1006',field:'技能实训',level:'三级 · 骨干',dir:'外交礼仪与跨文化沟通',hours:120,stu:93.1,sup:91,intro:'礼仪实训课程主讲，情景模拟教学经验丰富。',ach:'院级青年教师教学基本功比赛二等奖',tags:['互动性强气氛活跃','课件制作精良'],
+  courses:[['外交礼仪与礼宾实务','驻外干部轮训班',93.1,'优秀'],['跨文化沟通','外事骨干班',92.0,'优秀']]},
+ {id:'T07',name:'孙建平',src:'兄弟干院',unit:'中央党校国际战略研究院',pos:'教授',phone:'010-6280 xxxx',field:'理论教育',level:'二级 · 资深',dir:'国际战略与中国外交',hours:64,stu:90.5,sup:92,intro:'中央党校知名教授，与我院开展师资共享合作。',ach:'国家社科基金重大项目首席专家',tags:['理论功底深厚','逻辑清晰结构严谨'],
+  courses:[['国际战略专题','党校班（第26期）',90.5,'优秀']]},
+ {id:'T08',name:'周颖',src:'院内教师',unit:'外交培训学院教研部',pos:'讲师',phone:'010-8888 1008',field:'涉外法治',level:'四级 · 新锐',dir:'国际法与领事保护',hours:36,stu:86.3,sup:85,intro:'新入职青年教师，承担涉外法治新课程建设。',ach:'院级课题1项',tags:['课件制作精良','语速偏快'],
+  courses:[['涉外法治专题','涉外法治专题班',86.3,'良好'],['领事保护实务','驻外干部轮训班',84.9,'一般']]},
+ {id:'T09',name:'吴刚',src:'部委专家',unit:'外交部领事司',pos:'副处长',phone:'010-6596 xxxx',field:'涉外法治',level:'三级 · 骨干',dir:'领事保护与涉外案件处置',hours:78,stu:91.7,sup:90,intro:'领事保护一线工作经历丰富，案例教学见长。',ach:'参与重大领保案件处置20余起',tags:['案例生动贴近实战','内容丰富信息量大'],
+  courses:[['领事保护实务','驻外干部轮训班',91.7,'优秀'],['涉外案件处置','外事骨干班',90.3,'优秀']]},
+ {id:'T10',name:'郑淑兰',src:'外聘专家',unit:'北京大学国际关系学院',pos:'副教授',phone:'010-6275 xxxx',field:'经济金融',level:'三级 · 骨干',dir:'数字经济与全球治理',hours:42,stu:89.8,sup:88,intro:'数字经济领域新锐学者，承担新课程开发。',ach:'省部级课题2项',tags:['内容丰富信息量大','互动性强气氛活跃'],
+  courses:[['数字经济与全球治理','政能班（第9期·筹）',89.8,'良好']]}];
+let INVITES=[
+ {no:'YQ-2026-031',t:'张志明',course:'多边外交实务',cls:'党校班（第26期）',date:'2026-10-12',hours:4,status:'已确认',fee:'正高级：1500元/课时'},
+ {no:'YQ-2026-032',t:'孙建平',course:'国际战略专题',cls:'党校班（第26期）',date:'2026-10-20',hours:4,status:'待确认',fee:'正高级：1500元/课时'},
+ {no:'YQ-2026-033',t:'郑淑兰',course:'数字经济与全球治理',cls:'政能班（第9期）',date:'2026-10-26',hours:2,status:'待发送',fee:'副高级：1000元/课时'},
+ {no:'YQ-2026-028',t:'赵国强',course:'地区安全形势',cls:'外事骨干班（第3期）',date:'2026-05-18',hours:4,status:'已婉拒',fee:'研究员：1000元/课时'},
+ {no:'YQ-2026-025',t:'刘晓芸',course:'外交礼仪与礼宾实务',cls:'驻外干部轮训班',date:'2026-11-05',hours:4,status:'已确认',fee:'其他：600元/课时'}];
+let viewMode='card',curView='tea-list',archT='T01',repT='T01';
+const VIEW_NAME={'tea-list':'师资信息','tea-tag':'分级分类标签','tea-archive':'授课质量档案','tea-invite':'授课邀请函','tea-report':'综合评价报告'};
+const VIEW_OPS={'tea-list':['＋ 新增师资','批量导入','导出'],'tea-tag':['＋ 新增评价标签'],'tea-archive':['导出档案'],'tea-invite':['＋ 新建邀请函'],'tea-report':['生成报告','导出 PDF']};
+
+function showView(id){
+  curView=id;
+  $('crumb').textContent='首页 / 师资库 / '+VIEW_NAME[id];
+  $('pageTitle').textContent=VIEW_NAME[id];
+  $('pageOps').innerHTML=(VIEW_OPS[id]||[]).map((o,i)=>`<button class="btn ${i===0?'btn-primary':'btn-ghost'}" onclick="opClick('${o}')">${o}</button>`).join('');
+  render();
+}
+function opClick(o){
+  if(o==='+ 新增师资'){openTModal();return}
+  if(o==='+ 新建邀请函'){openInvModal();return}
+  if(o==='批量导入'){toast('下载导入模板 → 填写 → 上传校验 → 批量入库（原型占位）');return}
+  if(o==='+ 新增评价标签'){toast('新增评价标签：名称+说明，保存后师资档案可选（原型占位）');return}
+  if(o==='生成报告'){toast('综合评价报告生成中（数据来源：学员评教+教务督导+巡课记录）');return}
+  if(o.indexOf('导出')>=0){toast('已创建导出任务，可在「教务组织-数据导出与集成」查看');return}
+  toast('「'+o+'」（原型占位）');
+}
+function render(){
+  const b=$('viewBody');
+  if(curView==='tea-list')b.innerHTML=vList();
+  else if(curView==='tea-tag')b.innerHTML=vTag();
+  else if(curView==='tea-archive')b.innerHTML=vArchive();
+  else if(curView==='tea-invite')b.innerHTML=vInvite();
+  else b.innerHTML=vReport();
+}
+function setView(v){viewMode=v;$('vsCard').className='btn '+(v==='card'?'btn-primary':'btn-ghost');$('vsTable').className='btn '+(v==='table'?'btn-primary':'btn-ghost');render()}
+function scoreCls(v){return v>=90?'score-high':(v<85?'score-low':'')}
+
+/* ============ 4.6-P01 师资信息 ============ */
+const FILTER={kw:'',src:'',field:'',level:'',tag:''};
+function setFilter(k,v){FILTER[k]=v;render()}
+function tFiltered(){
+  const {kw,src,field,level,tag}=FILTER;
+  return TEACHERS.filter(t=>(!kw||t.name.includes(kw)||t.dir.includes(kw))&&(!src||t.src===src)&&(!field||t.field===field)&&(!level||t.level===level)&&(!tag||t.tags.includes(tag)));
+}
+function vList(){
+  const list=tFiltered();
+  const stats=`<div class="stat-cards">
+   <div class="stat"><div class="n">${TEACHERS.length}</div><div class="l">在册师资</div></div>
+   <div class="stat"><div class="n g">2</div><div class="l">一级名师</div></div>
+   <div class="stat"><div class="n">4</div><div class="l">教员来源渠道</div></div>
+   <div class="stat"><div class="n o">${TEACHERS.filter(t=>t.stu<88).length}</div><div class="l">评教待关注（&lt;88）</div></div></div>`;
+  const opt=(cur,s)=>`<option ${cur===s?'selected':''}>${s}</option>`;
+  const filters=`<div class="card" style="margin-bottom:16px"><div class="card-body" style="padding:14px 16px"><div class="filter-bar">
+   <input class="input" id="fKw" placeholder="姓名/研究方向模糊搜索，回车检索…" value="${FILTER.kw}" onkeydown="if(event.key==='Enter'){FILTER.kw=this.value.trim();render()}">
+   <button class="btn btn-primary" onclick="FILTER.kw=$('fKw').value.trim();render()">搜索</button>
+   <button class="btn btn-ghost" onclick="FILTER.kw='';FILTER.src='';FILTER.field='';FILTER.level='';FILTER.tag='';render()">重置</button>
+   <select class="sel" id="fSrc" onchange="setFilter('src',this.value)"><option value="">全部来源</option>${['院内教师','外聘专家','部委专家','兄弟干院'].map(s=>opt(FILTER.src,s)).join('')}</select>
+   <select class="sel" id="fField" onchange="setFilter('field',this.value)"><option value="">教学领域（分类）</option>${FIELDS.map(s=>opt(FILTER.field,s)).join('')}</select>
+   <select class="sel" id="fLevel" onchange="setFilter('level',this.value)"><option value="">教学等级（分级）</option>${LEVELS.map(s=>opt(FILTER.level,s)).join('')}</select>
+   <select class="sel" id="fTag" onchange="setFilter('tag',this.value)"><option value="">评价标签</option>${EVAL_TAGS.map(s=>opt(FILTER.tag,s[0])).join('')}</select>
+   <div class="view-switch" style="margin-left:auto">
+    <button class="btn ${viewMode==='card'?'btn-primary':'btn-ghost'}" id="vsCard" onclick="setView('card')">▦ 卡片</button>
+    <button class="btn ${viewMode==='table'?'btn-primary':'btn-ghost'}" id="vsTable" onclick="setView('table')">☰ 表格</button></div>
+  </div></div></div>`;
+  let body;
+  if(viewMode==='card'){
+    body=`<div class="t-grid">${list.map(t=>`
+     <div class="t-card" onclick="openTeacher('${t.id}')">
+      <span class="lvl tag ${LVL_CLS[t.level]}">${t.level}</span>
+      <div class="th"><div class="t-ava">${t.name[0]}</div>
+       <div><div class="t-name">${t.name}</div><div class="t-pos">${t.pos} · ${t.src}</div></div></div>
+      <div class="t-meta">🏢 ${t.unit}<br>📖 ${t.field} · ${t.dir}<br>⏱ 累计授课 ${t.hours} 课时</div>
+      <div class="t-tags"><span class="tag tag-blue">${t.field}</span>${t.tags.slice(0,2).map(x=>`<span class="tag tag-gray">${x}</span>`).join('')}</div>
+      <div class="t-score"><span style="flex:1">学员评教<b class="${scoreCls(t.stu)}">${t.stu}</b></span><span style="flex:1">督导评分<b class="${scoreCls(t.sup)}">${t.sup}</b></span><span style="flex:1">历史课程<b>${t.courses.length}</b></span></div>
+      <div class="t-ops"><button class="btn-text" onclick="event.stopPropagation();openTeacher('${t.id}')">详情</button>
+       <button class="btn-text" onclick="event.stopPropagation();archT='${t.id}';showView('tea-archive');setNavActive(document.querySelector('.nav-child[data-id=tea-archive]'))">质量档案</button>
+       <button class="btn-text" onclick="event.stopPropagation();openInvModal('${t.id}')">发邀请函</button></div>
+     </div>`).join('')||'<div class="card" style="grid-column:1/-1"><div class="card-body" style="text-align:center;color:var(--text-3);padding:40px">无匹配师资，请调整筛选条件</div></div>'}</div>`;
+  }else{
+    body=`<div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>姓名</th><th>来源</th><th>所在单位</th><th>职务</th><th>教学领域</th><th>教学等级</th><th>学员评教</th><th>督导评分</th><th>课时</th><th>评价标签</th><th>操作</th></tr></thead><tbody>
+     ${list.map(t=>`<tr><td class="c-name" onclick="openTeacher('${t.id}')">${t.name}</td><td>${t.src}</td><td>${t.unit}</td><td>${t.pos}</td>
+      <td>${t.field}</td><td><span class="tag ${LVL_CLS[t.level]}">${t.level}</span></td>
+      <td><span class="${scoreCls(t.stu)}">${t.stu}</span></td><td><span class="${scoreCls(t.sup)}">${t.sup}</span></td><td>${t.hours}</td>
+      <td><span style="display:flex;gap:4px;flex-wrap:wrap">${t.tags.slice(0,2).map(x=>`<span class="tag tag-gray">${x}</span>`).join('')}</span></td>
+      <td><button class="btn-text" onclick="openTeacher('${t.id}')">详情</button><button class="btn-text" onclick="archT='${t.id}';showView('tea-archive');setNavActive(document.querySelector('.nav-child[data-id=tea-archive]'))">档案</button><button class="btn-text" onclick="openTModal('${t.id}')">编辑</button></td></tr>`).join('')||'<tr><td colspan="11" style="text-align:center;color:var(--text-3);padding:32px">无匹配师资</td></tr>'}
+     </tbody></table></div></div>`;
+  }
+  return stats+filters+body;
+}
+function findT(id){return TEACHERS.find(t=>t.id===id)}
+function openTeacher(id){
+  const t=findT(id);if(!t)return;
+  $('dwTitle').textContent=t.name+' · 师资详情';
+  $('dwBody').innerHTML=`
+   <div class="d-sec">基本信息</div>
+   <div class="d-grid">
+    <span class="k">教员姓名</span><span><b>${t.name}</b>　<span class="tag ${LVL_CLS[t.level]}">${t.level}</span></span>
+    <span class="k">教员来源</span><span>${t.src}</span>
+    <span class="k">所在单位</span><span>${t.unit}</span>
+    <span class="k">职务</span><span>${t.pos}</span>
+    <span class="k">联系电话</span><span>${t.phone}</span>
+    <span class="k">教学领域</span><span>${t.field}</span>
+    <span class="k">研究方向</span><span>${t.dir}</span>
+    <span class="k">累计课时</span><span>${t.hours} 课时</span>
+   </div>
+   <div class="d-sec">个人简介</div><div style="font-size:13px;color:var(--text-2);line-height:1.8">${t.intro}</div>
+   <div class="d-sec">教学成果</div><div style="font-size:13px;color:var(--text-2);line-height:1.8">${t.ach}</div>
+   <div class="d-sec">评价标签（可维护）</div>
+   <div style="display:flex;gap:6px;flex-wrap:wrap">${t.tags.map(x=>`<span class="tag tag-orange">${x}</span>`).join('')}<button class="btn-text" onclick="toast('维护评价标签（原型占位）')">＋维护</button></div>
+   <div class="d-sec">历史授课课程（整合学员评价 + 教务督导评价）</div>
+   <table class="data-table"><thead><tr><th>课程</th><th>班次</th><th>学员评教</th><th>督导评价</th></tr></thead><tbody>
+   ${t.courses.map(c=>`<tr><td>${c[0]}</td><td>${c[1]}</td><td><span class="${scoreCls(c[2])}">${c[2]}</span></td><td><span class="tag ${c[3]==='优秀'?'tag-green':c[3]==='良好'?'tag-blue':'tag-orange'}">${c[3]}</span></td></tr>`).join('')}
+   </tbody></table>
+   <div class="d-sec">操作日志</div>
+   <div style="font-size:12px;color:var(--text-3);line-height:2">2026-09-20 张三 更新授课记录<br>2026-08-30 系统 学员评教数据自动归集<br>2026-03-12 李四 新增师资入库</div>`;
+  $('dwFoot').innerHTML=`
+   <button class="btn btn-ghost" onclick="openTModal('${t.id}')">编辑</button>
+   <button class="btn btn-ghost" onclick="closeDrawer();archT='${t.id}';showView('tea-archive');setNavActive(document.querySelector('.nav-child[data-id=tea-archive]'))">授课质量档案</button>
+   <button class="btn btn-ghost" onclick="closeDrawer();repT='${t.id}';showView('tea-report');setNavActive(document.querySelector('.nav-child[data-id=tea-report]'))">综合评价报告</button>
+   <button class="btn btn-primary" onclick="closeDrawer();openInvModal('${t.id}')">发授课邀请函</button>`;
+  $('drawerMask').classList.remove('hidden');$('drawer').classList.remove('hidden');
+}
+function closeDrawer(){$('drawerMask').classList.add('hidden');$('drawer').classList.add('hidden')}
+let editId=null;
+function openTModal(id){
+  editId=id||null;
+  $('tModalTitle').textContent=id?'编辑师资':'新增师资';
+  $('tfField').innerHTML=FIELDS.map(f=>`<option>${f}</option>`).join('');
+  $('tfLevel').innerHTML=LEVELS.map(l=>`<option>${l}</option>`).join('');
+  $('tfTags').innerHTML=EVAL_TAGS.map(t=>`<label><input type="checkbox" value="${t[0]}">${t[0]}</label>`).join('');
+  if(id){const t=findT(id);$('tfName').value=t.name;$('tfSrc').value=t.src;$('tfUnit').value=t.unit;$('tfPos').value=t.pos;$('tfPhone').value=t.phone;$('tfField').value=t.field;$('tfLevel').value=t.level;$('tfDir').value=t.dir;$('tfIntro').value=t.intro;$('tfAch').value=t.ach;
+    document.querySelectorAll('#tfTags input').forEach(c=>c.checked=t.tags.includes(c.value));}
+  else{['tfName','tfUnit','tfPos','tfPhone','tfDir','tfIntro','tfAch'].forEach(i=>$(i).value='');document.querySelectorAll('#tfTags input').forEach(c=>c.checked=false)}
+  $('tModal').classList.remove('hidden');
+}
+function tSave(){
+  const name=$('tfName').value.trim();
+  if(!name){toast('教员姓名不能为空');return}
+  const tags=[...document.querySelectorAll('#tfTags input:checked')].map(x=>x.value);
+  if(editId){const t=findT(editId);Object.assign(t,{name,src:$('tfSrc').value,unit:$('tfUnit').value,pos:$('tfPos').value,phone:$('tfPhone').value,field:$('tfField').value,level:$('tfLevel').value,dir:$('tfDir').value,intro:$('tfIntro').value,ach:$('tfAch').value,tags});}
+  else{TEACHERS.unshift({id:'T'+Date.now()%1000,name,src:$('tfSrc').value,unit:$('tfUnit').value||'—',pos:$('tfPos').value||'—',phone:$('tfPhone').value||'—',field:$('tfField').value,level:$('tfLevel').value,dir:$('tfDir').value||'—',hours:0,stu:'—',sup:'—',intro:$('tfIntro').value||'暂无',ach:$('tfAch').value||'暂无',tags,courses:[]});}
+  $('tModal').classList.add('hidden');render();toast(editId?'师资信息已更新':'「'+name+'」已入库（支持批量导入模板见页头按钮）');
+}
+
+/* ============ 4.6-P03 分级分类标签（专项 6.1） ============ */
+const LEVEL_DESC={'一级 · 名师':'国家级/省部级教学名师，承担重点班次主干课程，课酬标准最高','二级 · 资深':'高级职称 5 年以上，评教均分 ≥90，可独立承担主体班次课程','三级 · 骨干':'中级职称以上，评教均分 ≥85，承担专题课与实训课','四级 · 新锐':'新入职/新聘师资，需集体备课与督导听课培养，逐步升级'};
+function vTag(){
+  const cnt={};LEVELS.forEach(l=>cnt[l]=TEACHERS.filter(t=>t.level===l).length);
+  const fcnt={};FIELDS.forEach(f=>fcnt[f]=TEACHERS.filter(t=>t.field===f).length);
+  return `<div class="alert">🏅 分级分类标签专项：教学领域（分类）+ 教学等级（分级）双维度标签体系，创建培训班时可按课程「授课领域 + 授课等级」自动筛选符合条件的教师；评价标签支持维护，与资源库标签跨库共享。</div>
+  <div class="grid-2">
+   <div class="card"><div class="card-body">
+    <div class="sec-title">教学等级（分级）<button class="btn btn-ghost" style="margin-left:auto;height:28px;font-size:13px" onclick="toast('等级规则维护：评定条件/升降级规则（原型占位）')">等级规则</button></div>
+    ${LEVELS.map(l=>`<div style="border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:10px">
+     <div style="display:flex;align-items:center;gap:8px"><span class="tag ${LVL_CLS[l]}">${l}</span><b style="margin-left:auto;font-family:Consolas,monospace">${cnt[l]} 人</b></div>
+     <div style="font-size:12px;color:var(--text-3);margin-top:6px;line-height:1.7">${LEVEL_DESC[l]}</div>
+     <div style="margin-top:6px"><button class="btn-text" onclick="FILTER={kw:'',src:'',field:'',level:'${l}',tag:''};showView('tea-list');setNavActive(document.querySelector('.nav-child[data-id=tea-list]'))">查看该级师资 →</button></div>
+    </div>`).join('')}
+    <p class="mini-note">升降级规则：连续两次评教 ≥95 且督导 ≥93 可升级；评教 &lt;85 触发降级预警并安排集体备课帮扶。</p></div></div>
+   <div class="card"><div class="card-body">
+    <div class="sec-title">教学领域（分类）</div>
+    <table class="data-table"><thead><tr><th>领域</th><th>在册师资</th><th>覆盖课程</th><th>操作</th></tr></thead><tbody>
+    ${FIELDS.map(f=>`<tr><td><b>${f}</b></td><td>${fcnt[f]} 人</td><td>${fcnt[f]*2} 门</td>
+     <td><button class="btn-text" onclick="FILTER={kw:'',src:'',field:'${f}',level:'',tag:''};showView('tea-list');setNavActive(document.querySelector('.nav-child[data-id=tea-list]'))">筛选师资</button></td></tr>`).join('')}
+    </tbody></table>
+    <div class="sec-title" style="margin-top:22px">评价标签维护（如：观点正确紧扣主题、内容丰富信息量大）
+     <button class="btn btn-primary" style="margin-left:auto;height:28px;font-size:13px" onclick="toast('新增评价标签（原型占位）')">＋ 新增</button></div>
+    <div class="tag-cloud">${EVAL_TAGS.map(t=>`<span class="tc">${t[0]} <b>${t[1]}</b>
+     <button class="btn-text" style="font-size:12px" onclick="toast('重命名：历史挂接保留（原型占位）')">改</button>
+     <button class="btn-text danger" style="font-size:12px" onclick="toast('停用：历史保留、新增不可选（原型占位）')">停</button></span>`).join('')}</div>
+    <p class="mini-note">评价标签来源：学员评教问卷选项自动归集 + 教务手工维护；标签跨库共享至资源库（见 资源管理-标签管理）。</p></div></div>
+  </div>`;
+}
+
+/* ============ 4.6-P02 授课质量档案 ============ */
+const VISITS=[
+ {date:'2026-09-18',t:'T01',course:'习近平外交思想概论',cls:'党校班（第26期）',by:'教务处巡课 · 李处长',score:96,note:'理论阐释深入，案例时效性强，学员反映热烈'},
+ {date:'2026-09-10',t:'T04',course:'党性修养与理想信念教育',cls:'党校班（第26期）',by:'组织部门领导督导',score:93,note:'感染力强，建议增加分组研讨环节'},
+ {date:'2026-05-12',t:'T05',course:'国际谈判实务与模拟演练',cls:'外事骨干班',by:'教务处巡课 · 王主任',score:87,note:'案例需更新，模拟环节组织良好'},
+ {date:'2026-09-22',t:'T08',course:'领事保护实务',cls:'驻外干部轮训班',by:'教务处巡课 · 李处长',score:84,note:'语速偏快，建议增加课堂互动'}];
+function vArchive(){
+  const t=findT(archT)||TEACHERS[0];
+  const visits=VISITS.filter(v=>v.t===t.id);
+  const trend=t.courses.map(c=>({label:c[1],v:c[2]}));
+  const maxV=100;
+  return `<div class="filter-bar">
+   <select class="sel" style="width:220px" onchange="archT=this.value;render()">
+    ${TEACHERS.map(x=>`<option value="${x.id}" ${x.id===t.id?'selected':''}>${x.name}（${x.field} · ${x.level}）</option>`).join('')}</select>
+   <span style="font-size:12px;color:var(--text-3)">档案数据来源：学员评教（含纸质评教录入）+ 教务督导巡课，自动归集形成师资授课质量档案</span></div>
+  <div class="stat-cards">
+   <div class="stat"><div class="n ${scoreCls(t.stu)}" style="font-size:22px">${t.stu}</div><div class="l">学员评教均分</div></div>
+   <div class="stat"><div class="n ${scoreCls(t.sup)}" style="font-size:22px">${t.sup}</div><div class="l">督导评分均分</div></div>
+   <div class="stat"><div class="n">${t.hours}</div><div class="l">累计授课课时</div></div>
+   <div class="stat"><div class="n">${visits.length}</div><div class="l">巡课/督导记录</div></div>
+   <div class="stat"><div class="n g">${t.courses.length}</div><div class="l">历史授课课程</div></div></div>
+  <div class="grid-2">
+   <div class="card"><div class="card-body">
+    <div class="sec-title">📈 历次授课学员评教走势（≥90 标绿 / &lt;85 标红）</div>
+    ${trend.map((x,i)=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:12px">
+     <span style="width:130px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${x.label}">${x.label}</span>
+     <div class="bar" style="flex:1"><i class="${x.v>=90?'g':x.v<85?'r':'o'}" style="width:${Math.round(x.v/maxV*100)}%"></i></div>
+     <span style="width:44px;text-align:right" class="${scoreCls(x.v)}">${x.v}</span></div>`).join('')||'<p class="mini-note">暂无授课记录</p>'}
+    <div class="sec-title" style="margin-top:20px">🏷 评价标签（学员评教自动归集）</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${t.tags.map(x=>`<span class="tag tag-orange">${x}</span>`).join('')}</div></div></div>
+   <div class="card"><div class="card-body">
+    <div class="sec-title">📝 巡课/督导记录<button class="btn btn-ghost" style="margin-left:auto;height:28px;font-size:13px" onclick="toast('录入巡课记录（原型占位）')">＋ 录入</button></div>
+    ${visits.map(v=>`<div style="border-left:4px solid ${v.score>=93?'var(--success)':v.score>=88?'var(--primary-2)':'var(--warning)'};background:#fafbfc;border-radius:var(--r);padding:10px 12px;margin-bottom:10px;font-size:12px">
+     <div style="display:flex;justify-content:space-between"><b>${v.date} · ${v.course}</b><span class="${scoreCls(v.score)}" style="font-size:14px">${v.score} 分</span></div>
+     <div style="color:var(--text-3);margin-top:4px">${v.by} · ${v.cls}<br>${v.note}</div></div>`).join('')||'<p class="mini-note">暂无巡课记录</p>'}
+    <p class="mini-note">评分高亮：系统自动识别异常值（偏离均值超阈值）与极端高/低分，阈值可在基础设置自定义。</p></div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><div class="card-body">
+   <div class="sec-title">📚 历史授课课程明细（整合学员评价 + 教务督导评价）</div>
+   <table class="data-table"><thead><tr><th>课程名称</th><th>培训班次</th><th>学员评教均分</th><th>督导评价</th><th>操作</th></tr></thead><tbody>
+   ${t.courses.map(c=>`<tr><td><b>${c[0]}</b></td><td>${c[1]}</td><td><span class="${scoreCls(c[2])}">${c[2]}</span></td>
+    <td><span class="tag ${c[3]==='优秀'?'tag-green':c[3]==='良好'?'tag-blue':'tag-orange'}">${c[3]}</span></td>
+    <td><button class="btn-text" onclick="toast('评教明细：各维度得分+主观意见（原型占位）')">评教明细</button></td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:20px">暂无授课记录</td></tr>'}
+   </tbody></table></div></div>`;
+}
+
+/* ============ 4.6-P04 授课邀请函 ============ */
+function vInvite(){
+  const st={'待发送':0,'待确认':0,'已确认':0,'已婉拒':0};INVITES.forEach(i=>st[i.status]!==undefined&&st[i.status]++);
+  return `<div class="stat-cards">
+   <div class="stat"><div class="n">${INVITES.length}</div><div class="l">邀请函总数</div></div>
+   <div class="stat"><div class="n o">${st['待确认']}</div><div class="l">待确认</div></div>
+   <div class="stat"><div class="n g">${st['已确认']}</div><div class="l">已确认</div></div>
+   <div class="stat"><div class="n r">${st['已婉拒']}</div><div class="l">已婉拒</div></div></div>
+  <div class="card"><div class="card-body">
+   <div class="sec-title">邀请函列表（外聘师资邀约留痕，确认后可直接进入拖拽排课）</div>
+   <table class="data-table"><thead><tr><th>邀请单号</th><th>教师</th><th>课程</th><th>培训班次</th><th>拟授课时间</th><th>课时</th><th>课酬标准</th><th>状态</th><th>操作</th></tr></thead><tbody>
+   ${INVITES.map((x,i)=>`<tr><td><b>${x.no}</b></td><td class="c-name" onclick="toast('查看邀请函详情（原型占位）')">${x.t}</td><td>${x.course}</td><td>${x.cls}</td><td>${x.date}</td><td>${x.hours}</td><td style="font-size:12px">${x.fee}</td>
+    <td><span class="tag ${ST_CLS[x.status]}">${x.status}</span></td>
+    <td>${x.status==='待发送'?`<button class="btn-text" onclick="sendInv(${i})">发送</button><button class="btn-text danger" onclick="delInv(${i})">删除</button>`
+      :x.status==='待确认'?`<button class="btn-text" onclick="toast('已站内信+短信导出提醒（原型占位）')">催办</button><button class="btn-text" onclick="simInv(${i},true)">模拟确认</button><button class="btn-text danger" onclick="simInv(${i},false)">模拟婉拒</button><button class="btn-text" onclick="cancelInv(${i})">撤回</button>`
+      :x.status==='已确认'?`<button class="btn-text" onclick="location.href='training-schedule.html'">去排课</button>`
+      :`<button class="btn-text" onclick="toast('查看婉拒原因：档期冲突（原型占位）')">原因</button>`}</td></tr>`).join('')}
+   </tbody></table>
+   <p class="mini-note">流程：新建邀请（自动校验领域/等级匹配）→ 发送（站内信+短信待发送导出）→ 教师确认/婉拒 → 确认后进入拖拽排课选定教师；全流程留痕备查。</p></div></div>`;
+}
+function openInvModal(tid){
+  $('invT').innerHTML=TEACHERS.map(t=>`<option value="${t.id}" ${t.id===tid?'selected':''}>${t.name}（${t.field} · ${t.level}）</option>`).join('');
+  $('invMatch').classList.add('hidden');
+  $('invModal').classList.remove('hidden');
+}
+function invMatch(){
+  const t=findT($('invT').value);if(!t)return;
+  const c=$('invC').selectedOptions[0];
+  const fd=c.dataset.field,lv=c.dataset.level;
+  const okF=t.field===fd,okL=LEVELS.indexOf(t.level)<=LEVELS.indexOf(lv);
+  const box=$('invMatchBox');box.classList.remove('hidden');
+  if(okF&&okL){box.style.background='#f2f8f2';box.style.color='var(--success)';
+    box.innerHTML='✅ 匹配校验通过：教学领域匹配（'+fd+'），等级满足课程要求（'+lv+'及以上）；近期档期无冲突'}
+  else{box.style.background='#fdf5f5';box.style.color='var(--danger)';
+    box.innerHTML='⚠ 匹配提醒：'+(!okF?'教学领域不匹配（课程要求 '+fd+'，该教师为 '+t.field+'）；':'')+(!okL?'等级低于课程要求（需 '+lv+'及以上）；':'')+'可继续发送，由审批环节把关'}
+}
+function invSave(send){
+  const t=findT($('invT').value);
+  if(!t){toast('请选择教师');return}
+  const no='YQ-2026-'+String(34+INVITES.length).padStart(3,'0');
+  INVITES.unshift({no,t:t.name,course:$('invC').value,cls:$('invCls').value,date:$('invDate').value,hours:$('invHours').value||4,status:send?'待确认':'待发送',fee:$('invFee').value});
+  $('invModal').classList.add('hidden');showView('tea-invite');setNavActive(document.querySelector('.nav-child[data-id=tea-invite]'));
+  toast(send?'邀请函已发送（站内信+短信待发送导出），等待教师确认':'已存为待发送草稿');
+}
+function sendInv(i){INVITES[i].status='待确认';render();toast('邀请函已发送（站内信+短信导出）')}
+function simInv(i,ok){INVITES[i].status=ok?'已确认':'已婉拒';render();toast(ok?'教师已确认，可进入拖拽排课':'教师婉拒：档期冲突，建议改邀同领域教师')}
+function cancelInv(i){INVITES[i].status='已取消';render();toast('已撤回邀请')}
+function delInv(i){if(confirm('确认删除该待发送邀请函？')){INVITES.splice(i,1);render();toast('已删除')}}
+
+/* ============ 4.6-P05 综合评价报告 ============ */
+function vReport(){
+  const t=findT(repT)||TEACHERS[0];
+  const dims=[['教学态度',Math.min(98,t.stu+2)],['内容深度',t.stu],['方法互动',Math.round(t.stu-2.5)],['课堂效果',Math.round(t.stu+1)],['督导评价',t.sup]];
+  const overall=((t.stu*0.5+t.sup*0.3+Math.min(t.hours/3,98)*0.2)).toFixed(1);
+  return `<div class="filter-bar">
+   <select class="sel" style="width:220px" onchange="repT=this.value;render()">
+    ${TEACHERS.map(x=>`<option value="${x.id}" ${x.id===t.id?'selected':''}>${x.name}（${x.field} · ${x.level}）</option>`).join('')}</select>
+   <span style="font-size:12px;color:var(--text-3)">报告数据来源：学员评教（权重50%）+ 督导评分（30%）+ 授课量（20%），支持导出 PDF 归档</span>
+   <button class="btn btn-primary" style="margin-left:auto" onclick="toast('综合评价报告已生成，可在导出任务中下载 PDF')">生成报告</button></div>
+  <div class="grid-2">
+   <div class="card"><div class="card-body">
+    <div class="sec-title">👤 ${t.name} · 综合评价报告（2026 年度）</div>
+    <div style="display:flex;gap:16px;align-items:center;margin-bottom:14px">
+     <div class="t-ava" style="width:64px;height:64px;font-size:24px">${t.name[0]}</div>
+     <div><div style="font-size:16px;font-weight:700">${t.name}　<span class="tag ${LVL_CLS[t.level]}">${t.level}</span></div>
+      <div style="font-size:12px;color:var(--text-3);margin-top:4px">${t.unit} · ${t.pos} · ${t.field}领域</div></div>
+     <div style="margin-left:auto;text-align:center"><div style="font-size:34px;font-weight:700;font-family:Consolas,monospace" class="${scoreCls(+overall)}">${overall}</div><div style="font-size:12px;color:var(--text-3)">综合得分</div></div></div>
+    ${dims.map(d=>`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px">
+     <span style="width:64px;color:var(--text-2)">${d[0]}</span>
+     <div class="bar" style="flex:1"><i class="${d[1]>=90?'g':d[1]>=85?'o':'r'}" style="width:${d[1]}%"></i></div>
+     <span style="width:40px;text-align:right" class="${scoreCls(d[1])}">${d[1]}</span></div>`).join('')}
+    <div class="sec-title" style="margin-top:18px">🏷 评价标签 TOP</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">${t.tags.map(x=>`<span class="tag tag-orange">${x}</span>`).join('')}</div>
+    <p class="mini-note">建议：${t.stu>=93?'教学表现优异，建议纳入名师库并优先安排重点班次':t.stu>=88?'教学表现良好，建议保持并参与集体备课提升':'建议安排督导帮扶与集体备课，关注评教改进'}。</p></div></div>
+   <div class="card"><div class="card-body">
+    <div class="sec-title">📊 数据构成</div>
+    <div class="d-grid" style="grid-template-columns:130px 1fr">
+     <span class="k">学员评教份数</span><span>${t.courses.length*45} 份（含纸质评教录入）</span>
+     <span class="k">督导巡课次数</span><span>${VISITS.filter(v=>v.t===t.id).length} 次</span>
+     <span class="k">累计授课</span><span>${t.hours} 课时 / ${t.courses.length} 门课程</span>
+     <span class="k">异常评分识别</span><span>${t.stu<88?'<span class="tag tag-red">存在低分预警，已标记</span>':'<span class="tag tag-green">无异常值</span>'}</span>
+     <span class="k">报告周期</span><span>2026-01-01 至 2026-09-25</span></div>
+    <div class="sec-title" style="margin-top:18px">📚 历史课程得分</div>
+    <table class="data-table"><thead><tr><th>课程</th><th>班次</th><th>评教</th></tr></thead><tbody>
+    ${t.courses.map(c=>`<tr><td>${c[0]}</td><td>${c[1]}</td><td><span class="${scoreCls(c[2])}">${c[2]}</span></td></tr>`).join('')||'<tr><td colspan="3" style="color:var(--text-3)">暂无</td></tr>'}
+    </tbody></table>
+    <div style="display:flex;gap:8px;margin-top:16px">
+     <button class="btn btn-primary" onclick="toast('导出 PDF 报告（原型占位）')">导出 PDF</button>
+     <button class="btn btn-ghost" onclick="archT='${t.id}';showView('tea-archive');setNavActive(document.querySelector('.nav-child[data-id=tea-archive]'))">查看质量档案</button>
+     <button class="btn btn-ghost" onclick="toast('已推送至教务部待阅（站内信）')">推送教务</button></div></div></div>
+  </div>`;
+}
+
+/* ============ 初始化 ============ */
+const q=new URLSearchParams(location.search).get('page');
+const init=q&&VIEW_NAME[q]?q:'tea-list';
+showView(init);
+setNavActive(document.querySelector('.nav-child[data-id="'+init+'"]'));
+</script>
+</body>
+</html>

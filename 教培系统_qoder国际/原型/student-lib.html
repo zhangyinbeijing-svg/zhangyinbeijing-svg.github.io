@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学员库 · 干部培训学院教务管理系统 原型 V1.0</title>
+<style>
+:root{--primary:#1F4E79;--primary-2:#2E75B6;--success:#2E7D32;--warning:#F57F17;--danger:#C62828;
+ --text:#333;--text-2:#595959;--text-3:#8a9099;--bg:#F5F6F8;--card:#fff;--line:#e5e8ec;
+ --topbar-h:56px;--nav-w:220px;--nav-w-c:64px;--r:4px;--r-card:8px;--r-modal:12px;--shadow:0 2px 8px rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{text-decoration:none;color:var(--primary-2);cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2dc;border-radius:4px}
+.btn{height:32px;padding:0 16px;border-radius:var(--r);font-size:14px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#173e61}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-text{background:none;border:none;color:var(--primary-2);cursor:pointer;font-size:13px;padding:0 4px}
+.btn-text:hover{text-decoration:underline}
+.btn-text.danger{color:var(--danger)}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+.tag-blue{background:rgba(46,117,182,.12);color:var(--primary-2)}
+.tag-green{background:rgba(46,125,50,.12);color:var(--success)}
+.tag-orange{background:rgba(247,127,23,.12);color:var(--warning)}
+.tag-red{background:rgba(198,40,40,.12);color:var(--danger)}
+.tag-purple{background:rgba(123,80,160,.12);color:#7B50A0}
+.tag-cyan{background:rgba(0,137,123,.12);color:#00897B}
+.tag-gray{background:rgba(89,95,105,.1);color:var(--text-2)}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card-body{padding:16px}
+.input,.sel{height:32px;border:1px solid var(--line);border-radius:var(--r);padding:0 10px;font-size:13px;outline:none;background:#fff;color:var(--text)}
+.input:focus,.sel:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+/* 顶部栏/导航 */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--primary);color:#fff;display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{display:flex;align-items:center;gap:10px;min-width:230px}
+.tb-logo .mark{width:32px;height:32px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.tb-logo .name{font-size:16px;font-weight:700;white-space:nowrap}
+.tb-search{flex:1;max-width:460px}.tb-search .input{width:100%;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;height:34px}
+.tb-search .input::placeholder{color:rgba(255,255,255,.6)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tb-icon{position:relative;width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px}
+.tb-icon:hover{background:rgba(255,255,255,.15)}
+.tb-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.tb-ver{font-size:12px;color:rgba(255,255,255,.65);margin:0 4px}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tb-user:hover{background:rgba(255,255,255,.15)}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sidenav{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--nav-w);background:#fff;border-right:1px solid var(--line);overflow-y:auto;z-index:90;transition:width .2s}
+.nav-parent{display:flex;align-items:center;gap:10px;padding:0 16px;height:44px;cursor:pointer;color:var(--text-2);font-size:14px;position:relative}
+.nav-parent:hover{background:#f2f6fa;color:var(--primary)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex:none}
+.nav-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-caret{font-size:11px;color:var(--text-3);transition:transform .2s}
+.nav-group.open .nav-caret{transform:rotate(90deg)}
+.nav-group.open>.nav-parent{color:var(--primary);font-weight:700}
+.nav-children{display:none;background:#fafbfc}
+.nav-group.open .nav-children{display:block}
+.nav-child{padding:0 16px 0 44px;height:36px;display:flex;align-items:center;font-size:13px;color:var(--text-2);cursor:pointer;position:relative}
+.nav-child:hover{color:var(--primary);background:#f2f6fa}
+.nav-child.active{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-child.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.nav-collapse{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:var(--text-3);cursor:pointer;display:flex;gap:8px;align-items:center}
+body.nav-collapsed .sidenav{width:var(--nav-w-c)}
+body.nav-collapsed .nav-label,body.nav-collapsed .nav-caret,body.nav-collapsed .nav-children,body.nav-collapsed .nav-collapse span{display:none}
+body.nav-collapsed .nav-parent{justify-content:center;padding:0}
+body.nav-collapsed .nav-collapse{justify-content:center}
+.content{margin-left:var(--nav-w);margin-top:var(--topbar-h);padding:24px;min-height:calc(100vh - var(--topbar-h));transition:margin-left .2s}
+body.nav-collapsed .content{margin-left:var(--nav-w-c)}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+.breadcrumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+.page-title{font-size:20px;font-weight:700}
+.page-ops{display:flex;gap:8px;flex-wrap:wrap}
+/* 筛选/统计/表格 */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.filter-bar .input{width:180px}.filter-bar .sel{width:150px}
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#f7f9fc;border-radius:var(--r);padding:14px;text-align:center}
+.stat .n{font-size:24px;font-weight:700;font-family:Consolas,monospace;color:var(--primary)}
+.stat .n.g{color:var(--success)}.stat .n.o{color:var(--warning)}.stat .n.r{color:var(--danger)}
+.stat .l{font-size:12px;color:var(--text-3);margin-top:2px}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th,.data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.data-table th{background:#fafbfc;color:var(--text-2);font-size:12px;font-weight:400;white-space:nowrap}
+.data-table tbody tr:hover{background:#f7fafd}
+.data-table .c-name{font-weight:700;color:var(--primary);cursor:pointer}
+.data-table .c-name:hover{text-decoration:underline}
+.score-high{color:var(--success);font-weight:700}
+.score-low{color:var(--danger);font-weight:700}
+.bar{background:#edf0f3;border-radius:999px;height:8px;overflow:hidden;min-width:90px}
+.bar i{display:block;height:100%;border-radius:999px;background:var(--primary-2)}
+.bar i.g{background:var(--success)}.bar i.o{background:var(--warning)}.bar i.r{background:var(--danger)}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-row span{font-size:12px;color:var(--text-2);width:44px;text-align:right;flex:none}
+.sec-title{font-size:15px;font-weight:700;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sec-title:first-child{margin-top:0}
+.mini-note{font-size:12px;color:var(--text-3);margin-top:10px;line-height:1.7}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.view-switch{display:flex;gap:0}
+.view-switch .btn{border-radius:0}
+.view-switch .btn:first-child{border-radius:var(--r) 0 0 var(--r)}
+.view-switch .btn:last-child{border-radius:0 var(--r) var(--r) 0}
+.alert{border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;gap:8px;align-items:center;background:rgba(46,117,182,.07);border:1px solid rgba(46,117,182,.2);color:var(--primary)}
+/* 学员卡片 */
+.s-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.s-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-card);padding:16px;transition:box-shadow .15s,transform .15s;position:relative;cursor:pointer}
+.s-card:hover{box-shadow:0 6px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.s-card .sh{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.s-ava{width:46px;height:46px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;flex:none}
+.s-card .s-name{font-size:15px;font-weight:700}
+.s-card .s-sub{font-size:12px;color:var(--text-3);margin-top:2px}
+.s-card .s-meta{font-size:12px;color:var(--text-2);line-height:1.9}
+.s-card .s-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.s-card .s-ops{display:flex;gap:2px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.st-badge{position:absolute;top:14px;right:14px}
+/* 综合查询画像 */
+.profile-head{display:flex;gap:18px;align-items:center;margin-bottom:16px}
+.profile-head .s-ava{width:64px;height:64px;font-size:24px}
+.p-name{font-size:18px;font-weight:700}
+.p-sub{font-size:12px;color:var(--text-3);margin-top:4px;line-height:1.8}
+.tl{border-left:2px solid var(--line);margin-left:6px;padding-left:18px}
+.tl-item{position:relative;padding-bottom:16px}
+.tl-item::before{content:"";position:absolute;left:-24px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--primary-2)}
+.tl-item .tl-t{font-size:13px;font-weight:700}
+.tl-item .tl-s{font-size:12px;color:var(--text-3);line-height:1.8;margin-top:3px}
+/* 抽屉/弹窗/Toast */
+.drawer-mask{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:210}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:560px;background:#fff;box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:220;display:flex;flex-direction:column}
+.drawer-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.drawer-head h3{font-size:16px;font-weight:700}
+.drawer-body{flex:1;overflow-y:auto;padding:20px}
+.drawer-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.d-sec{font-size:14px;font-weight:700;margin:18px 0 10px;padding-left:8px;border-left:3px solid var(--primary)}
+.d-sec:first-child{margin-top:0}
+.d-grid{display:grid;grid-template-columns:110px 1fr;gap:8px 12px;font-size:13px}
+.d-grid .k{color:var(--text-3)}
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{width:560px;max-height:86vh;background:#fff;border-radius:var(--r-modal);box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden;display:flex;flex-direction:column}
+.modal-head{padding:14px 18px;font-size:16px;font-weight:700;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.modal-body{padding:18px;overflow-y:auto}
+.modal-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.f-row{margin-bottom:14px}
+.f-row label{display:block;font-size:13px;color:var(--text-2);margin-bottom:6px}
+.f-row label .req{color:var(--danger);margin-right:2px}
+.f-row .input,.f-row .sel,.f-row textarea{width:100%}
+textarea.input{height:auto;padding:8px 10px;resize:vertical}
+.f-2col{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(40,45,52,.92);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:300;box-shadow:var(--shadow);max-width:70%}
+@media (max-width:1100px){.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo"><div class="mark">院</div><div class="name">干部培训学院教务管理系统</div></div>
+  <div class="tb-search"><input class="input" id="tbSearch" placeholder="🔍 全局搜索：学员姓名 / 身份证号 / 部门…"></div>
+  <div class="tb-right">
+    <span class="tb-ver">V1.0 原型</span>
+    <div class="tb-icon" onclick="toast('跳转消息中心（原型占位）')" title="站内信">🔔<span class="tb-badge">5</span></div>
+    <div class="tb-icon" onclick="toast('帮助中心为原型占位')" title="帮助中心">❓</div>
+    <div class="tb-user" id="tbUser"><div class="tb-avatar">张</div><span>张三</span><span style="font-size:10px">▼</span></div>
+  </div>
+</header>
+
+<aside class="sidenav" id="sidenav"></aside>
+
+<main class="content">
+  <div class="page-head">
+    <div><div class="breadcrumb" id="crumb">首页 / 学员库 / 学员信息</div><h2 class="page-title" id="pageTitle">学员信息</h2></div>
+    <div class="page-ops" id="pageOps"></div>
+  </div>
+  <div id="viewBody"></div>
+</main>
+
+<!-- 学员详情抽屉 -->
+<div class="drawer-mask hidden" id="drawerMask" onclick="closeDrawer()"></div>
+<div class="drawer hidden" id="drawer">
+  <div class="drawer-head"><h3 id="dwTitle">学员详情</h3><span class="btn-text" onclick="closeDrawer()">✕ 关闭</span></div>
+  <div class="drawer-body" id="dwBody"></div>
+  <div class="drawer-foot" id="dwFoot"></div>
+</div>
+
+<!-- 新增/编辑学员弹窗 -->
+<div class="mask hidden" id="sModal"><div class="modal">
+  <div class="modal-head"><span id="sModalTitle">新增学员</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="f-2col">
+     <div class="f-row"><label><span class="req">*</span>姓名</label><input class="input" id="sfName" placeholder="请输入姓名"></div>
+     <div class="f-row"><label><span class="req">*</span>人员类型</label><select class="sel" id="sfType"></select></div>
+     <div class="f-row"><label><span class="req">*</span>部门</label><input class="input" id="sfDept" placeholder="如：外交部欧洲司"></div>
+     <div class="f-row"><label><span class="req">*</span>职级</label><select class="sel" id="sfRank"><option>正司级</option><option>副司级</option><option>正处级</option><option>副处级</option><option>一级主任科员</option><option>二级主任科员</option><option>其他</option></select></div>
+     <div class="f-row"><label><span class="req">*</span>身份证号</label><input class="input" id="sfIdc" placeholder="18位身份证号" maxlength="18"></div>
+     <div class="f-row"><label>联系电话</label><input class="input" id="sfPhone" placeholder="联系电话"></div>
+    </div>
+    <div class="alert" style="margin-bottom:14px">🔒 学员信息由管理员统一维护（学员端不接入系统）；身份证号等敏感字段存储加密、展示脱敏，访问行为留痕审计。</div>
+    <div class="f-row"><label>照片（用于人脸签到底库，报名一次采集全程复用）</label>
+     <div style="border:1px dashed var(--line);border-radius:var(--r);padding:18px;text-align:center;color:var(--text-3);font-size:13px;cursor:pointer" onclick="toast('照片上传+质检：清晰度/角度/遮挡/唯一性（原型占位）')">⬆ 点击上传照片（质检合格后写入人脸底库）</div></div>
+  </div>
+  <div class="modal-foot"><button class="btn btn-ghost js-close">取消</button><button class="btn btn-primary" onclick="sSave()">保存</button></div>
+</div></div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+document.querySelectorAll('.js-close').forEach(b=>b.onclick=e=>e.target.closest('.mask').classList.add('hidden'));
+
+/* ============ 导航（全站共享数据） ============ */
+const NAV=[
+ {id:'workbench',icon:'🏠',name:'工作台',direct:true},
+ {id:'teach',icon:'📚',name:'教学管理',children:[{id:'teach-system',name:'课程体系',pg:'4.2-P01'},{id:'teach-course',name:'课程管理',pg:'4.2-P02'}]},
+ {id:'train',icon:'🎓',name:'培训管理',children:[
+   {id:'train-class',name:'培训班管理',pg:'4.3-P01'},{id:'train-stu',name:'培训考生',pg:'4.3-P03'},
+   {id:'train-schedule',name:'培训排课（拖拽）',pg:'4.3-P04'},{id:'train-grade',name:'课程成绩',pg:'4.3-P06'},
+   {id:'train-cert',name:'电子证书',pg:'4.3-P07'},{id:'train-eval',name:'教学评估',pg:'4.3-P08'},
+   {id:'train-exam',name:'考务管理',pg:'4.3-P09'},{id:'train-cycle',name:'学员全周期',pg:'4.3-P10'},
+   {id:'train-stay',name:'住宿安排',pg:'4.3-P11'},{id:'train-budget',name:'预算管理',pg:'4.3-P12'},
+   {id:'train-report',name:'结班报告',pg:'4.3-P13'},{id:'train-attend',name:'考勤管理',pg:'4.3-P14'},
+   {id:'train-track',name:'训后跟踪',pg:'4.3-P15'}]},
+ {id:'resource',icon:'🗂️',name:'资源管理',children:[
+   {id:'res-plan',name:'教案库',pg:'4.4-P01'},{id:'res-book',name:'教材库',pg:'4.4-P02'},
+   {id:'res-case',name:'案例库',pg:'4.4-P03'},{id:'res-self',name:'自他资源库',pg:'4.4-P04'},
+   {id:'res-bank',name:'题库试卷库',pg:'4.4-P05'},{id:'res-tag',name:'标签管理',pg:'4.4-P06'}]},
+ {id:'edu',icon:'📊',name:'教务组织',children:[{id:'edu-plan',name:'教学计划管理',pg:'4.5-P01'},{id:'edu-data',name:'教务数据管理',pg:'4.5-P02'},{id:'edu-report',name:'多维度报表',pg:'4.5-P03'},{id:'edu-export',name:'数据导出与集成',pg:'4.5-P04'},{id:'edu-settle',name:'结算报告模板',pg:'4.5-P05'}]},
+ {id:'teacher',icon:'👥',name:'师资库',children:[{id:'tea-list',name:'师资信息',pg:'4.6-P01'},{id:'tea-tag',name:'分级分类标签',pg:'4.6-P03'},{id:'tea-archive',name:'授课质量档案',pg:'4.6-P02'},{id:'tea-invite',name:'授课邀请函',pg:'4.6-P04'},{id:'tea-report',name:'综合评价报告',pg:'4.6-P05'}]},
+ {id:'student',icon:'✪',name:'学员库',children:[{id:'stu-list',name:'学员信息',pg:'4.7-P01'},{id:'stu-query',name:'个人综合查询',pg:'4.7-P02'},{id:'stu-archive',name:'参训档案',pg:'4.7-P03'}]},
+ {id:'room',icon:'🏫',name:'教室管理',children:[{id:'room-point',name:'教学点管理',pg:'4.8-P01'},{id:'room-room',name:'教室管理',pg:'4.8-P02'},{id:'room-device',name:'人脸考勤设备',pg:'4.8-P03'}]},
+ {id:'approve',icon:'✅',name:'审批管理',children:[{id:'apv-schedule',name:'排课审批',pg:'4.9-P01'},{id:'apv-budget',name:'预算审批',pg:'4.9-P01'},{id:'apv-leave',name:'请假/调停课审批',pg:'4.9-P01'},{id:'apv-record',name:'审批记录',pg:'4.9-P03'}]},
+ {id:'org',icon:'🏛️',name:'组织管理',children:[{id:'org-structure',name:'组织架构',pg:'4.10-P01'},{id:'org-account',name:'账户管理',pg:'4.10-P02'},{id:'org-user',name:'用户权限',pg:'4.10-P03'},{id:'org-data',name:'数据权限',pg:'4.10-P04'},{id:'org-three',name:'三员管理',pg:'4.10-P05'}]},
+ {id:'base',icon:'⚙️',name:'基础设置',children:[{id:'base-category',name:'培训类别',pg:'4.11-P01'},{id:'base-course',name:'课程分类',pg:'4.11-P02'},{id:'base-log',name:'系统日志',pg:'4.11-P03'},{id:'base-rule',name:'经费规则库',pg:'4.11-P04'}]},
+ {id:'screen',icon:'📈',name:'可视化大屏',children:[{id:'scr-overview',name:'总览大屏',pg:'4.12'},{id:'scr-study',name:'学情大屏',pg:'4.12'},{id:'scr-resource',name:'资源大屏',pg:'4.12'}]}
+];
+$('sidenav').innerHTML=NAV.map(g=>`
+ <div class="nav-group ${g.id==='student'?'open':''}" data-group="${g.id}">
+   <div class="nav-parent" data-id="${g.id}"><span class="nav-icon">${g.icon}</span><span class="nav-label">${g.name}</span>${g.children?'<span class="nav-caret">▸</span>':''}</div>
+   ${g.children?`<div class="nav-children">${g.children.map(c=>`<div class="nav-child" data-id="${c.id}" data-name="${c.name}" data-pg="${c.pg||''}"><span class="nav-label">${c.name}</span></div>`).join('')}</div>`:''}
+ </div>`).join('')+`<div class="nav-collapse" id="navCollapse">⇤<span>收起导航</span></div>`;
+$('sidenav').addEventListener('click',e=>{
+  if(e.target.closest('#navCollapse')){document.body.classList.toggle('nav-collapsed');return}
+  const child=e.target.closest('.nav-child'),parent=e.target.closest('.nav-parent');
+  if(child){
+    const id=child.dataset.id,pg=child.dataset.pg||'';
+    if(pg.indexOf('4.7')===0){showView(id);setNavActive(child);return}
+        if(pg.indexOf('4.8')===0){location.href='room.html?page='+id;return}
+    if(pg.indexOf('4.9')===0){location.href='approve.html?page='+id;return}
+        if(pg.indexOf('4.10')===0){location.href='org.html?page='+id;return}
+        if(pg.indexOf('4.12')===0){location.href='screen.html?scr='+id;return}
+    if(id==='train-schedule'){location.href='training-schedule.html';return}
+    if(pg.indexOf('4.3')===0){location.href='training.html?page='+id;return}
+    if(pg.indexOf('4.2')===0){location.href='teaching.html?page='+id;return}
+    if(pg.indexOf('4.4')===0){location.href='resource.html?page='+id;return}
+    if(pg.indexOf('4.5')===0){location.href='edu.html?page='+id;return}
+    if(pg.indexOf('4.6')===0){location.href='teacher-lib.html?page='+id;return}
+    toast('「'+child.dataset.name+'」（'+pg+'）为原型占位');return}
+  if(parent){const g=NAV.find(x=>x.id===parent.dataset.id);
+    if(g.direct){location.href='workbench.html';return}
+    parent.closest('.nav-group').classList.toggle('open');}
+});
+function setNavActive(el){document.querySelectorAll('.nav-child').forEach(n=>n.classList.remove('active'));el&&el.classList.add('active')}
+$('tbUser').onclick=()=>toast('个人信息 / 修改密码见 workbench.html 账户入口');
+$('tbSearch').onkeydown=e=>{if(e.key==='Enter'){showView('stu-query');QF.name=e.target.value.trim();qDoSearch();toast('已在个人综合查询检索：'+e.target.value.trim())}};
+
+/* ============ 学员数据（V3.2 五-(一)-6 / PRD 4.7） ============ */
+const TYPES=['部机关','部属单位','驻外使领馆干部','党政军企外事干部','国外人员','其他'];
+const TYPE_CLS={'部机关':'tag-blue','部属单位':'tag-cyan','驻外使领馆干部':'tag-purple','党政军企外事干部':'tag-green','国外人员':'tag-orange','其他':'tag-gray'};
+const ST_CLS={'在训':'tag-blue','已结业':'tag-green','请假中':'tag-orange','待审核':'tag-gray'};
+const PH_CLS={'已采集':'tag-green','待采集':'tag-orange','不合格':'tag-red'};
+let STUDENTS=[
+ {id:'S01',name:'陈明远',type:'部机关',dept:'外交部欧洲司',rank:'正处级',idc:'110101198503****',phone:'138****2001',photo:'已采集',status:'在训',hours:186,credit:12,
+  history:[{course:'习近平外交思想概论',cls:'党校班（第26期）',time:'2026-09',score:'—',eval:'—',cert:'—',deptAt:'外交部欧洲司',rankAt:'正处级'},
+           {course:'宏观经济形势分析',cls:'政能班（第8期）',time:'2026-04',score:92,eval:'优秀',cert:'结业证书',deptAt:'外交部欧洲司',rankAt:'正处级'},
+           {course:'多边外交实务',cls:'党校班（第25期）',time:'2026-03',score:88,eval:'良好',cert:'结业证书',deptAt:'外交部欧洲司',rankAt:'副处级'}],
+  leaves:[{date:'2026-09-18',type:'事假',reason:'陪同外宾会见',status:'已批准'}],
+  attend:{due:42,real:40,leave:1,rate:95.2},
+  certs:[['政能班（第8期）结业证书','2026-05'],['党校班（第25期）结业证书','2026-04']],
+  track:[{date:'2026-07',way:'派出单位回访',note:'欧洲司反馈：训后将宏观分析框架应用于中欧经贸对话准备，成效明显'}]},
+ {id:'S02',name:'林婉如',type:'部属单位',dept:'外交部机关党委',rank:'副处级',idc:'110102198711****',phone:'139****2002',photo:'已采集',status:'在训',hours:186,credit:12,
+  history:[{course:'党性修养与理想信念教育',cls:'党校班（第26期）',time:'2026-09',score:'—',eval:'—',cert:'—',deptAt:'外交部机关党委',rankAt:'副处级'},
+           {course:'涉外法治专题',cls:'涉外法治专题班',time:'2026-07',score:95,eval:'优秀',cert:'结业证书',deptAt:'外交部机关党委',rankAt:'副处级'}],
+  leaves:[],attend:{due:42,real:42,leave:0,rate:100},
+  certs:[['涉外法治专题班结业证书','2026-07']],
+  track:[{date:'2026-08',way:'学员回访',note:'已将涉外法治课程案例用于机关党建培训授课'}]},
+ {id:'S03',name:'王志刚',type:'驻外使领馆干部',dept:'中国驻某国大使馆',rank:'正处级',idc:'110105197912****',phone:'137****2003',photo:'已采集',status:'已结业',hours:320,credit:20,
+  history:[{course:'领事保护实务',cls:'驻外干部轮训班（2025）',time:'2025-11',score:90,eval:'优秀',cert:'结业证书',deptAt:'中国驻某国大使馆',rankAt:'正处级'},
+           {course:'国际谈判实务与模拟演练',cls:'外事骨干班（第2期）',time:'2025-05',score:86,eval:'良好',cert:'结业证书',deptAt:'中国驻某国大使馆',rankAt:'副处级'}],
+  leaves:[],attend:{due:60,real:58,leave:1,rate:96.7},
+  certs:[['驻外干部轮训班结业证书','2025-11'],['外事骨干班结业证书','2025-05']],
+  track:[{date:'2026-02',way:'派出单位回访',note:'使馆反馈：领保课程对处置突发领保案件帮助直接，建议增加案例演练课时'}]},
+ {id:'S04',name:'赵晓晴',type:'党政军企外事干部',dept:'某省外事办公室',rank:'一级主任科员',idc:'120101199203****',phone:'136****2004',photo:'已采集',status:'在训',hours:96,credit:6,
+  history:[{course:'外交礼仪与礼宾实务',cls:'外事骨干班（第3期）',time:'2026-05',score:93,eval:'优秀',cert:'结业证书',deptAt:'某省外事办公室',rankAt:'一级主任科员'},
+           {course:'国际谈判实务与模拟演练',cls:'外事骨干班（第3期）',time:'2026-05',score:81,eval:'良好',cert:'—',deptAt:'某省外事办公室',rankAt:'一级主任科员'}],
+  leaves:[{date:'2026-05-14',type:'病假',reason:'身体不适就医',status:'已批准'}],
+  attend:{due:36,real:34,leave:1,rate:94.4},
+  certs:[['外事骨干班（第3期）结业证书','2026-05']],
+  track:[{date:'2026-08',way:'派出单位回访',note:'省外办反馈：承担省级外事接待任务中应用礼宾规范，获外方好评'}]},
+ {id:'S05',name:'孙立军',type:'部机关',dept:'外交部政策规划司',rank:'副司级',idc:'110108197506****',phone:'135****2005',photo:'已采集',status:'已结业',hours:410,credit:26,
+  history:[{course:'习近平外交思想概论',cls:'党校班（第25期）',time:'2026-03',score:96,eval:'优秀',cert:'结业证书',deptAt:'外交部政策规划司',rankAt:'副司级'},
+           {course:'国际战略专题',cls:'党校班（第25期）',time:'2026-03',score:94,eval:'优秀',cert:'—',deptAt:'外交部政策规划司',rankAt:'副司级'}],
+  leaves:[],attend:{due:58,real:57,leave:0,rate:98.3},
+  certs:[['党校班（第25期）结业证书','2026-04'],['优秀学员证书','2026-04']],
+  track:[{date:'2026-06',way:'学员回访',note:'训后主持司内专题学习两次，转化效果好'}]},
+ {id:'S06',name:'周雨桐',type:'部属单位',dept:'外交部服务中心',rank:'二级主任科员',idc:'110106199408****',phone:'188****2006',photo:'待采集',status:'待审核',hours:0,credit:0,
+  history:[],leaves:[],attend:{due:0,real:0,leave:0,rate:'—'},certs:[],track:[]},
+ {id:'S07',name:'吴国强',type:'驻外使领馆干部',dept:'中国驻某总领馆',rank:'正处级',idc:'310101198201****',phone:'186****2007',photo:'已采集',status:'在训',hours:96,credit:6,
+  history:[{course:'领事保护实务',cls:'驻外干部轮训班',time:'2026-09',score:'—',eval:'—',cert:'—',deptAt:'中国驻某总领馆',rankAt:'正处级'}],
+  leaves:[{date:'2026-09-20',type:'公假',reason:'临时公务视频会',status:'审批中'}],
+  attend:{due:20,real:18,leave:1,rate:90.0},certs:[],track:[]},
+ {id:'S08',name:'郑雅文',type:'党政军企外事干部',dept:'某央企国际合作部',rank:'副处级',idc:'110105198809****',phone:'158****2008',photo:'不合格',status:'在训',hours:120,credit:8,
+  history:[{course:'宏观经济形势分析',cls:'政能班（第8期）',time:'2026-04',score:58,eval:'待改进',cert:'—',deptAt:'某央企国际合作部',rankAt:'副处级'},
+           {course:'数字经济与全球治理',cls:'政能班（第8期）',time:'2026-04',score:89,eval:'良好',cert:'结业证书',deptAt:'某央企国际合作部',rankAt:'副处级'}],
+  leaves:[],attend:{due:40,real:35,leave:0,rate:87.5},
+  certs:[['政能班（第8期）结业证书','2026-05']],
+  track:[{date:'2026-07',way:'派出单位回访',note:'企业反馈：希望增加经贸谈判实操类课程'}]},
+ {id:'S09',name:'马文斌',type:'国外人员',dept:'某国际组织职员',rank:'其他',idc:'E12****9',phone:'+41-**2009',photo:'已采集',status:'已结业',hours:90,credit:6,
+  history:[{course:'当代中国外交',cls:'国外人员研修班',time:'2025-10',score:91,eval:'优秀',cert:'研修证书',deptAt:'某国际组织',rankAt:'—'}],
+  leaves:[],attend:{due:30,real:29,leave:0,rate:96.7},
+  certs:[['国外人员研修班研修证书','2025-10']],
+  track:[{date:'2026-01',way:'邮件回访',note:'在国际组织会议中引用课程材料介绍中国外交政策'}]},
+ {id:'S10',name:'何俊杰',type:'部机关',dept:'外交部领事司',rank:'正处级',idc:'440101198606****',phone:'139****2010',photo:'已采集',status:'在训',hours:142,credit:9,
+  history:[{course:'领事保护实务',cls:'驻外干部轮训班',time:'2026-09',score:'—',eval:'—',cert:'—',deptAt:'外交部领事司',rankAt:'正处级'},
+           {course:'涉外法治专题',cls:'涉外法治专题班',time:'2026-07',score:90,eval:'优秀',cert:'结业证书',deptAt:'外交部领事司',rankAt:'正处级'}],
+  leaves:[],attend:{due:32,real:32,leave:0,rate:100},
+  certs:[['涉外法治专题班结业证书','2026-07']],
+  track:[{date:'2026-08',way:'学员回访',note:'牵头起草领保工作指引时参考课程案例库材料'}]}];
+
+let curView='stu-list',viewMode='card',qSel=null,qYear='全部',archS='S01';
+const FILTER={kw:'',type:'',dept:'',rank:'',status:''};
+const QF={name:'',idc:'',dept:'',year:''};
+const VIEW_NAME={'stu-list':'学员信息','stu-query':'个人综合查询','stu-archive':'参训档案'};
+const VIEW_OPS={'stu-list':['＋ 新增学员','批量导入','导出名册'],'stu-query':[],'stu-archive':['学时学分登记','导出档案']};
+const DEPTS=[...new Set(STUDENTS.map(s=>s.dept))];
+const RANKS=['正司级','副司级','正处级','副处级','一级主任科员','二级主任科员','其他'];
+
+function showView(id){
+  curView=id;
+  $('crumb').textContent='首页 / 学员库 / '+VIEW_NAME[id];
+  $('pageTitle').textContent=VIEW_NAME[id];
+  $('pageOps').innerHTML=(VIEW_OPS[id]||[]).map((o,i)=>`<button class="btn ${i===0?'btn-primary':'btn-ghost'}" onclick="opClick('${o}')">${o}</button>`).join('');
+  render();
+}
+function opClick(o){
+  if(o==='+ 新增学员'){openSModal();return}
+  if(o==='批量导入'){toast('模板下载 → 上传 → 校验预览（职级/部门变化自动覆盖更新提示）→ 入库（原型占位）');return}
+  if(o==='学时学分登记'){toast('学时学分登记：按班次自动核算+人工补登（原型占位）');return}
+  if(o.indexOf('导出')>=0){toast('已创建导出任务，可在「教务组织-数据导出与集成」查看');return}
+  toast('「'+o+'」（原型占位）');
+}
+function render(){
+  const b=$('viewBody');
+  if(curView==='stu-list')b.innerHTML=vList();
+  else if(curView==='stu-query')b.innerHTML=vQuery();
+  else b.innerHTML=vArchive();
+}
+function setView(v){viewMode=v;render()}
+function scoreCls(v){return typeof v==='number'?(v>=90?'score-high':(v<=60?'score-low':'')):''}
+function findS(id){return STUDENTS.find(s=>s.id===id)}
+
+/* ============ 4.7-P01 学员信息 ============ */
+function setFilter(k,v){FILTER[k]=v;render()}
+function sFiltered(){
+  const {kw,type,dept,rank,status}=FILTER;
+  return STUDENTS.filter(s=>(!kw||s.name.includes(kw)||s.idc.includes(kw))&&(!type||s.type===type)&&(!dept||s.dept===dept)&&(!rank||s.rank===rank)&&(!status||s.status===status));
+}
+function vList(){
+  const list=sFiltered();
+  const opt=(cur,v)=>`<option ${cur===v?'selected':''}>${v}</option>`;
+  const stats=`<div class="stat-cards">
+   <div class="stat"><div class="n">${STUDENTS.length}</div><div class="l">在库学员</div></div>
+   <div class="stat"><div class="n g">${STUDENTS.filter(s=>s.status==='在训').length}</div><div class="l">在训学员</div></div>
+   <div class="stat"><div class="n o">${STUDENTS.filter(s=>s.photo!=='已采集').length}</div><div class="l">照片待处理</div></div>
+   <div class="stat"><div class="n">${STUDENTS.filter(s=>s.status==='待审核').length}</div><div class="l">报名待审核</div></div></div>`;
+  const filters=`<div class="card" style="margin-bottom:16px"><div class="card-body" style="padding:14px 16px"><div class="filter-bar">
+   <input class="input" id="fKw" placeholder="姓名/身份证号检索，回车确认…" value="${FILTER.kw}" onkeydown="if(event.key==='Enter'){FILTER.kw=this.value.trim();render()}">
+   <button class="btn btn-primary" onclick="FILTER.kw=$('fKw').value.trim();render()">搜索</button>
+   <button class="btn btn-ghost" onclick="FILTER.kw='';FILTER.type='';FILTER.dept='';FILTER.rank='';FILTER.status='';render()">重置</button>
+   <select class="sel" onchange="setFilter('type',this.value)"><option value="">人员类型</option>${TYPES.map(t=>opt(FILTER.type,t)).join('')}</select>
+   <select class="sel" onchange="setFilter('dept',this.value)"><option value="">全部部门</option>${DEPTS.map(d=>opt(FILTER.dept,d)).join('')}</select>
+   <select class="sel" onchange="setFilter('rank',this.value)"><option value="">全部职级</option>${RANKS.map(r=>opt(FILTER.rank,r)).join('')}</select>
+   <select class="sel" onchange="setFilter('status',this.value)"><option value="">全部状态</option>${['在训','已结业','请假中','待审核'].map(s=>opt(FILTER.status,s)).join('')}</select>
+   <div class="view-switch" style="margin-left:auto">
+    <button class="btn ${viewMode==='card'?'btn-primary':'btn-ghost'}" onclick="setView('card')">▦ 卡片</button>
+    <button class="btn ${viewMode==='table'?'btn-primary':'btn-ghost'}" onclick="setView('table')">☰ 表格</button></div>
+  </div></div></div>`;
+  let body;
+  if(viewMode==='card'){
+    body=`<div class="s-grid">${list.map(s=>`
+     <div class="s-card" onclick="openStu('${s.id}')">
+      <span class="st-badge tag ${ST_CLS[s.status]}">${s.status}</span>
+      <div class="sh"><div class="s-ava">${s.name[0]}</div>
+       <div><div class="s-name">${s.name}</div><div class="s-sub">${s.dept} · ${s.rank}</div></div></div>
+      <div class="s-meta">👤 ${s.type}<br>⏱ 累计学时 ${s.hours} · 学分 ${s.credit}<br>📷 照片：<span class="tag ${PH_CLS[s.photo]}">${s.photo}</span></div>
+      <div class="s-tags"><span class="tag ${TYPE_CLS[s.type]}">${s.type}</span><span class="tag tag-gray">参训 ${s.history.length} 次</span></div>
+      <div class="s-ops"><button class="btn-text" onclick="event.stopPropagation();openStu('${s.id}')">详情</button>
+       <button class="btn-text" onclick="event.stopPropagation();qSel='${s.id}';showView('stu-query');setNavActive(document.querySelector('.nav-child[data-id=stu-query]'))">综合查询</button>
+       <button class="btn-text" onclick="event.stopPropagation();archS='${s.id}';showView('stu-archive');setNavActive(document.querySelector('.nav-child[data-id=stu-archive]'))">参训档案</button>
+       <button class="btn-text" onclick="event.stopPropagation();toast('请假登记：填写原因走审批流（原型占位）')">请假</button></div>
+     </div>`).join('')||'<div class="card" style="grid-column:1/-1"><div class="card-body" style="text-align:center;color:var(--text-3);padding:40px">无匹配学员，请调整筛选条件</div></div>'}</div>`;
+  }else{
+    body=`<div class="card"><div class="card-body"><table class="data-table"><thead><tr><th>姓名</th><th>人员类型</th><th>部门</th><th>职级</th><th>身份证号</th><th>照片状态</th><th>累计学时</th><th>状态</th><th>操作</th></tr></thead><tbody>
+     ${list.map(s=>`<tr><td class="c-name" onclick="openStu('${s.id}')">${s.name}</td>
+      <td><span class="tag ${TYPE_CLS[s.type]}">${s.type}</span></td><td>${s.dept}</td><td>${s.rank}</td><td>${s.idc}</td>
+      <td><span class="tag ${PH_CLS[s.photo]}">${s.photo}</span></td><td>${s.hours}</td>
+      <td><span class="tag ${ST_CLS[s.status]}">${s.status}</span></td>
+      <td><button class="btn-text" onclick="openStu('${s.id}')">详情</button><button class="btn-text" onclick="openSModal('${s.id}')">编辑</button><button class="btn-text" onclick="archS='${s.id}';showView('stu-archive');setNavActive(document.querySelector('.nav-child[data-id=stu-archive]'))">档案</button></td></tr>`).join('')||'<tr><td colspan="9" style="text-align:center;color:var(--text-3);padding:32px">无匹配学员</td></tr>'}
+     </tbody></table></div></div>`;
+  }
+  return stats+filters+body;
+}
+function openStu(id){
+  const s=findS(id);if(!s)return;
+  $('dwTitle').textContent=s.name+' · 学员详情';
+  $('dwBody').innerHTML=`
+   <div class="d-sec">基本信息（管理员统一维护）</div>
+   <div class="d-grid">
+    <span class="k">姓名</span><span><b>${s.name}</b>　<span class="tag ${ST_CLS[s.status]}">${s.status}</span></span>
+    <span class="k">人员类型</span><span><span class="tag ${TYPE_CLS[s.type]}">${s.type}</span></span>
+    <span class="k">部门</span><span>${s.dept}</span>
+    <span class="k">职级</span><span>${s.rank}</span>
+    <span class="k">身份证号</span><span>${s.idc}（脱敏展示，访问留痕）</span>
+    <span class="k">联系电话</span><span>${s.phone}</span>
+    <span class="k">照片状态</span><span><span class="tag ${PH_CLS[s.photo]}">${s.photo}</span>${s.photo!=='已采集'?' <button class="btn-text" onclick="toast(\'补采照片并质检（原型占位）\')">补采</button>':''}</span>
+    <span class="k">累计学时/学分</span><span>${s.hours} 学时 / ${s.credit} 学分</span>
+   </div>
+   <div class="d-sec">培训经历（${s.history.length} 次）</div>
+   ${s.history.length?`<table class="data-table"><thead><tr><th>课程</th><th>班次</th><th>时间</th><th>成绩</th><th>评价</th><th>证书</th></tr></thead><tbody>
+   ${s.history.map(h=>`<tr><td>${h.course}</td><td>${h.cls}</td><td>${h.time}</td><td><span class="${scoreCls(h.score)}">${h.score}</span></td><td>${h.eval}</td><td>${h.cert}</td></tr>`).join('')}</tbody></table>`:'<p class="mini-note">暂无培训经历</p>'}
+   <div class="d-sec">数据自动更新提示</div>
+   <div class="alert" style="margin-bottom:0">🔄 部人事业务系统同步：检测到该学员职级/部门如有变动，将按自动更新机制覆盖基础信息（受权限控制），减少人工重复录入。</div>`;
+  $('dwFoot').innerHTML=`
+   <button class="btn btn-ghost" onclick="openSModal('${s.id}')">编辑</button>
+   <button class="btn btn-ghost" onclick="closeDrawer();qSel='${s.id}';showView('stu-query');setNavActive(document.querySelector('.nav-child[data-id=stu-query]'))">综合查询</button>
+   <button class="btn btn-primary" onclick="closeDrawer();archS='${s.id}';showView('stu-archive');setNavActive(document.querySelector('.nav-child[data-id=stu-archive]'))">参训档案</button>`;
+  $('drawerMask').classList.remove('hidden');$('drawer').classList.remove('hidden');
+}
+function closeDrawer(){$('drawerMask').classList.add('hidden');$('drawer').classList.add('hidden')}
+let editSid=null;
+function openSModal(id){
+  editSid=id||null;
+  $('sModalTitle').textContent=id?'编辑学员信息':'新增学员';
+  $('sfType').innerHTML=TYPES.map(t=>`<option>${t}</option>`).join('');
+  if(id){const s=findS(id);$('sfName').value=s.name;$('sfType').value=s.type;$('sfDept').value=s.dept;$('sfRank').value=RANKS.includes(s.rank)?s.rank:'其他';$('sfIdc').value=s.idc;$('sfPhone').value=s.phone;}
+  else{['sfName','sfDept','sfIdc','sfPhone'].forEach(i=>$(i).value='')}
+  $('sModal').classList.remove('hidden');
+}
+function sSave(){
+  const name=$('sfName').value.trim(),idc=$('sfIdc').value.trim();
+  if(!name){toast('姓名不能为空');return}
+  if(!idc||idc.length<8){toast('身份证号格式不正确');return}
+  if(editSid){const s=findS(editSid);Object.assign(s,{name,type:$('sfType').value,dept:$('sfDept').value,rank:$('sfRank').value,idc,phone:$('sfPhone').value});}
+  else{if(STUDENTS.some(x=>x.idc===idc)){toast('该身份证号已存在，请勿重复录入');return}
+    STUDENTS.unshift({id:'S'+Date.now()%1000,name,type:$('sfType').value,dept:$('sfDept').value,rank:$('sfRank').value,idc,phone:$('sfPhone').value,photo:'待采集',status:'待审核',hours:0,credit:0,history:[],leaves:[],attend:{due:0,real:0,leave:0,rate:'—'},certs:[],track:[]});}
+  $('sModal').classList.add('hidden');render();toast(editSid?'学员信息已更新':'「'+name+'」已录入，待报名审核');
+}
+
+/* ============ 4.7-P02 个人综合查询 ============ */
+function qDoSearch(){if(curView==='stu-query'){render()}else{showView('stu-query')}}
+function qResults(){
+  const {name,idc,dept,year}=QF;
+  return STUDENTS.filter(s=>
+    (!name||s.name.includes(name))&&
+    (!idc||s.idc.includes(idc))&&
+    (!dept||s.dept===dept)&&
+    (!year||year==='全部'||s.history.some(h=>h.time.indexOf(year)===0)));
+}
+function qYears(s){const ys=[...new Set(s.history.map(h=>h.time.slice(0,4)))];return ['全部',...ys.sort().reverse()]}
+function vQuery(){
+  const list=qResults();
+  const panel=`<div class="card" style="margin-bottom:16px"><div class="card-body">
+   <div class="sec-title" style="margin-top:0">🔍 多维度检索（姓名 / 身份证号 / 部门 / 参训年份）</div>
+   <div class="filter-bar" style="margin-bottom:0">
+    <input class="input" placeholder="姓名" value="${QF.name}" onkeydown="if(event.key==='Enter'){QF.name=this.value.trim();qDoSearch()}">
+    <input class="input" placeholder="身份证号" style="width:200px" value="${QF.idc}" onkeydown="if(event.key==='Enter'){QF.idc=this.value.trim();qDoSearch()}">
+    <select class="sel" onchange="QF.dept=this.value;qDoSearch()"><option value="">全部部门</option>${DEPTS.map(d=>`<option ${QF.dept===d?'selected':''}>${d}</option>`).join('')}</select>
+    <select class="sel" style="width:120px" onchange="QF.year=this.value;qDoSearch()"><option ${qYearSel('全部')}>全部年份</option><option ${qYearSel('2026')}>2026</option><option ${qYearSel('2025')}>2025</option></select>
+    <button class="btn btn-primary" onclick="readQInputs();qDoSearch()">查询</button>
+    <button class="btn btn-ghost" onclick="QF.name='';QF.idc='';QF.dept='';QF.year='';qSel=null;qDoSearch()">重置</button>
+    <span style="font-size:12px;color:var(--text-3);margin-left:auto">共 ${list.length} 名学员；查询行为记入审计日志</span>
+   </div></div></div>`;
+  const rows=`<div class="card" ${qSel?'style="margin-bottom:16px"':''}><div class="card-body">
+   <table class="data-table"><thead><tr><th>姓名</th><th>人员类型</th><th>部门</th><th>职级</th><th>身份证号</th><th>参训年份</th><th>操作</th></tr></thead><tbody>
+   ${list.map(s=>{const ys=[...new Set(s.history.map(h=>h.time.slice(0,4)))].join('、')||'—';
+     return `<tr ${qSel===s.id?'style="background:rgba(31,78,121,.06)"':''}><td class="c-name" onclick="qSel='${s.id}';render()">${s.name}</td>
+     <td><span class="tag ${TYPE_CLS[s.type]}">${s.type}</span></td><td>${s.dept}</td><td>${s.rank}</td><td>${s.idc}</td><td>${ys}</td>
+     <td><button class="btn-text" onclick="qSel='${s.id}';render()">综合档案</button></td></tr>`}).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:32px">无匹配学员，请调整检索条件</td></tr>'}
+   </tbody></table></div></div>`;
+  return panel+rows+(qSel?qProfile(findS(qSel)):'');
+}
+function qYearSel(y){return QF.year===y?'selected':''}
+function readQInputs(){
+  const ins=document.querySelectorAll('.filter-bar .input');
+  if(ins[0])QF.name=ins[0].value.trim();
+  if(ins[1])QF.idc=ins[1].value.trim();
+}
+function qProfile(s){
+  if(!s)return '';
+  const years=qYears(s);
+  if(!years.includes(qYear))qYear='全部';
+  const hs=s.history.filter(h=>qYear==='全部'||h.time.indexOf(qYear)===0);
+  return `<div class="card"><div class="card-body">
+   <div class="profile-head">
+    <div class="s-ava">${s.name[0]}</div>
+    <div style="flex:1"><div class="p-name">${s.name}　<span class="tag ${ST_CLS[s.status]}">${s.status}</span>　<span class="tag ${TYPE_CLS[s.type]}">${s.type}</span></div>
+     <div class="p-sub">${s.dept} · ${s.rank} · 身份证号 ${s.idc}（脱敏）<br>累计学时 ${s.hours} · 学分 ${s.credit} · 证书 ${s.certs.length} 份 · 训后反馈 ${s.track.length} 条</div></div>
+    <div style="display:flex;gap:8px">
+     <button class="btn btn-ghost" onclick="archS='${s.id}';showView('stu-archive');setNavActive(document.querySelector('.nav-child[data-id=stu-archive]'))">参训档案</button>
+     <button class="btn btn-primary" onclick="toast('已创建导出任务：培训档案包（数据+附件+清单+校验码+签名）')">导出培训档案</button></div></div>
+   <div class="sec-title">📚 培训经历（支持按时间筛选）
+    <div style="margin-left:auto;display:flex;gap:6px">${years.map(y=>`<button class="btn ${qYear===y?'btn-primary':'btn-ghost'}" style="height:26px;font-size:12px;padding:0 12px" onclick="qYear='${y}';render()">${y==='全部'?'全部':y+'年'}</button>`).join('')}</div></div>
+   <table class="data-table"><thead><tr><th>课程名称</th><th>培训班次</th><th>培训时间</th><th>成绩数据</th><th>教学评价</th><th>所获证书</th><th>参训时所属部门</th><th>参训时职级</th></tr></thead><tbody>
+   ${hs.map(h=>`<tr><td><b>${h.course}</b></td><td>${h.cls}</td><td>${h.time}</td>
+    <td><span class="${scoreCls(h.score)}">${h.score}</span></td><td>${h.eval==='优秀'?'<span class="tag tag-green">优秀</span>':h.eval==='良好'?'<span class="tag tag-blue">良好</span>':h.eval==='待改进'?'<span class="tag tag-red">待改进</span>':h.eval}</td>
+    <td>${h.cert==='—'?'—':'📜 '+h.cert}</td><td>${h.deptAt}</td><td>${h.rankAt}</td></tr>`).join('')||'<tr><td colspan="8" style="text-align:center;color:var(--text-3);padding:20px">该时间段无培训记录</td></tr>'}
+   </tbody></table>
+   <p class="mini-note">培训经历保留参训时部门与职级快照，与当前基础信息（可被部人事系统自动覆盖更新）区分展示；分数高亮：高分标绿、低分（≤60）标红。</p>
+  </div></div>`;
+}
+
+/* ============ 4.7-P03 参训档案 ============ */
+function vArchive(){
+  const s=findS(archS)||STUDENTS[0];
+  const rate=typeof s.attend.rate==='number'?s.attend.rate:null;
+  return `<div class="filter-bar">
+   <select class="sel" style="width:240px" onchange="archS=this.value;render()">
+    ${STUDENTS.map(x=>`<option value="${x.id}" ${x.id===s.id?'selected':''}>${x.name}（${x.dept}）</option>`).join('')}</select>
+   <span style="font-size:12px;color:var(--text-3)">档案涵盖：学籍信息、参训档案（学时学分）、成绩数据、资质证书、请假记录、考勤情况、训后成效跟踪反馈，由管理员统一维护</span></div>
+  <div class="stat-cards">
+   <div class="stat"><div class="n">${s.hours}</div><div class="l">累计学时</div></div>
+   <div class="stat"><div class="n g">${s.credit}</div><div class="l">累计学分</div></div>
+   <div class="stat"><div class="n">${s.certs.length}</div><div class="l">资质证书</div></div>
+   <div class="stat"><div class="n ${rate!==null&&rate<90?'r':'g'}">${rate===null?'—':rate+'%'}</div><div class="l">总体出勤率</div></div>
+   <div class="stat"><div class="n o">${s.leaves.filter(l=>l.status==='审批中').length}</div><div class="l">待审请假</div></div></div>
+  <div class="grid-2">
+   <div class="card"><div class="card-body">
+    <div class="sec-title" style="margin-top:0">📖 学籍信息</div>
+    <div class="d-grid"><span class="k">姓名</span><span>${s.name}</span>
+     <span class="k">人员类型</span><span><span class="tag ${TYPE_CLS[s.type]}">${s.type}</span></span>
+     <span class="k">部门/职级</span><span>${s.dept} · ${s.rank}</span>
+     <span class="k">身份证号</span><span>${s.idc}</span>
+     <span class="k">照片/底库</span><span><span class="tag ${PH_CLS[s.photo]}">${s.photo}</span>${s.photo==='已采集'?' · 已写入人脸底库':''}</span></div>
+    <div class="sec-title">⏱ 学时学分登记（按班次自动核算 + 人工补登）</div>
+    <table class="data-table"><thead><tr><th>班次</th><th>学时</th><th>学分</th><th>登记方式</th></tr></thead><tbody>
+    ${[...new Set(s.history.map(h=>h.cls))].map(c=>{const n=s.history.filter(h=>h.cls===c).length;return `<tr><td>${c}</td><td>${n*46}</td><td>${n*3}</td><td><span class="tag tag-green">考勤自动核算</span></td></tr>`}).join('')||'<tr><td colspan="4" style="color:var(--text-3)">暂无登记</td></tr>'}
+    </tbody></table>
+    <button class="btn-text" onclick="toast('人工补登学时学分：需填写原因并留痕（原型占位）')">＋ 人工补登</button>
+    <div class="sec-title">📊 成绩数据（高分标绿 / ≤60 标红）</div>
+    <table class="data-table"><thead><tr><th>课程</th><th>班次</th><th>成绩</th><th>教学评价</th></tr></thead><tbody>
+    ${s.history.filter(h=>typeof h.score==='number').map(h=>`<tr><td>${h.course}</td><td>${h.cls}</td><td><span class="${scoreCls(h.score)}">${h.score}</span></td><td>${h.eval}</td></tr>`).join('')||'<tr><td colspan="4" style="color:var(--text-3)">暂无成绩（在训班次结课考核后录入/导入）</td></tr>'}
+    </tbody></table></div></div>
+   <div class="card"><div class="card-body">
+    <div class="sec-title" style="margin-top:0">📜 资质证书（电子签章 PDF）</div>
+    ${s.certs.length?`<div style="display:flex;flex-direction:column;gap:8px">${s.certs.map(c=>`<div style="display:flex;align-items:center;gap:10px;background:#f7f9fc;border-radius:var(--r);padding:10px 12px;font-size:13px">🏅 <span style="flex:1">${c[0]}<span style="color:var(--text-3);font-size:12px">（${c[1]}）</span></span><a onclick="toast('下载电子证书 PDF（原型占位）')">下载</a><a onclick="toast('在线预览证书（原型占位）')">预览</a></div>`).join('')}</div>`:'<p class="mini-note">暂无证书，结课考核完成后自动生成</p>'}
+    <div class="sec-title">📅 考勤情况与请假记录</div>
+    <div style="display:flex;gap:14px;font-size:12px;color:var(--text-2);margin-bottom:8px">应到 <b>${s.attend.due}</b> · 实到 <b>${s.attend.real}</b> · 请假 <b>${s.attend.leave}</b> · 出勤率 <b class="${rate!==null&&rate<90?'score-low':'score-high'}">${rate===null?'—':rate+'%'}</b>
+     <button class="btn-text" style="margin-left:auto" onclick="location.href='training.html?page=train-attend'">考勤明细 →</button></div>
+    <table class="data-table"><thead><tr><th>日期</th><th>类型</th><th>事由</th><th>状态</th></tr></thead><tbody>
+    ${s.leaves.map(l=>`<tr><td>${l.date}</td><td>${l.type}</td><td>${l.reason}</td><td><span class="tag ${l.status==='已批准'?'tag-green':'tag-orange'}">${l.status}</span></td></tr>`).join('')||'<tr><td colspan="4" style="color:var(--text-3)">无请假记录</td></tr>'}
+    </tbody></table>
+    <button class="btn-text" onclick="toast('请假登记：填写类型/事由，走审批流（组织员/带班老师处理）')">＋ 请假登记</button>
+    <div class="sec-title">🔁 训后成效跟踪反馈</div>
+    ${s.track.length?`<div class="tl">${s.track.map(t=>`<div class="tl-item"><div class="tl-t">${t.date} · ${t.way}</div><div class="tl-s">${t.note}</div></div>`).join('')}</div>`:'<p class="mini-note">暂无训后反馈（培训结束后回访学员及派出单位自动归集）</p>'}
+    <button class="btn-text" onclick="toast('登记训后回访记录（原型占位）')">＋ 登记回访</button>
+    <p class="mini-note">训后反馈形成“培训—实践—反馈—课程优化”闭环，同步纳入结班报告与课程优化输入。</p></div></div>
+  </div>`;
+}
+
+/* ============ 初始化 ============ */
+const q=new URLSearchParams(location.search).get('page');
+const init=q&&VIEW_NAME[q]?q:'stu-list';
+showView(init);
+setNavActive(document.querySelector('.nav-child[data-id="'+init+'"]'));
+</script>
+</body>
+</html>

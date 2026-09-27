@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>结班报告与教学点 · 干部培训学院教务管理系统 原型 V1.0</title>
+<style>
+:root{--primary:#1F4E79;--primary-2:#2E75B6;--success:#2E7D32;--warning:#F57F17;--danger:#C62828;
+ --text:#333;--text-2:#595959;--text-3:#8a9099;--bg:#F5F6F8;--card:#fff;--line:#e5e8ec;
+ --topbar-h:56px;--nav-w:220px;--nav-w-c:64px;--r:4px;--r-card:8px;--r-modal:12px;--shadow:0 2px 8px rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{text-decoration:none;color:var(--primary-2);cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2dc;border-radius:4px}
+.btn{height:32px;padding:0 16px;border-radius:var(--r);font-size:14px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#173e61}
+.btn-primary[disabled]{background:#b9c4d0;cursor:not-allowed}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-text{background:none;border:none;color:var(--primary-2);cursor:pointer;font-size:13px;padding:0 4px}
+.btn-text:hover{text-decoration:underline}
+.btn-text.danger{color:var(--danger)}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+.tag-blue{background:rgba(46,117,182,.12);color:var(--primary-2)}
+.tag-green{background:rgba(46,125,50,.12);color:var(--success)}
+.tag-orange{background:rgba(247,127,23,.12);color:var(--warning)}
+.tag-red{background:rgba(198,40,40,.12);color:var(--danger)}
+.tag-gray{background:rgba(89,95,105,.1);color:var(--text-2)}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card-body{padding:16px}
+.input,.sel{height:32px;border:1px solid var(--line);border-radius:var(--r);padding:0 10px;font-size:13px;outline:none;background:#fff;color:var(--text)}
+.input:focus,.sel:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+/* 顶部栏/导航 */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--primary);color:#fff;display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{display:flex;align-items:center;gap:10px;min-width:230px}
+.tb-logo .mark{width:32px;height:32px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.tb-logo .name{font-size:16px;font-weight:700;white-space:nowrap}
+.tb-search{flex:1;max-width:460px}.tb-search .input{width:100%;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;height:34px}
+.tb-search .input::placeholder{color:rgba(255,255,255,.6)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tb-icon{position:relative;width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px}
+.tb-icon:hover{background:rgba(255,255,255,.15)}
+.tb-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tb-user:hover{background:rgba(255,255,255,.15)}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sidenav{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--nav-w);background:#fff;border-right:1px solid var(--line);overflow-y:auto;z-index:90;transition:width .2s}
+.nav-parent{display:flex;align-items:center;gap:10px;padding:0 16px;height:44px;cursor:pointer;color:var(--text-2);font-size:14px;position:relative}
+.nav-parent:hover{background:#f2f6fa;color:var(--primary)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex:none}
+.nav-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-caret{font-size:11px;color:var(--text-3);transition:transform .2s}
+.nav-group.open .nav-caret{transform:rotate(90deg)}
+.nav-group.open>.nav-parent{color:var(--primary);font-weight:700}
+.nav-children{display:none;background:#fafbfc}
+.nav-group.open .nav-children{display:block}
+.nav-child{padding:0 16px 0 44px;height:36px;display:flex;align-items:center;font-size:13px;color:var(--text-2);cursor:pointer;position:relative}
+.nav-child:hover{color:var(--primary);background:#f2f6fa}
+.nav-child.active{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-child.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.nav-collapse{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:var(--text-3);cursor:pointer;display:flex;gap:8px;align-items:center}
+body.nav-collapsed .sidenav{width:var(--nav-w-c)}
+body.nav-collapsed .nav-label,body.nav-collapsed .nav-caret,body.nav-collapsed .nav-children,body.nav-collapsed .nav-collapse span{display:none}
+body.nav-collapsed .nav-parent{justify-content:center;padding:0}
+body.nav-collapsed .nav-collapse{justify-content:center}
+.content{margin-left:var(--nav-w);margin-top:var(--topbar-h);padding:24px;min-height:calc(100vh - var(--topbar-h));transition:margin-left .2s}
+body.nav-collapsed .content{margin-left:var(--nav-w-c)}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+.breadcrumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+.page-title{font-size:20px;font-weight:700}
+/* 表格样式 */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th,.data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+.data-table th{background:#fafbfc;color:var(--text-2);font-size:12px;font-weight:400}
+.data-table tbody tr:hover{background:#f7fafd}
+.pager{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding-top:14px;font-size:13px;color:var(--text-3)}
+.pager .pg{min-width:28px;height:28px;border:1px solid var(--line);border-radius:var(--r);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;background:#fff}
+.pager .pg.cur{background:var(--primary);color:#fff;border-color:var(--primary)}
+/* 筛选区 */
+.filter-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+.f-item label{display:block;font-size:12px;color:var(--text-3);margin-bottom:4px}
+.f-item .input,.f-item .sel{width:100%}
+/* 详情卡片 */
+.detail-card{background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:24px}
+.detail-header{padding:18px 24px;border-bottom:1px solid #e5e8ec;display:flex;justify-content:space-between;align-items:center}
+.detail-header h2{font-size:18px;font-weight:700;color:var(--primary)}
+.detail-content{padding:24px}
+.detail-section{margin-bottom:24px}
+.section-title{font-size:16px;font-weight:700;margin-bottom:12px;color:var(--text);border-left:3px solid var(--primary);padding-left:10px}
+.report-cover{background:#fff;padding:60px 40px;border:1px solid #e5e8ec;text-align:center}
+.report-cover h1{font-size:28px;margin-bottom:24px;font-weight:700}
+.report-cover .meta{font-size:18px;margin:16px 0;padding:16px 0;border-top:1px solid #e5e8ec;border-bottom:1px solid #e5e8ec;line-height:2}
+.report-cover .org{text-align:right;font-size:16px;margin-top:48px}
+/* 结班报告内容 */
+.report-table{width:100%;border:1px solid var(--line)}
+.report-table th,.report-table td{padding:8px 12px;border:1px solid var(--line);font-size:12px}
+.report-table th{background:#fafbfc;font-weight:700}
+.report-list li{margin-bottom:8px;line-height:1.6}
+.score-cell{font-family:Consolas,monospace;font-weight:700}
+.score-high{color:var(--success)}.score-low{color:var(--danger)}
+/* 教学点列表 */
+.site-card{border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:12px;cursor:pointer;transition:border-color .2s}
+.site-card:hover{border-color:var(--primary)}
+.site-card.active{border-color:var(--primary);background:rgba(31,78,121,.05)}
+.site-type{font-size:12px;color:var(--primary-2);margin-bottom:8px}
+.site-name{font-size:16px;font-weight:700;margin-bottom:8px}
+.site-desc{font-size:13px;color:var(--text-2);margin-bottom:8px;line-height:1.5}
+.site-address{font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:6px}
+.alert{border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:12px;display:flex;gap:8px;align-items:center}
+.alert-info{background:rgba(46,117,182,.08);color:var(--primary-2);border:1px solid rgba(46,117,182,.25)}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(40,45,52,.92);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:300;box-shadow:var(--shadow)}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo"><div class="mark">院</div><div class="name">干部培训学院教务管理系统</div></div>
+  <div class="tb-search"><input class="input" id="tbSearch" placeholder="🔍 全局搜索：班次 / 学员 / 师资 / 课程…"></div>
+  <div class="tb-right">
+    <div class="tb-icon" onclick="toast('跳转消息中心（原型占位）')" title="站内信">🔔<span class="tb-badge">3</span></div>
+    <div class="tb-user"><div class="tb-avatar">张</div><span>张三</span></div>
+  </div>
+</header>
+
+<aside class="sidenav" id="sidenav"></aside>
+
+<main class="content">
+  <!-- ===== 结班报告（4.3-P13）===== -->
+  <section id="page-report">
+    <div class="page-head">
+      <div><div class="breadcrumb">首页 / 培训管理 / 结班报告</div><h2 class="page-title">结班报告</h2></div>
+      <div>
+        <button class="btn btn-primary" onclick="previewReport()">📄 预览 PDF</button>
+        <button class="btn btn-ghost" onclick="exportPDF()">导出 PDF</button>
+        <button class="btn btn-ghost" onclick="customTemplate()">模板自定义</button>
+      </div>
+    </div>
+    
+    <div class="alert alert-info">💡 系统自动生成标准化 PDF 结班报告（基于图片资料），无需人工手动整理；名单排序按礼宾顺序自动排列。</div>
+    
+    <div class="detail-card">
+      <div class="detail-header">
+        <h2>2503 期处级干部进修班 · 结班报告预览</h2>
+        <span class="tag tag-green">生成完成</span>
+      </div>
+      <div class="detail-content" id="reportPreview">
+        <!-- 封面 -->
+        <div class="report-cover">
+          <h1>2026 年第 3 期处级干部进修班<br>结 班 报 告</h1>
+          <div class="meta">
+            <p>班次代码：B2503</p>
+            <p>办班时间：2026 年 9 月 1 日至 9 月 30 日</p>
+            <p>学员人数：45 人</p>
+            <p>带班人员：张三、李四</p>
+          </div>
+          <div class="org">中国外交培训学院<br>2026 年 9 月</div>
+        </div>
+        
+        <!-- 目录 -->
+        <div style="margin-top:48px;background:#f9f9f9;padding:32px;border:1px solid #e5e8ec">
+          <div style="font-size:18px;font-weight:700;text-align:center;margin-bottom:32px">目&nbsp;&nbsp;录</div>
+          <table class="data-table">
+            <tr><td>一、培训小结</td><td style="text-align:right">...................................................1</td></tr>
+            <tr><td>二、课程安排</td><td style="text-align:right">...................................................2</td></tr>
+            <tr><td>三、学员名单</td><td style="text-align:right">...................................................3</td></tr>
+            <tr><td>四、综合教学评估</td><td style="text-align:right">...................................................4</td></tr>
+            <tr><td>五、课程量化评估</td><td style="text-align:right">...................................................5</td></tr>
+            <tr><td>六、学习日志</td><td style="text-align:right">...................................................6</td></tr>
+          </table>
+        </div>
+        
+        <!-- 培训小结 -->
+        <div style="margin-top:24px">
+          <div class="section-title">一、培训小结</div>
+          <p style="margin-bottom:12px;line-height:1.8">2026 年 9 月 1 日至 30 日，第 3 期处级干部进修班成功举办。主要情况如下：</p>
+          <ol style="margin-left:24px;margin-bottom:12px;line-height:1.8">
+            <li><b>（一）培训类型和课程内容：</b>党校班，围绕习近平外交思想课程体系，包含理论教育、党性教育、能力培养三大模块，共计 28 课时。</li>
+            <li><b>（二）学员情况及教学管理：</b>应到 45 人，实到 43 人，2 人请假；实行分班管控，设 3 个研讨小组；教学管理严格规范，考勤率 95.6%，学员学风优良。</li>
+            <li><b>（三）综合教学评估：</b>综合教学评估平均得分 92.4 分，其中，培训目标清晰度（95 分）、课程内容针对性（94 分）、师资力量配置（93 分）等 5 项评分较高；教学设施完备性（82 分）和后勤服务响应速度（85 分）分值较低。</li>
+            <li><b>（四）课程量化评估：</b>教员平均得分 88.6 分（满分 10 分），其中王教授（9.5 分）、李教授（9.2 分）、张教授（8.8 分）评分较高。赵教授（6.2 分）分值较低，已安排教学反思。</li>
+            <li><b>（五）学员意见建议：</b>正面：课程设置合理、教师水平高、案例丰富实用；反面：建议增加互动式教学比重、延长晚间自习时间、加强国际组织人才专题。</li>
+          </ol>
+        </div>
+        
+        <!-- 课程安排 -->
+        <div style="margin-top:24px">
+          <div class="section-title">二、课程安排</div>
+          <p style="margin-bottom:12px;color:var(--text-3)">提醒：<br>1. 部内退休教员和部外师资请附教员联系方式。<br>2. 本次培训共计 28 课时。</p>
+          <table class="data-table report-table">
+            <thead><tr><th>序号</th><th>课程名称</th><th>课时</th><th>上课时间</th><th>授课教师</th><th>教室</th><th>备注</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>习近平外交思想概论 1/16</td><td>2</td><td>09-01 08:30</td><td>王教授</td><td>教室 301</td><td>--</td></tr>
+              <tr><td>2</td><td>宏观经济形势分析 1/6</td><td>2</td><td>09-03 14:00</td><td>李教授</td><td>报告厅</td><td>合班授课</td></tr>
+              <tr><td>3</td><td>党性修养与理想信念教育 1/6</td><td>2</td><td>09-05 10:15</td><td>张教授</td><td>研讨室 201</td><td>第 1 组</td></tr>
+              <tr><td>4</td><td>国际谈判实务与模拟演练 1/8</td><td>4</td><td>09-10 09:00</td><td>陈司长</td><td>模拟谈判室</td><td>全真模拟</td></tr>
+              <tr><td>5</td><td>外交礼仪与礼宾实务 1/4</td><td>2</td><td>09-15 14:30</td><td>刘处长</td><td>教室 302</td><td>实操训练</td></tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- 学员名单 -->
+        <div style="margin-top:24px">
+          <div class="section-title">三、学员名单（按礼宾顺序自动排列）</div>
+          <table class="data-table report-table">
+            <thead><tr><th>序号</th><th>姓名</th><th>人员类型</th><th>部门</th><th>职级</th><th>分组</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>王××</td><td>部机关</td><td>西欧司</td><td>副处长</td><td>第 1 组</td></tr>
+              <tr><td>2</td><td>李××</td><td>驻外使领馆干部</td><td>驻某使馆</td><td>二等秘书</td><td>第 1 组</td></tr>
+              <tr><td>3</td><td>陈××</td><td>部属单位</td><td>外交学院</td><td>正处级</td><td>第 2 组</td></tr>
+              <tr><td>4</td><td>赵××</td><td>党政军企外事干部</td><td>某省外办</td><td>副处长</td><td>第 3 组</td></tr>
+              <tr><td>5</td><td>孙××</td><td>部机关</td><td>领事司</td><td>正处级</td><td>第 1 组</td></tr>
+              <!-- ...共 45 人 -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- 综合教学评估 -->
+        <div style="margin-top:24px">
+          <div class="section-title">四、综合教学评估（16 项指标）</div>
+          <table class="data-table report-table">
+            <thead><tr><th>序号</th><th>测评项目</th><th>平均分</th><th>序号</th><th>测评项目</th><th>平均分</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>培训目标：目标清晰，要求明确</td><td class="score-cell score-high">95</td><td>9</td><td>教学技术应用：适当选择先进的教学技术、设备和手段</td><td class="score-cell">88</td></tr>
+              <tr><td>2</td><td>培训课程：安排合理，针对性强</td><td class="score-cell score-high">94</td><td>10</td><td>教学设施：设备齐全，能满足教学需要</td><td class="score-cell">82</td></tr>
+              <tr><td>3</td><td>培训时间：天数适中，每天培训时长合理</td><td class="score-cell">91</td><td>11</td><td>服务水平：服务人员热情周到</td><td class="score-cell">85</td></tr>
+              <tr><td>4</td><td>培训地点：地点选择合理，能保障教学活动正常开展</td><td class="score-cell">90</td><td>12</td><td>纪律监督及执行：对培训纪律有明确要求</td><td class="score-cell">93</td></tr>
+              <tr><td>5</td><td>培训内容的逻辑性：内容完整，层次感强，重点突出</td><td class="score-cell score-high">93</td><td>13</td><td>带班人员组织能力：与学员信息沟通及时高效</td><td class="score-cell score-high">94</td></tr>
+              <tr><td>6</td><td>培训内容的新颖性：能体现新理论、新知识、新方法</td><td class="score-cell score-high">92</td><td>14</td><td>带班人员服务水平：熟悉培训业务，工作严谨细致</td><td class="score-cell score-high">92</td></tr>
+              <tr><td>7</td><td>培训内容的适用性：讲授内容符合实际工作的要求</td><td class="score-cell score-high">91</td><td>15</td><td>对培训内容的掌握情况：针对性强，很好地解答了心中疑惑</td><td class="score-cell score-high">90</td></tr>
+              <tr><td>8</td><td>培训方式方法：科学合理，灵活多样</td><td class="score-cell score-high">90</td><td>16</td><td>对今后工作的启发性：能开拓工作思路</td><td class="score-cell score-high">89</td></tr>
+              <tr><td colspan="3" style="text-align:right;font-weight:700">总平均分</td><td colspan="3" style="text-align:right;font-weight:700;color:var(--primary)">92.4</td></tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- 教员评价 -->
+        <div style="margin-top:24px">
+          <div class="section-title">五、课程量化评估（教员评价）</div>
+          <table class="data-table report-table">
+            <thead><tr><th rowspan="2">序号</th><th rowspan="2">教员姓名</th><th rowspan="2">授课课程</th><th colspan="2">教学内容</th><th colspan="2">教学水平</th><th colspan="2">教学方法</th><th colspan="2">教学效果</th><th rowspan="2">总平均分</th></tr>
+            <tr>
+              <th>观点正确紧扣主题</th><th>内容丰富信息量大</th><th>逻辑严谨条理清楚</th><th>授课生动有感染力</th><th>方式多样气氛活跃</th><th>案例典型启发性强</th><th>有助于掌握吸收授课要点</th><th>有助于促进实际工作</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>1</td><td>王教授</td><td>习近平外交思想概论</td><td class="score-cell score-high">9.8</td><td class="score-cell score-high">9.6</td><td class="score-cell score-high">9.5</td><td class="score-cell score-high">9.7</td><td class="score-cell score-high">9.4</td><td class="score-cell score-high">9.6</td><td class="score-cell score-high">9.5</td><td class="score-cell score-high">9.5</td><td class="score-cell score-high score-high">9.5</td></tr>
+              <tr><td>2</td><td>李教授</td><td>宏观经济形势分析</td><td class="score-cell score-high">9.3</td><td class="score-cell score-high">9.1</td><td class="score-cell score-high">9.0</td><td class="score-cell">8.8</td><td class="score-cell score-high">9.2</td><td class="score-cell score-high">9.0</td><td class="score-cell score-high">8.9</td><td class="score-cell score-high">9.0</td><td class="score-cell score-high">9.0</td></tr>
+              <tr><td>3</td><td>赵教授</td><td>党性修养教育</td><td class="score-cell">6.5</td><td class="score-cell">6.0</td><td class="score-cell">6.2</td><td class="score-cell score-low">5.8</td><td class="score-cell">6.8</td><td class="score-cell">6.5</td><td class="score-cell">6.0</td><td class="score-cell">6.8</td><td class="score-cell score-low">6.2</td></tr>
+            </tbody>
+          </table>
+          <p class="mini-note" style="margin-top:8px">评分规则：高分（≥9.0）自动标绿，低分（≤7.0）自动标红；异常值（偏离均值超阈值）醒目颜色标记。</p>
+        </div>
+        
+        <!-- 学习日志 -->
+        <div style="margin-top:24px">
+          <div class="section-title">六、学习日志</div>
+          <div style="background:#f9f9f9;padding:24px;border:1px solid #e5e8ec">
+            <p style="margin-bottom:12px;font-weight:700">学员王某某学习日志摘要：</p>
+            <ul class="report-list" style="margin-left:24px;color:var(--text-2)">
+              <li><b>09-01（第一天）：</b>开班仪式，领导动员讲话；聆听王教授《习近平外交思想概论》第一课，收获颇丰，对新时代中国特色大国外交有了更深理解。</li>
+              <li><b>09-05（第五天）：</b>党性修养课程，赴长辛店二七纪念馆现场教学，了解中国共产党领导北方工人运动的光辉历史，接受红色洗礼。</li>
+              <li><b>09-15（第十五天）：</b>国际谈判模拟演练，陈司长带领实战演练，提升了应对复杂国际局面的能力，但感觉经验不足。</li>
+              <li><b>09-28（最后一天）：</b>结业考核通过，总结发言深感培训收获巨大，将把所学知识应用到工作实际中。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- ===== 现场教学点库（4.8-P01）===== -->
+  <section id="page-sites" class="hidden">
+    <div class="page-head">
+      <div><div class="breadcrumb">首页 / 教室管理 / 现场教学点库</div><h2 class="page-title">现场教学点库</h2></div>
+      <div>
+        <button class="btn btn-primary" onclick="addSite()">＋ 新增教学点</button>
+        <button class="btn btn-ghost" onclick="exportSites()">导出数据</button>
+      </div>
+    </div>
+    
+    <div class="alert alert-info">📍 现场教学点库为培训提供实地教育资源支持，可按主题分类管理（如党性教育、党史教育、对外交往等）。</div>
+    
+    <div class="filter-bar">
+      <div class="f-item"><input class="input" id="siteKw" placeholder="🔍 搜索教学点名称…"></div>
+      <div class="f-item"><select class="sel" id="siteTheme"><option value="">全部主题</option><option>党性教育</option><option>党史教育</option><option>对外交往</option><option>法治教育</option></select></div>
+      <div class="f-item"><select class="sel"><option value="">全部区域</option><option>北京市丰台区</option><option>北京市朝阳区</option><option>北京市海淀区</option><option>北京市东城区</option></select></div>
+    </div>
+    
+    <div class="card">
+      <div class="card-body">
+        <!-- 党性教育主题 -->
+        <div class="detail-section">
+          <div class="section-title">一、党性教育</div>
+          <div id="siteList-party">
+            <div class="site-card active" onclick="selectSite(this)" data-id="S001">
+              <div class="site-type">党性教育 • 建议班次：所有党校班</div>
+              <div class="site-name">1. 长辛店二七纪念馆</div>
+              <div class="site-desc">了解中国共产党领导北方工人运动的光辉历史；现场讲解 + 参观体验，时长约 2 小时。</div>
+              <div class="site-address">📍 北京市丰台区长辛店花园南里甲 15 号</div>
+            </div>
+            
+            <div class="site-card" onclick="selectSite(this)" data-id="S002">
+              <div class="site-type">党史教育 • 建议班次：青年干部培训班</div>
+              <div class="site-name">2. 中国共产党历史展览馆</div>
+              <div class="site-desc">系统学习党的百年奋斗历程和伟大成就；可预约团体讲解，需提前 3 天申请。</div>
+              <div class="site-address">📍 北京市朝阳区奥运村街道北辰东路 9 号</div>
+            </div>
+            
+            <div class="site-card" onclick="selectSite(this)" data-id="S003">
+              <div class="site-type">专业教育 • 建议班次：铁路/交通系统干部班</div>
+              <div class="site-name">3. 铁道兵纪念馆暨中国铁建展览馆</div>
+              <div class="site-desc">了解铁道兵的辉煌历史和精神面貌；爱国主义教育示范基地，适合大型团队参观。</div>
+              <div class="site-address">📍 北京市海淀区复兴路与玉泉路辅路交叉口东</div>
+            </div>
+            
+            <div class="site-card" onclick="selectSite(this)" data-id="S004">
+              <div class="site-type">对外交往 • 建议班次：外事干部任职班</div>
+              <div class="site-name">4. 中央礼品文物管理中心</div>
+              <div class="site-desc">了解新中国外交发展历程和外事工作成就；珍贵外交国礼展示，提升外事素养。</div>
+              <div class="site-address">📍 北京市东城区西兴隆街 1 号</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 其他主题... -->
+        <div class="detail-section">
+          <div class="section-title">二、法治教育（示例）</div>
+          <div id="siteList-law" style="opacity:0.6">
+            <div class="site-card" onclick="selectSite(this)" data-id="S005">
+              <div class="site-type">法治教育 • 建议班次：涉外法治专题班</div>
+              <div class="site-name">5. 国家知识产权审判法庭参观区</div>
+              <div class="site-desc">了解我国知识产权司法保护体系；旁听真实案件庭审，增强法治意识。</div>
+              <div class="site-address">📍 北京市海淀区中关村南大街 1 号</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+function $(id){return document.getElementById(id)}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+
+/* ============ 导航 ============ */
+const NAV=[
+ {id:'workbench',icon:'🏠',name:'工作台',direct:true},
+ {id:'teach',icon:'📚',name:'教学管理',children:[{id:'teach-system',name:'课程体系',pg:'4.2-P01'},{id:'teach-course',name:'课程管理',pg:'4.2-P02'}]},
+ {id:'train',icon:'🎓',name:'培训管理',children:[
+   {id:'train-class',name:'培训班管理',pg:'4.3-P01'},{id:'train-stu',name:'培训考生',pg:'4.3-P03'},
+   {id:'train-schedule',name:'培训排课（拖拽）',pg:'4.3-P04'},{id:'train-grade',name:'课程成绩',pg:'4.3-P06'},
+   {id:'train-cert',name:'电子证书',pg:'4.3-P07'},{id:'train-eval',name:'教学评估',pg:'4.3-P08'},
+   {id:'train-exam',name:'考务管理',pg:'4.3-P09'},{id:'train-cycle',name:'学员全周期',pg:'4.3-P10'},
+   {id:'train-stay',name:'住宿安排',pg:'4.3-P11'},{id:'train-budget',name:'预算管理',pg:'4.3-P12'},
+   {id:'train-report',name:'结班报告',pg:'4.3-P13'},{id:'train-attend',name:'考勤管理',pg:'4.3-P14'},
+   {id:'train-track',name:'训后跟踪',pg:'4.3-P15'}]},
+ {id:'room',icon:'🏫',name:'教室管理',children:[{id:'room-point',name:'教学点管理',pg:'4.8-P01'},{id:'room-room',name:'教室管理',pg:'4.8-P02'},{id:'room-device',name:'人脸考勤设备',pg:'4.8-P03'}]},
+ {id:'base',icon:'⚙️',name:'基础设置',children:[{id:'base-category',name:'培训类别',pg:'4.11-P01'},{id:'base-course',name:'课程分类',pg:'4.11-P02'},{id:'base-log',name:'系统日志',pg:'4.11-P03'},{id:'base-rule',name:'经费规则库',pg:'4.11-P04'}]}
+];
+$('sidenav').innerHTML=NAV.map(g=>`
+ <div class="nav-group ${g.id==='train'?'open':''}" data-group="${g.id}">
+   <div class="nav-parent" data-id="${g.id}"><span class="nav-icon">${g.icon}</span><span class="nav-label">${g.name}</span>${g.children?'<span class="nav-caret">▸</span>':''}</div>
+   ${g.children?`<div class="nav-children">${g.children.map(c=>`<div class="nav-child" data-id="${c.id}" data-name="${c.name}" data-pg="${c.pg||''}"><span class="nav-label">${c.name}</span></div>`).join('')}</div>`:''}
+ </div>`).join('')+`<div class="nav-collapse" id="navCollapse">⇤<span>收起导航</span></div>`;
+
+$('sidenav').addEventListener('click',e=>{
+  if(e.target.closest('#navCollapse')){document.body.classList.toggle('nav-collapsed');return}
+  const child=e.target.closest('.nav-child'),parent=e.target.closest('.nav-parent');
+  if(child){
+    const id=child.dataset.id;
+    if(id==='train-report'){$('page-report').classList.remove('hidden');$('page-sites').classList.add('hidden');setNavActive(child);return}
+    if(id==='room-point'){$('page-report').classList.add('hidden');$('page-sites').classList.remove('hidden');setNavActive(child);return}
+    if(id==='train-class'){location.href='training.html?page=train-class';return}
+    toast('「'+child.dataset.name+'」（'+child.dataset.pg+'）为原型占位');return}
+  if(parent){const g=NAV.find(x=>x.id===parent.dataset.id);
+    if(g.direct){location.href='workbench.html';return}
+    parent.closest('.nav-group').classList.toggle('open');}
+});
+
+function setNavActive(el){document.querySelectorAll('.nav-child').forEach(n=>n.classList.remove('active'));el&&el.classList.add('active')}
+
+/* ============ 结班报告功能 ============ */
+function previewReport(){toast('PDF 预览窗口已打开（原型占位）')}
+function exportPDF(){toast('正在生成 PDF 文件…完成后自动下载')}
+function customTemplate(){toast('模板自定义：支持调整章节顺序、样式、字体等（原型占位）')}
+function selectSite(el){document.querySelectorAll('.site-card').forEach(c=>c.classList.remove('active'));el.classList.add('active');toast('已选中：'+el.querySelector('.site-name').textContent)}
+function addSite(){toast('新增教学点：填写基本信息、地址、建议班次等（原型占位）')}
+function exportSites(){toast('导出教学点数据清单 Excel（原型占位）')}
+
+// URL 参数直达
+const q=new URLSearchParams(location.search).get('page');
+if(q==='train-report'){$('page-report').classList.remove('hidden');$('page-sites').classList.add('hidden')}
+else if(q==='room-point'){$('page-report').classList.add('hidden');$('page-sites').classList.remove('hidden')}
+else{$('page-report').classList.remove('hidden');$('page-sites').classList.add('hidden')}
+</script>
+</body>
+</html>

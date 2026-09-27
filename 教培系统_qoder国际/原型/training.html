@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>培训管理 · 干部培训学院教务管理系统 原型 V1.0</title>
+<style>
+:root{--primary:#1F4E79;--primary-2:#2E75B6;--success:#2E7D32;--warning:#F57F17;--danger:#C62828;
+ --text:#333;--text-2:#595959;--text-3:#8a9099;--bg:#F5F6F8;--card:#fff;--line:#e5e8ec;
+ --topbar-h:56px;--nav-w:220px;--nav-w-c:64px;--r:4px;--r-card:8px;--r-modal:12px;--shadow:0 2px 8px rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{text-decoration:none;color:var(--primary-2);cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2dc;border-radius:4px}
+.btn{height:32px;padding:0 16px;border-radius:var(--r);font-size:14px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#173e61}
+.btn-primary[disabled]{background:#b9c4d0;cursor:not-allowed}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-text{background:none;border:none;color:var(--primary-2);cursor:pointer;font-size:13px;padding:0 4px}
+.btn-text:hover{text-decoration:underline}
+.btn-text.danger{color:var(--danger)}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;white-space:nowrap}
+.tag-blue{background:rgba(46,117,182,.12);color:var(--primary-2)}
+.tag-green{background:rgba(46,125,50,.12);color:var(--success)}
+.tag-orange{background:rgba(247,127,23,.12);color:var(--warning)}
+.tag-red{background:rgba(198,40,40,.12);color:var(--danger)}
+.tag-gray{background:rgba(89,95,105,.1);color:var(--text-2)}
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card-body{padding:16px}
+.input,.sel{height:32px;border:1px solid var(--line);border-radius:var(--r);padding:0 10px;font-size:13px;outline:none;background:#fff;color:var(--text)}
+.input:focus,.sel:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+/* 顶部栏/导航（同框架） */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--primary);color:#fff;display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{display:flex;align-items:center;gap:10px;min-width:230px}
+.tb-logo .mark{width:32px;height:32px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.tb-logo .name{font-size:16px;font-weight:700;white-space:nowrap}
+.tb-search{flex:1;max-width:460px}.tb-search .input{width:100%;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;height:34px}
+.tb-search .input::placeholder{color:rgba(255,255,255,.6)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tb-icon{position:relative;width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px}
+.tb-icon:hover{background:rgba(255,255,255,.15)}
+.tb-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.tb-ver{font-size:12px;color:rgba(255,255,255,.65);margin:0 4px}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tb-user:hover{background:rgba(255,255,255,.15)}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sidenav{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--nav-w);background:#fff;border-right:1px solid var(--line);overflow-y:auto;z-index:90;transition:width .2s}
+.nav-parent{display:flex;align-items:center;gap:10px;padding:0 16px;height:44px;cursor:pointer;color:var(--text-2);font-size:14px;position:relative}
+.nav-parent:hover{background:#f2f6fa;color:var(--primary)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex:none}
+.nav-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-caret{font-size:11px;color:var(--text-3);transition:transform .2s}
+.nav-group.open .nav-caret{transform:rotate(90deg)}
+.nav-group.open>.nav-parent{color:var(--primary);font-weight:700}
+.nav-children{display:none;background:#fafbfc}
+.nav-group.open .nav-children{display:block}
+.nav-child{padding:0 16px 0 44px;height:36px;display:flex;align-items:center;font-size:13px;color:var(--text-2);cursor:pointer;position:relative}
+.nav-child:hover{color:var(--primary);background:#f2f6fa}
+.nav-child.active{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-child.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+.nav-collapse{border-top:1px solid var(--line);padding:12px 16px;font-size:13px;color:var(--text-3);cursor:pointer;display:flex;gap:8px;align-items:center}
+body.nav-collapsed .sidenav{width:var(--nav-w-c)}
+body.nav-collapsed .nav-label,body.nav-collapsed .nav-caret,body.nav-collapsed .nav-children,body.nav-collapsed .nav-collapse span{display:none}
+body.nav-collapsed .nav-parent{justify-content:center;padding:0}
+body.nav-collapsed .nav-collapse{justify-content:center}
+.content{margin-left:var(--nav-w);margin-top:var(--topbar-h);padding:24px;min-height:calc(100vh - var(--topbar-h));transition:margin-left .2s}
+body.nav-collapsed .content{margin-left:var(--nav-w-c)}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+.breadcrumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+.page-title{font-size:20px;font-weight:700}
+.page-ops{display:flex;gap:8px}
+/* 筛选/表格 */
+.filter-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.f-item label{display:block;font-size:12px;color:var(--text-3);margin-bottom:4px}
+.f-item .input,.f-item .sel{width:100%}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th,.data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+.data-table th{background:#fafbfc;color:var(--text-2);font-size:12px;font-weight:400}
+.data-table tbody tr:hover{background:#f7fafd}
+.data-table .c-name{font-weight:700;color:var(--primary);cursor:pointer}
+.data-table .c-name:hover{text-decoration:underline}
+.pager{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding-top:14px;font-size:13px;color:var(--text-3)}
+.pager .pg{min-width:28px;height:28px;border:1px solid var(--line);border-radius:var(--r);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;background:#fff}
+.pager .pg.cur{background:var(--primary);color:#fff;border-color:var(--primary)}
+.score-high{color:var(--success);font-weight:700}.score-low{color:var(--danger);font-weight:700}
+.money-over{color:var(--danger);font-weight:700}
+/* 详情头/Tab */
+.detail-head{background:linear-gradient(120deg,var(--primary),var(--primary-2));border-radius:var(--r-card);color:#fff;padding:18px 24px;margin-bottom:16px;display:flex;align-items:center;gap:20px;box-shadow:var(--shadow)}
+.detail-head h2{font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px}
+.detail-head .meta{font-size:12px;opacity:.85;margin-top:6px}
+.detail-head .ops{margin-left:auto;display:flex;gap:8px}
+.detail-head .btn-ghost{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.4);color:#fff}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--line);margin-bottom:16px;flex-wrap:wrap}
+.tab{padding:9px 16px;font-size:14px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab.active{color:var(--primary);font-weight:700;border-bottom-color:var(--primary)}
+.stat-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:14px}
+.stat{background:#f7f9fc;border-radius:var(--r);padding:12px;text-align:center}
+.stat .n{font-size:24px;font-weight:700;font-family:Consolas,monospace;color:var(--primary)}
+.stat .n.red{color:var(--danger)}.stat .n.green{color:var(--success)}.stat .n.orange{color:var(--warning)}
+.stat .l{font-size:12px;color:var(--text-3);margin-top:2px}
+.t-ops{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.t-ops .right{margin-left:auto;font-size:12px;color:var(--text-3)}
+.alert{border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:12px;display:flex;gap:8px;align-items:center}
+.alert-red{background:rgba(198,40,40,.08);color:var(--danger);border:1px solid rgba(198,40,40,.25)}
+.alert-green{background:rgba(46,125,50,.08);color:var(--success);border:1px solid rgba(46,125,50,.25)}
+.bar-row{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13px}
+.bar-row .nm{width:200px;flex:none}
+.bar{flex:1;height:8px;background:#eef1f4;border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:var(--success)}
+.bar.mid i{background:var(--primary-2)}.bar.low i{background:var(--danger)}
+.bar-row .sc{width:48px;text-align:right;font-weight:700;font-family:Consolas,monospace}
+/* 向导 */
+.steps{display:flex;margin-bottom:20px}
+.step{flex:1;text-align:center;font-size:13px;color:var(--text-3);position:relative;padding-top:30px}
+.step::before{content:attr(data-n);position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:#e9edf2;color:var(--text-3);display:flex;align-items:center;justify-content:center;font-size:12px}
+.step::after{content:"";position:absolute;top:12px;left:calc(50% + 16px);right:calc(-50% + 16px);height:2px;background:#e9edf2}
+.step:last-child::after{display:none}
+.step.cur{color:var(--primary);font-weight:700}
+.step.cur::before{background:var(--primary);color:#fff}
+.step.done::before{background:var(--success);color:#fff;content:"✓"}
+.wz-course{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px;cursor:pointer;font-size:13px}
+.wz-course:hover{border-color:var(--primary-2)}
+.wz-course .hrs{margin-left:auto;color:var(--text-3);font-size:12px}
+.wz-sum{background:#f7f9fc;border-radius:var(--r);padding:14px;font-size:13px;line-height:2}
+/* 弹窗 */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center}
+.modal{width:680px;max-height:88vh;background:#fff;border-radius:var(--r-modal);box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden;display:flex;flex-direction:column}
+.modal-head{padding:14px 18px;font-size:16px;font-weight:700;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.modal-body{padding:18px;overflow-y:auto}
+.modal-foot{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
+.f-row label{display:block;font-size:13px;color:var(--text-2);margin-bottom:6px}
+.f-row label .req{color:var(--danger);margin-right:2px}
+.f-row .input,.f-row .sel{width:100%}
+.f-row.full{grid-column:1/3}
+textarea.input{height:auto;padding:8px 10px;resize:vertical}
+.switch{position:relative;width:40px;height:22px;background:#c9d2dc;border-radius:999px;cursor:pointer;transition:background .2s;flex:none;display:inline-block;vertical-align:middle}
+.switch.on{background:var(--success)}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.switch.on::after{left:20px}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(40,45,52,.92);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:300;box-shadow:var(--shadow)}
+.mini-note{font-size:12px;color:var(--text-3);margin-top:8px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo"><div class="mark">院</div><div class="name">干部培训学院教务管理系统</div></div>
+  <div class="tb-search"><input class="input" id="tbSearch" placeholder="🔍 全局搜索：班次 / 学员 / 师资 / 课程…"></div>
+  <div class="tb-right">
+    <span class="tb-ver">V1.0 原型</span>
+    <div class="tb-icon" onclick="toast('跳转消息中心（原型占位）')" title="站内信">🔔<span class="tb-badge">5</span></div>
+    <div class="tb-icon" onclick="toast('帮助中心为原型占位')" title="帮助中心">❓</div>
+    <div class="tb-user" id="tbUser"><div class="tb-avatar">张</div><span>张三</span><span style="font-size:10px">▼</span></div>
+  </div>
+</header>
+
+<aside class="sidenav" id="sidenav"></aside>
+
+<main class="content">
+  <!-- ===== 培训班列表（4.3-P01） ===== -->
+  <section id="page-list">
+    <div class="page-head">
+      <div><div class="breadcrumb">首页 / 培训管理 / 培训班管理</div><h2 class="page-title">培训班管理</h2></div>
+      <div class="page-ops">
+        <button class="btn btn-ghost" onclick="toast('导出班次清单（原型占位）')">导出</button>
+        <button class="btn btn-ghost" onclick="toast('模板下载+文件上传+校验预览（原型占位）')">导入</button>
+        <button class="btn btn-primary" onclick="openWizard()">＋ 新建班次</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px"><div class="card-body">
+      <div class="filter-bar">
+        <div class="f-item"><label>班次名称</label><input class="input" id="fName" placeholder="模糊搜索" oninput="renderList()"></div>
+        <div class="f-item"><label>培训类别</label><select class="sel" id="fCat" onchange="renderList()"><option value="">全部</option><option>党校班</option><option>政能班</option><option>专题研讨班</option><option>任职培训班</option></select></div>
+        <div class="f-item"><label>主办单位</label><select class="sel" id="fHost" onchange="renderList()"><option value="">全部</option><option>办公厅</option><option>干部司</option><option>机关党委</option></select></div>
+        <div class="f-item"><label>班次状态</label><select class="sel" id="fStatus" onchange="renderList()"><option value="">全部</option><option>筹备</option><option>在办</option><option>待结班</option><option>已结业</option></select></div>
+        <div class="f-item"><label>开始日期（≥）</label><input class="input" id="fDate" type="date" onchange="renderList()"></div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-body">
+      <table class="data-table">
+        <thead><tr><th>班次名称</th><th>培训类别</th><th>培训对象</th><th>主办/承办</th><th>时长</th><th>起止日期</th><th>学员数</th><th>进度</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody id="listBody"></tbody>
+      </table>
+      <div class="pager"><span id="pgTotal"></span><span class="pg">‹</span><span class="pg cur">1</span><span class="pg">›</span></div>
+    </div></div>
+  </section>
+
+  <!-- ===== 班次详情（4.3-P02） ===== -->
+  <section id="page-detail" class="hidden">
+    <div class="detail-head">
+      <div>
+        <h2 id="dtName">班次详情</h2>
+        <div class="meta" id="dtMeta"></div>
+      </div>
+      <div class="ops">
+        <button class="btn btn-ghost" onclick="goList()">‹ 返回列表</button>
+        <button class="btn btn-ghost" onclick="location.href='training-schedule.html?class='+curClass">🧲 拖拽排课</button>
+        <button class="btn btn-ghost" onclick="switchTab('budget')">💰 预算</button>
+        <button class="btn btn-ghost" onclick="switchTab('report')">📄 结班报告</button>
+      </div>
+    </div>
+    <div class="tabs" id="dtTabs"></div>
+    <div class="card"><div class="card-body" id="dtBody"></div></div>
+  </section>
+
+  <!-- ===== 培训类别与课程分类 (4.11-P01/P02) ===== -->
+  <section id="page-category" class="hidden">
+    <div class="page-head">
+      <div><div class="breadcrumb" id="crumb">首页 / 培训管理 / 培训类别管理</div><h2 class="page-title" id="pageTitle">培训类别管理</h2></div>
+      <div class="page-ops">
+        <button class="btn btn-primary" onclick="openCatModal(null)">＋ 新增类别</button>
+        <button class="btn btn-ghost" onclick="toast('批量导入功能（原型占位）')">批量导入</button>
+        <button class="btn btn-ghost" onclick="toast('导出树形结构功能（原型占位）')">导出</button>
+      </div>
+    </div>
+    <div id="statsArea" class="stat-cards"></div>
+    <div class="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div id="treeArea"></div>
+      <div id="categoryListArea"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== 新建班次向导（4步） ===== -->
+<div class="mask hidden" id="wzModal"><div class="modal">
+  <div class="modal-head"><span>新建培训班次（分步向导）</span><span class="btn-text js-close">✕</span></div>
+  <div class="modal-body">
+    <div class="steps" id="wzSteps">
+      <div class="step cur" data-n="1">基本信息</div><div class="step" data-n="2">课程组合</div>
+      <div class="step" data-n="3">学员与分班</div><div class="step" data-n="4">确认提交</div>
+    </div>
+    <div id="wzS1">
+      <div class="form-grid">
+        <div class="f-row full"><label><span class="req">*</span>班次名称（≤60字）</label><input class="input" id="wName" placeholder="如：2507期处级干部进修班"></div>
+        <div class="f-row"><label><span class="req">*</span>培训类别</label><select class="sel" id="wCat"><option>党校班</option><option>政能班</option><option>专题研讨班</option><option>任职培训班</option></select></div>
+        <div class="f-row"><label><span class="req">*</span>培训对象</label><input class="input" id="wTarget" placeholder="如：处级干部"></div>
+        <div class="f-row"><label><span class="req">*</span>主办单位</label><select class="sel" id="wHost"><option>办公厅</option><option>干部司</option><option>机关党委</option></select></div>
+        <div class="f-row"><label><span class="req">*</span>承办/协助承办部门</label><select class="sel" id="wDept"><option>教务管理办</option><option>培训部</option><option>科研部</option></select></div>
+        <div class="f-row"><label><span class="req">*</span>开始日期</label><input class="input" type="date" id="wStart" value="2026-10-12"></div>
+        <div class="f-row"><label><span class="req">*</span>结束日期（≥开始）</label><input class="input" type="date" id="wEnd" value="2026-10-30"></div>
+        <div class="f-row full"><label>培训内容</label><textarea class="input" id="wContent" rows="2" placeholder="培训内容概述"></textarea></div>
+      </div>
+    </div>
+    <div id="wzS2" class="hidden">
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:10px">从课程体系勾选多门课程，自动汇总课时总量（至少1门）：</p>
+      <div id="wzCourses"></div>
+      <div style="text-align:right;font-size:14px;margin-top:8px">已选 <b id="wzCnt">0</b> 门 · 课时总量 <b id="wzHours" style="color:var(--primary)">0</b></div>
+    </div>
+    <div id="wzS3" class="hidden">
+      <div class="form-grid">
+        <div class="f-row full"><label>学员报名录入（学员端不接入，由管理员统一录入或批量导入）</label>
+          <div style="display:flex;gap:8px"><button class="btn btn-ghost" onclick="toast('单个新增学员功能（原型占位）')">单个新增</button><button class="btn btn-ghost" onclick="toast('批量导入功能，职级部门变化自动更新基础信息（原型占位）')">批量导入</button></div></div>
+        <div class="f-row"><label>分班管控</label><div><span class="switch on" onclick="this.classList.toggle('on')"></span> <span style="font-size:12px;color:var(--text-3)">开启后按分班隔离管理</span></div></div>
+        <div class="f-row"><label>分组研讨</label><select class="sel" id="wGroups"><option>不分组</option><option selected>3 个研讨小组</option><option>4 个研讨小组</option><option>5 个研讨小组</option></select></div>
+        <div class="f-row full"><label>预计学员数</label><input class="input" id="wStuNum" type="number" value="45" style="width:160px"></div>
+      </div>
+    </div>
+    <div id="wzS4" class="hidden"><div class="wz-sum" id="wzSum"></div>
+      <p class="mini-note">提交后班次进入「筹备」状态；创建人默认为班次管理员，可增设其他管理员（数据权限规则见 PRD 4.10）。</p></div>
+  </div>
+  <div class="modal-foot">
+    <button class="btn btn-ghost" id="wzPrev" onclick="wzGo(-1)">上一步</button>
+    <button class="btn btn-primary" id="wzNext" onclick="wzGo(1)">下一步</button>
+  </div>
+</div></div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+document.querySelectorAll('.js-close').forEach(b=>b.onclick=e=>e.target.closest('.mask').classList.add('hidden'));
+const ST_CLS={'在办':'tag-blue','筹备':'tag-orange','待结班':'tag-green','已结业':'tag-gray'};
+
+/* ============ 导航 ============ */
+const NAV=[
+ {id:'workbench',icon:'🏠',name:'工作台',direct:true},
+ {id:'teach',icon:'📚',name:'教学管理',children:[{id:'teach-system',name:'课程体系',pg:'4.2-P01'},{id:'teach-course',name:'课程管理',pg:'4.2-P02'}]},
+ {id:'train',icon:'🎓',name:'培训管理',children:[{id:'train-class',name:'培训班管理',pg:'4.3-P01'},{id:'base-category',name:'培训类别',pg:'4.11-P01'},{id:'base-course',name:'课程分类',pg:'4.11-P02'}]},
+ {id:'resource',icon:'🗂️',name:'资源管理',children:[{id:'res-plan',name:'教案库',pg:'4.4-P01'},{id:'res-book',name:'教材库',pg:'4.4-P02'},{id:'res-case',name:'案例库',pg:'4.4-P03'},{id:'res-self',name:'自他资源库',pg:'4.4-P04'},{id:'res-bank',name:'题库试卷库',pg:'4.4-P05'},{id:'res-tag',name:'标签管理',pg:'4.4-P06'}]},
+ {id:'edu',icon:'📊',name:'教务组织',children:[{id:'edu-plan',name:'教学计划管理',pg:'4.5-P01'},{id:'edu-data',name:'教务数据管理',pg:'4.5-P02'},{id:'edu-report',name:'多维度报表',pg:'4.5-P03'},{id:'edu-export',name:'数据导出与集成',pg:'4.5-P04'},{id:'edu-settle',name:'结算报告模板',pg:'4.5-P05'}]},
+ {id:'teacher',icon:'👥',name:'师资库',children:[{id:'tea-list',name:'师资信息',pg:'4.6-P01'},{id:'tea-tag',name:'分级分类标签',pg:'4.6-P03'},{id:'tea-archive',name:'授课质量档案',pg:'4.6-P02'},{id:'tea-invite',name:'授课邀请函',pg:'4.6-P04'},{id:'tea-report',name:'综合评价报告',pg:'4.6-P05'}]},
+ {id:'student',icon:'✪',name:'学员库',children:[{id:'stu-list',name:'学员信息',pg:'4.7-P01'},{id:'stu-query',name:'个人综合查询',pg:'4.7-P02'},{id:'stu-archive',name:'参训档案',pg:'4.7-P03'}]},
+ {id:'room',icon:'🏫',name:'教室管理',children:[{id:'room-point',name:'教学点管理',pg:'4.8-P01'},{id:'room-room',name:'教室管理',pg:'4.8-P02'},{id:'room-device',name:'人脸考勤设备',pg:'4.8-P03'}]},
+ {id:'approve',icon:'✅',name:'审批管理',children:[{id:'apv-schedule',name:'排课审批',pg:'4.9-P01'},{id:'apv-budget',name:'预算审批',pg:'4.9-P01'},{id:'apv-leave',name:'请假/调停课审批',pg:'4.9-P01'},{id:'apv-record',name:'审批记录',pg:'4.9-P03'}]},
+ {id:'org',icon:'🏛️',name:'组织管理',children:[{id:'org-structure',name:'组织架构',pg:'4.10-P01'},{id:'org-account',name:'账户管理',pg:'4.10-P02'},{id:'org-user',name:'用户权限',pg:'4.10-P03'},{id:'org-data',name:'数据权限',pg:'4.10-P04'},{id:'org-three',name:'三员管理',pg:'4.10-P05'}]},
+ {id:'base',icon:'⚙️',name:'基础设置',children:[{id:'base-log',name:'系统日志',pg:'4.11-P03'},{id:'base-rule',name:'经费规则库',pg:'4.11-P04'}]},
+ {id:'screen',icon:'📈',name:'可视化大屏',children:[{id:'scr-overview',name:'总览大屏',pg:'4.12'},{id:'scr-study',name:'学情大屏',pg:'4.12'},{id:'scr-resource',name:'资源大屏',pg:'4.12'}]}
+];
+$('sidenav').innerHTML=NAV.map(g=>`
+ <div class="nav-group ${g.id==='train'?'open':''}" data-group="${g.id}">
+   <div class="nav-parent" data-id="${g.id}"><span class="nav-icon">${g.icon}</span><span class="nav-label">${g.name}</span>${g.children?'<span class="nav-caret">▸</span>':''}</div>
+   ${g.children?`<div class="nav-children">${g.children.map(c=>`<div class="nav-child" data-id="${c.id}" data-name="${c.name}" data-pg="${c.pg||''}"><span class="nav-label">${c.name}</span></div>`).join('')}</div>`:''}
+ </div>`).join('')+`<div class="nav-collapse" id="navCollapse">⇤<span>收起导航</span></div>`;
+const TAB_OF={'train-stu':'stu','train-grade':'grade','train-cert':'cert','train-eval':'eval','train-exam':'exam','train-cycle':'cycle','train-stay':'stay','train-budget':'budget','train-report':'report','train-attend':'attend','train-track':'track'};
+$('sidenav').addEventListener('click',e=>{
+  if(e.target.closest('#navCollapse')){document.body.classList.toggle('nav-collapsed');return}
+  const child=e.target.closest('.nav-child'),parent=e.target.closest('.nav-parent');
+  if(child){
+    const id=child.dataset.id;
+    if(id==='train-class'){goList();setNavActive(child);return}
+    if(id==='train-schedule'){location.href='training-schedule.html?class='+curClass;return}
+    if(TAB_OF[id]){openDetail(curClass);switchTab(TAB_OF[id]);setNavActive(child);return}
+    if(child.dataset.pg&&child.dataset.pg.indexOf('4.2')===0){location.href='teaching.html?page='+id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.4')===0){location.href='resource.html?page='+id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.5')===0){location.href='edu.html?page='+id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.6')===0){location.href='teacher-lib.html?page='+id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.7')===0){location.href='student-lib.html?page='+id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.8')===0){location.href='room.html?page='+id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.9')===0){location.href='approve.html?page='+id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.10')===0){location.href='org.html?page='+id;return}
+if(child.dataset.pg&&child.dataset.pg.indexOf('4.12')===0){location.href='screen.html?scr='+id;return}
+    toast('「'+child.dataset.name+'」（'+child.dataset.pg+'）为原型占位');return}
+  if(parent){const g=NAV.find(x=>x.id===parent.dataset.id);
+    if(g.direct){location.href='workbench.html';return}
+    parent.closest('.nav-group').classList.toggle('open');}
+});
+function setNavActive(el){document.querySelectorAll('.nav-child').forEach(n=>n.classList.remove('active'));el&&el.classList.add('active')}
+$('tbSearch').onkeydown=e=>{if(e.key==='Enter'){goList();$('fName').value=e.target.value.trim();renderList();toast('已按班次名称检索')}};
+
+/* ============ 班次数据 ============ */
+let CLASSES=[
+ {id:'B2503',name:'2503期处级干部进修班',cat:'党校班',target:'处级干部',host:'办公厅',dept:'教务管理办',days:20,start:'2026-09-01',end:'2026-09-30',stu:45,prog:62,status:'在办'},
+ {id:'B2505',name:'2505期青年干部培训班',cat:'政能班',target:'青年干部',host:'干部司',dept:'培训部',days:30,start:'2026-09-08',end:'2026-10-20',stu:48,prog:40,status:'在办'},
+ {id:'B2506',name:'2506期驻外使节任职培训班',cat:'任职培训班',target:'驻外使节',host:'干部司',dept:'教务管理办',days:15,start:'2026-10-12',end:'2026-10-30',stu:32,prog:0,status:'筹备'},
+ {id:'B2498',name:'2498期专题研讨班',cat:'专题研讨班',target:'司局级干部',host:'办公厅',dept:'科研部',days:14,start:'2026-08-01',end:'2026-08-20',stu:40,prog:100,status:'待结班'},
+ {id:'B2490',name:'2490期干部政能提升班',cat:'政能班',target:'处级干部',host:'机关党委',dept:'培训部',days:20,start:'2026-06-10',end:'2026-07-05',stu:50,prog:100,status:'已结业'},
+ {id:'B2485',name:'2485期外事干部英语强化班',cat:'专题研讨班',target:'青年干部',host:'干部司',dept:'教务管理办',days:25,start:'2026-05-06',end:'2026-06-10',stu:36,prog:100,status:'已结业'}
+];
+let curClass='B2503';
+function renderList(){
+  const n=$('fName').value.trim(),cat=$('fCat').value,host=$('fHost').value,st=$('fStatus').value,d=$('fDate').value;
+  const list=CLASSES.filter(c=>(!n||c.name.includes(n))&&(!cat||c.cat===cat)&&(!host||c.host===host)&&(!st||c.status===st)&&(!d||c.start>=d));
+  $('listBody').innerHTML=list.map(c=>`<tr>
+    <td class="c-name" onclick="openDetail('${c.id}')">${c.name}</td>
+    <td>${c.cat}</td><td>${c.target}</td><td>${c.host} / ${c.dept}</td><td>${c.days}天</td>
+    <td>${c.start} 至 ${c.end}</td><td>${c.stu}</td><td>${c.prog}%</td>
+    <td><span class="tag ${ST_CLS[c.status]}">${c.status}</span></td>
+    <td><button class="btn-text" style="margin-right:8px" onclick="openDetail('${c.id}')">详情</button>
+        <button class="btn-text" style="margin-right:8px" onclick="openDetail('${c.id}','stu')">考生</button>
+        <button class="btn-text" style="margin-right:8px" onclick="location.href='training-schedule.html?class=${c.id}'">排课</button>
+        <button class="btn-text" onclick="openDetail('${c.id}','budget')">预算</button></td>
+  </tr>`).join('')||'<tr><td colspan="10" style="text-align:center;color:var(--text-3);padding:32px">无匹配班次</td></tr>';
+  $('pgTotal').textContent='共 '+list.length+' 条';
+}
+function goList(){$('page-list').classList.remove('hidden');$('page-detail').classList.add('hidden')}
+
+/* ============ 班次详情 Tab（4.3-P02~P15） ============ */
+const TABS=[['info','基本信息'],['stu','培训考生'],['sched','班级课表'],['grade','课程成绩'],['exam','考务管理'],['eval','教学评估'],['budget','预算管理'],['attend','考勤管理'],['stay','住宿安排'],['cert','电子证书'],['report','结班报告'],['track','训后跟踪'],['cycle','学员全周期']];
+let curTab='info';
+function openDetail(id,tab){
+  curClass=id;const c=CLASSES.find(x=>x.id===id);if(!c)return;
+  $('page-list').classList.add('hidden');$('page-detail').classList.remove('hidden');
+  $('dtName').innerHTML=c.name+' <span class="tag '+ST_CLS[c.status]+'">'+c.status+'</span>';
+  $('dtMeta').textContent=c.cat+' · '+c.target+' · 主办：'+c.host+' / 承办：'+c.dept+' · '+c.start+' 至 '+c.end+'（'+c.days+'天） · 学员 '+c.stu+' 人 · 班次管理员：张三';
+  $('dtTabs').innerHTML=TABS.map(t=>'<div class="tab" data-t="'+t[0]+'">'+t[1]+'</div>').join('');
+  $('dtTabs').querySelectorAll('.tab').forEach(el=>el.onclick=()=>switchTab(el.dataset.t));
+  switchTab(tab||'info');
+}
+function switchTab(t){
+  curTab=t;
+  $('dtTabs').querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.dataset.t===t));
+  const R={info:tabInfo,stu:tabStu,sched:tabSched,grade:tabGrade,exam:tabExam,eval:tabEval,budget:tabBudget,attend:tabAttend,stay:tabStay,cert:tabCert,report:tabReport,track:tabTrack,cycle:tabCycle};
+  $('dtBody').innerHTML=R[t]();
+}
+function tabInfo(){const c=CLASSES.find(x=>x.id===curClass);return `
+ <div class="t-ops"><b style="font-size:16px">基本信息</b><span class="right">创建人默认为班次管理员，可增设其他管理员</span></div>
+ <div class="wz-sum">班次编号：${c.id} ｜ 培训类别：${c.cat} ｜ 培训对象：${c.target}<br>
+  主办单位：${c.host} ｜ 承办部门：${c.dept} ｜ 培训时长：${c.days}天（${c.start} 至 ${c.end}）<br>
+  对应课程：习近平外交思想概论(16) / 宏观经济形势分析(6) / 党性修养与理想信念教育(6) ｜ 课时总量：28<br>
+  学员数：${c.stu} ｜ 分班管控：开启 ｜ 分组研讨：3个小组 ｜ 培训进度：${c.prog}%</div>
+ <p class="mini-note">可按后续请示补充课程大纲、授课教师信息、教学安排、预算表等完善培训信息（V3.2 四-1）。</p>`}
+function tabStu(){return `
+ <div class="t-ops">
+  <button class="btn btn-primary" onclick="toast('单个新增考生（原型占位）')">＋ 单个新增</button>
+  <button class="btn btn-ghost" onclick="toast('批量导入：职级/部门变化自动更新基础信息（原型占位）')">批量导入</button>
+  <button class="btn btn-ghost" onclick="toast('导出名册（原型占位）')">导出名册</button>
+  <button class="btn btn-ghost" onclick="toast('按职级/部门自动分组或手工拖拽分组（原型占位）')">分班/分组</button>
+  <button class="btn btn-ghost" onclick="toast('批量上传照片→质检→人脸底库（PRD 6.6）')">🖼 照片采集</button>
+  <span class="right">共 45 人 · 照片已采集 43 · 待采集 2</span></div>
+ <table class="data-table"><thead><tr><th>姓名</th><th>人员类型</th><th>部门</th><th>职级</th><th>分组</th><th>照片状态</th><th>状态</th><th>操作</th></tr></thead><tbody>
+  <tr><td>王××</td><td>部机关</td><td>西欧司</td><td>副处长</td><td>第1组</td><td><span class="tag tag-green">已采集</span></td><td><span class="tag tag-blue">在训</span></td><td><button class="btn-text" onclick="toast('学员详情（原型占位）')">详情</button></td></tr>
+  <tr><td>李××</td><td>驻外使领馆干部</td><td>驻某使馆</td><td>二等秘书</td><td>第1组</td><td><span class="tag tag-green">已采集</span></td><td><span class="tag tag-blue">在训</span></td><td><button class="btn-text">详情</button></td></tr>
+  <tr><td>张××</td><td>部属单位</td><td>外交学院</td><td>正处级</td><td>第2组</td><td><span class="tag tag-orange">待采集</span></td><td><span class="tag tag-blue">在训</span></td><td><button class="btn-text" onclick="toast('补采照片（原型占位）')">补采</button></td></tr>
+  <tr><td>赵××</td><td>党政军企外事干部</td><td>某省外办</td><td>副处长</td><td>第3组</td><td><span class="tag tag-red">不合格</span></td><td><span class="tag tag-orange">请假</span></td><td><button class="btn-text" onclick="toast('重新采集照片（原型占位）')">重采</button></td></tr>
+ </tbody></table>
+ <p class="mini-note">导入时若学员职级/部门变化，按数据自动更新机制覆盖基础信息（受权限控制）；照片质检不合格进入补采流程。</p>`}
+function tabSched(){return `
+ <div class="t-ops"><b style="font-size:16px">班级课表（审批通过后自动汇总生成）</b>
+  <button class="btn btn-primary" style="margin-left:auto" onclick="location.href='training-schedule.html?class='+curClass">🧲 进入拖拽排课</button></div>
+ <table class="data-table"><thead><tr><th>申请单号</th><th>课程（课时）</th><th>上课时间</th><th>教师</th><th>教室</th><th>考生分组</th><th>状态</th><th>操作</th></tr></thead><tbody>
+  <tr><td>PK-2503-012</td><td>习近平外交思想概论 1/16</td><td>09-21（一）08:30</td><td>王教授</td><td>教室301</td><td>第1/2组</td><td><span class="tag tag-green">已排课</span></td><td><button class="btn-text" onclick="toast('调课：重新发起申请，旧单作废')">调课</button><button class="btn-text danger" onclick="toast('停课：释放锁定资源（二次确认）')">停课</button></td></tr>
+  <tr><td>PK-2503-015</td><td>宏观经济形势分析 1/6（合班）</td><td>09-23（三）14:00</td><td>李教授</td><td>报告厅</td><td>2503全部+2505全部</td><td><span class="tag tag-blue">审核中（预锁定）</span></td><td><button class="btn-text" onclick="toast('撤回申请，释放全部预锁定资源')">撤回</button></td></tr>
+  <tr><td>PK-2503-016</td><td>党性修养与理想信念教育 1/6</td><td>09-25（五）10:15</td><td>张教授</td><td>研讨室201</td><td>第3组</td><td><span class="tag tag-red">审批驳回</span></td><td><button class="btn-text" onclick="toast('修改排课信息重新提交（再次预锁资源）')">修改重提</button><button class="btn-text danger" onclick="toast('放弃排课，单据作废')">作废</button></td></tr>
+ </tbody></table>
+ <p class="mini-note">状态机：审核中（提交即预锁定教师+教室）→ 已排课（正式锁定，同步班级/教师/教室三张课表）；驳回/撤回/作废自动释放资源（V3.2 审批管理状态流转）。</p>`}
+function tabGrade(){return `
+ <div class="t-ops">
+  <button class="btn btn-primary" onclick="toast('学员成绩导入：模板+校验预览（原型占位）')">导入学员成绩</button>
+  <button class="btn btn-ghost" onclick="toast('教员评价分数导入（原型占位）')">导入教员评价分</button>
+  <button class="btn btn-ghost" onclick="toast('导出成绩单（原型占位）')">导出</button>
+  <span class="right">高亮规则：≥90 标绿 · ≤60 标红（阈值可配置）</span></div>
+ <table class="data-table"><thead><tr><th>姓名</th><th>部门</th><th>课程</th><th>成绩</th><th>教员评价</th><th>排名</th></tr></thead><tbody>
+  <tr><td>王××</td><td>西欧司</td><td>习近平外交思想概论</td><td class="score-high">95</td><td class="score-high">92</td><td>1/45</td></tr>
+  <tr><td>李××</td><td>驻某使馆</td><td>习近平外交思想概论</td><td class="score-high">91</td><td>88</td><td>3/45</td></tr>
+  <tr><td>陈××</td><td>亚洲司</td><td>习近平外交思想概论</td><td>86</td><td>84</td><td>8/45</td></tr>
+  <tr><td>刘××</td><td>某省外办</td><td>习近平外交思想概论</td><td>72</td><td>75</td><td>30/45</td></tr>
+  <tr><td>孙××</td><td>领事司</td><td>习近平外交思想概论</td><td class="score-low">56</td><td class="score-low">58</td><td>45/45</td></tr>
+ </tbody></table>`}
+function tabExam(){return `
+ <div class="t-ops"><b style="font-size:16px">考务管理（支撑线下考试）</b>
+  <button class="btn btn-primary" style="margin-left:auto" onclick="toast('按知识点/难度抽题组卷（题库 4.4-P05，原型占位）')">组卷</button>
+  <button class="btn btn-ghost" onclick="toast('布置作业（原型占位）')">布置作业</button></div>
+ <table class="data-table"><thead><tr><th>考核名称</th><th>关联课程</th><th>形式</th><th>时间</th><th>地点/考点</th><th>参考人数</th><th>状态</th></tr></thead><tbody>
+  <tr><td>概论课结业考核</td><td>习近平外交思想概论</td><td>线下闭卷</td><td>09-28 09:00</td><td>教室301</td><td>45</td><td><span class="tag tag-orange">待举行</span></td></tr>
+  <tr><td>第1次随堂作业</td><td>宏观经济形势分析</td><td>作业</td><td>09-20 已收</td><td>—</td><td>43/45</td><td><span class="tag tag-green">已批改</span></td></tr>
+ </tbody></table>`}
+function tabEval(){return `
+ <div class="t-ops">
+  <button class="btn btn-primary" onclick="toast('导入第三方评估问卷数据（原型占位）')">导入评估数据</button>
+  <button class="btn btn-ghost" onclick="toast('纸质评教结果模板导入（原型占位）')">纸质评教录入</button>
+  <button class="btn btn-ghost" onclick="toast('生成评估报告（原型占位）')">生成评估报告</button>
+  <span class="right">支持组织部门领导督导 / 教务巡课 / 教师评学 / 学员综合鉴定多方评价</span></div>
+ <div class="stat-cards" style="grid-template-columns:repeat(4,1fr)">
+  <div class="stat"><div class="n green">92.4</div><div class="l">课程满意度</div></div>
+  <div class="stat"><div class="n">4.7</div><div class="l">教师均分（5分制）</div></div>
+  <div class="stat"><div class="n orange">2</div><div class="l">异常评分（偏离均值）</div></div>
+  <div class="stat"><div class="n green">+18%</div><div class="l">能力提升指数</div></div></div>
+ <div class="bar-row"><span class="nm">概论课 · 王教授</span><div class="bar"><i style="width:95%"></i></div><span class="sc score-high">95.2</span></div>
+ <div class="bar-row"><span class="nm">宏观经济 · 李教授</span><div class="bar mid"><i style="width:88%"></i></div><span class="sc">88.4</span></div>
+ <div class="bar-row"><span class="nm">党性教育 · 张教授</span><div class="bar low"><i style="width:58%"></i></div><span class="sc score-low">58.7</span></div>
+ <p class="mini-note">系统自动识别异常值（偏离均值超阈值）、极端高分/低分并醒目标记，阈值与颜色可配置；训后转化跟踪评估形成“培训-实践-反馈-课程优化”闭环。</p>`}
+let BUDGET=[{k:'师资费',v:52000,std:50000},{k:'住宿费',v:36000,std:40000},{k:'伙食费',v:18000,std:20000},{k:'场地费',v:8000,std:10000},{k:'资料费',v:4000,std:5000},{k:'交通费',v:6000,std:6000}];
+function tabBudget(){
+  const over=BUDGET.filter(b=>b.v>b.std),total=BUDGET.reduce((a,b)=>a+b.v,0),cap=130000;
+  return `
+ <div class="t-ops"><b style="font-size:16px">预算管理（规则引擎实时校验）</b>
+  <span class="right">适用标准：《培训经费管理办法》规则库 FY-001~FY-006 · 总额上限 ¥${cap.toLocaleString()}</span></div>
+ ${over.length?'<div class="alert alert-red">⛔ 合规校验不通过：<b>'+over.map(b=>b.k).join('、')+'</b> 超标（禁止提交类），请修改明细至合规，或走特批流程（一级审批）。</div>'
+   :'<div class="alert alert-green">✅ 合规校验通过，可提交审批（≤5万二级审批；>5万追加一级审批）。</div>'}
+ <table class="data-table"><thead><tr><th>开支科目</th><th>预算金额(¥)</th><th>标准值(¥)</th><th>差额(¥)</th><th>校验状态</th><th>操作</th></tr></thead><tbody>
+ ${BUDGET.map((b,i)=>`<tr><td>${b.k}</td><td class="${b.v>b.std?'money-over':''}">${b.v.toLocaleString()}</td><td>${b.std.toLocaleString()}</td>
+  <td class="${b.v>b.std?'money-over':''}">${b.v>b.std?'+':''}${(b.v-b.std).toLocaleString()}</td>
+  <td>${b.v>b.std?'<span class="tag tag-red">超标</span>':'<span class="tag tag-green">合规</span>'}</td>
+  <td>${b.v>b.std?`<button class="btn-text" onclick="fixBudget(${i})">调整至合规</button>`:''}</td></tr>`).join('')}
+ <tr><td><b>合计</b></td><td class="${total>cap?'money-over':''}"><b>${total.toLocaleString()}</b></td><td>${cap.toLocaleString()}</td><td>${(total-cap).toLocaleString()}</td><td colspan="2"></td></tr>
+ </tbody></table>
+ <div class="t-ops" style="margin-top:14px">
+  <button class="btn btn-ghost" onclick="toast('草稿已保存')">保存草稿</button>
+  <button class="btn btn-ghost" onclick="toast('上传票据/合同/凭证/签收单，与班次绑定关联（原型占位）')">上传票据凭证</button>
+  <button class="btn btn-primary" ${over.length||total>cap?'disabled':''} onclick="toast('已提交审批，按金额分级路由（≤5万二级 / >5万追加一级）')">提交审批</button>
+  <span class="right">审批通过后预算锁定为报销控制基线；累计执行超预算触发预警冻结</span></div>`}
+function fixBudget(i){BUDGET[i].v=BUDGET[i].std-1000;$('dtBody').innerHTML=tabBudget();toast(BUDGET[i].k+'已调整至合规')}
+function tabAttend(){return `
+ <div class="t-ops"><b style="font-size:16px">考勤管理（人脸考勤设备自动上传）</b>
+  <button class="btn btn-ghost" style="margin-left:auto" onclick="toast('导出考勤表（原型占位）')">导出考勤表</button>
+  <button class="btn btn-ghost" onclick="toast('批量补签需填写原因并留痕（原型占位）')">批量补签</button>
+  <button class="btn btn-ghost" onclick="toast('请假登记（原型占位）')">请假登记</button></div>
+ <div class="stat-cards">
+  <div class="stat"><div class="n">45</div><div class="l">应到</div></div><div class="stat"><div class="n green">43</div><div class="l">实到</div></div>
+  <div class="stat"><div class="n orange">1</div><div class="l">请假</div></div><div class="stat"><div class="n red">1</div><div class="l">缺勤</div></div>
+  <div class="stat"><div class="n">95.6%</div><div class="l">出勤率</div></div></div>
+ <table class="data-table"><thead><tr><th>姓名</th><th>部门</th><th>考勤状态</th><th>签到时间</th><th>设备号</th><th>抓拍图</th><th>操作</th></tr></thead><tbody>
+  <tr><td>王××</td><td>西欧司</td><td><span class="tag tag-green">已到（刷脸开门）</span></td><td>08:26:14</td><td>FACE-301</td><td><button class="btn-text" onclick="toast('抓拍图放大查看，用于考勤争议复核（原型占位）')">查看</button></td><td>—</td></tr>
+  <tr><td>李××</td><td>驻某使馆</td><td><span class="tag tag-green">已到（刷脸开门）</span></td><td>08:27:02</td><td>FACE-301</td><td><button class="btn-text">查看</button></td><td>—</td></tr>
+  <tr><td>赵××</td><td>某省外办</td><td><span class="tag tag-orange">请假</span></td><td>—</td><td>—</td><td>—</td><td><button class="btn-text" onclick="toast('请假单已登记（审批留痕）')">请假单</button></td></tr>
+  <tr><td>孙××</td><td>领事司</td><td><span class="tag tag-red">缺勤</span></td><td>—</td><td>—</td><td>—</td><td><button class="btn-text" onclick="toast('补签需填写原因并留痕，纳入操作日志')">补签</button></td></tr>
+ </tbody></table>
+ <p class="mini-note">刷脸识别成功→门禁自动开门+生成考勤记录；异常由组织员核实后补签/登记请假；结果自动纳入学时核算与结班报告（PRD 6.6）。</p>`}
+function tabStay(){return `
+ <div class="t-ops"><b style="font-size:16px">住宿安排（住宿类班次）</b>
+  <button class="btn btn-primary" style="margin-left:auto" onclick="toast('新增住宿安排（原型占位）')">＋ 安排住宿</button>
+  <button class="btn btn-ghost" onclick="toast('导出住宿名单（原型占位）')">导出</button></div>
+ <table class="data-table"><thead><tr><th>姓名</th><th>部门</th><th>房间号</th><th>入住日期</th><th>住宿天数</th><th>状态</th></tr></thead><tbody>
+  <tr><td>王××</td><td>西欧司</td><td>512（单人间）</td><td>08-31</td><td>20</td><td><span class="tag tag-blue">在住</span></td></tr>
+  <tr><td>李××</td><td>驻某使馆</td><td>514（标间）</td><td>08-31</td><td>20</td><td><span class="tag tag-blue">在住</span></td></tr>
+  <tr><td>陈××</td><td>亚洲司</td><td>514（标间）</td><td>08-31</td><td>20</td><td><span class="tag tag-blue">在住</span></td></tr>
+ </tbody></table>`}
+function tabCert(){return `
+ <div class="t-ops"><b style="font-size:16px">电子证书（带电子签章 PDF）</b>
+  <select class="sel" style="margin-left:auto"><option>证书模板：干部培训结业证书 V2</option></select>
+  <label style="font-size:13px;display:flex;align-items:center;gap:6px"><input type="checkbox" checked>展示学员照片</label>
+  <button class="btn btn-primary" onclick="toast('结课考核完成后批量生成（异步任务+完成通知）')">批量生成</button></div>
+ <table class="data-table"><thead><tr><th>学员</th><th>证书编号</th><th>结业课程</th><th>生成时间</th><th>状态</th><th>操作</th></tr></thead><tbody>
+  <tr><td>王××</td><td>ZS-2503-001</td><td>习近平外交思想概论</td><td>09-29</td><td><span class="tag tag-green">已生成</span></td><td><button class="btn-text" onclick="toast('下载PDF（原型占位）')">下载</button></td></tr>
+  <tr><td>李××</td><td>ZS-2503-002</td><td>习近平外交思想概论</td><td>09-29</td><td><span class="tag tag-green">已生成</span></td><td><button class="btn-text">下载</button></td></tr>
+  <tr><td>孙××</td><td>—</td><td>习近平外交思想概论</td><td>—</td><td><span class="tag tag-orange">考核未通过</span></td><td>—</td></tr>
+ </tbody></table>`}
+function tabReport(){return `
+ <div class="t-ops"><b style="font-size:16px">结班报告（自动生成标准化 PDF）</b>
+  <button class="btn btn-primary" style="margin-left:auto" onclick="toast('异步生成中…完成后消息通知（原型占位）')">生成结班报告</button>
+  <button class="btn btn-ghost" onclick="toast('导出 PDF（原型占位）')">导出 PDF</button></div>
+ <table class="data-table"><thead><tr><th>报告章节</th><th>数据来源</th><th>状态</th></tr></thead><tbody>
+  <tr><td>封面 / 目录</td><td>班次基本信息</td><td><span class="tag tag-green">就绪</span></td></tr>
+  <tr><td>培训小结</td><td>教务数据汇总</td><td><span class="tag tag-green">就绪</span></td></tr>
+  <tr><td>课程安排</td><td>班级课表（已排课课时）</td><td><span class="tag tag-green">就绪</span></td></tr>
+  <tr><td>学员名单（按礼宾顺序自动排列）</td><td>培训考生 + 职级</td><td><span class="tag tag-green">就绪</span></td></tr>
+  <tr><td>综合教学评估 / 教员评价</td><td>教学评估模块</td><td><span class="tag tag-orange">2项评估未提交</span></td></tr>
+ </tbody></table>
+ <p class="mini-note">无需人工整理；模板可自定义；结班归档后支持导出加密档案包对接独立档案系统（PRD 6.7）。</p>`}
+function tabTrack(){return `
+ <div class="t-ops"><b style="font-size:16px">训后跟踪（成效数据归集）</b>
+  <button class="btn btn-primary" style="margin-left:auto" onclick="toast('新增回访记录（原型占位）')">＋ 新增回访</button></div>
+ <table class="data-table"><thead><tr><th>回访日期</th><th>对象</th><th>方式</th><th>反馈摘要</th><th>状态</th></tr></thead><tbody>
+  <tr><td>2026-09-15</td><td>2498班学员（3人）</td><td>电话回访</td><td>培训成果已应用于本单位外事工作实践</td><td><span class="tag tag-green">已完成</span></td></tr>
+  <tr><td>2026-09-18</td><td>某省外办（派出单位）</td><td>函询</td><td>学员岗位实践表现良好，建议增加案例教学比重</td><td><span class="tag tag-green">已完成</span></td></tr>
+  <tr><td>2026-09-30</td><td>2503班全体学员</td><td>问卷（计划）</td><td>—</td><td><span class="tag tag-orange">待执行</span></td></tr>
+ </tbody></table>
+ <p class="mini-note">回访与派出单位岗位实践反馈回流至课程优化与师资质量档案，形成培训-实践-反馈-课程优化闭环。</p>`}
+function tabCycle(){return `
+ <div class="t-ops"><b style="font-size:16px">学员全周期</b><span class="right">学籍 · 请假 · 评优 · 结业审核 · 档案归集</span></div>
+ <div class="steps" style="margin:8px 0 20px">
+  <div class="step done" data-n="1">报名审核</div><div class="step done" data-n="2">学籍登记</div>
+  <div class="step done" data-n="3">在训管理</div><div class="step cur" data-n="4">结业审核</div><div class="step" data-n="5">档案归集</div></div>
+ <table class="data-table"><thead><tr><th>姓名</th><th>学籍状态</th><th>请假记录</th><th>学时/学分</th><th>评优</th><th>结业审核</th><th>档案</th></tr></thead><tbody>
+  <tr><td>王××</td><td><span class="tag tag-green">在籍</span></td><td>0 次</td><td>56/4</td><td><span class="tag tag-orange">优秀学员候选</span></td><td><span class="tag tag-blue">审核中</span></td><td><button class="btn-text" onclick="toast('参训档案（4.7-P03）')">查看</button></td></tr>
+  <tr><td>赵××</td><td><span class="tag tag-green">在籍</span></td><td>2 次（已审批）</td><td>48/3.5</td><td>—</td><td><span class="tag tag-orange">待补学时</span></td><td><button class="btn-text">查看</button></td></tr>
+  <tr><td>孙××</td><td><span class="tag tag-red">延期结业</span></td><td>1 次</td><td>40/3</td><td>—</td><td><span class="tag tag-red">考核未通过</span></td><td><button class="btn-text">查看</button></td></tr>
+ </tbody></table>`}
+
+/* ============ 新建班次向导 ============ */
+const WZ_COURSES=[['习近平外交思想概论',16],['新时代中国特色社会主义思想概论',12],['宏观经济形势分析',6],['党性修养与理想信念教育',6],['国际谈判实务与模拟演练',8],['外交礼仪与礼宾实务',4]];
+let wzStep=1;
+function openWizard(){wzStep=1;wzRender();$('wzCourses').innerHTML=WZ_COURSES.map((c,i)=>`<label class="wz-course"><input type="checkbox" value="${i}" onchange="wzSum()"> ${c[0]} <span class="hrs">${c[1]} 课时</span></label>`).join('');wzSum();$('wzModal').classList.remove('hidden')}
+function wzRender(){
+  for(let i=1;i<=4;i++){$('wzS'+i).classList.toggle('hidden',i!==wzStep)}
+  document.querySelectorAll('#wzSteps .step').forEach((el,i)=>{el.classList.toggle('cur',i===wzStep-1);el.classList.toggle('done',i<wzStep-1)});
+  $('wzPrev').style.visibility=wzStep===1?'hidden':'visible';
+  $('wzNext').textContent=wzStep===4?'提交':'下一步';
+}
+function wzSum(){
+  const cks=[...document.querySelectorAll('#wzCourses input:checked')];
+  $('wzCnt').textContent=cks.length;
+  $('wzHours').textContent=cks.reduce((a,x)=>a+WZ_COURSES[+x.value][1],0);
+}
+function wzGo(d){
+  if(d>0){
+    if(wzStep===1){
+      if(!$('wName').value.trim()){toast('班次名称不能为空');return}
+      if($('wEnd').value<$('wStart').value){toast('结束日期不得早于开始日期');return}}
+    if(wzStep===2&&!document.querySelectorAll('#wzCourses input:checked').length){toast('至少选择1门课程');return}
+    if(wzStep===3){
+      const cs=[...document.querySelectorAll('#wzCourses input:checked')].map(x=>WZ_COURSES[+x.value]);
+      $('wzSum').innerHTML=`班次名称：<b>${$('wName').value.trim()}</b> ｜ 类别：${$('wCat').value} ｜ 对象：${$('wTarget').value||'—'}<br>
+       主办：${$('wHost').value} ｜ 承办：${$('wDept').value} ｜ 起止：${$('wStart').value} 至 ${$('wEnd').value}<br>
+       课程组合：${cs.map(c=>c[0]+'('+c[1]+')').join(' / ')} ｜ 课时总量：<b>${cs.reduce((a,c)=>a+c[1],0)}</b><br>
+       学员：${$('wStuNum').value} 人 ｜ 分组研讨：${$('wGroups').value}`}}
+  if(d>0&&wzStep===4){
+    const cs=[...document.querySelectorAll('#wzCourses input:checked')].map(x=>WZ_COURSES[+x.value]);
+    CLASSES.unshift({id:'B'+(2500+CLASSES.length+8),name:$('wName').value.trim(),cat:$('wCat').value,target:$('wTarget').value||'—',host:$('wHost').value,dept:$('wDept').value,
+      days:Math.round((new Date($('wEnd').value)-new Date($('wStart').value))/864e5),start:$('wStart').value,end:$('wEnd').value,stu:+$('wStuNum').value||0,prog:0,status:'筹备'});
+    $('wzModal').classList.add('hidden');renderList();toast('班次创建成功，进入「筹备」状态；课时总量 '+cs.reduce((a,c)=>a+c[1],0));return}
+  wzStep=Math.min(4,Math.max(1,wzStep+d));wzRender();
+}
+
+/* ============ 培训类别管理 (4.11-P01) ============ */
+let CATS=[
+ {id:'C01',name:'党校班',code:'DXB',parent:null,desc:'处级干部轮训班次',status:'启用',cnt:8},
+ {id:'C02',name:'政能班',code:'NGB',parent:null,desc:'公务员能力素质提升班次',status:'启用',cnt:6},
+ {id:'C03',name:'专题研讨班',code:'ZTB',parent:null,desc:'针对特定主题的小规模研讨班',status:'启用',cnt:12},
+ {id:'C0301',name:'涉外法治专题',code:'WZFZ',parent:'C03',desc:'外交法治相关专题',status:'启用',cnt:3},
+ {id:'C0302',name:'数字经济专题',code:'JJSS',parent:'C03',desc:'数字经济发展专题',status:'启用',cnt:4},
+ {id:'C04',name:'驻外干部轮训班',code:'ZWLB',parent:null,desc:'驻外使领馆干部轮训',status:'启用',cnt:5},
+ {id:'C05',name:'青年干部培训班',code:'QNB',parent:null,desc:'优秀青年干部重点培养',status:'启用',cnt:4},
+ {id:'C06',name:'国际组织人才培养班',code:'GZRW',parent:null,desc:'向国际组织输送人才培训',status:'启用',cnt:2},
+ {id:'C07',name:'领导干部进修班',code:'LGBXJ',parent:null,desc:'高阶领导干部研修',status:'停用',cnt:1}
+];
+let editCatId=null;
+
+function catTreeHtml(pid,$container){
+  const kids=CATS.filter(c=>c.parent===pid).sort((a,b)=>(a.status==='启用'?0:1)-(b.status==='启用'?0:1));
+  if(!kids.length)return '';
+  return `<div class="tn-children" style="${pid===null?'margin-left:0;border:none;padding-left:0':''}`+kids.map(c=>{
+    const hasKids=CATS.some(k=>k.parent===c.id);
+    return `<div class="tree-node">
+     <div class="tn-row ${curView==='base-category'&&$container===c.id?'active':''}" onclick="$container===c.id?($container=null):($container=c.id);showCategory()">
+       <span class="tn-caret ${hasKids?'':'leaf'}">▸</span>
+       <span class="tn-ico">${hasKids?'🗂️':'📁'}</span>
+       <span class="tn-name">${c.name}</span>
+       <span class="tn-cnt">${c.cnt} 个班次</span>
+     </div>
+     ${hasKids?catTreeHtml(c.id,c.id):''}
+    </div>`}).join('')+'</div>';
+}
+let curView='base-category';
+let $treeContainer=null;
+
+function showCategory(){
+  curView='base-category';
+  $('page-list').classList.add('hidden');
+  $('page-detail').classList.add('hidden');
+  $('page-category').classList.remove('hidden');
+  $('pageTitle').textContent='培训类别管理';
+  $('crumb').textContent='首页 / 培训管理 / 培训类别管理';
+  renderCategory();
+}
+
+function renderCategory(){
+  const total=CATS.filter(c=>!c.parent).length,used=CATS.filter(c=>c.status==='启用'&&!c.parent).length;
+  const stats=`<div class="stat-cards">
+   <div class="stat"><div class="n">${total}</div><div class="l">顶级类别数</div></div>
+   <div class="stat"><div class="n g">${used}</div><div class="l">启用类别</div></div>
+   <div class="stat"><div class="n">${CATS.reduce((sum,c)=>sum+(c.cnt||0),0)}</div><div class="l">关联班次总数</div></div></div>`;
+  $('statsArea').innerHTML=stats;
+  $('treeArea').innerHTML=`<div class="tree-panel">
+     <div class="tp-head"><b>培训类别树</b><span class="btn-text" onclick="openCatModal(null)">＋ 新增顶级类别</span></div>
+     <input class="input" placeholder="🔍 搜索类别名称…" onkeydown="if(event.key==='Enter')toast('搜索类别：'+this.value.trim()+'（原型占位）')">
+     ${catTreeHtml(null,$treeContainer)}
+   </div>`;
+  renderCategoryList();
+}
+
+function renderCategoryList(){
+  const list=CATS.filter(c=>c.parent);
+  const table=`<table class="data-table"><thead><tr><th>类别名称</th><th>类别编码</th><th>上级类别</th><th>描述</th><th>关联班次</th><th>状态</th><th>操作</th></tr></thead><tbody>
+     ${list.map(c=>`<tr><td><b>${c.name}</b></td><td>${c.code}</td><td>${CATS.find(p=>p.id===c.parent)?p.name:'—'}</td><td>${c.desc||'—'}</td>
+      <td>${c.cnt||0} 个</td><td><span class="tag ${c.status==='启用'?'tag-green':'tag-gray'}">${c.status}</span></td>
+      <td><button class="btn-text" onclick="editCatId='${c.id}';openCatModal('${c.id}')">编辑</button>
+       <button class="btn-text ${c.status==='停用'?'':'danger'}" onclick="catToggle('${c.id}')">${c.status==='停用'?'启用':'停用'}</button></td></tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--text-3)">暂无二级类别</td></tr>'}
+     </tbody></table>`;
+  $('categoryListArea').innerHTML=table;
+}
+
+function openCatModal(id,pid){
+  editCatId=id||null;
+  const title=id?'编辑类别':'新增类别';
+  $('catModalTitle').textContent=title;
+  $('cfParent').innerHTML=CATS.filter(c=>!c.parent).map(c=>`<option value="${c.id}" ${(pid&&pid===c.id)?'selected':''}>${c.name}</option>`).join('');
+  if(id){
+    const c=CATS.find(x=>x.id===id);
+    $('cfName').value=c.name;$('cfCode').value=c.code;$('cfParent').value=c.parent||'';$('cfDesc').value=c.desc||'';$('cfStatus').value=c.status;
+  }else{
+    $('cfName').value='';$('cfCode').value='';$('cfParent').value='';$('cfDesc').value='';$('cfStatus').value='启用';
+  }
+  $('catModal').classList.remove('hidden');
+}
+
+function catSave(){
+  const name=$('cfName').value.trim(),code=$('cfCode').value.trim();
+  if(!name){toast('类别名称不能为空');return}
+  if(!code){toast('类别编码不能为空');return}
+  if(CATS.some(c=>c.code===code&&(editCatId!==c.id))){toast('类别编码已存在，请更换');return}
+  const obj={name,code,parent:$('cfParent').value,desc:$('cfDesc').value,status:$('cfStatus').value};
+  if(editCatId){
+    const idx=CATS.findIndex(c=>c.id===editCatId);
+    if(idx>-1)CATS[idx]={...CATS[idx],...obj};
+    toast('类别「'+name+'」已更新');
+  }else{
+    CATS.push({id:'C'+Date.now()%1000,...obj,cnt:0});
+    toast('新类别「'+name+'」已添加');
+  }
+  $('catModal').classList.add('hidden');
+  showCategory();
+}
+
+function catToggle(id){
+  const c=CATS.find(x=>x.id===id);
+  c.status=c.status==='启用'?'停用':'启用';
+  renderCategory();
+  toast('「'+c.name+'』已'+c.status);
+}
+
+/* ============ 课程分类管理 (4.11-P02) ============ */
+function showCourseCategory(){
+  curView='base-course';
+  $('page-list').classList.add('hidden');
+  $('page-detail').classList.add('hidden');
+  $('page-category').classList.remove('hidden');
+  $('pageTitle').textContent='课程分类管理';
+  $('crumb').textContent='首页 / 培训管理 / 课程分类管理';
+  renderCourseCategory();
+}
+
+function renderCourseCategory(){
+  const content=`<div class="alert">课程分类用于管理体系内课程的层级结构，支持树形分类与课程关联统计。</div>
+  <div class="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+   <div class="card"><div class="card-body">
+     <div class="sec-title">课程体系示例（树形结构）</div>
+     <div class="tree-panel">${catTreeHtml(null,null)}</div>
+     <p class="mini-note" style="margin-top:12px;font-size:12px;color:var(--text-3)">课程分类按「课程体系→子体系→课程」三级构建；每个课程体系包含多个独立课程；一个体系下课程自动汇总总课时量。</p>
+   </div></div>
+   <div class="card"><div class="card-body">
+     <div class="sec-title" style="margin-bottom:12px">快捷操作</div>
+     <div style="display:flex;flex-direction:column;gap:8px">
+       <button class="btn btn-primary" onclick="toast('新增课程体系（原型占位）')">＋ 新增课程体系</button>
+       <button class="btn btn-ghost" onclick="toast('批量导入课程分类（原型占位）")">批量导入</button>
+       <button class="btn btn-ghost" onclick="toast('导出课程分类清单（原型占位）")">导出清单</button>
+       <button class="btn btn-ghost" onclick="toast('关联课程统计（原型占位）")">关联课程统计</button>
+     </div>
+     <div class="stat-cards" style="margin-top:20px">
+       <div class="stat"><div class="n">${CATS.filter(c=>!c.parent).length}</div><div class="l">课程大类</div></div>
+       <div class="stat"><div class="n">${CATS.filter(c=>c.parent).length}</div><div class="l">课程子类</div></div>
+       <div class="stat"><div class="n">${CATS.reduce((sum,c)=>sum+(c.cnt||0),0)}</div><div class="l">关联课程数</div></div>
+     </div>
+   </div></div>
+  </div>`;
+  $('statsArea').innerHTML='';
+  $('treeArea').innerHTML='';
+  $('categoryListArea').innerHTML=content;
+}
+
+/* ============ 初始化（支持 ?page= 直达 Tab） ============ */
+renderList();
+const q=new URLSearchParams(location.search).get('page');
+if(q&&TAB_OF[q]){openDetail(curClass,TAB_OF[q]);setNavActive(document.querySelector('.nav-child[data-id="'+q+'"]'))}
+else if(q==='train-schedule'){location.replace('training-schedule.html?class='+curClass)}
+else if(q==='base-category'){showCategory();setNavActive(document.querySelector('.nav-child[data-id="base-category"]'))}
+else if(q==='base-course'){showCourseCategory();setNavActive(document.querySelector('.nav-child[data-id="base-course"]'))}
+else{setNavActive(document.querySelector('.nav-child[data-id="train-class"]'))}
+$('tbUser').onclick=()=>toast('个人信息 / 修改密码见 workbench.html 账户入口');
+</script>
+</body>
+</html>
