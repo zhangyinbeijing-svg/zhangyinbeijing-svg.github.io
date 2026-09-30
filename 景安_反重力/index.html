@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ES Mail 本地邮件归档 - 邮件生命周期管理方案选型与原型中心</title>
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <!-- 顶部全局导航栏 -->
+  <header class="home-header">
+    <a href="index.html" class="brand-wrapper">
+      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#3b82f6" />
+        <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      <div class="brand-text">
+        <span class="brand-title">ES Mail 本地邮件归档</span>
+        <span class="brand-badge">方案原型门户</span>
+      </div>
+    </a>
+
+    <nav class="header-nav">
+      <a href="#solutions" class="nav-link"><i class="fa-solid fa-shapes"></i> 方案概览</a>
+      <a href="#comparison" class="nav-link"><i class="fa-solid fa-table-columns"></i> 选型对比矩阵</a>
+      <a href="#architecture" class="nav-link"><i class="fa-solid fa-server"></i> 底层清理架构</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="多策略方案/index.html" class="btn-header-ghost" target="_blank">
+        <i class="fa-solid fa-layer-group" style="color: #818cf8;"></i> 多策略原型
+      </a>
+      <a href="单一策略方案/index.html" class="btn-header-ghost" target="_blank">
+        <i class="fa-solid fa-bolt" style="color: #34d399;"></i> 单一策略原型
+      </a>
+    </div>
+  </header>
+
+  <!-- 主体内容 -->
+  <main class="home-container">
+    <!-- Hero 区域 -->
+    <section class="hero-section">
+      <div class="hero-pill">
+        <i class="fa-solid fa-shield-halved"></i> 数据合规审计 · 硬件存储释放 · ES 性能调优
+      </div>
+      <h1 class="hero-title">
+        邮件生命周期管理 <span class="gradient-text">两套设计方案对比与体验</span>
+      </h1>
+      <p class="hero-subtitle">
+        在企业邮件长期归档场景中，随着数据体量急剧攀升，硬件存储成本与 ES 全文检索性能面临严峻挑战。我们设计并实现了<strong>【多策略精细化方案】</strong>与<strong>【单一策略极简方案】</strong>两套交互原型与架构标准，供业务方和技术评审选择最适方案。
+      </p>
+
+      <!-- 核心指标特性横栏 -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-icon blue"><i class="fa-solid fa-trash-can-arrow-up"></i></div>
+          <div class="stat-info">
+            <div class="stat-value">双向物理销毁</div>
+            <div class="stat-label">文件本体 + ES 索引</div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon purple"><i class="fa-solid fa-shield-cat"></i></div>
+          <div class="stat-info">
+            <div class="stat-value">交集防误删保障</div>
+            <div class="stat-label">最长保留原则多方判定</div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon green"><i class="fa-solid fa-clipboard-check"></i></div>
+          <div class="stat-info">
+            <div class="stat-value">全流程审计闭环</div>
+            <div class="stat-label">批次追踪与抽样清单</div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon amber"><i class="fa-solid fa-gauge-high"></i></div>
+          <div class="stat-info">
+            <div class="stat-value">防雪崩分批限速</div>
+            <div class="stat-label">夜间调度 & 峰值保护</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 方案概览卡片区域 -->
+    <section id="solutions">
+      <div class="section-heading">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-cubes-stacked" style="color: #60a5fa;"></i> 方案选型总览</h2>
+          <p class="section-desc">根据企业组织架构复杂度、审计法规要求与运维习惯选择最佳实践</p>
+        </div>
+      </div>
+
+      <div class="solutions-grid">
+        <!-- 方案 1: 多策略精细化管控方案 -->
+        <div class="solution-card card-multi">
+          <div class="card-top">
+            <div class="card-icon-title">
+              <div class="scheme-icon-box">
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <div>
+                <h3 class="scheme-name">多策略精细化管控方案</h3>
+                <span class="scheme-code">Multi-Strategy Scheme · 按组织架构定制</span>
+              </div>
+            </div>
+            <span class="tag-badge">适用复杂合规组织</span>
+          </div>
+
+          <p class="card-desc">
+            支持管理员创建多条互相独立的生命周期策略，按“全员、指定部门、指定账户、指定域名”灵活划分适用范围，并配备健全的多方命中判定机制。
+          </p>
+
+          <ul class="card-feature-list">
+            <li class="feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><strong>多维度适用范围：</strong>可为高管/财务定制保留 7 年，常规部门保留 3 年，临时或测试域保留 180 天。</div>
+            </li>
+            <li class="feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><strong>核心冲突判定机制：</strong>独创“最长保留原则”；当一封邮件的发件人、收件人、抄送人命中不同策略时，以最长保留期限为准，全部方超期后才销毁。</div>
+            </li>
+            <li class="feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><strong>多策略增删改查：</strong>支持策略优先排序、启停控制、即时单策略执行清理与统计看板。</div>
+            </li>
+            <li class="feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><strong>高亮悬浮 Popover 说明：</strong>在列表关键表头与操作区提供鼠标悬浮规则解释弹层，降低使用疑虑。</div>
+            </li>
+          </ul>
+
+          <div class="highlight-box">
+            <div class="hl-title"><i class="fa-solid fa-lightbulb"></i> 典型适用客户</div>
+            大型集团、银行金融机构、上市公司或各部门数据保密级别差异巨大的跨国企业。
+          </div>
+
+          <div class="card-actions">
+            <a href="多策略方案/index.html" class="btn-primary-action" target="_blank">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> 进入多策略原型体验
+            </a>
+            <a href="多策略方案/邮件生命周期管理模块设计方案.md" class="btn-secondary-action" target="_blank">
+              <i class="fa-regular fa-file-lines"></i> 查看 PRD
+            </a>
+          </div>
+        </div>
+
+        <!-- 方案 2: 单一策略极简统一方案 -->
+        <div class="solution-card card-single">
+          <div class="card-top">
+            <div class="card-icon-title">
+              <div class="scheme-icon-box">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <div>
+                <h3 class="scheme-name">单一策略极简统一方案</h3>
+                <span class="scheme-code">Single-Policy Scheme · 全局统一一目了然</span>
+              </div>
+            </div>
+            <span class="tag-badge">适用统一合规标准</span>
+          </div>
+
+          <p class="card-desc">
+            全系统仅维护一个全局唯一的系统生命周期策略，免配置策略名称、免配置适用范围、无多方判定冲突，策略看板与清理日志一体化直呈。
+          </p>
+
+          <ul class="card-feature-list">
+            <li class="feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><strong>全系统全局生效：</strong>全系统所有归档邮件遵循唯一明确的时效标准（如统一保留 3 年 0 月 0 天）。</div>
+            </li>
+            <li class="feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><strong>零冲突判定成本：</strong>所有发件人与收件人享受完全相同的时间基准，杜绝策略重叠、配置混淆与误删隐患。</div>
+            </li>
+            <li class="feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><strong>看板+日志一体化直呈：</strong>页面上方常驻系统策略卡片，下方直接呈现批次清理审计列表，操作路径极短。</div>
+            </li>
+            <li class="feature-item">
+              <i class="fa-solid fa-circle-check"></i>
+              <div><strong>支持即时执行：</strong>除每日凌晨定时调度外，支持管理员随时一键“立即执行清理”，实时查看释放成效。</div>
+            </li>
+          </ul>
+
+          <div class="highlight-box">
+            <div class="hl-title"><i class="fa-solid fa-lightbulb"></i> 典型适用客户</div>
+            追求极致操作简便、团队运维精力有限、企业内部执行全员统一合规归档制度的中小及中大型政企单位。
+          </div>
+
+          <div class="card-actions">
+            <a href="单一策略方案/index.html" class="btn-primary-action" target="_blank">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> 进入单一策略原型体验
+            </a>
+            <a href="单一策略方案/邮件生命周期管理模块设计方案.md" class="btn-secondary-action" target="_blank">
+              <i class="fa-regular fa-file-lines"></i> 查看 PRD
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 方案深度对比矩阵 -->
+    <section id="comparison" class="comparison-section">
+      <div class="section-heading" style="border-bottom: none; margin-bottom: 0;">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-table-list" style="color: #38bdf8;"></i> 方案全维度对比矩阵</h2>
+          <p class="section-desc">横向对比两套方案在功能、架构、运维及用户体验层面的核心差异</p>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th class="col-dim">对比维度</th>
+              <th class="col-multi"><i class="fa-solid fa-layer-group"></i> 方案一：多策略精细化方案</th>
+              <th class="col-single"><i class="fa-solid fa-bolt"></i> 方案二：单一策略极简方案</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="dim-title">适用企业形态</td>
+              <td>
+                <span class="badge-pill purple">集团 / 多业务线</span>
+                部门间合规要求异构，如研发/法务/高管需保留 5~10 年，普通职能保留 3 年。
+              </td>
+              <td>
+                <span class="badge-pill green">标准政企 / 统一制度</span>
+                全公司贯彻统一的数据保存与清理规章（如全员邮件一律留存 3 年后清理）。
+              </td>
+            </tr>
+            <tr>
+              <td class="dim-title">策略数量限制</td>
+              <td>
+                <span class="badge-pill blue">无限制</span>
+                支持按需新增 N 条策略，每条策略独立命名与配置。
+              </td>
+              <td>
+                <span class="badge-pill green">全局唯一 (1条)</span>
+                全系统仅有一条默认策略，无需为策略起名，杜绝维护冗余。
+              </td>
+            </tr>
+            <tr>
+              <td class="dim-title">适用范围灵活度</td>
+              <td>
+                <span class="badge-pill purple">高度灵活</span>
+                支持选择：全员、指定部门、指定账户、指定邮件域名。
+              </td>
+              <td>
+                <span class="badge-pill green">自动全员覆盖</span>
+                无需挑选范围，默认无差别作用于系统内所有归档邮件。
+              </td>
+            </tr>
+            <tr>
+              <td class="dim-title">多方冲突判定逻辑</td>
+              <td>
+                <span class="badge-pill amber">最长保留原则 (安全交集)</span>
+                当邮件各收发方对应不同期限时，仅当所有人均满足删除条件时才执行物理销毁。
+              </td>
+              <td>
+                <span class="badge-pill green">天然无冲突 (零判定成本)</span>
+                全局基准时间完全统一，不存在任何收发方策略冲突的可能性。
+              </td>
+            </tr>
+            <tr>
+              <td class="dim-title">页面架构与操作路径</td>
+              <td>
+                <strong>两级视图：</strong><br>
+                页面呈现“策略管理列表”，点击日志需切换至【生命周期日志】页面。
+              </td>
+              <td>
+                <strong>一体化直呈：</strong><br>
+                页面顶部直接展示“策略运行看板”，下方直接直呈“清理日志列表”，一页搞定。
+              </td>
+            </tr>
+            <tr>
+              <td class="dim-title">管理配置复杂度</td>
+              <td>中等（需要管理员规划策略范围，理解防误删交集规则）。</td>
+              <td>极低（仅需填入保留年/月/日及清理时间，30秒完成配置）。</td>
+            </tr>
+            <tr>
+              <td class="dim-title">底层物理销毁一致性</td>
+              <td>
+                <span class="badge-pill blue">一致</span>
+                彻底删除物理邮件本体（.eml/.msg）及 ES 索引元数据。
+              </td>
+              <td>
+                <span class="badge-pill blue">一致</span>
+                彻底删除物理邮件本体（.eml/.msg）及 ES 索引元数据。
+              </td>
+            </tr>
+            <tr>
+              <td class="dim-title">研发与测试交付成本</td>
+              <td>涉及多策略判定 SQL/ES Query 组装与冲突校验，测试边界用例较多。</td>
+              <td>执行逻辑清晰纯粹，SQL/ES 检索过滤条件统一，开发上线迅速。</td>
+            </tr>
+            <tr>
+              <td class="dim-title">选型推荐结论</td>
+              <td><strong>推荐合规要求高、存在多套保留年限要求的企业。</strong></td>
+              <td><strong>推荐管理诉求清晰、追求极简易用和低维护成本的企业。</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 底层共性清理机制说明 -->
+    <section id="architecture">
+      <div class="section-heading">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-server" style="color: #818cf8;"></i> 底层共性机制与架构保障</h2>
+          <p class="section-desc">两套方案均继承并共享 ES Mail 本地邮件归档的高可用清理引擎底座</p>
+        </div>
+      </div>
+
+      <div class="tech-architecture">
+        <div class="tech-card">
+          <div class="tech-card-header">
+            <div class="tech-icon"><i class="fa-solid fa-database"></i></div>
+            <div class="tech-title">双向物理彻底销毁</div>
+          </div>
+          <div class="tech-desc">
+            清理任务执行时，不仅从磁盘彻底物理抹除邮件本体（.eml / .msg 及其嵌套附件），同时向 Elasticsearch 集群发出批量清理指令，抹除元数据与全文倒排索引，确保释放存储并保护合规隐私。
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-card-header">
+            <div class="tech-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="tech-title">调度引擎与防雪崩限速</div>
+          </div>
+          <div class="tech-desc">
+            默认设定于业务低峰期（如每日凌晨 02:00）调度执行；采用游标分页分批检索（每批次 5,000 封），辅以 IO 缓冲降速算法，彻底避免超大规模清理导致系统 CPU 突增或磁盘 IO 阻塞。
+          </div>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-card-header">
+            <div class="tech-icon"><i class="fa-solid fa-file-shield"></i></div>
+            <div class="tech-title">审计闭环与数据安全</div>
+          </div>
+          <div class="tech-desc">
+            所有清理批次均产生全局唯一批次号（TASK-YYYYMMDD-XXXXX），详细记录扫描数、删除文件数、清除索引数与释放容量；提供前 50 条清理抽样明细可信核验，确保合规溯源有据可查。
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 全局页脚 -->
+  <footer class="home-footer">
+    <div class="footer-content">
+      <div>
+        <strong>ES Mail 本地邮件归档系统</strong> · 邮件生命周期管理原型交互中心
+      </div>
+      <div>
+        <a href="多策略方案/index.html" style="color: var(--text-secondary); text-decoration: none; margin-right: 16px;" target="_blank"><i class="fa-solid fa-layer-group"></i> 多策略方案原型</a>
+        <a href="单一策略方案/index.html" style="color: var(--text-secondary); text-decoration: none; margin-right: 16px;" target="_blank"><i class="fa-solid fa-bolt"></i> 单一策略方案原型</a>
+        <span>版本：v1.2.0-Release</span>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

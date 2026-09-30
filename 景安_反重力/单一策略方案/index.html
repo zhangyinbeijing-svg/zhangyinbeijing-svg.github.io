@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ES Mail 本地邮件归档 - 邮件生命周期管理 (单一策略方案)</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- 顶部全局导航栏 -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-logo">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#1890ff" />
+            <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="#1890ff" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <span class="system-title">ES Mail</span>
+          <span class="sub-title">本地邮件归档 (单一策略方案)</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <a href="../index.html" class="header-link" style="color: #1890ff; font-weight: 500;"><i class="fa-solid fa-house"></i> 返回方案首页</a>
+        <a href="javascript:void(0)" class="header-link"><i class="fa-regular fa-file-lines"></i> 使用流程</a>
+        <div class="user-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>您好，admin</span>
+          <i class="fa-solid fa-angle-down"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主体区域：左侧菜单 + 右侧内容 -->
+    <div class="app-main">
+      <!-- 左侧功能导航菜单 -->
+      <aside class="app-sidebar">
+        <ul class="nav-tree">
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-solid fa-table-cells-large"></i>
+              <span>工作台</span></a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-regular fa-compass"></i> <span>轻松上手管理</span></a>
+          </li>
+          <!-- 1. 企业配置（一级栏目，展开） -->
+          <li class="nav-item has-sub open">
+            <div class="nav-link sub-toggle active-parent"><i class="fa-solid fa-building"></i> <span>企业配置</span> <i class="fa-solid fa-angle-down arrow"></i></div>
+            <ul class="sub-menu show">
+              <li><a href="javascript:void(0)" class="sub-link">归档配置</a></li>
+              <!-- 生命周期子栏目 -->
+              <li><a href="javascript:void(0)" id="menu-lifecycle" class="sub-link active">生命周期</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">账户管理</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">角色管理</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">员工管理</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">收发信配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">登录配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">安全配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">存储扩展配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">集成配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">API配置</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> <span>邮件搜索</span></a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-solid fa-shield-halved"></i> <span>邮件审计</span></a>
+          </li>
+          <!-- 2. 辅助工具（一级栏目） -->
+          <li class="nav-item has-sub">
+            <div class="nav-link sub-toggle"><i class="fa-solid fa-wrench"></i> <span>辅助工具</span> <i class="fa-solid fa-angle-right arrow"></i></div>
+            <ul class="sub-menu">
+              <li><a href="javascript:void(0)" class="sub-link">归档备份</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">标签管理</a></li>
+            </ul>
+          </li>
+          <!-- 3. 日志管理（一级栏目） -->
+          <li class="nav-item has-sub open">
+            <div class="nav-link sub-toggle"><i class="fa-solid fa-clock-rotate-left"></i> <span>日志管理</span> <i class="fa-solid fa-angle-down arrow"></i></div>
+            <ul class="sub-menu show">
+              <li><a href="javascript:void(0)" class="sub-link">搜索日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">备份日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">登录日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">告警日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">归档日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">审计任务日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">审计邮件日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">同步日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">第三方邮箱日志</a></li>
+              <li><a href="javascript:void(0)" id="menu-lifecycle-log" class="sub-link">生命周期日志</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-solid fa-sliders"></i> <span>搜索管理</span></a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-solid fa-chart-column"></i> <span>数据统计</span></a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-solid fa-circle-info"></i> <span>关于系统</span></a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- 右侧业务内容区 -->
+      <main class="app-content-wrapper">
+        <!-- 标签页栏（Tabs） -->
+        <div class="tabs-header">
+          <div class="tab-item" data-tab="workbench"><span>工作台</span> <i class="fa-solid fa-xmark tab-close"></i></div>
+          <div class="tab-item" data-tab="archive-config"><span>归档配置</span> <i class="fa-solid fa-xmark tab-close"></i></div>
+          <div class="tab-item active" data-tab="lifecycle"><span>生命周期</span> <i class="fa-solid fa-xmark tab-close"></i></div>
+          <div class="tab-item" data-tab="lifecycle-log"><span>生命周期日志</span> <i class="fa-solid fa-xmark tab-close"></i></div>
+        </div>
+
+        <!-- 页面视图1：生命周期管理（系统单一策略配置 + 清理日志列表直呈） -->
+        <section id="view-lifecycle" class="view-panel active">
+          <div class="page-card">
+            <!-- 页面标题与规则说明 -->
+            <div class="page-title-row">
+              <div class="title-with-info">
+                <h2 class="page-heading">生命周期</h2>
+                <div class="policy-rule-hint-box" id="hintBox">
+                  <span class="hint-tag"><i class="fa-solid fa-circle-question"></i> 单一策略运行说明</span>
+                  <!-- 悬浮弹出的详细解释 Popover -->
+                  <div class="rule-popover-box" id="rulePopover">
+                    <div class="popover-header">
+                      <i class="fa-solid fa-circle-info info-icon"></i>
+                      <strong>全系统统一邮件生命周期规则说明</strong>
+                    </div>
+                    <div class="popover-content">
+                      <p class="rule-core-desc">
+                        本方案采用<strong>系统级单一策略</strong>：全系统所有归档邮件均遵照统一的时间策略进行到期自动删除，无需复杂的分人员、分部门配置及冲突判定。
+                      </p>
+                      <ul class="popover-rule-list">
+                        <li><strong>统一时间时效</strong>：邮件自归档入库之日起计算，满设定期限后自动进入销毁队列。</li>
+                        <li><strong>双向彻底粉碎</strong>：物理删除服务器本地邮件存储文件（.eml/.msg及附件），并同步销毁 ElasticSearch 数据库元数据与全文索引。</li>
+                        <li><strong>日志合规存证</strong>：每次清理的执行批次、清理邮件数、释放存储空间均在下方清理日志中完整呈现。</li>
+                      </ul>
+                    </div>
+                    <div class="popover-arrow"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 右侧快捷操作按钮 -->
+              <div class="page-actions-row">
+                <button class="btn-primary" id="btn-edit-policy"><i class="fa-solid fa-gear"></i> 配置策略</button>
+                <button class="btn-secondary" id="btn-manual-trigger"><i class="fa-solid fa-play"></i> 立即执行清理</button>
+              </div>
+            </div>
+
+            <!-- 系统单一策略配置概览卡片 (核心看板) -->
+            <div class="single-policy-banner">
+              <div class="banner-top-bar">
+                <div class="policy-badge-title">
+                  <span class="policy-main-badge">系统默认策略</span>
+                  <span class="policy-main-name">全系统邮件统一生命周期管理策略</span>
+                </div>
+                <div class="banner-status-tag active" id="bannerStatusTag">
+                  <span class="status-dot"></span>
+                  <span id="bannerStatusText">运行中 (定时调度)</span>
+                </div>
+              </div>
+
+              <div class="single-policy-grid">
+                <!-- 邮件保存期限 -->
+                <div class="policy-metric-col">
+                  <span class="metric-label">邮件保存期限</span>
+                  <div class="metric-value-box">
+                    <span class="retention-highlight" id="displayYears">3</span>
+                    <span class="retention-highlight-unit">年</span>
+                    <span class="retention-highlight" id="displayMonths">0</span>
+                    <span class="retention-highlight-unit">月</span>
+                    <span class="retention-highlight" id="displayDays">0</span>
+                    <span class="retention-highlight-unit">日</span>
+                  </div>
+                </div>
+
+                <!-- 执行调度频次 -->
+                <div class="policy-metric-col">
+                  <span class="metric-label">调度规则</span>
+                  <span class="metric-value-text" id="displayExecRule">每日 02:00 定时执行</span>
+                </div>
+
+                <!-- 清理覆盖对象 -->
+                <div class="policy-metric-col">
+                  <span class="metric-label">清理覆盖对象</span>
+                  <span class="metric-value-text">邮件文件本体 (.eml/.msg) + ES索引</span>
+                </div>
+
+                <!-- 上次执行时间 -->
+                <div class="policy-metric-col">
+                  <span class="metric-label">上次执行成功</span>
+                  <span class="metric-value-text" id="displayLastExecTime">2026-09-29 02:00:15</span>
+                </div>
+
+                <!-- 卡片内部快速操作 -->
+                <div class="policy-action-col">
+                  <button class="action-btn" id="btn-banner-edit" title="修改保存期限与执行规则"><i class="fa-solid fa-pen-to-square"></i> 修改设置</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 统计摘要微组件 -->
+            <div class="summary-cards-bar">
+              <div class="summary-card">
+                <div class="card-icon bg-blue"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="card-text">
+                  <span class="card-val" id="stat-policy-status">已启用</span>
+                  <span class="card-label">系统生命周期策略</span>
+                </div>
+              </div>
+              <div class="summary-card">
+                <div class="card-icon bg-indigo"><i class="fa-solid fa-calendar-day"></i></div>
+                <div class="card-text">
+                  <span class="card-val" id="stat-today-cleaned">14,208</span>
+                  <span class="card-label">今日自动清理邮件 (封)</span>
+                </div>
+              </div>
+              <div class="summary-card">
+                <div class="card-icon bg-emerald"><i class="fa-solid fa-envelope-circle-check"></i></div>
+                <div class="card-text">
+                  <span class="card-val" id="stat-cleaned-emails">124,592</span>
+                  <span class="card-label">累计自动清理邮件 (封)</span>
+                </div>
+              </div>
+              <div class="summary-card">
+                <div class="card-icon bg-cyan"><i class="fa-solid fa-database"></i></div>
+                <div class="card-text">
+                  <span class="card-val">586.4 GB</span>
+                  <span class="card-label">释放存储空间(本体+ES)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 下方直接呈现清理日志列表 (需求核心) -->
+            <div class="section-divider-row">
+              <div class="section-title">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>生命周期清理日志列表</span>
+              </div>
+              <div class="log-filter-row">
+                <div class="filter-item">
+                  <input type="text" placeholder="输入批次号 (如 TASK-2026...)" class="custom-input" style="width:200px;"
+                    id="search-log-keyword">
+                </div>
+                <div class="filter-item">
+                  <div class="date-range-picker">
+                    <input type="text" placeholder="开始时间" class="date-input" value="2026-09-01" id="log-start-date">
+                    <span class="separator">~</span>
+                    <input type="text" placeholder="结束时间" class="date-input" value="2026-09-29" id="log-end-date">
+                    <i class="fa-regular fa-calendar picker-icon"></i>
+                  </div>
+                </div>
+                <div class="filter-item">
+                  <select class="custom-select" id="search-log-status">
+                    <option value="">全部执行状态</option>
+                    <option value="成功">执行成功</option>
+                    <option value="部分完成">部分完成</option>
+                    <option value="执行中">执行中</option>
+                  </select>
+                </div>
+                <button class="btn-primary" id="btn-query-log"><i class="fa-solid fa-filter"></i> 筛选</button>
+                <button class="btn-secondary" id="btn-reset-log"><i class="fa-solid fa-arrow-rotate-left"></i> 重置</button>
+                <button class="btn-export" id="btn-export-log"><i class="fa-solid fa-file-export"></i> 导出日志</button>
+              </div>
+            </div>
+
+            <!-- 清理日志表格直呈 -->
+            <div class="table-container">
+              <table class="custom-table" id="log-table">
+                <thead>
+                  <tr>
+                    <th>执行批次ID</th>
+                    <th>执行开始时间</th>
+                    <th>执行结束时间</th>
+                    <th>扫描到期邮件</th>
+                    <th>物理本体删除</th>
+                    <th>ES索引数据清理</th>
+                    <th>释放存储空间</th>
+                    <th>执行状态</th>
+                    <th width="120" class="text-center">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="log-table-body">
+                  <!-- JS动态渲染清理日志 -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 日志表格底部分页栏 -->
+            <div class="table-pagination-row">
+              <div class="pagination-info">共 <span id="log-total-count">5</span> 条执行记录</div>
+              <div class="pagination-controls">
+                <button class="page-btn disabled"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn disabled"><i class="fa-solid fa-chevron-right"></i></button>
+                <div class="page-size-selector">
+                  <select class="custom-select">
+                    <option>10 条/页</option>
+                    <option>20 条/页</option>
+                  </select>
+                </div>
+                <span class="jump-text">跳至</span>
+                <input type="text" value="1" class="jump-input">
+                <span class="jump-text">页</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 页面视图2：独立日志视图 (左侧菜单或Tab切换时的备用视图，结构同主视图日志) -->
+        <section id="view-lifecycle-log" class="view-panel">
+          <div class="page-card">
+            <div class="page-title-row">
+              <h2 class="page-heading">生命周期日志 (审计归档)</h2>
+              <div class="log-filter-row">
+                <button class="btn-primary" id="btn-back-to-lifecycle"><i class="fa-solid fa-arrow-left"></i> 返回生命周期主页</button>
+              </div>
+            </div>
+            <p style="color:var(--text-regular); font-size:13px; margin-bottom:10px;">
+              系统记录的所有邮件生命周期清理审计日志，永久不可篡改，支持数据审计与追踪溯源。
+            </p>
+            <div class="table-container">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>执行批次ID</th>
+                    <th>执行开始时间</th>
+                    <th>执行结束时间</th>
+                    <th>扫描到期邮件</th>
+                    <th>物理本体删除</th>
+                    <th>ES索引数据清理</th>
+                    <th>释放存储空间</th>
+                    <th>执行状态</th>
+                    <th width="120" class="text-center">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="secondary-log-table-body">
+                  <!-- 动态填充 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- 弹窗：单一系统策略配置 Modal (去除了名称、适用范围、多方判定规则) -->
+    <div class="modal-overlay" id="policyModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modalTitle">系统邮件生命周期策略设置</h3>
+          <button class="modal-close-btn" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <form id="policyForm" class="custom-form">
+            <!-- 核心：保存时间（年、月、日） -->
+            <div class="form-row">
+              <label class="form-label required">
+                邮件保存时间：
+              </label>
+              <div class="form-control-wrap">
+                <div class="retention-period-row">
+                  <div class="period-input-item">
+                    <input type="number" id="form-retention-years" class="number-input" min="0" max="50" value="3">
+                    <span class="unit-text">年</span>
+                  </div>
+                  <div class="period-input-item">
+                    <input type="number" id="form-retention-months" class="number-input" min="0" max="11" value="0">
+                    <span class="unit-text">月</span>
+                  </div>
+                  <div class="period-input-item">
+                    <input type="number" id="form-retention-days" class="number-input" min="0" max="30" value="0">
+                    <span class="unit-text">日</span>
+                  </div>
+                </div>
+                <div class="form-tip-text">
+                  <i class="fa-solid fa-lightbulb"></i> 针对全系统所有邮件，超过此指定保存期限将自动由系统彻底删除。
+                </div>
+              </div>
+            </div>
+
+            <!-- 清理范围（双重执行） -->
+            <div class="form-row">
+              <label class="form-label required">执行清理对象：</label>
+              <div class="form-control-wrap">
+                <div class="checkbox-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="form-clean-body" checked disabled>
+                    <span>删除邮件本地存储文件（.eml/.msg及所有附件）</span>
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="form-clean-es" checked disabled>
+                    <span>清除ElasticSearch数据库相关信息（元数据与全文索引）</span>
+                  </label>
+                </div>
+                <span class="form-note">注：为确保数据彻底销毁与检索一致性，两项均由系统联动强制执行。</span>
+              </div>
+            </div>
+
+            <!-- 自动执行频次 -->
+            <div class="form-row">
+              <label class="form-label required">执行规则：</label>
+              <div class="form-control-wrap">
+                <div class="radio-group">
+                  <label class="radio-label">
+                    <input type="radio" name="execRule" value="auto" checked>
+                    <span>定时自动清理</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="execRule" value="manual">
+                    <span>仅手动执行</span>
+                  </label>
+                </div>
+                <div class="exec-time-row" id="execTimeRow">
+                  <span class="label-sub">每天执行时间：</span>
+                  <input type="time" class="time-input" id="form-exec-time" value="02:00">
+                  <span class="time-tip">（建议避开企业业务高峰期）</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 策略状态 -->
+            <div class="form-row">
+              <label class="form-label">策略状态：</label>
+              <div class="form-control-wrap">
+                <label class="switch-wrap">
+                  <input type="checkbox" id="form-policy-status" checked>
+                  <span class="switch-slider"></span>
+                </label>
+                <span class="status-tip-text" id="statusTipText">开启（到期邮件将在设定的调度时段自动清理）</span>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-primary" id="btn-save-policy">确认保存</button>
+          <button type="button" class="btn-cancel" id="btn-cancel-policy">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 弹窗：查看清理明细详情 Modal -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+          <h3 class="modal-title">生命周期执行详情 - 批次 <span id="detailBatchId">TASK-20260929-0200</span></h3>
+          <button class="modal-close-btn" id="detailCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-summary-grid">
+            <div class="detail-item"><span class="k">清理范围：</span><span class="v">全系统统一生命周期</span></div>
+            <div class="detail-item"><span class="k">执行时长：</span><span class="v" id="detailDuration">18 分 42 秒</span></div>
+            <div class="detail-item"><span class="k">释放空间：</span><span class="v" id="detailSpace" style="color:var(--primary-color);">24.5 GB</span></div>
+            <div class="detail-item"><span class="k">ES清理条数：</span><span class="v" id="detailEs" style="color:var(--success-color);">14,208 条</span></div>
+          </div>
+          <h4 class="sub-section-title">部分清理邮件明细抽样记录（最近20条）</h4>
+          <div class="table-container max-height-table">
+            <table class="custom-table table-condensed">
+              <thead>
+                <tr>
+                  <th>邮件主题</th>
+                  <th>发件人</th>
+                  <th>收件人/抄送</th>
+                  <th>邮件发送时间</th>
+                  <th>存储路径</th>
+                  <th>ES索引ID</th>
+                  <th>清理结果</th>
+                </tr>
+              </thead>
+              <tbody id="detailSampleTableBody">
+                <!-- 动态填充 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-primary" id="detailOkBtn">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 简易通知 Toast 容器 -->
+    <div class="toast-container" id="toastContainer"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
