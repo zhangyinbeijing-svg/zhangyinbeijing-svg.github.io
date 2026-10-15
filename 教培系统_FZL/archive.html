@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>归档档案 · 干部**学院教务系统 (PRD 4.13)</title>
+<link rel="stylesheet" href="common.css">
+<style>
+.tab-bar { display: flex; gap: 4px; border-bottom: 2px solid var(--line); margin-bottom: 20px; }
+.tab-item { padding: 10px 20px; font-size: 14px; font-weight: 500; color: var(--text-2); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+.tab-item.active { color: var(--primary); font-weight: 700; border-bottom-color: var(--primary); }
+
+.check-card {
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 18px 24px;
+  margin-bottom: 16px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+.check-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.check-item:last-child { border-bottom: none; }
+.ci-info { display: flex; align-items: center; gap: 12px; }
+.ci-icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; font-weight: 700; }
+.ci-pass { background: var(--success); }
+.ci-fail { background: var(--danger); }
+.ci-name { font-weight: 600; font-size: 14px; }
+.ci-desc { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+.pkg-box {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 16px;
+  font-family: Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #1e293b;
+}
+</style>
+</head>
+<body>
+
+<main class="content">
+  <div class="page-head">
+    <div>
+      <div class="breadcrumb">教培系统 / 归档档案</div>
+      <h2 class="page-title">📦 培训档案归档与独立系统导出 (PRD 4.13 & 6.7)</h2>
+    </div>
+    <div class="page-ops">
+      <button class="btn btn-ghost" onclick="location.href='report.html'">‹ 返回报告中心</button>
+      <span class="tag tag-blue">涉密摆渡防篡改签名机制已就绪</span>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab-item active" id="tabCheckBtn" onclick="switchArchTab('check')">① 结班档案完整性硬校验</div>
+    <div class="tab-item" id="tabExportBtn" onclick="switchArchTab('export')">② 生成标准化涉密摆渡包</div>
+    <div class="tab-item" id="tabLogBtn" onclick="switchArchTab('log')">③ 离线物理摆渡审计记录</div>
+  </div>
+
+  <!-- 选项卡 1：完整性硬校验 -->
+  <div id="pane-check">
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-head">
+        <h3>选择结班班次执行归档预检</h3>
+        <div style="display:flex;gap:10px;align-items:center">
+          <label style="font-size:13px;color:var(--text-3)">班次：</label>
+          <select class="sel" id="archClassSelect" onchange="runArchiveCheck()" style="min-width:260px"></select>
+          <button class="btn btn-primary" onclick="runArchiveCheck()">🔍 执行完整性校验</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="checkResultSummary" style="margin-bottom:16px"></div>
+        <div class="check-card" id="checkItemsList"></div>
+
+        <div style="text-align:right">
+          <button class="btn btn-ghost" onclick="toast('导出预检清单明细 (PDF/Excel)', 'info')">📄 导出预检明细</button>
+          <button class="btn btn-primary" id="confirmArchiveBtn" onclick="doConfirmArchive()">🔒 确认校验无误，正式归档入库</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 选项卡 2：生成标准化摆渡包 -->
+  <div id="pane-export" class="hidden">
+    <div class="card">
+      <div class="card-head">
+        <h3>标准化干部培训档案导出包 (独立干部系统规范格式)</h3>
+        <button class="btn btn-primary" onclick="generateExportPackage()">⚡ 立即生成离线摆渡加密包 (.zip)</button>
+      </div>
+      <div class="card-body">
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:12px">
+          根据涉密网隔离要求，导出的数据包包含元数据清单、干部职级参训花名册、已脱敏数字证书及 MD5/SM3 防篡改数字签名摘要，供光盘刻录后摆渡至外部部人事管理系统：
+        </p>
+
+        <div class="pkg-box" id="pkgTree">
+          📁 TREA_ARCHIVE_B2503_20260930_SECRET.pkg/<br>
+          ├── 📄 manifest.json (元数据清单与SM3签名摘要)<br>
+          ├── 📊 student_roster.xlsx (干部参训花名册 · 依礼宾顺序脱敏)<br>
+          ├── 🗓️ schedule_calendar.json (全周期教学课表与授课师资)<br>
+          ├── 💰 budget_settlement_report.pdf (财务经费预算三对照表)<br>
+          ├── 🎓 electronic_certificates/ (45份PDF电子结业证书及电子签章)<br>
+          └── 📈 teaching_evaluation_summary.xlsx (多维度教学评估与回访反馈)
+        </div>
+
+        <div style="margin-top:20px;padding:12px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;font-size:12px;color:var(--danger)">
+          <b>保密纪律提醒：</b>导出文件包含外交涉密及敏感干部履历信息，光盘刻录须由安全保密管理员监督执行，并填写《涉密介质离线摆渡登记簿》。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 选项卡 3：审计记录 -->
+  <div id="pane-log" class="hidden">
+    <div class="card">
+      <div class="card-head"><h3>离线介质刻录与摆渡审计日志</h3></div>
+      <div class="card-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>日志编号</th>
+              <th>操作时间</th>
+              <th>班次编号与名称</th>
+              <th>导出人</th>
+              <th>监护保密员</th>
+              <th>包大小</th>
+              <th>数据校验和 (SM3)</th>
+              <th>摆渡去向</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LOG-ARC-01</td>
+              <td>2026-09-20 16:30</td>
+              <td>2490期干部政能提升班</td>
+              <td>张三 (教务办)</td>
+              <td>陈保密</td>
+              <td>42.8 MB</td>
+              <td><span style="font-family:Consolas">A7F8...32B9</span></td>
+              <td>部人事司干部教育专网</td>
+              <td><span class="tag tag-green">已刻盘交接</span></td>
+            </tr>
+            <tr>
+              <td>LOG-ARC-02</td>
+              <td>2026-08-25 10:15</td>
+              <td>2485期外事干部英语强化班</td>
+              <td>赵六 (培训部)</td>
+              <td>陈保密</td>
+              <td>38.2 MB</td>
+              <td><span style="font-family:Consolas">C1D2...99E1</span></td>
+              <td>党校系统共享数据库</td>
+              <td><span class="tag tag-green">已归档留痕</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="store.js"></script>
+<script src="common.js"></script>
+<script>
+function switchArchTab(tab) {
+  ['check', 'export', 'log'].forEach(t => {
+    document.getElementById('pane-' + t).classList.toggle('hidden', t !== tab);
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1) + 'Btn').classList.toggle('active', t === tab);
+  });
+}
+
+function initClassSelect() {
+  const sel = document.getElementById('archClassSelect');
+  const classes = window.TREA_STORE.getClasses();
+  sel.innerHTML = classes.map(c => `
+    <option value="${c.id}">${c.id} - ${c.name} (${c.status})</option>
+  `).join('');
+  runArchiveCheck();
+}
+
+function runArchiveCheck() {
+  const cid = document.getElementById('archClassSelect').value;
+  const res = window.TREA_STORE.validateClassArchiving(cid);
+  const sumEl = document.getElementById('checkResultSummary');
+  const listEl = document.getElementById('checkItemsList');
+  const confirmBtn = document.getElementById('confirmArchiveBtn');
+
+  if (res.pass) {
+    sumEl.innerHTML = `
+      <div style="background:#ecfdf5;border:1px solid #a7f3d0;padding:12px 16px;border-radius:6px;color:#065f46;display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px">✅</span>
+        <div><b>校验全部通过！</b> 该班次教学、排课、考勤、成绩、预算结算全部完备闭环，满足涉密归档入库标准。</div>
+      </div>
+    `;
+    confirmBtn.disabled = false;
+    confirmBtn.classList.remove('disabled');
+  } else {
+    sumEl.innerHTML = `
+      <div style="background:#fef2f2;border:1px solid #fecaca;padding:12px 16px;border-radius:6px;color:#991b1b;display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px">❌</span>
+        <div><b>发现 ${res.errors.length} 项硬性阻断问题！</b> 依管理制度必须全部补齐后方可归档：<br>
+        <span style="font-size:12px">${res.errors.join('；')}</span></div>
+      </div>
+    `;
+    confirmBtn.disabled = true;
+    confirmBtn.classList.add('disabled');
+  }
+
+  listEl.innerHTML = res.checkItems.map(item => `
+    <div class="check-item">
+      <div class="ci-info">
+        <div class="ci-icon ${item.pass ? 'ci-pass' : 'ci-fail'}">${item.pass ? '✓' : '✕'}</div>
+        <div>
+          <div class="ci-name">${item.name}</div>
+          <div class="ci-desc">${item.pass ? '数据完备，已通过签名哈希校验' : '数据未达到归档标准或关键附件缺失'}</div>
+        </div>
+      </div>
+      <div>
+        <span class="tag ${item.pass ? 'tag-green' : 'tag-red'}">${item.pass ? '合格' : '阻断'}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function doConfirmArchive() {
+  const cid = document.getElementById('archClassSelect').value;
+  const cls = window.TREA_STORE.getClass(cid);
+  cls.status = '已结业';
+  cls.archived = true;
+  window.TREA_STORE.save();
+  toast(`班次 ${cls.name} 已正式归档锁定入库！`, 'success');
+  setTimeout(() => switchArchTab('export'), 600);
+}
+
+function generateExportPackage() {
+  toast('正在压缩打包元数据、脱敏花名册与数字签名...', 'info');
+  setTimeout(() => {
+    toast('标准化摆渡加密包生成成功！已登记至安全审计日志', 'success');
+  }, 1200);
+}
+
+document.addEventListener('DOMContentLoaded', initClassSelect);
+</script>
+</body>
+</html>

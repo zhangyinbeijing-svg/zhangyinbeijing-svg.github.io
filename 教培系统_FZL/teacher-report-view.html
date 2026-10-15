@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>师资教学质量综合评价报告 · 干部**学院教务管理系统</title>
+<link rel="stylesheet" href="common.css">
+<style>
+:root {
+  --primary-color: #1F4E79;
+  --secondary-color: #2E75B6;
+  --accent-red: #C62828;
+}
+body {
+  background: #E2E8F0;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "PingFang SC", sans-serif;
+  color: #1E293B;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* 顶部固定操作条 */
+.report-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #1E293B;
+  color: #FFF;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+.report-tb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.report-tb-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tb-btn {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  transition: all .15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tb-btn-primary {
+  background: #2563EB;
+  color: #FFF;
+}
+.tb-btn-primary:hover {
+  background: #1D4ED8;
+}
+.tb-btn-ghost {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.25);
+  color: #F8FAFC;
+}
+.tb-btn-ghost:hover {
+  background: rgba(255,255,255,0.2);
+  color: #FFF;
+}
+
+/* 报告纸质容器 */
+.report-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 30px 16px 60px;
+}
+.report-paper {
+  width: 900px;
+  background: #FFF;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  padding: 50px 65px;
+  box-sizing: border-box;
+  position: relative;
+  min-height: 1100px;
+  line-height: 1.75;
+}
+
+/* 报告公文红头 */
+.doc-header {
+  border-bottom: 2px solid var(--accent-red);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  text-align: center;
+  position: relative;
+}
+.doc-org-title {
+  color: var(--accent-red);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  font-family: "SimSun", "Songti SC", serif;
+  margin-bottom: 6px;
+}
+.doc-sub-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+.doc-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #64748B;
+  padding: 0 4px;
+}
+
+/* 核心评分看板卡片 */
+.score-overview-box {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 240px 1fr 140px;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.score-teacher-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.score-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  flex: none;
+}
+.score-num-box {
+  text-align: center;
+  border-left: 1px solid #E2E8F0;
+  padding-left: 20px;
+}
+.score-big {
+  font-size: 42px;
+  font-weight: 700;
+  font-family: Consolas, monospace;
+  color: #15803D;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.score-rank {
+  font-size: 12px;
+  color: #15803D;
+  background: #DCFCE7;
+  padding: 2px 8px;
+  border-radius: 999px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+/* 章节标题 */
+.rep-section {
+  margin-top: 28px;
+}
+.rep-sec-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+}
+.rep-sec-title::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 16px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+/* 维度指标对标表 */
+.dim-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.dim-table th, .dim-table td {
+  border: 1px solid #E2E8F0;
+  padding: 8px 12px;
+  text-align: left;
+}
+.dim-table th {
+  background: #F8FAFC;
+  color: #475569;
+  font-weight: 600;
+}
+.bar-track {
+  background: #E2E8F0;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+.bar-fill {
+  background: #2563EB;
+  height: 100%;
+  border-radius: 5px;
+}
+
+/* 标签胶囊 */
+.tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #FEF3C7;
+  color: #92400E;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+/* 学员评语摘抄列表 */
+.comment-card {
+  background: #F8FAFC;
+  border-left: 3px solid #2563EB;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #334155;
+  margin-bottom: 8px;
+  border-radius: 0 4px 4px 0;
+}
+
+/* 底部签章区 */
+.sign-box {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+  font-size: 14px;
+  line-height: 2;
+  padding-right: 20px;
+}
+
+/* 动态防扩散水印 */
+.paper-watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    -35deg,
+    rgba(31, 78, 121, 0.03),
+    rgba(31, 78, 121, 0.03) 140px,
+    transparent 140px,
+    transparent 280px
+  );
+}
+
+@media print {
+  .report-toolbar { display: none !important; }
+  body { background: #FFF !important; }
+  .report-container { padding: 0 !important; }
+  .report-paper {
+    width: 100% !important;
+    box-shadow: none !important;
+    padding: 15mm 20mm !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部工具条 -->
+<div class="report-toolbar">
+  <div class="report-tb-left">
+    <button class="tb-btn tb-btn-ghost" onclick="location.href='teacher-lib.html?page=tea-report'" style="height:28px;padding:0 12px;font-size:12.5px">‹ 返回师资库</button>
+    <span>｜</span>
+    <span>📑 师资教学质量综合评价报告</span>
+    <span style="font-size:12px;background:#334155;padding:2px 8px;border-radius:4px;color:#93C5FD">王建国 · 2026年度考核</span>
+  </div>
+  <div class="report-tb-right">
+    <button class="tb-btn tb-btn-ghost" onclick="toast('正在导出 Word 格式综合评价报告 (.docx)...')">
+      <span>📄</span> 导出 Word
+    </button>
+    <button class="tb-btn tb-btn-ghost" onclick="toast('已将本评价报告推送至教师质量档案与个人工作台！')">
+      <span>📨</span> 推送至质量档案
+    </button>
+    <button class="tb-btn tb-btn-primary" onclick="window.print()">
+      <span>🖨️</span> 打印报告 (A4双面)
+    </button>
+  </div>
+</div>
+
+<!-- 报告纸张主体 -->
+<div class="report-container">
+  <div class="report-paper">
+    <div class="paper-watermark"></div>
+
+    <!-- 红头抬头 -->
+    <div class="doc-header">
+      <div class="doc-org-title">干部**学院教学考评委员会</div>
+      <div class="doc-sub-title">2026 年度师资教学质量综合评价考核报告</div>
+      <div class="doc-meta-bar">
+        <span>报告文号：干院评教字〔2026〕第088号</span>
+        <span>评估周期：2026年01月01日 至 2026年09月25日</span>
+        <span>密级：内部考核 (受控)</span>
+      </div>
+    </div>
+
+    <!-- 教师基本信息与综合得分概览 -->
+    <div class="score-overview-box">
+      <div class="score-teacher-info">
+        <div class="score-avatar">王</div>
+        <div>
+          <div style="font-size:18px;font-weight:700">王建国 <span style="font-size:12px;background:rgba(37,99,235,0.12);color:#2563EB;padding:2px 8px;border-radius:4px;font-weight:600">一级 · 名师</span></div>
+          <div style="font-size:12px;color:#64748B;margin-top:4px">所在单位：**学院教研部</div>
+          <div style="font-size:12px;color:#64748B">职称职务：教授 / 副主任</div>
+          <div style="font-size:12px;color:#64748B">教学领域：理论教育 / 外交战略</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#64748B;line-height:1.6">
+          <b>考核数据构成来源：</b><br>
+          • 学员评教问卷 (权重 50%)：有效问卷 135 份，平均 95.1 分<br>
+          • 教学督导与处室巡课 (权重 30%)：巡课 1 次，评分 96.0 分<br>
+          • 教学工作量与教案研发 (权重 20%)：累计 286 课时 / 3 门主讲课程
+        </div>
+      </div>
+      <div class="score-num-box">
+        <div class="score-big">95.1</div>
+        <div style="font-size:12px;color:#64748B;margin-bottom:6px">综合考评得分</div>
+        <div class="score-rank">优秀 · A档 (Top 3%)</div>
+      </div>
+    </div>
+
+    <!-- 第一部分：五维教学能力对标剖析 -->
+    <div class="rep-section">
+      <div class="rep-sec-title">一、五维教学能力量化评估与对标剖析</div>
+      <table class="dim-table">
+        <thead>
+          <tr>
+            <th style="width:110px">评估维度</th>
+            <th style="width:70px">权重</th>
+            <th style="width:80px">教师得分</th>
+            <th style="width:80px">全院平均</th>
+            <th>指标对比状态</th>
+            <th style="width:120px">评价结论</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>教学态度</b></td>
+            <td>20%</td>
+            <td><b style="color:#15803D">96.5</b></td>
+            <td style="color:#64748B">91.2</td>
+            <td>
+              <div class="bar-track"><div class="bar-fill" style="width:96.5%;background:#10B981"></div></div>
+            </td>
+            <td><span style="color:#15803D;font-weight:600">显著领先 (+5.3)</span></td>
+          </tr>
+          <tr>
+            <td><b>内容深度</b></td>
+            <td>25%</td>
+            <td><b style="color:#15803D">94.5</b></td>
+            <td style="color:#64748B">89.8</td>
+            <td>
+              <div class="bar-track"><div class="bar-fill" style="width:94.5%;background:#10B981"></div></div>
+            </td>
+            <td><span style="color:#15803D;font-weight:600">显著领先 (+4.7)</span></td>
+          </tr>
+          <tr>
+            <td><b>方法互动</b></td>
+            <td>20%</td>
+            <td><b style="color:#2563EB">92.0</b></td>
+            <td style="color:#64748B">87.5</td>
+            <td>
+              <div class="bar-track"><div class="bar-fill" style="width:92%;background:#3B82F6"></div></div>
+            </td>
+            <td><span style="color:#2563EB;font-weight:600">高于院均 (+4.5)</span></td>
+          </tr>
+          <tr>
+            <td><b>课堂效果</b></td>
+            <td>20%</td>
+            <td><b style="color:#15803D">96.0</b></td>
+            <td style="color:#64748B">90.3</td>
+            <td>
+              <div class="bar-track"><div class="bar-fill" style="width:96%;background:#10B981"></div></div>
+            </td>
+            <td><span style="color:#15803D;font-weight:600">显著领先 (+5.7)</span></td>
+          </tr>
+          <tr>
+            <td><b>督导评价</b></td>
+            <td>15%</td>
+            <td><b style="color:#15803D">96.0</b></td>
+            <td style="color:#64748B">88.6</td>
+            <td>
+              <div class="bar-track"><div class="bar-fill" style="width:96%;background:#10B981"></div></div>
+            </td>
+            <td><span style="color:#15803D;font-weight:600">高度认可 (+7.4)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 第二部分：历史主讲班次与课程得分分布 -->
+    <div class="rep-section">
+      <div class="rep-sec-title">二、2026 年度主讲课程与班次评教明细</div>
+      <table class="dim-table">
+        <thead>
+          <tr>
+            <th>主讲课程名称</th>
+            <th>授课班次</th>
+            <th>授课课时</th>
+            <th>参评人数</th>
+            <th>评教平均分</th>
+            <th>考核等级</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>习近平外交思想概论</b></td>
+            <td>党校班（第26期）</td>
+            <td>36 课时</td>
+            <td>45 人</td>
+            <td><b style="color:#15803D">95.2</b></td>
+            <td>优秀 (A)</td>
+          </tr>
+          <tr>
+            <td><b>习近平外交思想概论</b></td>
+            <td>政能班（第8期）</td>
+            <td>32 课时</td>
+            <td>46 人</td>
+            <td><b style="color:#15803D">93.8</b></td>
+            <td>良好 (B+)</td>
+          </tr>
+          <tr>
+            <td><b>大国外交专题（合班）</b></td>
+            <td>全院大课（秋季大讲堂）</td>
+            <td>16 课时</td>
+            <td>44 人</td>
+            <td><b style="color:#15803D">94.5</b></td>
+            <td>优秀 (A)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 第三部分：学员评教代表性标签与定性评语 -->
+    <div class="rep-section">
+      <div class="rep-sec-title">三、学员高频评价标签与代表性评语采录</div>
+      <div style="margin-bottom:12px">
+        <span class="tag-badge">🏷️ 观点正确紧扣主题 (68人提及)</span>
+        <span class="tag-badge">🏷️ 理论功底深厚 (54人提及)</span>
+        <span class="tag-badge">🏷️ 内容丰富信息量大 (47人提及)</span>
+        <span class="tag-badge">🏷️ 旁征博引生动鲜活 (39人提及)</span>
+        <span class="tag-badge">🏷️ 结合实战答疑解惑 (28人提及)</span>
+      </div>
+      <div class="comment-card">
+        “王老师对大国外交历史脉络和新时代对外方针的梳理非常清晰透彻，理论阐述深刻有力，回答基层学员实战关切时切中要害，是本次进修最具含金量的课程之一。” —— <i>党校班（第26期）学员张某</i>
+      </div>
+      <div class="comment-card">
+        “授课富有感染力，结合国际多边磋商案例分析，不仅讲清了理论框架，更传授了谈判策略思考方法，非常受用。” —— <i>政能班（第8期）学员李某</i>
+      </div>
+    </div>
+
+    <!-- 第四部分：教学督导巡课意见与考核结论 -->
+    <div class="rep-section">
+      <div class="rep-sec-title">四、教学督导与教务综合考评结论</div>
+      <div style="background:#F8FAFC;border:1px solid #E2E8F0;padding:14px 18px;border-radius:6px;font-size:13px;line-height:1.8">
+        <b>【督导专家组巡课记录（2026-09-18）】</b><br>
+        听课专家：李处长（教务处巡课督导组）。听课课程：《习近平外交思想概论》。<br>
+        <b>督导评审意见：</b> 教师备课充分、教案完备严谨；理论逻辑严密，紧密结合当前国际热点，有效启发学员独立思考。课堂把控能力强，学员听课专注度极高。建议在后续课时中，进一步加大分组研讨和典型涉外案例推演比重。<br><br>
+        <b>【教务部综合考评建议】</b><br>
+        王建国教授在本年度教学工作中表现卓越，评教成绩优异，各项指标位居全院前列。<b>建议：</b><br>
+        1. 继续认定为全院<b>「一级 · 名师」</b>，并在下一聘期优先聘任；<br>
+        2. 优先安排至厅局级重点进修班次主讲核心课程；<br>
+        3. 推荐申报全院 2026 年度优秀教学成果奖与精品课程带头人。
+      </div>
+    </div>
+
+    <!-- 签章 -->
+    <div class="sign-box">
+      <div>
+        <b>干部**学院教务处考评组（盖章）</b><br>
+        <b>分管教学院长签批：</b> __________________<br>
+        <b>日期：</b> 2026 年 09 月 25 日
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,0.92);color:#FFF;padding:10px 20px;border-radius:6px;font-size:13px;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,0.3);font-family:sans-serif';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+</script>
+</body>
+</html>
