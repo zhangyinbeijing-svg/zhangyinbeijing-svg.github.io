@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ES Mail 本地邮件归档 - 账户管理</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- 顶部全局导航栏 (还原景安系统标准规范) -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-logo">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#1890ff" />
+            <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="#1890ff" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <span class="system-title">ES Mail</span>
+          <span class="sub-title">本地邮件归档</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <a href="javascript:void(0)" class="header-link" id="btn-show-rules-top">
+          <i class="fa-regular fa-file-lines"></i> 使用流程
+        </a>
+        <div class="user-profile">
+          <i class="fa-regular fa-user"></i>
+          <span>您好，admin</span>
+          <i class="fa-solid fa-angle-down"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主体区域：左侧菜单 + 右侧内容 -->
+    <div class="app-main">
+      <!-- 左侧导航菜单 (完全还原截图菜单栏目) -->
+      <aside class="app-sidebar">
+        <ul class="nav-tree">
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-solid fa-table-cells-large"></i> <span>工作台</span></a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-regular fa-compass"></i> <span>轻松上手管理</span></a>
+          </li>
+          
+          <!-- 企业配置（一级栏目，展开） -->
+          <li class="nav-item has-sub open">
+            <div class="nav-link sub-toggle active-parent"><i class="fa-solid fa-building"></i> <span>企业配置</span> <i class="fa-solid fa-angle-down arrow"></i></div>
+            <ul class="sub-menu show">
+              <li><a href="javascript:void(0)" class="sub-link">归档配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link active" id="menu-account">账户管理</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">角色管理</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">员工管理</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">收发信配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">登录配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">安全配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">存储扩容配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">集成配置</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">API配置</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i> <span>邮件搜索</span></a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link"><i class="fa-solid fa-shield-halved"></i> <span>邮件审计</span></a>
+          </li>
+
+          <!-- 辅助工具 -->
+          <li class="nav-item has-sub">
+            <div class="nav-link sub-toggle"><i class="fa-solid fa-wrench"></i> <span>辅助工具</span> <i class="fa-solid fa-angle-right arrow"></i></div>
+            <ul class="sub-menu">
+              <li><a href="javascript:void(0)" class="sub-link">归档备份</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">标签管理</a></li>
+            </ul>
+          </li>
+
+          <!-- 日志管理 -->
+          <li class="nav-item has-sub">
+            <div class="nav-link sub-toggle"><i class="fa-solid fa-clock-rotate-left"></i> <span>日志管理</span> <i class="fa-solid fa-angle-right arrow"></i></div>
+            <ul class="sub-menu">
+              <li><a href="javascript:void(0)" class="sub-link">搜索日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">备份日志</a></li>
+              <li><a href="javascript:void(0)" class="sub-link">登录日志</a></li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- 右侧业务内容区 -->
+      <main class="app-content-wrapper">
+        <!-- 标签页栏（Tabs，与原图完全一致） -->
+        <div class="tabs-header">
+          <div class="tab-item" data-tab="workbench"><span>工作台</span> <i class="fa-solid fa-xmark tab-close"></i></div>
+          <div class="tab-item" data-tab="role"><span>角色管理</span> <i class="fa-solid fa-xmark tab-close"></i></div>
+          <div class="tab-item active" data-tab="account"><span>账户管理</span> <i class="fa-solid fa-xmark tab-close"></i></div>
+        </div>
+
+        <!-- 页面视图主体：账户管理 -->
+        <div class="content-body">
+          <div class="page-card">
+            <!-- 页面顶部操作栏 (严格对齐原截图布局) -->
+            <div class="card-header-bar">
+              <span class="card-title">账户管理</span>
+              <div class="card-actions">
+                <div class="search-input-group">
+                  <input type="text" id="filter-user-input" placeholder="请输入用户名称">
+                  <i class="fa-solid fa-magnifying-glass search-icon" id="btn-search-user"></i>
+                </div>
+                <button class="btn btn-primary" id="btn-add-account">
+                  <i class="fa-solid fa-plus"></i> 添加
+                </button>
+              </div>
+            </div>
+
+            <!-- 数据表格 (严格还原截图的 9 列标准结构，无额外无关列) -->
+            <div class="table-container">
+              <table class="custom-table" id="account-table">
+                <thead>
+                  <tr>
+                    <th style="min-width: 90px;">用户名称</th>
+                    <th style="min-width: 100px;">登录账号</th>
+                    <th style="min-width: 130px;">角色</th>
+                    <th style="min-width: 130px;">搜索限制关键词</th>
+                    <th style="min-width: 130px;">搜索限制收件人</th>
+                    <th style="min-width: 130px;">审计限制关键词</th>
+                    <th style="min-width: 130px;">审计限制收件人</th>
+                    <th style="width: 80px;">状态</th>
+                    <th style="width: 100px; text-align: center;">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="account-table-body">
+                  <!-- 动态由 app.js 渲染 -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 底部分页 (与原图一致：共 4 条，页码，10条/页) -->
+            <div class="table-pagination">
+              <span class="page-total" id="table-total-count">共 4 条</span>
+              <button class="pagination-btn disabled"><i class="fa-solid fa-angle-left"></i></button>
+              <button class="pagination-btn active">1</button>
+              <button class="pagination-btn disabled"><i class="fa-solid fa-angle-right"></i></button>
+              <select style="height: 28px; border: 1px solid var(--border-color); border-radius: 2px; padding: 0 4px; font-size: 12px; color: var(--text-regular);">
+                <option>10 条/页</option>
+                <option>20 条/页</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ================= 修改/添加账户弹窗 (Modal) ================= -->
+  <div class="modal-overlay" id="account-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title" id="modal-title-text">修改账户</span>
+        <button class="modal-close" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- 基础信息 (两列排版，严格对齐用户最新参考图) -->
+        <div class="form-grid-2">
+          <!-- 第1行：用户名称 (必填) + 状态 (必填下拉框) -->
+          <div class="form-item">
+            <label class="form-label required">用户名称：</label>
+            <div class="form-content">
+              <input type="text" class="form-input" id="form-realname" placeholder="请输入用户名称">
+            </div>
+          </div>
+
+          <div class="form-item">
+            <label class="form-label required">状态：</label>
+            <div class="form-content form-input-with-icon">
+              <select class="form-input form-select" id="form-account-status">
+                <option value="true">开启</option>
+                <option value="false">停用</option>
+              </select>
+              <i class="fa-solid fa-angle-down input-suffix-icon" style="pointer-events: none; font-size: 11px;"></i>
+            </div>
+          </div>
+
+          <!-- 第2行：登录账号 (必填) + 角色 (必填Tag多选) -->
+          <div class="form-item">
+            <label class="form-label required">登录账号：</label>
+            <div class="form-content">
+              <input type="text" class="form-input" id="form-username" placeholder="请输入登录账号">
+            </div>
+          </div>
+
+          <div class="form-item">
+            <label class="form-label required">角色：</label>
+            <div class="form-content">
+              <div class="role-select-box" id="role-select-box">
+                <div id="role-tags-wrap" style="display: flex; flex-wrap: wrap; gap: 4px;"></div>
+                <i class="fa-solid fa-angle-down" style="position: absolute; right: 8px; top: 9px; font-size: 11px; color: var(--text-muted);"></i>
+              </div>
+              <!-- 角色下拉浮层 -->
+              <div class="role-dropdown-menu" id="role-dropdown-menu">
+                <div class="role-dropdown-item" data-role="搜索员"><span>搜索员</span> <i class="fa-solid fa-check check-mark"></i></div>
+                <div class="role-dropdown-item" data-role="审计员"><span>审计员</span> <i class="fa-solid fa-check check-mark"></i></div>
+                <div class="role-dropdown-item" data-role="系统管理员"><span>系统管理员</span> <i class="fa-solid fa-check check-mark"></i></div>
+                <div class="role-dropdown-item" data-role="超级管理员"><span>超级管理员</span> <i class="fa-solid fa-check check-mark"></i></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 第3行：密码 (选填) + 登录验证 (选填Switch带文字) -->
+          <div class="form-item">
+            <label class="form-label">密码：</label>
+            <div class="form-content form-input-with-icon">
+              <input type="password" class="form-input" id="form-password" placeholder="请输入">
+              <i class="fa-regular fa-eye-slash input-suffix-icon" id="toggle-pwd-visibility"></i>
+            </div>
+          </div>
+
+          <div class="form-item">
+            <label class="form-label">登录验证：</label>
+            <div class="form-content">
+              <label class="switch-control">
+                <input type="checkbox" id="form-login-verify">
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 第4行：验证邮箱 (必填) + 失效时间 (日期框) -->
+          <div class="form-item">
+            <label class="form-label required">验证邮箱：</label>
+            <div class="form-content">
+              <input type="email" class="form-input" id="form-email" placeholder="请输入验证邮箱 (如 ceshi@163.com)">
+            </div>
+          </div>
+
+          <div class="form-item">
+            <label class="form-label">失效时间：</label>
+            <div class="form-content form-input-with-icon">
+              <input type="text" class="form-input" id="form-expire-time" value="2026-10-31 00:00">
+              <i class="fa-regular fa-calendar input-suffix-icon"></i>
+            </div>
+          </div>
+
+          <!-- 第5行：手机号 (必填) + 右侧占位 -->
+          <div class="form-item">
+            <label class="form-label required">手机号：</label>
+            <div class="form-content">
+              <input type="tel" class="form-input" id="form-phone" placeholder="请输入手机号">
+            </div>
+          </div>
+
+          <div class="form-item">
+            <!-- 占位保持两列对齐 -->
+          </div>
+        </div>
+
+        <!-- ================= 同级模块 1：管理域名 (提到搜索限制同级，先设置管理域名！) ================= -->
+        <div id="section-domain-management" class="restriction-section">
+          <div class="section-divider">
+            <span class="section-divider-title">管理域名</span>
+            <div class="section-divider-line"></div>
+          </div>
+
+          <div class="restriction-item">
+            <label class="restriction-label" style="font-weight: 500;">管理域名：</label>
+            <div class="restriction-content">
+              <div class="radio-group">
+                <label class="radio-item">
+                  <input type="radio" name="account-domain-mode" value="ALL" id="account-domain-mode-all" checked>
+                  <span>不限制域名（可管理全部归档域名）</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="account-domain-mode" value="SPECIFIED" id="account-domain-mode-specified">
+                  <span>仅限管理指定域名（此域发出和收到的所有邮件）</span>
+                </label>
+              </div>
+
+              <!-- 指定域名 Tag 录入区 (默认不限制时隐藏) -->
+              <div class="domain-scope-box" id="account-domain-scope-box" style="display: none;">
+                <div class="domain-tags-container" id="account-domain-tags-container">
+                  <!-- 动态由 JS 渲染 tag，以及输入框 -->
+                  <input type="text" class="tag-input" id="input-account-domain" placeholder="输入域名按回车或逗号添加 (支持多个)...">
+                </div>
+
+                <div class="domain-quick-actions">
+                  <button type="button" class="quick-btn" id="btn-quick-fill-email-domain">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> 快捷填入验证邮箱域名
+                  </button>
+                  <div style="position: relative; display: inline-block;">
+                    <button type="button" class="quick-btn" id="btn-open-domain-picker">
+                      <i class="fa-solid fa-list-check"></i> 从已归档域名选择 <i class="fa-solid fa-angle-down"></i>
+                    </button>
+                    <!-- 下拉勾选系统已有域名 -->
+                    <div class="domain-picker-dropdown" id="domain-picker-dropdown">
+                      <div class="domain-picker-title">选择归档域名：</div>
+                      <ul class="domain-picker-list" id="domain-picker-list">
+                        <!-- 动态由 JS 渲染 -->
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 规则提示 -->
+                <div class="domain-rule-tip">
+                  <i class="fa-solid fa-circle-check"></i>
+                  <span><strong>管理范围说明：</strong>先限定此账户的管理域名，管理的范围是<strong>此域发出和收到的所有邮件</strong>；后续设置的搜索限制和审计限制均在此域名范围内生效。</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= 同级模块 2：搜索限制 (当角色包含“搜索员”时显示) ================= -->
+        <div id="section-search-restriction" class="restriction-section">
+          <div class="section-divider">
+            <span class="section-divider-title">搜索限制</span>
+            <div class="section-divider-line"></div>
+          </div>
+
+          <!-- 禁搜关键词 -->
+          <div class="restriction-item">
+            <label class="restriction-label">禁搜关键词：</label>
+            <div class="restriction-content">
+              <div class="textarea-wrapper">
+                <textarea class="custom-textarea" id="form-search-keywords" maxlength="1000" placeholder="请输入关键词，多个关键词可用,隔开"></textarea>
+                <span class="textarea-counter" id="search-keywords-counter">0/1000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 收件人限制 -->
+          <div class="restriction-item">
+            <label class="restriction-label">收件人限制：</label>
+            <div class="restriction-content">
+              <div class="radio-group">
+                <label class="radio-item">
+                  <input type="radio" name="search-recipient-mode" value="DENY" checked>
+                  <span>设置禁搜名单</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="search-recipient-mode" value="ALLOW">
+                  <span>设置可搜索名单(名单以外邮箱无法查询)</span>
+                </label>
+              </div>
+              <div class="textarea-wrapper">
+                <textarea class="custom-textarea" id="form-search-recipients" maxlength="1000" placeholder="请输入收件人，多个收件人可用,隔开"></textarea>
+                <span class="textarea-counter" id="search-recipients-counter">0/1000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= 同级模块 3：审计限制 (当角色包含“审计员”时显示) ================= -->
+        <div id="section-audit-restriction" class="restriction-section">
+          <div class="section-divider">
+            <span class="section-divider-title">审计限制</span>
+            <div class="section-divider-line"></div>
+          </div>
+
+          <!-- 禁搜关键词 -->
+          <div class="restriction-item">
+            <label class="restriction-label">禁搜关键词：</label>
+            <div class="restriction-content">
+              <div class="textarea-wrapper">
+                <textarea class="custom-textarea" id="form-audit-keywords" maxlength="1000" placeholder="请输入关键词，多个关键词可用,隔开"></textarea>
+                <span class="textarea-counter" id="audit-keywords-counter">0/1000</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 收件人限制 -->
+          <div class="restriction-item">
+            <label class="restriction-label">收件人限制：</label>
+            <div class="restriction-content">
+              <div class="radio-group">
+                <label class="radio-item">
+                  <input type="radio" name="audit-recipient-mode" value="DENY" checked>
+                  <span>设置禁搜名单</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="audit-recipient-mode" value="ALLOW">
+                  <span>设置可搜索名单(名单以外邮箱无法查询)</span>
+                </label>
+              </div>
+              <div class="textarea-wrapper">
+                <textarea class="custom-textarea" id="form-audit-recipients" maxlength="1000" placeholder="请输入收件人，多个收件人可用,隔开"></textarea>
+                <span class="textarea-counter" id="audit-recipients-counter">0/1000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="btn-save-account" style="min-width: 80px;">确 认</button>
+        <button class="btn btn-default" id="btn-cancel-modal" style="min-width: 80px;">取 消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 轻量提示 Toast -->
+  <div class="toast-msg" id="global-toast">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toast-text">操作成功</span>
+  </div>
+
+  <!-- 引入交互脚本 -->
+  <script src="app.js"></script>
+</body>
+
+</html>
