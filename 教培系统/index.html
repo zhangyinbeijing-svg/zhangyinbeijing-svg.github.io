@@ -331,7 +331,7 @@
       gap: 8px;
       margin-bottom: 12px;
     }
-    .score-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .score-bars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     .score-party {
       background: #FFFFFF;
       border: 1px solid var(--slate-200);
@@ -616,7 +616,7 @@
         <!-- 100-Point Total Bid Simulation (Pure Written Evaluation) -->
         <div class="score-sim">
           <div class="score-sim-hd">
-            <strong style="color:var(--navy-900);font-size:14.5px;">📊 100 分制综合评标胜局推演（假设双方报价接近，价格分均按 28 分计）</strong>
+            <strong style="color:var(--navy-900);font-size:14.5px;">📊 100 分制三方综合评标胜局推演（假设三方报价接近，价格分均按 28 分计）</strong>
             <span style="font-size:12px;color:var(--slate-600);">图例：⬛ 价格(30) ｜ 🟧 商务(15) ｜ 🟦 技术与算法方案(35) ｜ 🟩 标书真实界面与工程深化实证(20)</span>
           </div>
           <div class="score-bars">
@@ -633,10 +633,23 @@
               </div>
               <div style="font-size:12px;color:var(--slate-600);">价格 ~28分 ｜ 商务 13.5–15分（线下业绩+4软著） ｜ 技术算法 30.5–32.5分 ｜ <strong>标书界面与点位实证 18.5–19.5分</strong></div>
             </div>
+            <div class="score-party" style="border-color:#FCD34D;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-weight:800;font-size:13.5px;color:#92400E;">
+                <span>🟠 明高软件（垂直党校头号劲敌）</span>
+                <span style="background:#FEF3C7;color:#92400E;padding:2px 9px;border-radius:999px;font-size:12px;white-space:nowrap;">预估：77.5 – 83.5 分（落后9–13分）</span>
+              </div>
+              <div class="score-seg-bar">
+                <div class="seg-price" style="width:28%" title="价格分 28"></div>
+                <div class="seg-biz" style="width:12.5%" title="商务分 12-13.5（CMMI5+党校线下业绩）"></div>
+                <div class="seg-tech" style="width:27.5%" title="技术架构与算法分 26.5-29"></div>
+                <div class="seg-proof" style="width:11.5%" title="标书界面与点位实证分 10.5-12.5"></div>
+              </div>
+              <div style="font-size:12px;color:var(--slate-600);">价格 ~28分 ｜ 商务 12–13.5分（CMMI5+党校业绩） ｜ 技术算法 26.5–29分 ｜ <strong>标书界面与点位实证 10.5–12.5分</strong></div>
+            </div>
             <div class="score-party" style="border-color:#FECACA;">
-              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-weight:800;font-size:13.8px;color:#991B1B;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-weight:800;font-size:13.5px;color:#991B1B;">
                 <span>⚠️ 知学云（仅能贴网院/低代码通用图）</span>
-                <span style="background:#FEE2E2;color:#991B1B;padding:2px 9px;border-radius:999px;font-size:12.5px;white-space:nowrap;">预估：66.0 – 73.5 分（落后20+分）</span>
+                <span style="background:#FEE2E2;color:#991B1B;padding:2px 9px;border-radius:999px;font-size:12px;white-space:nowrap;">预估：66.0 – 73.5 分（落后20+分）</span>
               </div>
               <div class="score-seg-bar">
                 <div class="seg-price" style="width:28%" title="价格分 28"></div>
@@ -1867,66 +1880,74 @@
           </table>
         </div>
 
-        <h3>第四层级核心胜负手：20 分「标书真实界面实证与工程深化」6 项评分推演</h3>
+        <h3>第四层级核心胜负手：20 分「标书真实界面实证与工程深化」三方评分推演</h3>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th style="width:45px;">序号</th>
-                <th style="width:255px;">标书书面实证评分项（无真实对应截图仅得0~1分）</th>
-                <th style="width:65px;">分值</th>
-                <th>我方技术标图册筹码（21页现成原型高清标注）</th>
-                <th>知学云 20 天等标期书面应标表现</th>
+                <th style="width:40px;">#</th>
+                <th style="width:215px;">标书书面实证评分项（无真实图得0~1分）</th>
+                <th style="width:58px;">分值</th>
+                <th>我方技术标图册（21页现成原型）</th>
+                <th>明高软件（垂直党校头号劲敌）</th>
+                <th>知学云（企培网院/低代码）</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td><strong>01</strong></td>
-                <td><strong>外事礼宾居中交替辐射排座与桌签打印预览界面实证</strong></td>
+                <td><strong>外事礼宾居中交替辐射排座与桌签打印预览界面</strong></td>
                 <td><strong>4 分</strong></td>
-                <td>直接嵌入 <code>room.html</code> 与 <code>training-schedule.html</code> 职级色块居中辐射座次图及桌签打印图 · <strong style="color:#047857;">预估 4.0 分</strong></td>
-                <td>无此功能界面，仅能文字描述或放空白低代码画布图 · <strong style="color:#B91C1C;">预估 0.5–1.0 分</strong></td>
+                <td><code>room.html</code> / <code>training-schedule.html</code> 职级色块辐射座次+桌签图 · <strong style="color:#047857;">4.0 分</strong></td>
+                <td>仅有通用党校普通座次安排，无外事辐射算法与桌签联动 · <strong style="color:#B45309;">1.5–2.0 分</strong></td>
+                <td>无此功能界面，仅文字或空白低代码画布 · <strong style="color:#B91C1C;">0.5–1.0 分</strong></td>
               </tr>
               <tr>
                 <td><strong>02</strong></td>
-                <td><strong>日/周/月拖拽排课、全院并发透视与合班建议弹窗界面实证</strong></td>
+                <td><strong>日/周/月拖拽排课、全院并发透视与合班建议弹窗</strong></td>
                 <td><strong>4 分</strong></td>
-                <td><code>training-schedule.html</code> 全套多视图、红框冲突拦截与合班弹窗实景图 · <strong style="color:#047857;">预估 4.0 分</strong></td>
-                <td>仅能提供基础排期表单或通用日历截图，无合班弹窗实证 · <strong style="color:#B91C1C;">预估 1.5–2.0 分</strong></td>
+                <td><code>training-schedule.html</code> 多视图、红框冲突拦截与合班弹窗图 · <strong style="color:#047857;">4.0 分</strong></td>
+                <td>具备党校智能拖拽排课截图，缺跨班同类课合班优化建议 · <strong style="color:#B45309;">2.5–3.0 分</strong></td>
+                <td>仅基础排期表单或通用日历，无合班弹窗 · <strong style="color:#B91C1C;">1.5–2.0 分</strong></td>
               </tr>
               <tr>
                 <td><strong>03</strong></td>
-                <td><strong>培训经费 5+2 实时校验规则库与 7 类机关红头《呈批单》界面</strong></td>
+                <td><strong>培训经费 5+2 实时规则库与 7 类机关红头《呈批单》</strong></td>
                 <td><strong>4 分</strong></td>
-                <td><code>base.html</code> 规则库（禁止提交/特批）+ <code>approve.html</code> 红头呈批单原貌图 · <strong style="color:#047857;">预估 3.8–4.0 分</strong></td>
-                <td>仅能贴普通课酬结算列表与通用扁平白板审批表单截图 · <strong style="color:#B91C1C;">预估 1.0–1.5 分</strong></td>
+                <td><code>base.html</code> 5+2硬阻断规则库 + <code>approve.html</code> 红头呈批单 · <strong style="color:#047857;">3.8–4.0 分</strong></td>
+                <td>偏通用后勤报销与党校 OA，缺财政定额 5+2 事中硬拦截 · <strong style="color:#B45309;">2.0–2.5 分</strong></td>
+                <td>仅普通课酬结算表与扁平白板表单 · <strong style="color:#B91C1C;">1.0–1.5 分</strong></td>
               </tr>
               <tr>
                 <td><strong>04</strong></td>
-                <td><strong>标准教案段落级留痕对比与分章节《结班报告》合成界面实证</strong></td>
+                <td><strong>标准教案段落级留痕对比与分章节《结班报告》合成</strong></td>
                 <td><strong>3 分</strong></td>
-                <td><code>version-diff.html</code> 双栏/行内红绿留痕图 + <code>report.html</code> 8要素结班报告预览图 · <strong style="color:#047857;">预估 3.0 分</strong></td>
-                <td>仅能贴常规课件上传列表与线上学情饼图截图 · <strong style="color:#B91C1C;">预估 0.5–1.0 分</strong></td>
+                <td><code>version-diff.html</code> 双栏/行内留痕 + <code>report.html</code> 8要素结班报告 · <strong style="color:#047857;">3.0 分</strong></td>
+                <td>无教案段落级 Diff 回滚，缺特定部委 8 套规范结班模板 · <strong style="color:#B45309;">1.5–2.0 分</strong></td>
+                <td>仅课件上传列表与线上学情饼图 · <strong style="color:#B91C1C;">0.5–1.0 分</strong></td>
               </tr>
               <tr>
                 <td><strong>05</strong></td>
-                <td><strong>原生“三员分立”职责复核与涉密离线摆渡包三步预检界面实证</strong></td>
+                <td><strong>原生“三员分立”职责复核与涉密离线摆渡三步预检</strong></td>
                 <td><strong>3 分</strong></td>
-                <td><code>org.html</code> 三员互斥与复核台账图 + <code>archive.html</code> 完整性预检/摆渡包/刻录日志图 · <strong style="color:#047857;">预估 3.0 分</strong></td>
-                <td>仅能贴集团总分院常规角色授权菜单截图，无离线摆渡界面 · <strong style="color:#B91C1C;">预估 0.5–1.0 分</strong></td>
+                <td><code>org.html</code> 三员复核台账 + <code>archive.html</code> 预检/摆渡包/刻录日志 · <strong style="color:#047857;">3.0 分</strong></td>
+                <td>具备三权分立权限截图，缺涉密离线物理摆渡包与刻录审计 · <strong style="color:#B45309;">2.0 分</strong></td>
+                <td>仅集团总分院角色菜单，无离线摆渡界面 · <strong style="color:#B91C1C;">0.5–1.0 分</strong></td>
               </tr>
               <tr>
                 <td><strong>06</strong></td>
-                <td><strong>学院五层/六层房间点位布线图纸与人脸门禁本地同步界面</strong></td>
+                <td><strong>学院五/六层房间点位布线图纸与人脸门禁同步界面</strong></td>
                 <td><strong>2 分</strong></td>
-                <td>V3.5 内嵌五/六层 32工位64口深化布线图 + <code>room.html</code> 门禁特征下发截图 · <strong style="color:#047857;">预估 2.0 分</strong></td>
-                <td>未深入现场踏勘，仅能画通用概念网络拓扑图 · <strong style="color:#B91C1C;">预估 0.5–1.0 分</strong></td>
+                <td>五/六层 32工位64口深化布线图 + <code>room.html</code> 门禁同步图 · <strong style="color:#047857;">2.0 分</strong></td>
+                <td>未踏勘五/六层物理点位，仅提供通用智慧校园概念拓扑 · <strong style="color:#B45309;">0.5–1.0 分</strong></td>
+                <td>仅画通用云端/机房概念拓扑图 · <strong style="color:#B91C1C;">0.5–1.0 分</strong></td>
               </tr>
               <tr style="background:#ECFDF5;font-weight:700;">
-                <td colspan="2" style="color:#065F46;">📊 20 分「标书界面实证与工程深化」纯书面评审模拟对比</td>
+                <td colspan="2" style="color:#065F46;">📊 20 分「标书界面实证与工程深化」三方模拟得分</td>
                 <td style="color:#065F46;">20 分</td>
-                <td style="color:#047857;font-size:14.2px;">我方预计得分：18.5 – 19.5 分（实景竣工级图册）</td>
-                <td style="color:#B91C1C;font-size:14.2px;">知学云预计得分：6.5 – 8.5 分（单环节净输 11–13 分！）</td>
+                <td style="color:#047857;">我方：18.5 – 19.5 分</td>
+                <td style="color:#92400E;">明高软件：10.5 – 12.5 分（落后6–9分）</td>
+                <td style="color:#B91C1C;">知学云：6.5 – 8.5 分（落后11–13分）</td>
               </tr>
             </tbody>
           </table>
