@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>系统登录 · **学院教培管理系统 (PRD 4.1-P01)</title>
+<link rel="stylesheet" href="common.css">
+<style>
+.login-body {
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 30%, #1e3a5f 0%, #0d1b2a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.login-card {
+  width: 1000px;
+  max-width: 96vw;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  overflow: hidden;
+}
+.login-banner {
+  background: linear-gradient(145deg, #1F4E79, #0d2847);
+  color: #fff;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.login-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(46, 117, 182, 0.25), transparent 70%);
+  pointer-events: none;
+}
+.lb-head .mark {
+  width: 44px; height: 44px;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+.lb-head h1 { font-size: 24px; font-weight: 700; line-height: 1.35; margin-bottom: 8px; }
+.lb-head p { font-size: 13px; opacity: 0.8; line-height: 1.6; }
+.lb-features { margin: 32px 0; display: flex; flex-direction: column; gap: 14px; font-size: 13px; }
+.lb-feat { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); padding: 8px 14px; border-radius: 6px; }
+.lb-foot { font-size: 12px; opacity: 0.7; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 16px; }
+
+.login-form-pane {
+  padding: 44px 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.form-title { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+.form-desc { font-size: 12px; color: var(--text-3); margin-bottom: 24px; }
+
+.role-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.role-tab {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: #f8fafc;
+}
+.role-tab:hover { border-color: var(--primary-2); color: var(--primary); }
+.role-tab.active {
+  background: rgba(31, 78, 121, 0.08);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.fg { margin-bottom: 16px; }
+.fg label { display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 5px; }
+.fg .input { width: 100%; height: 38px; font-size: 13px; }
+.code-row { display: flex; gap: 10px; }
+.code-box {
+  width: 100px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Consolas, monospace;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: #1e293b;
+  user-select: none;
+}
+.sec-tip {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 14px;
+  line-height: 1.5;
+  background: #f1f5f9;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 3px solid var(--primary-2);
+}
+</style>
+</head>
+<body class="login-body">
+
+<div class="login-card">
+  <!-- 左侧品牌展示区 -->
+  <div class="login-banner">
+    <div class="lb-head">
+      <div class="mark">院</div>
+      <h1>**学院<br>教培管理系统</h1>
+      <p>全国干部教育培训 · 安可替代及涉密内网专版 (PRD V1.0)</p>
+    </div>
+
+    <div class="lb-features">
+      <div class="lb-feat"><span>🛡️</span> 严格落实国家等保分保要求与三员分立安全架构</div>
+      <div class="lb-feat"><span>💰</span> 内置《中央和国家机关培训费管理办法》硬拦截规则引擎</div>
+      <div class="lb-feat"><span>🗓️</span> 全流程可视化智能排课、防冲突检测与多班次统筹</div>
+      <div class="lb-feat"><span>👥</span> 干部职级政治礼宾排序算法与门禁人脸考勤联动</div>
+    </div>
+
+    <div class="lb-foot">
+      <span>系统安全级别：机密级涉密内网终端 · 访问受审计监控</span>
+    </div>
+  </div>
+
+  <!-- 右侧表单交互区 -->
+  <div class="login-form-pane">
+    <div class="form-title">安全登录认证</div>
+    <div class="form-desc">请使用分配的专属内网 USB-Key 证书或账户密码登录</div>
+
+    <!-- 演示用快捷角色切换 -->
+    <div style="font-size:12px;font-weight:700;color:var(--text-2);margin-bottom:8px">快速选择演示角色登录：</div>
+    <div class="role-tabs">
+      <div class="role-tab active" data-role="办训人员" data-u="admin_train" data-p="123456" onclick="selectRoleTab(this)">
+        <b>办训教务</b><br><span style="font-size:11px;color:var(--text-3)">三级管理员</span>
+      </div>
+      <div class="role-tab" data-role="处领导" data-u="admin_dept" data-p="123456" onclick="selectRoleTab(this)">
+        <b>处领导</b><br><span style="font-size:11px;color:var(--text-3)">二级审批员</span>
+      </div>
+      <div class="role-tab" data-role="院领导" data-u="admin_dean" data-p="123456" onclick="selectRoleTab(this)">
+        <b>院领导</b><br><span style="font-size:11px;color:var(--text-3)">一级特批员</span>
+      </div>
+      <div class="role-tab" data-role="系统管理员" data-u="admin_sys" data-p="123456" onclick="selectRoleTab(this)">
+        <b>系统管理员</b><br><span style="font-size:11px;color:var(--text-3)">三员之一</span>
+      </div>
+      <div class="role-tab" data-role="安全保密管理员" data-u="admin_sec" data-p="123456" onclick="selectRoleTab(this)">
+        <b>保密管理员</b><br><span style="font-size:11px;color:var(--text-3)">三员之一</span>
+      </div>
+      <div class="role-tab" data-role="安全审计员" data-u="admin_aud" data-p="123456" onclick="selectRoleTab(this)">
+        <b>安全审计员</b><br><span style="font-size:11px;color:var(--text-3)">三员之一</span>
+      </div>
+    </div>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="fg">
+        <label>用户登录账号</label>
+        <input class="input" id="loginUser" value="admin_train" required>
+      </div>
+      <div class="fg">
+        <label>认证密码</label>
+        <input class="input" type="password" id="loginPwd" value="••••••" required>
+      </div>
+      <div class="fg">
+        <label>内网动态防重放验证码</label>
+        <div class="code-row">
+          <input class="input" id="loginCode" value="8542" style="flex:1" required>
+          <div class="code-box" id="codeBox" title="点击刷新验证码" onclick="refreshCode()">8542</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" type="submit" style="width:100%;height:40px;font-size:14px;margin-top:8px">
+        安全登录进入系统 ›
+      </button>
+    </form>
+
+    <div class="sec-tip">
+      <b>安全提示：</b>密码复杂度须包含大小写字母、数字及特殊字符；登录连续失败 5 次将锁定账号 30 分钟。所有登录及操作全程记录在安全审计员日志中。
+    </div>
+  </div>
+</div>
+
+<script src="store.js"></script>
+<script>
+let currentRole = '办训人员';
+
+function selectRoleTab(el) {
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentRole = el.dataset.role;
+  document.getElementById('loginUser').value = el.dataset.u;
+  document.getElementById('loginPwd').value = el.dataset.p;
+}
+
+function refreshCode() {
+  const c = Math.floor(1000 + Math.random() * 9000);
+  document.getElementById('codeBox').textContent = c;
+  document.getElementById('loginCode').value = c;
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  if (window.TREA_STORE) {
+    window.TREA_STORE.switchUser(currentRole);
+  }
+  // 按照不同角色推荐跳转主界面
+  if (currentRole === '安全审计员') {
+    location.href = 'base.html?page=base-log';
+  } else if (currentRole === '安全保密管理员') {
+    location.href = 'org.html?page=org-user';
+  } else if (currentRole === '处领导' || currentRole === '院领导') {
+    location.href = 'approve.html';
+  } else {
+    location.href = 'workbench.html';
+  }
+}
+</script>
+</body>
+</html>

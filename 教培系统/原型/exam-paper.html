@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>试卷打印与考核排版预览 · 干部**学院教务管理系统</title>
+<link rel="stylesheet" href="common.css">
+<style>
+:root {
+  --paper-w: 880px;
+  --primary-color: #1F4E79;
+}
+body {
+  background: #E2E8F0;
+  margin: 0;
+  padding: 0;
+  font-family: "SimSun", "Songti SC", "Microsoft YaHei", serif;
+  color: #111827;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* 顶部固定工具栏 */
+.exam-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #1E293B;
+  color: #FFF;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
+}
+.exam-tb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.exam-tb-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tb-btn {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  transition: all .15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tb-btn-primary {
+  background: #2563EB;
+  color: #FFF;
+}
+.tb-btn-primary:hover {
+  background: #1D4ED8;
+}
+.tb-btn-ghost {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.25);
+  color: #F8FAFC;
+}
+.tb-btn-ghost:hover {
+  background: rgba(255,255,255,0.2);
+  color: #FFF;
+}
+.tb-btn-active {
+  background: #10B981 !important;
+  color: #FFF !important;
+}
+
+/* 试卷纸张主体 */
+.paper-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 30px 16px 60px;
+}
+.exam-paper {
+  width: var(--paper-w);
+  background: #FFF;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  padding: 60px 70px;
+  box-sizing: border-box;
+  position: relative;
+  min-height: 1200px;
+  line-height: 1.8;
+}
+/* 密封线 */
+.seal-line {
+  position: absolute;
+  left: 20px;
+  top: 60px;
+  bottom: 60px;
+  width: 32px;
+  border-right: 1px dashed #94A3B8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #94A3B8;
+  font-size: 12px;
+  letter-spacing: 12px;
+  writing-mode: vertical-lr;
+  user-select: none;
+}
+
+/* 试卷抬头 */
+.exam-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.exam-super-title {
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #475569;
+  margin-bottom: 6px;
+}
+.exam-main-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+  color: #0F172A;
+}
+.exam-meta-grid {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 13px;
+  color: #334155;
+  border-top: 1px solid #E2E8F0;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 8px 0;
+  margin-bottom: 16px;
+  font-family: "SimSun", serif;
+}
+
+/* 考生信息填报栏 */
+.candidate-info-bar {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 18px;
+  padding: 0 10px;
+}
+.cand-item {
+  display: flex;
+  align-items: center;
+}
+.cand-line {
+  display: inline-block;
+  min-width: 90px;
+  border-bottom: 1px solid #334155;
+  margin-left: 4px;
+}
+
+/* 大题总得分汇总表 */
+.score-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  text-align: center;
+  font-size: 13px;
+}
+.score-summary-table th, .score-summary-table td {
+  border: 1px solid #64748B;
+  padding: 6px 4px;
+}
+.score-summary-table th {
+  background: #F8FAFC;
+  font-weight: 600;
+}
+
+/* 试卷大题区域 */
+.big-question-section {
+  margin-top: 24px;
+}
+.big-q-title {
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F1F5F9;
+  padding: 6px 12px;
+  border-left: 4px solid var(--primary-color);
+  margin-bottom: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
+}
+.big-q-score-box {
+  font-size: 12px;
+  font-weight: normal;
+  color: #475569;
+}
+
+/* 具体题目 */
+.q-item {
+  margin-bottom: 18px;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.q-title {
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.q-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 16px;
+  padding-left: 20px;
+  margin-bottom: 6px;
+}
+.q-options-col4 {
+  grid-template-columns: 1fr;
+}
+.q-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* 答题留白区 */
+.q-answer-space {
+  min-height: 90px;
+  border: 1px dashed #CBD5E1;
+  background: #FAFAFA;
+  border-radius: 4px;
+  margin: 10px 0 10px 20px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+/* 答案解析区（可切换显示） */
+.q-answer-panel {
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 8px 0 12px 20px;
+  font-size: 13px;
+  color: #92400E;
+  display: none;
+}
+.show-answer .q-answer-panel {
+  display: block;
+}
+.show-answer .opt-correct {
+  color: #15803D !important;
+  font-weight: 700 !important;
+  text-decoration: underline;
+}
+
+/* 水印 */
+.paper-watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    -35deg,
+    rgba(31, 78, 121, 0.03),
+    rgba(31, 78, 121, 0.03) 140px,
+    transparent 140px,
+    transparent 280px
+  );
+}
+
+/* 题目调序交互模式 */
+.reorder-active .q-item {
+  border: 1px dashed #2563EB;
+  background: #F8FAFC;
+  padding: 10px 14px;
+  border-radius: 6px;
+  position: relative;
+  transition: all .2s;
+  box-shadow: 0 1px 4px rgba(37,99,235,0.08);
+}
+.reorder-active .q-item:hover {
+  background: #EFF6FF;
+}
+.q-reorder-toolbar {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  background: #DBEAFE;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft YaHei", sans-serif;
+  font-size: 12px;
+}
+.reorder-active .q-reorder-toolbar {
+  display: flex;
+}
+.ro-btn {
+  background: #FFF;
+  border: 1px solid #BFDBFE;
+  color: #1E40AF;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all .15s;
+}
+.ro-btn:hover {
+  background: #1D4ED8;
+  color: #FFF;
+  border-color: #1D4ED8;
+}
+
+@media print {
+  .exam-toolbar { display: none !important; }
+  body { background: #FFF !important; }
+  .paper-container { padding: 0 !important; }
+  .exam-paper {
+    width: 100% !important;
+    box-shadow: none !important;
+    padding: 20mm !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- 顶部工具条 -->
+<div class="exam-toolbar">
+  <div class="exam-tb-left">
+    <button class="tb-btn tb-btn-ghost" onclick="location.href='resource.html'" style="height:28px;padding:0 12px;font-size:12.5px">‹ 返回题库试卷库</button>
+    <span>｜</span>
+    <span>📑 试卷预览与印刷排版中心</span>
+    <span style="font-size:12px;background:#334155;padding:2px 8px;border-radius:4px;color:#93C5FD">SJ01 结业考核 A卷</span>
+  </div>
+  <div class="exam-tb-right">
+    <button class="tb-btn tb-btn-ghost" id="btnToggleReorder" onclick="toggleReorderMode()">
+      <span>⇅</span> <span id="reorderBtnText">调整题目顺序</span>
+    </button>
+    <button class="tb-btn tb-btn-ghost" id="btnToggleAns" onclick="toggleAnswerMode()">
+      <span>🔑</span> <span id="ansBtnText">显示参考答案与采分要点</span>
+    </button>
+    <button class="tb-btn tb-btn-ghost" onclick="toast('正在导出 Word 格式试卷 (.docx)...')">
+      <span>📄</span> 导出 Word
+    </button>
+    <button class="tb-btn tb-btn-ghost" onclick="toast('正在生成标准答题卡 (PDF)...')">
+      <span>📥</span> 导出答题卡
+    </button>
+    <button class="tb-btn tb-btn-primary" onclick="window.print()">
+      <span>🖨️</span> 打印试卷 (A4/A3)
+    </button>
+  </div>
+</div>
+
+<!-- 试卷纸张 -->
+<div class="paper-container">
+  <div class="exam-paper" id="paperBody">
+    <div class="paper-watermark"></div>
+    <div class="seal-line">密 · 封 · 线 · 内 · 不 · 要 · 答 · 题</div>
+
+    <!-- 抬头 -->
+    <div class="exam-header">
+      <div class="exam-super-title">干部**学院 · 2026年秋季干部培训班结业理论考核</div>
+      <div class="exam-main-title">《习近平外交思想概论》结业考核试卷（A卷）</div>
+      <div class="exam-meta-grid">
+        <span>考核方式：闭卷笔试</span>
+        <span>考试时长：120 分钟</span>
+        <span>卷面总分：100 分</span>
+        <span>命题教师：理论教研室命题组</span>
+        <span>试卷版本：V2.1 (已审定)</span>
+      </div>
+    </div>
+
+    <!-- 考生信息填报栏 -->
+    <div class="candidate-info-bar">
+      <div class="cand-item">学员班次：<span class="cand-line"></span></div>
+      <div class="cand-item">学员姓名：<span class="cand-line"></span></div>
+      <div class="cand-item">学号：<span class="cand-line"></span></div>
+      <div class="cand-item">考场号：<span class="cand-line" style="min-width:60px"></span></div>
+      <div class="cand-item">座位号：<span class="cand-line" style="min-width:60px"></span></div>
+    </div>
+
+    <!-- 得分汇总栏 -->
+    <table class="score-summary-table">
+      <thead>
+        <tr>
+          <th>题号</th>
+          <th>一、单选</th>
+          <th>二、多选</th>
+          <th>三、判断</th>
+          <th>四、简答</th>
+          <th>五、案例论述</th>
+          <th>总分</th>
+          <th>核分人签名</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>满分</td>
+          <td>40</td>
+          <td>30</td>
+          <td>10</td>
+          <td>10</td>
+          <td>10</td>
+          <td>100</td>
+          <td rowspan="2"></td>
+        </tr>
+        <tr>
+          <td>得分</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 大题一：单选题 -->
+    <div class="big-question-section">
+      <div class="big-q-title">
+        <span>一、单项选择题（本大题共 20 小题，每小题 2 分，共 40 分。在每小题列出的备选项中只有一项是最符合题目要求的）</span>
+        <span class="big-q-score-box">得分：_____</span>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">1. 习近平外交思想的核心要义可以概括为“十个坚持”，其中明确指出新时代中国特色大国外交的根本遵循是（&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
+        <div class="q-options">
+          <div class="q-opt opt-correct">A. 坚持以维护党中央权威为统领加强党对对外工作的集中统一领导</div>
+          <div class="q-opt">B. 坚持以实现中华民族伟大复兴为使命推进中国特色大国外交</div>
+          <div class="q-opt">C. 坚持以推动构建人类命运共同体为总目标</div>
+          <div class="q-opt">D. 坚持以国家核心利益为底线维护国家主权、安全、发展利益</div>
+        </div>
+        <div class="q-answer-panel">
+          <b>【参考答案】</b> A<br>
+          <b>【考点解析】</b> 考查“十个坚持”的根本统领与政治原则。坚持以维护党中央权威为统领加强党对对外工作的集中统一领导，是中国外交的最大政治优势和根本政治保证。
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">2. 构建人类命运共同体理念被首次提出并写入联合国多项决议，其鲜明主张建设一个持久和平、普遍安全、（&nbsp;&nbsp;&nbsp;&nbsp;）、开放包容、清洁美丽的世界。</div>
+        <div class="q-options">
+          <div class="q-opt">A. 互利互惠</div>
+          <div class="q-opt opt-correct">B. 共同繁荣</div>
+          <div class="q-opt">C. 合作共赢</div>
+          <div class="q-opt">D. 公平正义</div>
+        </div>
+        <div class="q-answer-panel">
+          <b>【参考答案】</b> B<br>
+          <b>【考点解析】</b> 考查构建人类命运共同体的“五个世界”科学内涵：持久和平、普遍安全、共同繁荣、开放包容、清洁美丽。
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">3. 中国处理周边外交关系始终坚持的方针理念是（&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
+        <div class="q-options">
+          <div class="q-opt">A. 真实亲诚</div>
+          <div class="q-opt opt-correct">B. 亲诚惠容</div>
+          <div class="q-opt">C. 互尊互信</div>
+          <div class="q-opt">D. 求同存异</div>
+        </div>
+        <div class="q-answer-panel">
+          <b>【参考答案】</b> B<br>
+          <b>【考点解析】</b> 周边外交理念为“亲、诚、惠、容”；对非外交方针为“真、实、亲、诚”。
+        </div>
+      </div>
+
+      <div class="q-item" style="color:#64748B;font-style:italic">
+        [……第 4 至 20 题略，已依抽题规则从《外交理论知识点题库》单选池随机生成并排版……]
+      </div>
+    </div>
+
+    <!-- 大题二：多选题 -->
+    <div class="big-question-section">
+      <div class="big-q-title">
+        <span>二、多项选择题（本大题共 10 小题，每小题 3 分，共 30 分。在每小题列出的备选项中有两个或两个以上是符合题目要求的，多选、少选、错选均不得分）</span>
+        <span class="big-q-score-box">得分：_____</span>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">21. 习近平总书记在中央外事工作会议上强调，当前和今后一个时期，中国特色大国外交要紧紧围绕的主线与根本原则包括（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
+        <div class="q-options q-options-col4">
+          <div class="q-opt opt-correct">A. 紧紧围绕党和国家中心任务，稳中求进、守正创新</div>
+          <div class="q-opt opt-correct">B. 坚定维护国家主权、安全、发展利益</div>
+          <div class="q-opt opt-correct">C. 开辟中国外交理论与实践新境界，塑造我国我国同世界关系新格局</div>
+          <div class="q-opt opt-correct">D. 把我国国际影响力、感召力、塑造力提升到新高度</div>
+        </div>
+        <div class="q-answer-panel">
+          <b>【参考答案】</b> A B C D<br>
+          <b>【考点解析】</b> 考查新时代新征程对外工作的指导方针与历史使命。全选项皆为中央外事工作会议部署的战略重点。
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">22. 共建“一带一路”秉持的国际合作基本原则包括（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）。</div>
+        <div class="q-options">
+          <div class="q-opt opt-correct">A. 共商</div>
+          <div class="q-opt opt-correct">B. 共建</div>
+          <div class="q-opt opt-correct">C. 共享</div>
+          <div class="q-opt">D. 普惠</div>
+        </div>
+        <div class="q-answer-panel">
+          <b>【参考答案】</b> A B C<br>
+          <b>【考点解析】</b> “一带一路”合作的黄金原则是“共商、共建、共享”。
+        </div>
+      </div>
+
+      <div class="q-item" style="color:#64748B;font-style:italic">
+        [……第 23 至 30 题略，已依抽题规则从《外交理论知识点题库》多选池自动排版……]
+      </div>
+    </div>
+
+    <!-- 大题三：判断题 -->
+    <div class="big-question-section">
+      <div class="big-q-title">
+        <span>三、判断题（本大题共 10 小题，每小题 1 分，共 10 分。对的打“√”，错的打“×”）</span>
+        <span class="big-q-score-box">得分：_____</span>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">31. 推动构建新型国际关系，核心是相互尊重、公平正义、合作共赢。（&nbsp;&nbsp;&nbsp;&nbsp;）</div>
+        <div class="q-answer-panel">
+          <b>【参考答案】</b> √（正确）<br>
+          <b>【考点解析】</b> 新型国际关系内涵即相互尊重、公平正义、合作共赢，摒弃冷战思维和零和博弈。
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">32. 中国倡导的全球文明倡议强调以文明优越超越文明隔阂。（&nbsp;&nbsp;&nbsp;&nbsp;）</div>
+        <div class="q-answer-panel">
+          <b>【参考答案】</b> ×（错误）<br>
+          <b>【考点解析】</b> 中国主张以文明交流超越文明隔阂、文明互鉴超越文明冲突、文明包容超越文明优越。
+        </div>
+      </div>
+    </div>
+
+    <!-- 大题四：简答题 -->
+    <div class="big-question-section">
+      <div class="big-q-title">
+        <span>四、简答题（本大题共 2 小题，每小题 5 分，共 10 分）</span>
+        <span class="big-q-score-box">得分：_____</span>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">41. 简述全球发展倡议、全球安全倡议、全球文明倡议的内在统一性与战略价值。</div>
+        <div class="q-answer-space">考生答题区域：</div>
+        <div class="q-answer-panel">
+          <b>【参考答案及评分要点】</b><br>
+          1. 发展是安全和文明的基础，全球发展倡议聚焦破解发展赤字（2分）；<br>
+          2. 安全是发展的保障，全球安全倡议旨在消弭冲突根源，实现持久和平（2分）；<br>
+          3. 文明是发展与安全的精神纽带，全球文明倡议促进交流互鉴（1分）。
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">42. 简述对外工作中“坚持以国家核心利益为底线维护国家主权、安全、发展利益”的具体要求。</div>
+        <div class="q-answer-space">考生答题区域：</div>
+        <div class="q-answer-panel">
+          <b>【参考答案及评分要点】</b><br>
+          1. 坚定维护国家政治安全、政权安全与领土完整（2分）；<br>
+          2. 在涉台、涉疆、涉港等大是大非问题上敢于斗争、善于斗争（2分）；<br>
+          3. 坚决反对任何外部势力干涉中国内政（1分）。
+        </div>
+      </div>
+    </div>
+
+    <!-- 大题五：案例分析与论述题 -->
+    <div class="big-question-section">
+      <div class="big-q-title">
+        <span>五、综合案例分析与论述题（本大题共 1 题，共 10 分）</span>
+        <span class="big-q-score-box">得分：_____</span>
+      </div>
+
+      <div class="q-item">
+        <div class="q-title">
+          43. <b>【背景情境】</b> 2026年，国际格局加速演进，地缘冲突、多边主义受挫及逆全球化思潮抬头。某多边国际机制峰会前夕，部分西方代表团试图在共同宣言中加入排他性条款，削弱发展中国家在绿色转型中的正当权益。<br>
+          <b>【问题要求】</b> 请结合习近平外交思想中关于践行真正的多边主义、推动全球治理体系变革的原则要求，分析阐述我方代表团在磋商与斡旋中应采取的策略要点（字数不少于400字）。
+        </div>
+        <div class="q-answer-space" style="min-height:160px">考生答题区域：</div>
+        <div class="q-answer-panel">
+          <b>【参考答案及评分标准】</b><br>
+          1. <b>立论立场（3分）</b>：旗帜鲜明捍卫真正的多边主义，坚持共商共建共享，反对搞针对特定国家的“小圈子”。<br>
+          2. <b>统战与联盟策略（3分）</b>：团结广大全球南方国家，形成利益共同体与联合提案，筑牢道义高地。<br>
+          3. <b>磋商技巧与原则底线（4分）</b>：求同存异、坚守底线，善用程序性规则，引导各方达成求最大公约数的联合声明文本。
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:40px;color:#94A3B8;font-size:12px">
+      --- 试卷至此结束 · 干部**学院教务处制 ---
+    </div>
+  </div>
+</div>
+
+<script>
+let showAns = false;
+function toggleAnswerMode() {
+  showAns = !showAns;
+  const paper = document.getElementById('paperBody');
+  const btn = document.getElementById('btnToggleAns');
+  const text = document.getElementById('ansBtnText');
+  if (showAns) {
+    paper.classList.add('show-answer');
+    btn.classList.add('tb-btn-active');
+    text.textContent = '隐藏参考答案（切回考生模式）';
+  } else {
+    paper.classList.remove('show-answer');
+    btn.classList.remove('tb-btn-active');
+    text.textContent = '显示参考答案与采分要点';
+  }
+}
+
+let isReordering = false;
+function toggleReorderMode() {
+  isReordering = !isReordering;
+  const paper = document.getElementById('paperBody');
+  const btn = document.getElementById('btnToggleReorder');
+  const text = document.getElementById('reorderBtnText');
+  if (isReordering) {
+    paper.classList.add('reorder-active');
+    btn.classList.add('tb-btn-active');
+    text.textContent = '完成顺序调整';
+    ensureReorderToolbars();
+    toast('已开启题目调序模式：可在各题上方点击“上移”、“下移”或“置顶”调整顺序');
+  } else {
+    paper.classList.remove('reorder-active');
+    btn.classList.remove('tb-btn-active');
+    text.textContent = '调整题目顺序';
+    toast('题目顺序已更新并保存');
+  }
+}
+
+function ensureReorderToolbars() {
+  document.querySelectorAll('.big-question-section').forEach(sec => {
+    const qItems = sec.querySelectorAll('.q-item');
+    qItems.forEach((item, idx) => {
+      let tb = item.querySelector('.q-reorder-toolbar');
+      if (!tb) {
+        tb = document.createElement('div');
+        tb.className = 'q-reorder-toolbar';
+        item.prepend(tb);
+      }
+      tb.innerHTML = `
+        <span style="color:#1E40AF;font-weight:700">⇅ 调序操作：</span>
+        <button class="ro-btn" onclick="moveStandaloneQuestion(this, -1)" ${idx === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed"' : ''}>▲ 上移</button>
+        <button class="ro-btn" onclick="moveStandaloneQuestion(this, 1)" ${idx === qItems.length - 1 ? 'disabled style="opacity:0.4;cursor:not-allowed"' : ''}>▼ 下移</button>
+        <button class="ro-btn" onclick="moveStandaloneQuestion(this, \'top\')" ${idx === 0 ? 'disabled style="opacity:0.4;cursor:not-allowed"' : ''}>🔝 置顶</button>
+      `;
+    });
+  });
+}
+
+function moveStandaloneQuestion(btn, dir) {
+  const item = btn.closest('.q-item');
+  const section = item.parentElement;
+  if (!section) return;
+
+  if (dir === -1) {
+    const prev = item.previousElementSibling;
+    if (prev && prev.classList.contains('q-item')) {
+      section.insertBefore(item, prev);
+    }
+  } else if (dir === 1) {
+    const next = item.nextElementSibling;
+    if (next && next.classList.contains('q-item')) {
+      section.insertBefore(next, item);
+    }
+  } else if (dir === 'top') {
+    const firstQ = section.querySelector('.q-item');
+    if (firstQ && firstQ !== item) {
+      section.insertBefore(item, firstQ);
+    }
+  }
+  ensureReorderToolbars();
+  renumberStandaloneQuestions();
+  toast('题目顺序调整成功');
+}
+
+function renumberStandaloneQuestions() {
+  let curNum = 1;
+  document.querySelectorAll('.big-question-section').forEach(sec => {
+    sec.querySelectorAll('.q-item').forEach(item => {
+      const titleEl = item.querySelector('.q-title');
+      if (titleEl) {
+        titleEl.innerHTML = titleEl.innerHTML.replace(/^\s*\d+\.\s*/, `${curNum}. `);
+      }
+      curNum++;
+    });
+  });
+}
+
+function toast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,0.92);color:#FFF;padding:10px 20px;border-radius:6px;font-size:13px;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,0.3);font-family:sans-serif';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+</script>
+</body>
+</html>

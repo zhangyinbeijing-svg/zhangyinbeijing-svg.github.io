@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="stylesheet" href="common.css">
+<script src="store.js"></script>
+<script src="common.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>审批管理 · 干部**学院教务管理系统 原型 V1.0</title>
+<style>
+:root{
+  --primary:#1F4E79;--primary-2:#2E75B6;--primary-light:#eef4fa;
+  --success:#2E7D32;--warning:#F57F17;--danger:#C62828;--info:#0288D1;
+  --text:#2c3e50;--text-2:#595959;--text-3:#8a9099;--bg:#F5F6F8;--card:#fff;--line:#e5e8ec;
+  --topbar-h:56px;--nav-w:160px;--nav-w-c:48px;--r:4px;--r-card:8px;--r-modal:12px;--shadow:0 2px 8px rgba(0,0,0,.08);
+  --stamp-red:#c62828;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;font-size:14px;color:var(--text);background:var(--bg)}
+a{text-decoration:none;color:var(--primary-2);cursor:pointer}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c9d2dc;border-radius:4px}
+.btn{height:32px;padding:0 16px;border-radius:var(--r);font-size:13px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .15s;font-weight:500}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#173e61}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--text-2)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-danger{background:#fff;border-color:var(--danger);color:var(--danger)}.btn-danger:hover{background:rgba(198,40,40,.06)}
+.btn-success{background:var(--success);color:#fff}.btn-success:hover{background:#236327}
+.btn-text{background:none;border:none;color:var(--primary-2);cursor:pointer;font-size:13px;padding:0 4px}
+.btn-text:hover{text-decoration:underline}
+.btn-text.danger{color:var(--danger)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;white-space:nowrap;font-weight:500}
+.tag-blue{background:rgba(46,117,182,.12);color:var(--primary-2)}
+.tag-green{background:rgba(46,125,50,.12);color:var(--success)}
+.tag-orange{background:rgba(247,127,23,.12);color:var(--warning)}
+.tag-red{background:rgba(198,40,40,.12);color:var(--danger)}
+.tag-purple{background:rgba(123,80,160,.12);color:#7B50A0}
+.tag-cyan{background:rgba(0,137,123,.12);color:#00897B}
+.tag-gray{background:rgba(89,95,105,.1);color:var(--text-2)}
+
+.card{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow)}
+.card-body{padding:18px}
+.input,.sel{height:32px;border:1px solid var(--line);border-radius:var(--r);padding:0 10px;font-size:13px;outline:none;background:#fff;color:var(--text)}
+.input:focus,.sel:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(31,78,121,.12)}
+textarea.input{height:auto;padding:8px 10px;resize:vertical;width:100%}
+
+/* 顶部栏/导航 */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--primary);color:#fff;display:flex;align-items:center;padding:0 16px;gap:16px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.tb-logo{display:flex;align-items:center;gap:10px;min-width:230px}
+.tb-logo .mark{width:32px;height:32px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+.tb-logo .name{font-size:16px;font-weight:700;white-space:nowrap}
+.tb-search{flex:1;max-width:460px}.tb-search .input{width:100%;background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.25);color:#fff;height:34px}
+.tb-search .input::placeholder{color:rgba(255,255,255,.6)}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.tb-icon{position:relative;width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px}
+.tb-icon:hover{background:rgba(255,255,255,.15)}
+.tb-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;border-radius:999px;background:var(--danger);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.tb-ver{font-size:12px;color:rgba(255,255,255,.65);margin:0 4px}
+.tb-user{display:flex;align-items:center;gap:8px;cursor:pointer;padding:4px 8px;border-radius:var(--r)}
+.tb-user:hover{background:rgba(255,255,255,.15)}
+.tb-avatar{width:30px;height:30px;border-radius:50%;background:var(--primary-2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+
+.sidenav{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--nav-w);background:#fff;border-right:1px solid var(--line);overflow-y:auto;z-index:90;transition:width .2s}
+.nav-parent{display:flex;align-items:center;gap:8px;padding:0 12px;height:36px;cursor:pointer;color:var(--text-2);font-size:13px;position:relative}
+.nav-parent:hover{background:#f2f6fa;color:var(--primary)}
+.nav-icon{width:18px;text-align:center;font-size:15px;flex:none}
+.nav-label{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-caret{font-size:11px;color:var(--text-3);transition:transform .2s}
+.nav-group.open .nav-caret{transform:rotate(90deg)}
+.nav-group.open>.nav-parent{color:var(--primary);font-weight:700}
+.nav-children{display:none;background:#fafbfc}
+.nav-group.open .nav-children{display:block}
+.nav-child{padding:0 10px 0 32px;height:30px;display:flex;align-items:center;font-size:12.5px;color:var(--text-2);cursor:pointer;position:relative}
+.nav-child:hover{color:var(--primary);background:#f2f6fa}
+.nav-child.active{color:var(--primary);font-weight:700;background:rgba(31,78,121,.08)}
+.nav-child.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--primary)}
+
+.content{margin-left:var(--nav-w);margin-top:var(--topbar-h);padding:24px;min-height:calc(100vh - var(--topbar-h));transition:margin-left .2s}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+.breadcrumb{font-size:12px;color:var(--text-3);margin-bottom:6px}
+.page-title{font-size:20px;font-weight:700;color:var(--text)}
+.page-ops{display:flex;gap:8px;flex-wrap:wrap}
+
+/* 统计卡与 Tab 样式 */
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:#fff;border-radius:var(--r-card);padding:14px 16px;text-align:center;box-shadow:var(--shadow);border:1px solid #edf1f5;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.stat:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.stat.active{border-color:var(--primary);background:var(--primary-light)}
+.stat .n{font-size:22px;font-weight:700;font-family:Consolas,monospace;color:var(--primary)}
+.stat .n.g{color:var(--success)}.stat .n.o{color:var(--warning)}.stat .n.r{color:var(--danger)}.stat .n.p{color:#7B50A0}.stat .n.c{color:#00897B}
+.stat .l{font-size:12px;color:var(--text-3);margin-top:3px}
+
+.sub-tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.sub-tab{padding:8px 16px;font-size:13px;color:var(--text-2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.sub-tab:hover{color:var(--primary)}
+.sub-tab.active{color:var(--primary);font-weight:700;border-bottom-color:var(--primary)}
+.sub-tab .cnt{display:inline-block;min-width:18px;height:18px;line-height:18px;text-align:center;background:var(--danger);color:#fff;border-radius:999px;font-size:11px;padding:0 5px}
+
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.filter-bar .input{width:220px}.filter-bar .sel{width:140px}
+
+/* 数据表格 */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th,.data-table td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.data-table th{background:#fafbfc;color:var(--text-2);font-size:12px;font-weight:600;white-space:nowrap}
+.data-table tbody tr:hover{background:#f7fafd}
+.data-table .c-name{font-weight:700;color:var(--primary-2);cursor:pointer}
+.data-table .c-name:hover{text-decoration:underline}
+.cell-ellipsis{display:block;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.5;cursor:pointer;transition:color .15s}
+.cell-ellipsis:hover{color:var(--primary-2);text-decoration:underline}
+.floating-tooltip{position:fixed;background:rgba(15,23,42,.94);color:#fff;padding:6px 12px;border-radius:6px;font-size:12px;line-height:1.5;max-width:450px;word-break:break-all;z-index:99999;pointer-events:none;box-shadow:0 6px 24px rgba(0,0,0,.25);transition:opacity .15s ease-out,transform .15s ease-out;display:none;opacity:0;transform:translateY(2px);backdrop-filter:blur(4px)}
+.floating-tooltip.show{display:block;opacity:1;transform:translateY(0)}
+
+.alert{border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;gap:8px;align-items:flex-start;background:rgba(46,117,182,.07);border:1px solid rgba(46,117,182,.2);color:var(--primary);line-height:1.7}
+.alert.warn{background:rgba(247,127,23,.07);border-color:rgba(247,127,23,.3);color:var(--warning)}
+.alert.success{background:rgba(46,125,50,.07);border-color:rgba(46,125,50,.25);color:var(--success)}
+.alert.danger{background:rgba(198,40,40,.07);border-color:rgba(198,40,40,.25);color:var(--danger)}
+
+/* 审批链路 */
+.chain{display:flex;align-items:flex-start;margin:8px 0 6px}
+.ch-step{flex:1;text-align:center;position:relative;font-size:12px}
+.ch-step::before{content:"";position:absolute;top:11px;left:-50%;width:100%;height:2px;background:var(--line);z-index:0}
+.ch-step:first-child::before{display:none}
+.ch-step.done::before{background:var(--success)}
+.ch-step.cur::before{background:var(--success)}
+.ch-dot{width:24px;height:24px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:12px;background:#fff;border:2px solid var(--line);color:var(--text-3);position:relative;z-index:1}
+.ch-step.done .ch-dot{background:var(--success);border-color:var(--success);color:#fff}
+.ch-step.cur .ch-dot{background:#fff;border-color:var(--warning);color:var(--warning);font-weight:700;box-shadow:0 0 0 3px rgba(245,127,23,.18)}
+.ch-name{color:var(--text-2);font-weight:700}
+.ch-step.cur .ch-name{color:var(--warning)}
+.ch-sub{color:var(--text-3);font-size:11px;line-height:1.5;margin-top:2px}
+
+/* 抽屉与大模态 */
+.drawer-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(2px);z-index:210}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:660px;background:#fff;box-shadow:-6px 0 24px rgba(0,0,0,.18);z-index:220;display:flex;flex-direction:column}
+.drawer-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#fafbfc}
+.drawer-head h3{font-size:16px;font-weight:700;color:var(--primary)}
+.drawer-body{flex:1;overflow-y:auto;padding:20px}
+.drawer-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;background:#fafbfc}
+
+.d-sec{font-size:13.5px;font-weight:700;margin:18px 0 10px;padding-left:8px;border-left:3px solid var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:space-between}
+.d-sec:first-child{margin-top:0}
+.d-grid{display:grid;grid-template-columns:105px 1fr;gap:8px 12px;font-size:13px}
+.d-grid .k{color:var(--text-3)}
+
+/* ================= 专属公文审签大单据模态框 (Page Modal) ================= */
+.doc-modal{position:fixed;top:40px;bottom:40px;left:50%;transform:translateX(-50%);width:960px;max-width:96vw;background:#fff;border-radius:12px;box-shadow:0 12px 48px rgba(0,0,0,.28);z-index:230;display:flex;flex-direction:column;overflow:hidden;border:1px solid #d0d7de}
+.doc-modal-head{background:linear-gradient(180deg,#ffffff,#f7f9fb);border-bottom:1px solid #e1e4e8;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.doc-modal-head .title-box{display:flex;align-items:center;gap:12px}
+.doc-modal-head .badge-type{padding:4px 10px;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:1px}
+.doc-modal-body{flex:1;overflow-y:auto;padding:28px 36px;background:#fafbfc}
+.doc-modal-foot{padding:14px 24px;border-top:1px solid var(--line);background:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px}
+
+/* 红头公文纸质感 */
+.paper-sheet{background:#fff;border:1px solid #e1e6eb;border-radius:8px;padding:32px 36px;box-shadow:0 3px 12px rgba(0,0,0,.04);position:relative}
+.red-header{text-align:center;margin-bottom:24px;position:relative}
+.red-header .inst-name{font-size:24px;font-weight:800;color:#c62828;letter-spacing:3px;font-family:"SimSun","Songti SC",serif}
+.red-header .doc-kind{font-size:20px;font-weight:700;color:#1F4E79;letter-spacing:2px;margin-top:6px}
+.red-header .doc-meta-row{display:flex;justify-content:space-between;border-bottom:2px solid #c62828;padding-bottom:10px;margin-top:18px;font-size:12px;color:var(--text-2)}
+
+/* 骑缝印章与防伪章 */
+.stamp-seal{position:absolute;top:28px;right:40px;width:105px;height:105px;border:3px solid var(--stamp-red);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--stamp-red);font-weight:800;transform:rotate(-15deg);opacity:.85;pointer-events:none;background:rgba(255,255,255,.7);box-shadow:0 0 0 2px var(--stamp-red) inset;text-shadow:0 0 1px rgba(198,40,40,.3)}
+.stamp-seal .s-sub{font-size:10px;letter-spacing:1px}
+.stamp-seal .s-main{font-size:15px;margin:3px 0;letter-spacing:2px}
+.stamp-seal .s-star{font-size:12px}
+
+/* 公文表单格 */
+.doc-table{width:100%;border-collapse:collapse;border:1px solid #2b2b2b;margin-bottom:20px;font-size:13px}
+.doc-table td,.doc-table th{border:1px solid #d3d9df;padding:10px 14px}
+.doc-table .field-label{background:#f4f7fa;font-weight:600;color:#333;width:125px;text-align:right}
+.doc-table .field-val{background:#fff;color:#1a1a1a}
+
+/* 模块专属卡片 */
+.spec-box{border-radius:6px;border:1px solid #d5e2ef;background:#fff;padding:16px;margin:16px 0}
+.spec-title{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+
+/* 对比卡片（调课前后） */
+.compare-grid{display:grid;grid-template-columns:1fr 40px 1fr;gap:12px;align-items:center;margin:12px 0}
+.compare-box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:14px}
+.compare-box.after{background:#f0fdf4;border-color:#bbf7d0}
+.compare-arrow{text-align:center;font-size:22px;color:var(--primary-2);font-weight:700}
+
+/* 考勤仪表/学时红线 */
+.leave-gauge{display:flex;align-items:center;gap:16px;background:#fff8e6;border:1px solid #ffe082;border-radius:6px;padding:14px;margin:12px 0}
+.gauge-circle{width:60px;height:60px;border-radius:50%;background:#fff;border:4px solid var(--warning);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:var(--warning);flex:none}
+.gauge-circle.safe{border-color:var(--success);color:var(--success)}
+.gauge-circle.danger{border-color:var(--danger);color:var(--danger)}
+
+/* 快速批示评语条 */
+.quick-ops{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.quick-chip{background:#eef4fa;border:1px solid #cbdde9;color:var(--primary);border-radius:4px;padding:3px 10px;font-size:12px;cursor:pointer;transition:all .15s}
+.quick-chip:hover{background:var(--primary);color:#fff}
+
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(40,45,52,.92);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;z-index:350;box-shadow:var(--shadow);max-width:70%}
+@media (max-width:1100px){.doc-modal{width:98vw;top:10px;bottom:10px}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo"><div class="mark">院</div><div class="name">干部**学院教务管理系统</div></div>
+  <div class="tb-search"><input class="input" placeholder="🔍 全局搜索：审批单据 / 培训班次 / 授课专家 / 申请人…"></div>
+  <div class="tb-right">
+    <span class="tb-ver">V1.0 原型</span>
+    <div class="tb-icon" onclick="location.href='notice.html'" title="通知与待办中心">🔔<span class="tb-badge">6</span></div>
+    <div class="tb-icon" onclick="toast('帮助文档请参阅《教务系统详细需求文档PRD V1.0》', 'info')" title="帮助中心">❓</div>
+    <div class="tb-user" id="tbUser"><div class="tb-avatar">张</div><span>张三（处领导·二级审批员）</span><span style="font-size:10px">▼</span></div>
+  </div>
+</header>
+
+<aside class="sidenav" id="sidenav"></aside>
+
+<main class="content">
+  <div class="page-head">
+    <div>
+      <div class="breadcrumb" id="crumb">首页 / 审批管理 / 我的审批 / 我的待审批</div>
+      <h2 class="page-title" id="pageTitle">我的审批 · 我的待审批</h2>
+    </div>
+    <div class="page-ops" id="pageOps"></div>
+  </div>
+  <div id="viewBody"></div>
+</main>
+
+<!-- 普通滑动抽屉（轻量查看） -->
+<div class="drawer-mask hidden" id="drawerMask" onclick="closeDrawer()"></div>
+<div class="drawer hidden" id="drawer">
+  <div class="drawer-head"><h3 id="dwTitle">单据详情</h3><span class="btn-text" onclick="closeDrawer()">✕ 关闭</span></div>
+  <div class="drawer-body" id="dwBody"></div>
+  <div class="drawer-foot" id="dwFoot"></div>
+</div>
+
+<!-- ================= 全功能专属公文审签大单据页面/模态框 ================= -->
+<div class="drawer-mask hidden" id="docMask" onclick="closeDocModal()"></div>
+<div class="doc-modal hidden" id="docModal">
+  <div class="doc-modal-head">
+    <div class="title-box">
+      <span class="badge-type" id="docBadgeType">排课审批</span>
+      <h3 style="font-size:17px;font-weight:700;color:#1F4E79" id="docHeadTitle">干部**学院审批呈批单</h3>
+      <span style="font-size:12px;color:var(--text-3);margin-left:8px" id="docCode">PK-2026-0921</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="btn btn-ghost" style="height:28px;font-size:12px" onclick="window.print()">🖨️ 打印呈批表</button>
+      <span class="btn-text" style="font-size:16px;cursor:pointer" onclick="closeDocModal()">✕</span>
+    </div>
+  </div>
+  <div class="doc-modal-body" id="docBody"></div>
+  <div class="doc-modal-foot" id="docFoot"></div>
+</div>
+
+<script>
+function $(id){return document.getElementById(id)}
+function toast(msg){
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2800);
+}
+
+/* ============ 导航配置（全站统一，含5类审批+全周期记录） ============ */
+const NAV=[
+ {id:'workbench',icon:'🏠',name:'工作台',direct:true},
+ {id:'teach',icon:'📚',name:'教学管理',children:[{id:'teach-system',name:'课程体系',pg:'4.2-P01'},{id:'teach-course',name:'课程管理',pg:'4.2-P02'}]},
+ {id:'train',icon:'🎓',name:'培训管理',children:[{id:'train-class',name:'培训班管理',pg:'4.3-P01'},{id:'base-category',name:'培训类别',pg:'4.2-P04'}]},
+ {id:'resource',icon:'🗂️',name:'资源管理',children:[
+   {id:'res-plan',name:'教案库',pg:'4.4-P01'},{id:'res-book',name:'教材库',pg:'4.4-P02'},
+   {id:'res-case',name:'案例库',pg:'4.4-P03'},{id:'res-self',name:'自他资源库',pg:'4.4-P04'},
+   {id:'res-bank',name:'题库试卷库',pg:'4.4-P05'},{id:'res-tag',name:'标签管理',pg:'4.4-P06'}]},
+ {id:'edu',icon:'📊',name:'教务组织',children:[{id:'edu-plan',name:'教学计划管理',pg:'4.5-P01'},{id:'edu-data',name:'教务数据管理',pg:'4.5-P02'},{id:'edu-report',name:'多维度报表',pg:'4.5-P03'},{id:'edu-export',name:'数据导出与集成',pg:'4.5-P04'},{id:'edu-settle',name:'结算报告模板',pg:'4.5-P05'}]},
+ {id:'teacher',icon:'👥',name:'师资库',children:[{id:'tea-list',name:'师资信息',pg:'4.6-P01'},{id:'tea-tag',name:'分级分类标签',pg:'4.6-P03'},{id:'tea-archive',name:'授课质量档案',pg:'4.6-P02'},{id:'tea-report',name:'综合评价报告',pg:'4.6-P05'}]},
+ {id:'student',icon:'✪',name:'学员库',children:[{id:'stu-list',name:'学员信息',pg:'4.7-P01'}]},
+ {id:'room',icon:'🏫',name:'教室设备',children:[{id:'room-point',name:'教学点管理',pg:'4.8-P01'},{id:'room-room',name:'教室设备',pg:'4.8-P02'},{id:'room-device',name:'人脸考勤设备',pg:'4.8-P03'}]},
+ {id:'approve',icon:'✅',name:'审批管理',children:[
+   {id:'apv-my',name:'我的审批',pg:'4.9-P01'},
+   {id:'apv-record',name:'审批记录',pg:'4.9-P03'},
+   {id:'apv-scheme',name:'方案审批',pg:'4.9-P01'},
+   {id:'apv-plan',name:'计划审批',pg:'4.9-P01'},
+    {id:'apv-schedule',name:'排课审批',pg:'4.9-P01'},
+   {id:'apv-budget',name:'预算审批',pg:'4.9-P01'},
+   {id:'apv-class',name:'开结班审批',pg:'4.9-P01'},
+   {id:'apv-adjust',name:'调停课审批',pg:'4.9-P01'},
+   {id:'apv-leave',name:'学员请假审批',pg:'4.9-P01'}
+ ]},
+ {id:'org',icon:'🏛️',name:'组织管理',children:[{id:'org-structure',name:'组织架构',pg:'4.10-P01'},{id:'org-account',name:'账户管理',pg:'4.10-P02'},{id:'org-user',name:'用户权限',pg:'4.10-P03'},{id:'org-data',name:'数据权限',pg:'4.10-P04'},{id:'org-three',name:'三员管理',pg:'4.10-P05'}]},
+ {id:'base',icon:'⚙️',name:'基础设置',children:[{id:'base-log',name:'系统日志',pg:'4.11-P03'},{id:'base-rule',name:'经费规则库',pg:'4.11-P04'}]},
+ {id:'screen',icon:'📈',name:'可视大屏',children:[{id:'scr-overview',name:'总览大屏',pg:'4.12'},{id:'scr-study',name:'学情大屏',pg:'4.12'},{id:'scr-resource',name:'资源大屏',pg:'4.12'}]}
+];
+
+function setNavActive(el){
+  document.querySelectorAll('.nav-child').forEach(n=>n.classList.remove('active'));
+  if(el){
+    el.classList.add('active');
+    const group=el.closest('.nav-group');
+    if(group&&!group.classList.contains('open'))group.classList.add('open');
+    if(window.scrollNavElementIntoView)window.scrollNavElementIntoView(el);
+  }
+}
+$('tbUser').onclick=()=>toast('当前身份：张三 · 二级审批员（培训处领导），负责主持日常教务审签');
+
+/* ============ 单据数据池（涵盖 方案审批、计划审批、排课、预算、开结班、调停课、学员请假） ============ */
+const ME='张三';
+const ST_CLS={'审核中':'tag-orange','已排课':'tag-green','已通过':'tag-green','审批驳回':'tag-red','已驳回':'tag-red','已作废':'tag-gray','已撤销':'tag-gray'};
+const TYPE_CLS={'方案审批':'tag-blue','计划审批':'tag-purple','排课审批':'tag-blue','预算审批':'tag-purple','开结班审批':'tag-green','调停课审批':'tag-orange','学员请假审批':'tag-cyan','请假审批':'tag-cyan'};
+const LOCK={'预锁定':'tag-orange','正式锁定':'tag-green','正式生效':'tag-green','已释放':'tag-gray','无需锁定':'tag-gray','已锁定基线':'tag-green','正式下达':'tag-green'};
+
+let BILLS=[
+ // 0-1. 方案审批（培训班教学方案请示呈批：处领导审核 · 抄教务部领导）
+ {id:'FA-2026-B2503',type:'方案审批',title:'关于举办2503期处级干部进修班教学方案的请示报告（30课时 · 45人 · 处领导审核 · 抄教务部领导）',applicant:'张三',dept:'培训处',time:'2026-09-25 09:30',status:'审核中',lock:'预锁定',cur:'二级审批',mine:false,
+  mainLeader:'李处长 (培训一部)',
+  jointLeaders:['赵处长 (教研部)'],
+  ccLeader:'3级教务处领导 (王教务长/综合办)',
+  ccStatus:'待二级处领导核准后抄送',
+  scheme:{
+    clsId:'B2503',
+    clsName:'2503期处级干部进修班',
+    cat:'党校班',
+    target:'处级干部',
+    host:'办公厅',
+    dept:'培训一部',
+    duration:'2026-09-01 至 2026-09-30（20天）',
+    stuCount:45,
+    budget:'¥185,000',
+    headTeacher:'张三 (带班老师)',
+    room:'教学大楼 301报告厅',
+    courses:'习近平外交思想概论(16课时) / 宏观经济形势分析(6课时) / 涉外法治与海外利益安全(8课时)',
+    totalHours:30,
+    purpose:'紧扣外交外事干部履职能力需求，采取脱产集训、专家讲授与结构化研讨相结合方式，开班前锁定初步场地(教学大楼 301报告厅)与核心师资，结班前组织教学成果综合汇报。',
+    approverNode:'李处长 (主审 · 培训一部) / 赵处长 (会签 · 教研部)',
+    copyTo:'3级教务处领导 (王教务长、教务部综合办)',
+    attachments:[
+      '《2503期处级班教学实施方案（草案送审稿）》.docx (520KB)',
+      '《核心课程模块大纲与师资配备论证表》.pdf (1.8MB)'
+    ]
+  },
+  chain:[
+    {n:'教务提请',u:'张三 (带班教务员)',s:'done',t:'2026-09-25 09:30',op:'编制教学方案并提请处领导审签，抄送3级教务处领导'},
+    {n:'处领导审核',u:'李处长 (主审 · 培训一部) / 赵处长 (会签 · 教研部)',s:'cur',t:'',op:''},
+    {n:'抄送教务部',u:'3级教务处领导 (王教务长/综合办)',s:'wait',t:'',op:'【条件触发】待二级处领导（含会签处领导）审核通过后，系统自动触发抄送'}
+  ]},
+
+ // 0. 计划审批（年度重点班次与教学计划呈批报告）
+ {id:'JH-2026-0001',type:'计划审批',title:'干部**学院2026年度重点班次与教学计划呈批报告（6期重点班 · 330人 · 885学时 · ¥362.5万）',applicant:'李明',dept:'教务部',time:'2026-01-15 10:00',status:'审核中',lock:'预锁定',cur:'二级审批',mine:false,
+  plan:{
+    name:'2026年学院重点班次与教学计划',
+    year:'2026',
+    classesTotal:6,
+    studentsTotal:330,
+    hoursTotal:885,
+    budgetTotal:'362.5',
+    classes:[
+      {id:'KC-2026-01',name:'第26期省部级主要领导干部进修班',type:'主体班次',quarter:'Q1',timeRange:'2026-03-05 至 04-02',students:50,hours:160,budget:'68.0',room:'301报告厅',teacher:'王立新主任',core:'习近平新时代中国特色社会主义思想 · 领导现代化能力 · 党性锤炼'},
+      {id:'KC-2026-02',name:'2026年第1期中青年干部培训一班（青干班）',type:'主体班次',quarter:'Q1',timeRange:'2026-03-15 至 06-30',students:65,hours:320,budget:'98.5',room:'201阶梯教室',teacher:'李敏老师',core:'政治理论深化 · 宏观经济与科技前沿 · 基层调研实战'},
+      {id:'KC-2026-03',name:'厅局级领导干部涉外法治与国际合规专题研讨班',type:'专题研讨班',quarter:'Q2',timeRange:'2026-05-10 至 05-24',students:45,hours:80,budget:'42.0',room:'508研讨室',teacher:'陈建新教授',core:'涉外法律斗争策略 · 跨境数据安全与合规 · 国际仲裁实务演练'},
+      {id:'KC-2026-04',name:'2026年第1期驻外使领馆新任参赞及外交官轮训班',type:'专项轮训班',quarter:'Q2',timeRange:'2026-06-01 至 06-21',students:40,hours:110,budget:'56.0',room:'601模拟谈判室',teacher:'王志军专家',core:'新时代外交战略布局 · 外交礼仪与谈判艺术 · 涉外突发危机公关'},
+      {id:'KC-2026-05',name:'数字经济与人工智能赋能高质量发展高级研修班',type:'专题研讨班',quarter:'Q3',timeRange:'2026-09-08 至 09-22',students:55,hours:75,budget:'38.0',room:'智慧实训厅',teacher:'张秀荣教授',core:'通用大模型演进 · 算力基座与数字安全 · 产业数字化转型案例'},
+      {id:'KC-2026-06',name:'新任县处级领导干部政治能力提升示范培训班',type:'示范特训班',quarter:'Q4',timeRange:'2026-10-12 至 11-10',students:75,hours:140,budget:'60.0',room:'501阶梯教室',teacher:'赵海涛老师',core:'重要论述学习 · 群众工作与应急处突 · 廉政风险防范实训'}
+    ],
+    summary:'教务部按院党组部署完成2026年度重点班次编制论证，重点保障主体班次与战略急需专题研讨班，总课时及办学场地已预排校验无冲突，呈请院领导审签批示下达。'
+  },
+  chain:[
+    {n:'教务编制',u:'李明 (教务部计划主管)',s:'done',t:'2026-01-08 09:30',op:'完成年初重点班次需求摸底与指标大纲编制'},
+    {n:'部门初审',u:'张华 (教务部处长)',s:'done',t:'2026-01-12 16:40',op:'教研室集体备课意向与师资场地核验通过，呈请院领导审签'},
+    {n:'院领导审签',u:'张三 / 陈建国副院长',s:'cur',t:'',op:''}
+  ]},
+
+  {id:'JH-2025-0002',type:'计划审批',title:'干部**学院2025年度重点班次教学计划（已全周期结课）',applicant:'李明',dept:'教务部',time:'2025-01-10 14:20',status:'已通过',lock:'正式下达',cur:'—',mine:false,
+   plan:{name:'2025年学院重点班次与教学计划',year:'2025',classesTotal:5,studentsTotal:280,hoursTotal:720,budgetTotal:'310.0'},
+   chain:[
+     {n:'教务编制',u:'李明',s:'done',t:'2025-01-10 14:20',op:'年度计划编制送审'},
+     {n:'部门初审',u:'张华',s:'done',t:'2025-01-12 09:30',op:'初审合格呈报'},
+     {n:'院领导审签',u:'陈副院长',s:'done',t:'2025-01-15 11:00',op:'审签同意。按计划统筹推进实施。'}
+   ]},
+
+ // 1. 排课审批
+ {id:'PK-2026-0921',type:'排课审批',title:'党校班（第26期）· 党性修养与理想信念教育 第3课时',applicant:'李四',dept:'培训处',time:'2026-09-25 09:12',status:'审核中',lock:'预锁定',cur:'二级审批',mine:false,
+  res:{course:'党性修养与理想信念教育',cls:'党校班（第26期）',slot:'2026-09-28 09:00-12:00',teacher:'王建军（一级 · 名师）',room:'501教室（8×10 · 80人）',stu:42,conflict:'师资、教室、班次时间 0 冲突校验通过'},
+  chain:[{n:'三级提交',u:'李四',s:'done',t:'2026-09-25 09:12',op:'提交排课申请，资源已预锁定'},{n:'二级审批',u:'张三',s:'cur',t:'',op:''},{n:'一级审批',u:'—',s:'skip',t:'',op:'常规排课无需一级审批'}]},
+
+ {id:'PK-2026-0922',type:'排课审批',title:'外事骨干班（第4期）· 外交礼仪与礼宾实务 第1课时',applicant:'李四',dept:'培训处',time:'2026-09-25 10:03',status:'审核中',lock:'预锁定',cur:'二级审批',mine:false,
+  res:{course:'外交礼仪与礼宾实务',cls:'外事骨干班（第4期）',slot:'2026-09-29 14:00-17:00',teacher:'刘晓芸（二级 · 资深）',room:'502教室（6×8 · 48人）',stu:36,conflict:'师资时间充裕，教室容量满足且具备同传录播设施'},
+  chain:[{n:'三级提交',u:'李四',s:'done',t:'2026-09-25 10:03',op:'提交排课申请，资源已预锁定'},{n:'二级审批',u:'张三',s:'cur',t:'',op:''},{n:'一级审批',u:'—',s:'skip',t:'',op:'常规排课无需一级审批'}]},
+
+ // 2. 预算审批（张三待办补全，解决预算待办为0问题！）
+ {id:'YS-2026-0140',type:'预算审批',title:'中青年干部进修班教学与研讨经费预算（¥48,500）',applicant:'王五',dept:'财务处',time:'2026-09-25 10:30',status:'审核中',lock:'无需锁定',cur:'二级审批',mine:false,
+  budget:{amount:48500,cls:'中青年干部进修班（第12期）',scale:'45人 · 5天',norm:'处级定额 550元/人·天',
+   items:[
+     ['师资费',18000,'正高师资≤1500元/课时 · 标准内 ✓'],
+     ['住宿费',16000,'单人标间≤500元/天 · 标准内 ✓'],
+     ['伙食费',7500,'人均≤150元/天 · 标准内 ✓'],
+     ['场地资料费',4500,'标准教材及报告厅耗材 ✓'],
+     ['现场教学交通',2500,'定点租车费 ✓']
+   ],
+   check:'合规校验全通过（5/5 科目均在红线内）',level:'金额 ≤5万元，二级审批员（处领导）终审生效'},
+  chain:[{n:'预算编制',u:'王五',s:'done',t:'2026-09-25 10:30',op:'编制预算并通过财规自动核验系统，提交处领导审签'},{n:'二级审批',u:'张三',s:'cur',t:'',op:''},{n:'一级审批',u:'—',s:'skip',t:'',op:'≤5万无需一级追加'}]},
+
+ {id:'YS-2026-0135',type:'预算审批',title:'政能班（第9期）培训预算（¥86,000 · 大额）',applicant:'王五',dept:'财务处',time:'2026-09-24 16:40',status:'审核中',lock:'无需锁定',cur:'一级审批',mine:false,
+  budget:{amount:86000,cls:'政能班（第9期）',scale:'60人 · 7天',norm:'司局级定额 760元/人·天',
+   items:[['师资费',32000,'人均标准内 ✓'],['住宿费',28000,'人均≤500元/天 ✓'],['伙食费',15000,'标准内 ✓'],['场地费',6000,'标准内 ✓'],['资料费',5000,'标准内 ✓']],
+   check:'合规校验通过（5/5 科目）',level:'金额>5万，二级审批通过后自动追加一级审批（院领导）'},
+  chain:[{n:'三级提交',u:'王五',s:'done',t:'2026-09-24 16:40',op:'合规校验通过，提交审批'},{n:'二级审批',u:'张三',s:'done',t:'2026-09-25 08:50',op:'同意，经费标准符合管理办法，转院领导终审'},{n:'一级审批',u:'赵院长',s:'cur',t:'',op:'大额预算（>5万）追加一级审批'}]},
+
+ // 3. 开结班审批
+ {id:'KB-2026-0008',type:'开结班审批',title:'涉外法治高级研修班（第3期）开班准入审批',applicant:'李四',dept:'培训处',time:'2026-09-25 09:30',status:'审核中',lock:'无需锁定',cur:'二级审批',mine:false,
+  clsCheck:{mode:'开班准入',clsName:'涉外法治高级研修班（第3期）',duration:'2026-10-10 至 2026-10-17（8天）',stuCount:'38人',
+   items:[
+     ['生源审核完成度','38/38人（100%全审核通过，政审材料归档）','合格 ✓'],
+     ['教学方案与大纲','挂接课程体系4个核心单元，大纲完备度100%','合格 ✓'],
+     ['项目预算批复','预算YS-2026-0129已批复（¥52,000）并锁定基线','合格 ✓'],
+     ['师资与教室排课','8个单元课时全部完成预锁定并核验零冲突','合格 ✓'],
+     ['后勤学员手册','学员手册校对完成，住宿及就餐席位已锁定','合格 ✓'],
+     ['突发应急预案','涉外纪律与健康应急处置预案已签署备案','合格 ✓']
+   ],
+   summary:'六项开班准入指标100%就绪，符合开班准入标准'},
+  chain:[{n:'三级自检提交',u:'李四',s:'done',t:'2026-09-25 09:30',op:'开班六大要素自检合格，呈请开班审批'},{n:'二级审批',u:'张三',s:'cur',t:'',op:''},{n:'一级审批',u:'—',s:'skip',t:'',op:'开班常规准入由处领导审核生效'}]},
+
+ // 4. 调停课审批
+ {id:'TK-2026-0015',type:'调停课审批',title:'外事骨干班（第4期）· 9-29《国际礼宾实务》因外事重大迎宾任务紧急调课申请',applicant:'李四',dept:'培训处',time:'2026-09-25 11:00',status:'审核中',lock:'预锁定',cur:'二级审批',mine:false,
+  adjust:{act:'同日调整',cls:'外事骨干班（第4期）',
+   oldSlot:'2026-09-29 14:00-17:00 · 502教室 · 刘晓芸教师',
+   newSlot:'2026-09-30 09:00-12:00 · 多功能报告厅 · 刘晓芸教师',
+   reason:'授课专家临时受命参加主场外事重要礼宾迎见任务，申请调整授课时段',
+   effect:'批准后原502教室自动释放，新报告厅由预锁定转正式锁定，自动向36名学员推送短信通告',
+   cert:'附：司局紧急公务证明函.pdf（已核验）'},
+  chain:[{n:'教务员提请',u:'李四',s:'done',t:'2026-09-25 11:00',op:'专家出差公函齐备，新时段资源已预锁定，提请审批'},{n:'二级审批',u:'张三',s:'cur',t:'',op:''},{n:'一级审批',u:'—',s:'skip',t:'',op:'调课审批无需一级审批'}]},
+
+ {id:'TK-2026-0012',type:'调停课审批',title:'驻外干部轮训班 · 9-30《领事保护实务》临时停课申请',applicant:'李四',dept:'培训处',time:'2026-09-25 08:30',status:'审核中',lock:'正式锁定→待释放',cur:'二级审批',mine:false,
+  adjust:{act:'停课',cls:'驻外干部轮训班',
+   oldSlot:'2026-09-30 09:00-12:00 · 601研讨教室 · 吴国强教师',
+   newSlot:'后续由教务处补排 3 课时或计入专题讨论',
+   reason:'授课教师受命离京参加领保应急工作组',
+   effect:'审批通过后系统自动释放该时段教师与教室资源，原排课单PK-2026-0902作废留存备查',
+   cert:'附：公务出差审批单（驻外司）.jpg'},
+  chain:[{n:'三级提交',u:'李四',s:'done',t:'2026-09-25 08:30',op:'发起停课申请'},{n:'二级审批',u:'张三',s:'cur',t:'',op:''},{n:'一级审批',u:'—',s:'skip',t:'',op:'停课无需一级审批'}]},
+
+ // 5. 学员请假审批
+ {id:'QJ-2026-0091',type:'学员请假审批',title:'学员 王晓峰 事假申请（2026-09-28，请假1天/8课时）',applicant:'组织员小周',dept:'涉外法治班（第2期）',time:'2026-09-25 11:45',status:'审核中',lock:'无需锁定',cur:'二级审批',mine:false,
+  leave:{stu:'王晓峰（***亚洲司 · 副处级）',cls:'涉外法治班（第2期）',
+   range:'2026-09-28 08:30 至 17:30（1天）',hours:8,totalHours:64,cumHours:8,
+   reason:'紧急参加多边经贸协定司际磋商协调会',
+   rate:'12.5%（累计缺勤8/64课时）',safe:true,
+   alert:'未触及20%红线（干部培训管理规定：缺勤超过总学时20%即13课时，将无法获得结业证书）',
+   proof:'选派单位公务派差便函（加盖司局印章）.pdf'},
+  chain:[{n:'组织员录入',u:'组织员小周',s:'done',t:'2026-09-25 11:45',op:'学员提供公函，完成缺勤学时核算'},{n:'二级审批',u:'张三',s:'cur',t:'',op:''},{n:'一级审批',u:'—',s:'skip',t:'',op:'请假审批无需一级审批'}]},
+
+ {id:'QJ-2026-0088',type:'学员请假审批',title:'学员 陈明远 事假申请（2026-09-26 全天）',applicant:'组织员小周',dept:'党校班（第26期）',time:'2026-09-25 11:20',status:'审核中',lock:'无需锁定',cur:'二级审批',mine:false,
+  leave:{stu:'陈明远（***欧洲司 · 正处级）',cls:'党校班（第26期）',
+   range:'2026-09-26 09:00 至 17:00（1天）',hours:8,totalHours:80,cumHours:8,
+   reason:'陪同外宾会见（司里公务）',rate:'10.0%（安全区间）',safe:true,
+   alert:'缺勤课时计入考勤档案，学时按请假核减，未超20%无证书红线',proof:'欧洲司调函复印件'},
+  chain:[{n:'组织员登记',u:'组织员小周',s:'done',t:'2026-09-25 11:20',op:'学员请假登记表单已提交'},{n:'二级审批',u:'张三',s:'cur',t:'',op:''},{n:'一级审批',u:'—',s:'skip',t:'',op:'请假无需一级审批'}]},
+
+ // 历史记录/办结/我提交的单据
+ {id:'PK-2026-0920',type:'排课审批',title:'党校班（第26期）· 国际战略专题 第2课时',applicant:'李四',dept:'培训处',time:'2026-09-24 15:00',status:'已排课',lock:'正式锁定',cur:'—',mine:false,
+  res:{course:'国际战略专题',cls:'党校班（第26期）',slot:'2026-09-27 14:00-17:00',teacher:'孙立群（一级 · 名师）',room:'学术报告厅（16×20 · 320人）',stu:120},
+  chain:[{n:'三级提交',u:'李四',s:'done',t:'2026-09-24 15:00',op:'提交排课申请'},{n:'二级审批',u:'张三',s:'done',t:'2026-09-24 17:20',op:'同意，已排课。资源转正式锁定，同步班级/教师/教室三课表'},{n:'一级审批',u:'—',s:'skip',t:'',op:''}]},
+
+ {id:'YS-2026-0128',type:'预算审批',title:'党校班（第26期）培训预算（¥48,000）',applicant:'王五',dept:'财务处',time:'2026-09-10 10:20',status:'已通过',lock:'已锁定基线',cur:'—',mine:false,
+  budget:{amount:48000,cls:'党校班（第26期）',scale:'42人 · 5天',norm:'处级定额 550元/人·天',items:[['师资费',20000,'标准内 ✓'],['住宿费',15000,'标准内 ✓'],['伙食费',8000,'标准内 ✓'],['资料费',5000,'标准内 ✓']],check:'合规校验通过（4/4 科目）',level:'≤5万，二级审批'},
+  chain:[{n:'三级提交',u:'王五',s:'done',t:'2026-09-10 10:20',op:'合规校验通过'},{n:'二级审批',u:'张三',s:'done',t:'2026-09-10 16:00',op:'同意。预算已锁定为报销控制基线'},{n:'一级审批',u:'—',s:'skip',t:'',op:''}]},
+
+ {id:'JB-2026-0003',type:'开结班审批',title:'青年外交领军人才班结班与发证归档审批',applicant:'周老师',dept:'培训处',time:'2026-09-20 16:00',status:'已通过',lock:'无需锁定',cur:'—',mine:false,
+  clsCheck:{mode:'结班审查',clsName:'青年外交领军人才班',duration:'2026-09-08 至 2026-09-19',stuCount:'32人',
+   items:[
+     ['全班总到课率','98.2%（请假补课完成，无旷课违纪）','达标优秀 ✓'],
+     ['综合满意度得分','96.5分（对教师专业水平满意度98.2%）','优秀 ✓'],
+     ['考核及发证核验','32人论文与答辩全部合格，证书编号已生成','合格准予发证 ✓'],
+     ['经费决算执行比','决算实际支出 ¥46,800（预算 ¥48,500，执行率96.5%）','合规节余结清 ✓']
+   ],
+   summary:'各项结班指标全部达标，准予正式结班并向全体学员发放结业证书'},
+  chain:[{n:'结班提请',u:'周老师',s:'done',t:'2026-09-20 16:00',op:'成果资料归档完成，提交结班审批'},{n:'二级审批',u:'张三',s:'done',t:'2026-09-21 10:15',op:'同意结班，发证名单审核通过'},{n:'一级审批',u:'—',s:'skip',t:'',op:''}]},
+
+ {id:'PK-2026-0918',type:'排课审批',title:'政能班（第9期）· 数字经济与全球治理 第4课时',applicant:ME,dept:'培训处',time:'2026-09-23 14:10',status:'审批驳回',lock:'已释放',cur:'—',mine:true,
+  res:{course:'数字经济与全球治理',cls:'政能班（第9期）',slot:'2026-09-26 09:00-12:00',teacher:'刘晓芸（二级 · 资深）',room:'508多媒体教室（10×8 · 80人）',stu:55},
+  chain:[{n:'三级提交',u:ME,s:'done',t:'2026-09-23 14:10',op:'提交排课申请'},{n:'二级审批',u:'钱处长',s:'done',t:'2026-09-23 16:45',op:'驳回：教室容量不足（55人>508实际可用50座），请更换教室后重新提交。预锁定资源已释放'},{n:'一级审批',u:'—',s:'skip',t:'',op:''}]},
+
+ {id:'YS-2026-0130',type:'预算审批',title:'涉外法治专题班预算（¥42,000）',applicant:ME,dept:'培训处',time:'2026-09-20 10:00',status:'已驳回',lock:'无需锁定',cur:'—',mine:true,
+  budget:{amount:42000,cls:'涉外法治专题班',scale:'30人 · 4天',items:[['师资费',18000,'超人均标准（红色拦截）'],['住宿费',12000,'标准内'],['伙食费',7000,'标准内'],['资料费',5000,'标准内']],check:'合规校验：师资费超标（当前 人均650元/天 > 标准 500元/天），走特批或调减',level:'≤5万，二级审批'},
+  chain:[{n:'三级提交',u:ME,s:'done',t:'2026-09-20 10:00',op:'超标说明：外聘知名专家，申请特批'},{n:'二级审批',u:'钱处长',s:'done',t:'2026-09-20 15:30',op:'驳回：特批材料不全，请补充专家邀请函与课酬依据后重报'},{n:'一级审批',u:'—',s:'skip',t:'',op:''}]},
+
+ {id:'KB-2026-0006',type:'开结班审批',title:'外事骨干班（第4期）开班申请',applicant:ME,dept:'培训处',time:'2026-09-15 09:00',status:'已通过',lock:'无需锁定',cur:'—',mine:true,
+  clsCheck:{mode:'开班准入',clsName:'外事骨干班（第4期）',duration:'2026-09-28 至 2026-10-09（12天）',stuCount:'36人',items:[['报名审核','36人已全部通过审查','合格 ✓'],['排课与预算','预算与排课均已通过并锁定','合格 ✓']],summary:'开班准入条件完备'},
+  chain:[{n:'三级提交',u:ME,s:'done',t:'2026-09-15 09:00',op:'提交开班申请'},{n:'二级审批',u:'钱处长',s:'done',t:'2026-09-15 14:00',op:'同意开班'},{n:'一级审批',u:'赵院长',s:'done',t:'2026-09-16 09:30',op:'同意，纳入全院教学计划'}]},
+
+   {id:'FA-2026-0926',type:'方案审批',title:'关于2026年第2504期涉外法治专题班教学方案请示报告（28课时 · 40人 · 处领导审核）',applicant:ME,dept:'培训处',time:'2026-09-26 10:15',status:'审核中',lock:'预锁定',cur:'二级审批',mine:true,
+   mainLeader:'李处长 (培训一部)',
+   jointLeaders:['赵处长 (教研部)'],
+   ccLeader:'3级教务处领导 (王教务长/综合办)',
+   ccStatus:'待二级处领导核准后抄送',
+   scheme:{
+     clsId:'B2504',
+     clsName:'2504期涉外法治专题班',
+     cat:'专题研讨班',
+     target:'涉外干部',
+     host:'条法司',
+     dept:'培训一部',
+     duration:'2026-10-10 至 2026-10-25（15天）',
+     stuCount:40,
+     budget:'¥160,000',
+     headTeacher:'张三',
+     room:'教学大楼 501研讨教室',
+     courses:'国际条约实务(10课时) / 涉外争议解决(10课时) / 跨国执法协同(8课时)',
+     totalHours:28,
+     purpose:'紧扣涉外法治实战能力，围绕国际条约、争端处置开展脱产集训。现呈请处领导审核，审核通过后抄送教务处领导。',
+     approverNode:'李处长 (主审 · 培训一部) / 赵处长 (会签 · 教研部)',
+     copyTo:'3级教务处领导 (王教务长/综合办)',
+     attachments:['《2504期涉外法治班教学方案.docx》 (480KB)']
+   },
+   chain:[
+     {n:'教务提请',u:ME,s:'done',t:'2026-09-26 10:15',op:'编制教学方案并提请处领导审签，抄送3级教务处领导'},
+     {n:'处领导审核',u:'李处长 (主审 · 培训一部) / 赵处长 (会签 · 教研部)',s:'cur',t:'',op:''},
+     {n:'抄送教务部',u:'3级教务处领导 (王教务长/综合办)',s:'wait',t:'',op:'【条件触发】待二级处领导审核通过后，系统自动触发抄送'}
+   ]},
+
+  {id:'QJ-2026-0087',type:'学员请假审批',title:'学员 林婉如 病假申请（2026-09-22 下午）',applicant:'组织员小周',dept:'党校班（第26期）',time:'2026-09-22 13:05',status:'已通过',lock:'无需锁定',cur:'—',mine:false,
+  leave:{stu:'林婉如（***机关党委 · 副处级）',cls:'党校班（第26期）',range:'2026-09-22 14:00 至 17:00',hours:3,totalHours:80,reason:'身体不适就医',rate:'3.75%（远低于红线）',safe:true},
+  chain:[{n:'组织员登记',u:'组织员小周',s:'done',t:'2026-09-22 13:05',op:'提交请假登记'},{n:'二级审批',u:'张三',s:'done',t:'2026-09-22 13:40',op:'同意，已通知带班组织员'},{n:'一级审批',u:'—',s:'skip',t:'',op:''}]}
+];
+
+let curView='apv-my',mainTab='todo',todoType='全部',mineStatus='全部',recFilter={type:'',status:''},recKeyword='';
+const ALL_TYPES=['方案审批','计划审批','排课审批','预算审批','开结班审批','调停课审批','学员请假审批'];
+const VIEW_MAP={
+  'apv-my':'我的审批',
+  'apv-record':'审批记录',
+  'apv-scheme':'方案审批',
+  'apv-plan':'计划审批',
+  'apv-schedule':'排课审批',
+  'apv-budget':'预算审批',
+  'apv-class':'开结班审批',
+  'apv-adjust':'调停课审批',
+  'apv-leave':'学员请假审批'
+};
+
+function showView(id){
+  curView=id;
+  if(id==='apv-record'){
+    mainTab='record';
+  } else if(id==='apv-my'){
+    if(mainTab==='record') mainTab='todo';
+    todoType='全部';
+  } else {
+    if(mainTab==='record') mainTab='todo';
+    todoType=VIEW_MAP[id]||'全部';
+  }
+  syncHead();
+  render();
+}
+
+function syncHead(){
+  if(curView==='apv-record'||mainTab==='record'){
+    $('crumb').textContent='首页 / 审批管理 / 审批记录';
+    $('pageTitle').textContent='审批记录';
+    $('pageOps').innerHTML='<button class="btn btn-primary" onclick="toast(\'已导出全周期审批单据台账Excel包（含审批链路留痕）\')">📥 导出审批台账</button>';
+  } else if(curView==='apv-my'||todoType==='全部'){
+    const subTitle=mainTab==='mine'?'我提交的':'我的待审批';
+    $('crumb').textContent='首页 / 审批管理 / 我的审批 / '+subTitle;
+    $('pageTitle').textContent='我的审批 · '+subTitle;
+    $('pageOps').innerHTML='';
+  } else {
+    const tName=VIEW_MAP[curView]||todoType;
+    const subTitle=mainTab==='mine'?'我提交的':'待我审批';
+    $('crumb').textContent='首页 / 审批管理 / '+tName;
+    $('pageTitle').textContent=tName+' · '+subTitle;
+    $('pageOps').innerHTML='';
+  }
+}
+
+function switchTab(t){
+  mainTab=t;
+  if(t==='record'){
+    showView('apv-record');
+    return;
+  }
+  if(curView==='apv-record'){
+    curView='apv-my';
+    setNavActive(document.querySelector('.nav-child[data-id="apv-my"]'));
+  }
+  syncHead();
+  render();
+}
+
+function render(){
+  const b=$('viewBody');
+  if(mainTab==='todo')b.innerHTML=vTodo();
+  else if(mainTab==='mine')b.innerHTML=vMine();
+  else b.innerHTML=vRecord();
+  try {
+    const todoCount = BILLS.filter(todoOf).length;
+    if (typeof updateNavApprovalBadge === 'function') {
+      updateNavApprovalBadge(todoCount);
+    }
+  } catch(e) {}
+}
+
+function findB(id){return BILLS.find(x=>x.id===id)}
+function stTag(s){return `<span class="tag ${ST_CLS[s]||'tag-gray'}">${s}</span>`}
+function todoOf(b){return b.status==='审核中'&&b.cur==='二级审批'&&!b.mine}
+function canWithdrawBill(b){
+  if(!b) return false;
+  const isPending = (b.status === '审核中' || b.status === '待审批');
+  if(!isPending) return false;
+  const hasReviewed = Array.isArray(b.chain) && b.chain.slice(1).some(c => c.s === 'done');
+  return !hasReviewed;
+}
+
+function chainHtml(b){
+  return `<div class="chain">${b.chain.map(c=>{
+    if(c.s==='skip')return `<div class="ch-step"><div class="ch-dot">—</div><div class="ch-name" style="color:var(--text-3)">${c.n}</div><div class="ch-sub">${c.op||'无需此环节'}</div></div>`;
+    const cls=c.s==='done'?'done':c.s==='cur'?'cur':'';
+    const icon=c.s==='done'?'✓':c.s==='cur'?'●':'○';
+    return `<div class="ch-step ${cls}"><div class="ch-dot">${icon}</div><div class="ch-name">${c.n}</div><div class="ch-sub">${c.u||''}${c.t?'<br>'+c.t:''}</div>${c.op?`<div class="ch-sub" style="margin-top:2px">${c.op}</div>`:''}</div>`;
+  }).join('')}</div>`;
+}
+
+/* ============ 1. 待我审批（4.9-P01） ============ */
+function vTodo(){
+  const todos=BILLS.filter(todoOf);
+  const mine=BILLS.filter(b=>b.mine);
+  const filterList=todoType==='全部'?todos:todos.filter(b=>b.type===todoType||(todoType==='学员请假审批'&&b.type==='请假审批'));
+  const cnt=t=>t==='全部'?todos.length:todos.filter(b=>b.type===t||(t==='学员请假审批'&&b.type==='请假审批')).length;
+
+  const tabs=`<div class="sub-tabs">
+   <div class="sub-tab ${mainTab==='todo'?'active':''}" onclick="switchTab('todo')">我的待审批${todos.length?`<span class="cnt">${todos.length}</span>`:''}</div>
+   <div class="sub-tab ${mainTab==='mine'?'active':''}" onclick="switchTab('mine')">我提交的${mine.length?`<span class="cnt" style="background:var(--primary-2)">${mine.length}</span>`:''}</div>
+   <span style="flex:1"></span>
+   <div class="sub-tab ${todoType==='全部'?'active':''}" style="font-size:12px;padding:6px 10px" onclick="todoType='全部';render()">全部(${cnt('全部')})</div>
+   ${ALL_TYPES.map(t=>`<div class="sub-tab ${todoType===t?'active':''}" style="font-size:12px;padding:6px 10px" onclick="todoType='${t}';render()">${t}(${cnt(t)})</div>`).join('')}
+  </div>`;
+
+  const rows=`<div class="card"><div class="card-body">
+   <div class="alert">
+     <b>📌 干部**学院标准教务审批规程：</b>
+     三级教务员/组织员提请 → 二级审批员（处领导）审核（≤5万元预算、开班准入、排课与调课） → 大额预算（>5万元）自动追加一级审批（院领导终审）。
+     审批支持直接审签或调取【公文审签单】，全程流转留痕可溯源。
+   </div>
+    <div class="table-wrap">
+    <table class="data-table" style="min-width:1180px"><thead><tr>
+     <th style="width:130px">单据编号</th><th style="width:100px">类型</th><th style="width:280px">审批标题</th><th style="width:130px">申请人 / 归属部门</th><th style="width:140px">提交时间</th><th style="width:90px">当前节点</th><th style="width:90px">资源锁定</th><th style="width:80px">状态</th><th style="width:160px">操作</th>
+   </tr></thead><tbody>
+   ${filterList.map(b=>`<tr>
+     <td class="c-name" onclick="openDocModal('${b.id}')">${b.id}</td>
+     <td><span class="tag ${TYPE_CLS[b.type]}">${b.type}</span></td>
+     <td style="max-width:280px"><div class="cell-ellipsis" style="max-width:280px" title="${b.title}" data-tooltip="${b.title}" onclick="openDocModal('${b.id}')"><b>${b.title}</b></div></td>
+     <td>${b.applicant}<br><span style="font-size:11px;color:var(--text-3)">${b.dept}</span></td>
+     <td>${b.time}</td>
+     <td><span class="tag tag-orange">${b.cur}</span></td>
+     <td><span class="tag ${LOCK[b.lock]||'tag-gray'}">${b.lock}</span></td>
+     <td>${stTag(b.status)}</td>
+     <td>
+       <button class="btn btn-primary" style="height:26px;padding:0 10px;font-size:12px" onclick="openDocModal('${b.id}')">审签公文单</button>
+       <button class="btn-text" style="margin-left:6px" onclick="openDrawer('${b.id}')">快捷审批</button>
+     </td>
+   </tr>`).join('')||'<tr><td colspan="9" style="text-align:center;color:var(--text-3);padding:40px">🎉 当前类型暂无待办单据</td></tr>'}
+   </tbody></table>
+  </div></div>`;
+
+  return tabs+rows;
+}
+
+/* ============ 2. 我提交的（4.9-P02） ============ */
+function vMine(){
+  const mineAll=BILLS.filter(b=>b.mine);
+  const todos=BILLS.filter(todoOf);
+
+  const matchMineStatus = (b, filterSt) => {
+    if (filterSt === '全部') return true;
+    if (filterSt === '待审批') return b.status === '审核中' || b.status === '待审批';
+    if (filterSt === '已驳回') return b.status === '审批驳回' || b.status === '已驳回';
+    if (filterSt === '已完结') return b.status === '已通过' || b.status === '已排课' || b.status === '已作废' || b.status === '已撤销' || b.status === '已完结';
+    return true;
+  };
+
+  const cntMine = st => st === '全部' ? mineAll.length : mineAll.filter(b => matchMineStatus(b, st)).length;
+  const filteredMine = mineAll.filter(b => matchMineStatus(b, mineStatus));
+
+  const tabs=`<div class="sub-tabs">
+   <div class="sub-tab ${mainTab==='todo'?'active':''}" onclick="switchTab('todo')">我的待审批${todos.length?`<span class="cnt">${todos.length}</span>`:''}</div>
+   <div class="sub-tab ${mainTab==='mine'?'active':''}" onclick="switchTab('mine')">我提交的${mineAll.length?`<span class="cnt" style="background:var(--primary-2)">${mineAll.length}</span>`:''}</div>
+   <span style="flex:1"></span>
+   <div class="sub-tab ${mineStatus==='全部'?'active':''}" style="font-size:12px;padding:6px 12px" onclick="mineStatus='全部';render()">全部(${cntMine('全部')})</div>
+   <div class="sub-tab ${mineStatus==='待审批'?'active':''}" style="font-size:12px;padding:6px 12px" onclick="mineStatus='待审批';render()">待审批(${cntMine('待审批')})</div>
+   <div class="sub-tab ${mineStatus==='已驳回'?'active':''}" style="font-size:12px;padding:6px 12px" onclick="mineStatus='已驳回';render()">已驳回(${cntMine('已驳回')})</div>
+   <div class="sub-tab ${mineStatus==='已完结'?'active':''}" style="font-size:12px;padding:6px 12px" onclick="mineStatus='已完结';render()">已完结(${cntMine('已完结')})</div>
+  </div>`;
+
+  const cards=filteredMine.map(b=>`<div class="card" style="margin-bottom:12px"><div class="card-body">
+   <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+     <b class="c-name" style="cursor:pointer;color:var(--primary);font-size:15px" onclick="openDocModal('${b.id}')">${b.id}</b>
+     <span class="tag ${TYPE_CLS[b.type]}">${b.type}</span>${stTag(b.status)}
+     <span class="tag ${LOCK[b.lock]||'tag-gray'}">${b.lock}</span>
+     <span style="font-size:12px;color:var(--text-3);margin-left:auto">提交于 ${b.time}</span>
+   </div>
+   <div style="font-size:14px;font-weight:600;margin-bottom:10px">${b.title}</div>
+   ${chainHtml(b)}
+   <div style="display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);flex-wrap:wrap;align-items:center">
+     <button class="btn btn-ghost" style="height:26px;font-size:12px" onclick="openDocModal('${b.id}')">查看公文呈批单</button>
+     ${(b.status==='审核中'||b.status==='待审批')?`
+       <button class="btn-text" onclick="toast('已向当前节点审批人推送催办短信与系统提醒')">🔔 催办</button>
+       ${canWithdrawBill(b)?`<button class="btn-text danger" onclick="doWithdraw('${b.id}')">↩ 撤销申请</button>`:`<span style="font-size:12px;color:var(--text-3);margin-left:4px">（已有节点审核，不可撤销）</span>`}
+     `:''}
+     ${(b.status==='审批驳回'||b.status==='已驳回')?`
+       <button class="btn-text" onclick="openDocModal('${b.id}')">修改重提</button>
+       <button class="btn-text danger" onclick="doVoid('${b.id}')">作废单据</button>`:''}
+     ${(b.status==='已撤销')?`<span class="mini-note" style="margin:0;color:var(--text-3)">↩ 申请人已主动撤销审批 · 预锁定资源已全部解除释放</span>`:''}
+     ${(b.status==='已排课'||b.status==='已通过'||b.status==='已完结')?`<span class="mini-note" style="margin:0;color:var(--success)">✓ 单据已办结并留存全周期档案库</span>`:''}
+   </div>
+  </div></div>`).join('');
+
+  return tabs+(cards||`<div class="card"><div class="card-body" style="text-align:center;color:var(--text-3);padding:40px">暂无【${mineStatus}】状态的我提交审批单据</div></div>`);
+}
+
+/* ============ 3. 审批记录（全周期审批档案） ============ */
+function vRecord(){
+  const kw=recKeyword.toLowerCase();
+  const list=BILLS.filter(b=>{
+    if(recFilter.type&&b.type!==recFilter.type)return false;
+    if(recFilter.status&&b.status!==recFilter.status)return false;
+    if(kw&&!b.id.toLowerCase().includes(kw)&&!b.title.toLowerCase().includes(kw)&&!b.applicant.toLowerCase().includes(kw))return false;
+    return true;
+  });
+
+  const totalCnt=BILLS.length;
+  const passCnt=BILLS.filter(b=>b.status==='已通过'||b.status==='已排课').length;
+  const auditCnt=BILLS.filter(b=>b.status==='审核中').length;
+  const rejectCnt=BILLS.filter(b=>b.status==='审批驳回'||b.status==='已驳回'||b.status==='已作废').length;
+
+  const stats=`<div class="stat-cards" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">
+    <div class="stat ${!recFilter.status?'active':''}" onclick="recFilter.status='';render()"><div class="n">${totalCnt}</div><div class="l">全周期档案总数</div></div>
+    <div class="stat ${recFilter.status==='已通过'?'active':''}" onclick="recFilter.status='已通过';render()"><div class="n g">${passCnt}</div><div class="l">已办结/已通过</div></div>
+    <div class="stat ${recFilter.status==='审核中'?'active':''}" onclick="recFilter.status='审核中';render()"><div class="n o">${auditCnt}</div><div class="l">审核流转中</div></div>
+    <div class="stat ${recFilter.status==='审批驳回'?'active':''}" onclick="recFilter.status='审批驳回';render()"><div class="n r">${rejectCnt}</div><div class="l">驳回/作废留存</div></div>
+  </div>`;
+
+  const rows=`<div class="card"><div class="card-body">
+   <div class="filter-bar">
+     <input class="input" placeholder="输入单据号/标题/申请人回车检索…" value="${recKeyword}" oninput="recKeyword=this.value.trim();render()">
+     <select class="sel" onchange="recFilter.type=this.value;render()">
+       <option value="">全部审批类型</option>
+       ${ALL_TYPES.map(t=>`<option ${recFilter.type===t?'selected':''}>${t}</option>`).join('')}
+     </select>
+     <select class="sel" onchange="recFilter.status=this.value;render()">
+       <option value="">全部审批状态</option>
+       ${['审核中','已排课','已通过','审批驳回','已驳回','已作废'].map(s=>`<option ${recFilter.status===s?'selected':''}>${s}</option>`).join('')}
+     </select>
+     <button class="btn btn-ghost" onclick="recFilter.type='';recFilter.status='';recKeyword='';render()">重置</button>
+     <span style="font-size:12px;color:var(--text-3);margin-left:auto">共收录审批全生命周期档案 ${list.length} 件（支持溯源核验）</span>
+     <button class="btn btn-primary" style="margin-left:8px" onclick="toast('已导出全周期审批单据台账Excel包（含审批链路留痕）')">📥 导出台账</button>
+   </div>
+   <div class="table-wrap">
+    <table class="data-table" style="min-width:1180px"><thead><tr>
+     <th style="width:130px">单据编号</th><th style="width:100px">类型</th><th style="min-width:240px">审批标题</th><th style="width:130px">申请人</th><th style="width:140px">提交时间</th><th>审批路径</th><th style="width:90px">资源锁定</th><th style="width:80px">最终状态</th><th style="width:130px">操作</th>
+   </tr></thead><tbody>
+   ${list.map(b=>`<tr>
+     <td class="c-name" onclick="openDocModal('${b.id}')">${b.id}</td>
+     <td><span class="tag ${TYPE_CLS[b.type]}">${b.type}</span></td>
+     <td style="max-width:280px"><div class="cell-ellipsis" style="max-width:280px" title="${b.title}" data-tooltip="${b.title}" onclick="openDocModal('${b.id}')"><b>${b.title}</b></div></td>
+     <td>${b.applicant}<br><span style="font-size:11px;color:var(--text-3)">${b.dept}</span></td>
+     <td>${b.time}</td>
+     <td style="font-size:12px;color:var(--text-2)">
+       ${b.chain.filter(c=>c.s==='done').map(c=>c.n).join(' → ')}${b.cur!=='—'?' → <b style="color:var(--warning)">'+b.cur+'</b>':''}
+     </td>
+     <td><span class="tag ${LOCK[b.lock]||'tag-gray'}">${b.lock}</span></td>
+     <td>${stTag(b.status)}</td>
+     <td>
+       <button class="btn btn-ghost" style="height:26px;padding:0 8px;font-size:12px" onclick="openDocModal('${b.id}')">呈批单</button>
+       <button class="btn-text" onclick="openDrawer('${b.id}')">详情</button>
+     </td>
+   </tr>`).join('')||'<tr><td colspan="9" style="text-align:center;color:var(--text-3);padding:36px">暂无符合筛选条件的审批单据</td></tr>'}
+   </tbody></table>
+  </div></div>`;
+
+  return stats+rows;
+}
+
+/* ================= 专属公文审签大单据页面/模态渲染 ================= */
+function openDocModal(id){
+  const b=findB(id);if(!b)return;
+  $('docCode').textContent=b.id;
+  $('docBadgeType').textContent=b.type;
+  $('docBadgeType').className='badge-type '+(b.type==='方案审批'?'tag-blue':b.type==='排课审批'?'tag-blue':b.type==='预算审批'?'tag-purple':b.type==='开结班审批'?'tag-green':b.type==='调停课审批'?'tag-orange':'tag-cyan');
+  
+  // 渲染红头公文单
+  let specificHtml='';
+  if(b.type==='方案审批') specificHtml=renderSchemeDoc(b);
+  else if(b.type==='计划审批') specificHtml=renderPlanDoc(b);
+  else if(b.type==='排课审批') specificHtml=renderScheduleDoc(b);
+  else if(b.type==='预算审批') specificHtml=renderBudgetDoc(b);
+  else if(b.type==='开结班审批') specificHtml=renderClassDoc(b);
+  else if(b.type==='调停课审批') specificHtml=renderAdjustDoc(b);
+  else if(b.type==='学员请假审批'||b.type==='请假审批') specificHtml=renderLeaveDoc(b);
+
+  const canApprove=todoOf(b);
+  const sealText=b.status==='审核中'?'待批件':b.status==='已排课'||b.status==='已通过'?'准予执行':b.status==='审批驳回'||b.status==='已驳回'?'予以驳回':b.status==='已撤销'?'已撤销':'已作废';
+
+  $('docBody').innerHTML=`
+    <div class="paper-sheet">
+      <div class="stamp-seal">
+        <span class="s-sub">干部**学院</span>
+        <span class="s-main">${sealText}</span>
+        <span class="s-star">★ 档案留存 ★</span>
+      </div>
+      <div class="red-header">
+        <div class="inst-name">干部**学院教务呈批签报单</div>
+        <div class="doc-kind">${b.type} · 审签办结专页</div>
+        <div class="doc-meta-row">
+          <span>呈报单号：<b>${b.id}</b></span>
+          <span>主报部门：${b.dept}</span>
+          <span>提报人员：${b.applicant}</span>
+          <span>提交时间：${b.time}</span>
+          <span>密级：内部事项</span>
+        </div>
+      </div>
+
+      <!-- 审批事项公文表头 -->
+      <table class="doc-table">
+        <tr>
+          <td class="field-label">审批事项标题</td>
+          <td class="field-val" colspan="3"><b>${b.title}</b></td>
+        </tr>
+        <tr>
+          <td class="field-label">审批类型</td>
+          <td class="field-val"><span class="tag ${TYPE_CLS[b.type]}">${b.type}</span></td>
+          <td class="field-label">当前状态</td>
+          <td class="field-val">${stTag(b.status)} · <span class="tag ${LOCK[b.lock]||'tag-gray'}">${b.lock}</span></td>
+        </tr>
+      </table>
+
+      <!-- 核心专属业务审签块 -->
+      ${specificHtml}
+
+      <!-- 审批流转轨迹与签名 -->
+      <div class="spec-box" style="margin-top:20px;border-color:#cbd5e1">
+        <div class="spec-title">📋 审批流转及分级签署记录</div>
+        ${chainHtml(b)}
+        <div style="margin-top:14px;background:#f8fafc;padding:12px;border-radius:6px;font-size:12.5px;color:var(--text-2);line-height:1.8">
+          ${b.chain.map(c=>`<div><b>[${c.n}]</b> ${c.u} · ${c.s==='done'?'<span style="color:var(--success)">已通过</span>':'<span style="color:var(--warning)">待审核</span>'} ${c.t?`(${c.t})`:''}：${c.op||'—'}</div>`).join('')}
+        </div>
+      </div>
+
+      <!-- 领导批示填报区 -->
+      ${canApprove?`
+      <div class="spec-box" style="background:#fffaf0;border-color:#fcd34d;margin-top:16px">
+        <div class="spec-title" style="color:#b45309">✍️ 二级审批员审签批示意见 <span style="font-size:12px;color:var(--danger)">（通过需批复明确意见，驳回必填原因）</span></div>
+        <div class="quick-ops">
+          <span style="font-size:12px;color:var(--text-3);line-height:24px">快捷意见：</span>
+          <span class="quick-chip" onclick="setDocOp('审签同意。本期培训班教学方案编制规范、课程与师资配置合理，准予按此方案组织实施排课，已抄送教务部领导知悉备案。')">同意·方案生效实施</span>
+          <span class="quick-chip" onclick="setDocOp('审签同意。教学方案完备，请带班团队统筹做好初步场地与后勤保障衔接。')">同意·抓好落实</span>
+          <span class="quick-chip" onclick="setDocOp('退回修改：请结合学员结构优化专题讲授与研讨课时配比，完善方案后重报。')">退回·调整课时</span>
+          <span class="quick-chip" onclick="setDocOp('审签同意。本年度重点班次编制科学，请教务部按计划统筹师资与教学场地，抓好组织实施。')">同意·发布教学计划</span>
+          <span class="quick-chip" onclick="setDocOp('同意。符合教培管理办法，按规范组织实施。')">同意·按规范实施</span>
+          <span class="quick-chip" onclick="setDocOp('同意。预算科目核验合规，锁定为报销控制基线。')">同意·锁定预算基线</span>
+          <span class="quick-chip" onclick="setDocOp('同意排课。资源转正式锁定，同步三课表。')">同意·锁定课表</span>
+          <span class="quick-chip" onclick="setDocOp('同意请假。请带班组织员督促落实自修与补课。')">同意请假·督促补课</span>
+          <span class="quick-chip" onclick="setDocOp('驳回：相关佐证材料不全，请补充专家公函后重新发起。')">驳回·补交材料</span>
+        </div>
+        <textarea class="input" id="docOpText" rows="3" placeholder="请在此输入审批意见（例如：同意。经核验符合管理规范，准予实施…）" style="width:100%;margin-top:6px"></textarea>
+      </div>`:''}
+    </div>
+  `;
+
+  // 底部动作栏
+  let footHtml=`<button class="btn btn-ghost" onclick="closeDocModal()">关闭窗口</button>`;
+  if(canApprove){
+    footHtml=`
+      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-3)">
+        <span>当前节点：<b>二级审批员（处领导终审/流转）</b></span>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-danger" onclick="doApproveDoc('${b.id}',false)">⛔ 审批驳回并释放资源</button>
+        <button class="btn btn-success" onclick="doApproveDoc('${b.id}',true)">✅ 审签核准通过</button>
+      </div>
+    `;
+  } else if(b.mine && canWithdrawBill(b)){
+    footHtml=`
+      <div style="font-size:12.5px;color:#d97706;display:flex;align-items:center;gap:6px">
+        <span>⏳ <b>审批中（未审核）：</b>当前尚未有领导签批，您作为提请人可在审核前撤销申请并释放预锁定资源</span>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-danger" style="background:#fff;border-color:var(--danger);color:var(--danger)" onclick="doWithdraw('${b.id}');closeDocModal()">↩ 撤销申请</button>
+        <button class="btn btn-primary" onclick="closeDocModal()">关闭窗口</button>
+      </div>
+    `;
+  } else if(b.status === '已撤销'){
+    footHtml=`
+      <div style="font-size:12px;color:var(--text-3)">⚠️ 本审批单已由提报人主动撤销，审批流转终止，关联预锁定资源已全部解除释放</div>
+      <button class="btn btn-primary" onclick="closeDocModal()">已阅确认</button>
+    `;
+  } else {
+    footHtml=`
+      <div style="font-size:12px;color:var(--text-3)">单据办结状态，归档于干部**学院教务审批数字档案库</div>
+      <button class="btn btn-primary" onclick="closeDocModal()">已阅确认</button>
+    `;
+  }
+  $('docFoot').innerHTML=footHtml;
+
+  $('docMask').classList.remove('hidden');
+  $('docModal').classList.remove('hidden');
+}
+
+function setDocOp(txt){
+  const el=$('docOpText');if(el)el.value=txt;
+}
+
+function closeDocModal(){
+  $('docMask').classList.add('hidden');
+  $('docModal').classList.add('hidden');
+}
+
+/* ============ 各类型专属单据内容模板 ============ */
+// 0-1. 方案审批专属公文单（培训班教学方案请示呈批：处领导审核 · 抄教务部领导）
+function renderSchemeDoc(b){
+  const s = b.scheme || {};
+  return `
+    <div class="spec-box" style="background:#f0f9ff;border-color:#bae6fd">
+      <div class="spec-title" style="color:#0369a1">🏛️ 呈请班次基础信息与办训规格</div>
+      <table class="doc-table" style="margin-bottom:0">
+        <tr>
+          <td class="field-label">呈请班次名称</td><td class="field-val"><b>${s.clsName||b.title}</b>（${s.clsId||'—'}）</td>
+          <td class="field-label">培训类别/对象</td><td class="field-val"><span class="tag tag-blue">${s.cat||'主体培训'}</span> · ${s.target||'学员'}</td>
+        </tr>
+        <tr>
+          <td class="field-label">主办/承办单位</td><td class="field-val">${s.host||'办公厅'} / ${s.dept||'教务管理办'}</td>
+          <td class="field-label">培训周期/天数</td><td class="field-val">${s.duration||s.dates||'—'}</td>
+        </tr>
+        <tr>
+          <td class="field-label">带班责任教师</td><td class="field-val"><b style="color:var(--primary)">👨‍🏫 ${s.headTeacher||'张三'}</b></td>
+          <td class="field-label">初步分配场地</td><td class="field-val"><b style="color:var(--primary)">📍 ${s.room||'教学大楼 301报告厅'}</b></td>
+        </tr>
+        <tr>
+          <td class="field-label">培训学员规模</td><td class="field-val"><b style="color:var(--success)">${s.stuCount||45} 人</b></td>
+          <td class="field-label">批复预算额度</td><td class="field-val"><b style="color:var(--danger)">${s.budget||'¥185,000'}</b></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="spec-box">
+      <div class="spec-title">📚 核心课程配置、课时分布与培养方案说明</div>
+      <div style="background:#f8fafc;padding:12px;border-radius:6px;border:1px solid #e2e8f0;font-size:13px;line-height:1.8;margin-bottom:12px">
+        <b>核心课程体系构成：</b><br>
+        <span style="color:var(--text);font-weight:600">${s.courses||'习近平外交思想概论(16课时) / 宏观经济形势分析(6课时) / 涉外法治与海外利益安全(8课时)'}</span><br>
+        <b>总核定课时：</b><span style="color:var(--primary);font-weight:800;font-size:15px">${s.totalHours||30}</span> 课时 ｜ <b>组织形式：</b>脱产集训、随堂考勤、专家讲授、结构化研讨与综合汇报
+      </div>
+      <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #cbd5e1;font-size:12.5px;color:var(--text-2);line-height:1.7">
+        <b>教学方案请示说明与培养目标：</b><br>
+        ${s.purpose||'紧扣干部政治能力与履职实战能力需求，采取集中面授、名家导读、实景模拟与结构化研讨相结合。开班前提前锁定初步场地与核心师资，结班前组织教学成果综合汇报与考核鉴定。'}
+      </div>
+    </div>
+
+    <div class="spec-box" style="background:#fefce8;border-color:#fef08a">
+      <div class="spec-title" style="color:#854d0e">🛡️ 公文审签流转与抄送备案机制（统一审批规程）</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #fef08a">
+          <div style="font-weight:700;color:var(--primary);display:flex;align-items:center;justify-content:space-between">
+            <span>👤 审核节点：二级处领导审核</span>
+            <span class="tag tag-orange" style="font-size:11px">${b.status==='已通过'?'已审签':'待审签'}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:6px;line-height:1.7">
+            <b>主审处领导：</b>${b.mainLeader || (s.approverNode ? s.approverNode.split('/')[0] : '李处长 (培训一部)')}<br>
+            ${b.jointLeaders && b.jointLeaders.length ? `<b>会签处领导：</b><span style="color:#1e40af;font-weight:600">${b.jointLeaders.join('、')}</span><br>` : ''}
+            <b>审签职责：</b>对办训规格、课程体系30学时分布及初步场地配备进行合规终审把关并签署批示。
+          </div>
+        </div>
+        <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #fef08a">
+          <div style="font-weight:700;color:#0284c7;display:flex;align-items:center;justify-content:space-between">
+            <span>📢 抄送节点：3级教务处领导知照</span>
+            <span class="tag ${b.status==='已通过'?'tag-green':'tag-gray'}" style="font-size:11px">${b.status==='已通过'?'已送达备案':'待通过后抄送'}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:6px;line-height:1.7">
+            <b>抄送对象：</b>${b.ccLeader || s.copyTo || '3级教务处领导 (王教务长/综合办)'}<br>
+            <b>抄送状态：</b>${b.status==='已通过' ? '<span style="color:var(--success);font-weight:700">✓ 二级处领导已核准，已正式分发抄送至教务处领导端阅览备案</span>' : '<span style="color:#b45309">⏳ 严格受控：待二级处领导核准通过后，系统才会正式触发抄送分发</span>'}<br>
+            <b>抄送作用：</b>便于教学督导巡课安排与全院教室设备资源综合统筹保障。
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:8px 12px;background:#fff;border-radius:6px;border:1px dashed #fde047;font-size:12px;color:#713f12">
+        📎 <b>附送方案文稿及大纲附件：</b>
+        ${(s.attachments||['《教学实施方案（草案送审稿）》.docx','《核心课程模块大纲与师资论证表》.pdf']).map(a=>`<span style="margin-right:16px;display:inline-block"><a style="color:var(--primary);font-weight:600;cursor:pointer" onclick="toast('已调取文档预览：${a}')">📥 ${a}</a></span>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// 0. 计划审批专属页面（年度重点班次与教学计划公文呈批）
+function renderPlanDoc(b){
+  const p=b.plan||{};
+  const classes=p.classes||[];
+  return `
+    <div class="spec-box" style="background:#fffcf5;border-color:#fcd34d">
+      <div class="spec-title" style="color:#b25e00">📜 年度重点班次办学规划核心指标概览</div>
+      <table class="doc-table" style="margin-bottom:0">
+        <tr>
+          <td class="field-label">年度计划名称</td><td class="field-val"><b>${p.name||b.title}</b></td>
+          <td class="field-label">编制年度</td><td class="field-val"><b style="color:var(--primary)">${p.year||'2026'} 学年</b></td>
+        </tr>
+        <tr>
+          <td class="field-label">重点班次规模</td><td class="field-val"><b style="color:#b25e00">${p.classesTotal||6} 期重点班</b>（主体班占比 50%）</td>
+          <td class="field-label">计划培训人次</td><td class="field-val"><b style="color:var(--success)">${p.studentsTotal||330} 人</b></td>
+        </tr>
+        <tr>
+          <td class="field-label">教学总课时</td><td class="field-val"><b>${p.hoursTotal||885} 学时</b>（政治理论主课达标）</td>
+          <td class="field-label">经费总概算控制</td><td class="field-val"><b style="color:var(--danger)">¥ ${p.budgetTotal||'362.5'} 万元</b>（控制红线内）</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="spec-box">
+      <div class="spec-title">📋 纳入本年度教学计划的重点班次明细清单（${classes.length} 期）</div>
+      <div style="overflow-x:auto">
+        <table class="data-table" style="font-size:12.5px;margin:0">
+          <thead>
+            <tr style="background:#f1f5f9">
+              <th style="width:100px">班次编号</th>
+              <th>重点班次名称与主干核心模块</th>
+              <th style="width:90px">班次类型</th>
+              <th style="width:70px">季度</th>
+              <th style="width:80px">规模(人)</th>
+              <th style="width:80px">学时</th>
+              <th style="width:90px">概算(万)</th>
+              <th style="width:140px">场地/负责人</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${classes.map(c=>`
+              <tr>
+                <td><b>${c.id}</b></td>
+                <td style="white-space:normal;max-width:320px;line-height:1.4"><b>${c.name}</b><br><span style="font-size:11px;color:var(--text-3)">${c.core||''}</span></td>
+                <td><span class="tag tag-blue">${c.type}</span></td>
+                <td>${c.quarter}</td>
+                <td><b>${c.students}</b></td>
+                <td>${c.hours}</td>
+                <td>¥${c.budget}</td>
+                <td>${c.room||''}<br><span style="font-size:11px;color:var(--text-3)">${c.teacher||''}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="spec-box" style="background:#f0fdf4;border-color:#bbf7d0">
+      <div class="spec-title" style="color:var(--success)">🛡️ 教学资源承载力与办学合规性论证结论</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #bbf7d0">
+          <div style="font-weight:700;color:var(--success)">✓ 政治理论与主课指标</div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:4px">省部级进修班、中青班等核心主体班政治理论和党性教育课时占比均超过70%，完全符合干部教育培训条例要求。</div>
+        </div>
+        <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #bbf7d0">
+          <div style="font-weight:700;color:var(--success)">✓ 场地与教室承载力核验</div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:4px">大礼堂、301报告厅、201阶梯教室及模拟谈判室各季度排期已全面推演，重点班次间零时空冲突。</div>
+        </div>
+        <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #bbf7d0">
+          <div style="font-weight:700;color:var(--success)">✓ 办学经费预算控制</div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:4px">总概算362.5万元，人均办学成本严格控制在中央和地方干部培训定额标准内，各项支出科目合规。</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+// 1. 排课审批专属页面
+function renderScheduleDoc(b){
+  const r=b.res||{};
+  return `
+    <div class="spec-box">
+      <div class="spec-title">📅 课时排定明细与教学任务核定</div>
+      <table class="doc-table" style="margin-bottom:0">
+        <tr>
+          <td class="field-label">所属班级</td><td class="field-val"><b>${r.cls}</b>（学员 ${r.stu} 人）</td>
+          <td class="field-label">课程名称</td><td class="field-val"><b>${r.course}</b></td>
+        </tr>
+        <tr>
+          <td class="field-label">上课时段</td><td class="field-val">${r.slot}</td>
+          <td class="field-label">主讲师资</td><td class="field-val"><b>${r.teacher}</b></td>
+        </tr>
+        <tr>
+          <td class="field-label">指定教室</td><td class="field-val"><b>${r.room}</b></td>
+          <td class="field-label">锁定机制</td><td class="field-val"><span class="tag tag-orange">提交即预锁定</span> → 通过转正式锁定</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="spec-box" style="background:#f0fdf4;border-color:#bbf7d0">
+      <div class="spec-title" style="color:var(--success)">🛡️ 三方资源占用与冲突智能排查报告</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #bbf7d0">
+          <div style="font-weight:700;color:var(--success)">✓ 师资时间排查</div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:4px">该专家在此时间段无其他排课，符合国家干部培训授课资格。</div>
+        </div>
+        <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #bbf7d0">
+          <div style="font-weight:700;color:var(--success)">✓ 教室容量校验</div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:4px">教室额定80座 ≥ 班级42人，容纳裕度充足，录播设备已就绪。</div>
+        </div>
+        <div style="background:#fff;padding:12px;border-radius:6px;border:1px solid #bbf7d0">
+          <div style="font-weight:700;color:var(--success)">✓ 班次日程比对</div>
+          <div style="font-size:12px;color:var(--text-2);margin-top:4px">与班级教学大纲第二单元进度一致，无全院公共活动冲突。</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// 2. 预算审批专属页面（重点补充！）
+function renderBudgetDoc(b){
+  const bg=b.budget||{};
+  const items=bg.items||[];
+  return `
+    <div class="spec-box">
+      <div class="spec-title">💰 班次培训经费预算总括表</div>
+      <div style="display:flex;justify-content:space-between;background:#f8fafc;padding:12px 16px;border-radius:6px;margin-bottom:12px">
+        <div>培训班次：<b>${bg.cls||'—'}</b></div>
+        <div>班期规模：<b>${bg.scale||'—'}</b></div>
+        <div>综合定额标准：<b style="color:var(--primary)">${bg.norm||'—'}</b></div>
+        <div>申请预算总额：<b style="font-size:18px;color:#c62828">¥${(bg.amount||0).toLocaleString()}</b></div>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>预算科目</th><th>申报金额</th><th>财经纪律与限额核对标准</th><th>合规状态</th></tr>
+        </thead>
+        <tbody>
+          ${items.map(it=>{
+            const isOver=it[2].includes('超');
+            return `<tr>
+              <td><b>${it[0]}</b></td>
+              <td class="money ${isOver?'over':''}" style="font-size:14px;color:${isOver?'#c62828':'#1F4E79'}">¥${it[1].toLocaleString()}</td>
+              <td>${it[2]}</td>
+              <td>${isOver?'<span class="tag tag-red">超限额待特批</span>':'<span class="tag tag-green">合规达标</span>'}</td>
+            </tr>`;
+          }).join('')}
+          <tr style="background:#f1f5f9;font-weight:700">
+            <td>总计</td>
+            <td style="color:#c62828;font-size:15px">¥${(bg.amount||0).toLocaleString()}</td>
+            <td colspan="2">人均日均开支均在干部教育培训经费管理办法规定限额内</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spec-box" style="background:#f5f3ff;border-color:#ddd6fe">
+      <div class="spec-title" style="color:#6d28d9">⚖️ 财规限额红线合规审计与审批权限判定</div>
+      <div style="font-size:13px;line-height:1.8;color:var(--text)">
+        <div><b>① 限额审计结论：</b>${bg.check}</div>
+        <div><b>② 审批权限归属：</b>${bg.level}（单笔 ≤50,000元 由培训处领导终审生效；>50,000元 处领导审核后追加院领导终审）。</div>
+        <div><b>③ 预算效力说明：</b>审批通过后，本表金额即刻固化为该班报销控制硬基线，未履行追加特批程序不得突破决算总额。</div>
+      </div>
+    </div>
+  `;
+}
+
+// 3. 开结班审批专属页面
+function renderClassDoc(b){
+  const ck=b.clsCheck||{};
+  const isEnd=ck.mode==='结班审查';
+  return `
+    <div class="spec-box">
+      <div class="spec-title">${isEnd?'🎓 培训班次结业归档与发证审查':'🚩 培训班次开班准入核验清单'}</div>
+      <table class="doc-table" style="margin-bottom:12px">
+        <tr>
+          <td class="field-label">培训班次</td><td class="field-val"><b>${ck.clsName}</b></td>
+          <td class="field-label">办班周期</td><td class="field-val">${ck.duration}</td>
+        </tr>
+        <tr>
+          <td class="field-label">学员规模</td><td class="field-val"><b>${ck.stuCount}</b></td>
+          <td class="field-label">审核模式</td><td class="field-val"><span class="tag ${isEnd?'tag-purple':'tag-green'}">${ck.mode}</span></td>
+        </tr>
+      </table>
+
+      <table class="data-table">
+        <thead><tr><th>核验要点</th><th>实际核对情况</th><th>达标评价</th></tr></thead>
+        <tbody>
+          ${(ck.items||[]).map(it=>`<tr>
+            <td><b>${it[0]}</b></td>
+            <td>${it[1]}</td>
+            <td><span class="tag tag-green">${it[2]}</span></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spec-box" style="background:#f0fdf4;border-color:#86efac">
+      <div class="spec-title" style="color:var(--success)">🎯 准入综合评估结论</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7">
+        <b>结论：</b>${ck.summary}。<br>
+        ${isEnd?'批准后系统将锁定结课状态，生成32名学员的正式结业证书编号，教学资料归档入库。':'批准后该班级将转为【在训中】正式运行状态，自动启用学员人脸考勤与随堂评教系统。'}
+      </div>
+    </div>
+  `;
+}
+
+// 4. 调停课审批专属页面
+function renderAdjustDoc(b){
+  const a=b.adjust||{};
+  return `
+    <div class="spec-box">
+      <div class="spec-title">🔄 教学日程变动方案左右直观对标</div>
+      <div class="compare-grid">
+        <div class="compare-box">
+          <div style="font-weight:700;color:var(--danger);margin-bottom:8px">【原教学安排】</div>
+          <div style="font-size:13px;line-height:1.8">
+            <b>时段：</b>${a.oldSlot}<br>
+            <b>班次：</b>${a.cls}<br>
+            <b>状态：</b>审批通过后原锁定资源全额自动释放
+          </div>
+        </div>
+        <div class="compare-arrow">➔</div>
+        <div class="compare-box after">
+          <div style="font-weight:700;color:var(--success);margin-bottom:8px">【拟调整方案】</div>
+          <div style="font-size:13px;line-height:1.8">
+            <b>安排：</b>${a.newSlot}<br>
+            <b>保障：</b>${a.act==='停课'?'已规划后续专题讨论或补课':'新教室报告厅已预锁定'}<br>
+            <b>联动：</b>审批通过后自动向全体学员推送调课短信
+          </div>
+        </div>
+      </div>
+      <table class="doc-table" style="margin-top:12px;margin-bottom:0">
+        <tr>
+          <td class="field-label">调停课缘由</td><td class="field-val" colspan="3">${a.reason}</td>
+        </tr>
+        <tr>
+          <td class="field-label">佐证公函</td><td class="field-val"><b>${a.cert||'专家因公出差公函已核验'}</b></td>
+          <td class="field-label">资源联动机制</td><td class="field-val">${a.effect}</td>
+        </tr>
+      </table>
+    </div>
+  `;
+}
+
+// 5. 学员请假审批专属页面
+function renderLeaveDoc(b){
+  const l=b.leave||{};
+  return `
+    <div class="spec-box">
+      <div class="spec-title">👤 请假学员信息与在训档案</div>
+      <table class="doc-table" style="margin-bottom:0">
+        <tr>
+          <td class="field-label">请假学员</td><td class="field-val"><b>${l.stu}</b></td>
+          <td class="field-label">所属班级</td><td class="field-val">${l.cls||'党校班'}</td>
+        </tr>
+        <tr>
+          <td class="field-label">请假时段</td><td class="field-val">${l.range}</td>
+          <td class="field-label">请假学时</td><td class="field-val"><b style="color:var(--warning)">${l.hours} 课时</b> / 总 ${l.totalHours} 课时</td>
+        </tr>
+        <tr>
+          <td class="field-label">请假事由</td><td class="field-val" colspan="3">${l.reason}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="leave-gauge">
+      <div class="gauge-circle ${l.safe?'safe':'danger'}">${l.rate||'10%'}</div>
+      <div>
+        <div style="font-weight:700;font-size:14px;color:${l.safe?'var(--success)':'var(--danger)'}">
+          ${l.safe?'✅ 考勤学时在控（未触发20%缺勤红线）':'⚠️ 严重警示：缺勤超过20%红线'}
+        </div>
+        <div style="font-size:12.5px;color:var(--text-2);margin-top:4px">
+          ${l.alert||'学员请假学时在管理办法允许范围内，不影响按期结业发证。'}
+        </div>
+        <div style="font-size:11.5px;color:var(--text-3);margin-top:2px">
+          证明材料：<b>${l.proof||'派出司局公务公函（盖章）'}</b>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ============ 审批执行动作 ============ */
+function doApproveDoc(id,pass){
+  const b=findB(id);
+  const op=($('docOpText')?$('docOpText').value.trim():'');
+  if(!op){
+    toast('请在批示框内输入审批意见（通过需批示，驳回必填原因）');
+    if($('docOpText'))$('docOpText').focus();
+    return;
+  }
+  executeApproval(b,pass,op);
+  closeDocModal();
+}
+
+function doApproveDrawer(id,pass){
+  const b=findB(id);
+  const op=($('dwOpText')?$('dwOpText').value.trim():'');
+  if(!op){
+    toast('请填写审批意见');
+    if($('dwOpText'))$('dwOpText').focus();
+    return;
+  }
+  executeApproval(b,pass,op);
+  closeDrawer();
+}
+
+function executeApproval(b,pass,op){
+  const node=b.chain ? b.chain.find(c=>c.s==='cur') : null;
+  const timeStr=new Date().toLocaleString();
+  if(node){
+    node.s='done';
+    node.t=timeStr;
+    node.op=(pass?'同意。':'驳回：')+op;
+  }
+  b.cur='—';
+
+  // 全局 Store 联动
+  if(window.TREA_STORE){
+    window.TREA_STORE.reviewApproval(b.id, pass, op);
+  }
+
+  if(pass){
+    if(b.type==='方案审批'){
+      b.status='已通过';b.lock='正式生效';b.ccStatus='已抄送 (送达3级教务处领导)';
+      const approverName = b.mainLeader ? b.mainLeader.split(' ')[0] : '李处长';
+      if(b.chain){
+        const auditNode = b.chain.find(c => c.n === '处领导审核');
+        if(auditNode){ auditNode.s = 'done'; auditNode.t = timeStr; auditNode.op = '审签同意：' + op; }
+        const ccNode = b.chain.find(c => c.n.includes('抄送'));
+        if(ccNode){ ccNode.s = 'done'; ccNode.t = timeStr; ccNode.op = '【已触发抄送】二级处领导核准通过，方案送审稿已自动抄送分发至 3级教务处领导 (王教务长/综合办) 端知悉备案'; }
+      }
+      try {
+        let schemes = [];
+        const rawSchemes = localStorage.getItem('TREA_SCHEME_APPROVALS');
+        if(rawSchemes){
+          try {
+            const parsed = JSON.parse(rawSchemes);
+            schemes = Array.isArray(parsed) ? parsed : Object.values(parsed);
+          } catch(e){}
+        }
+        const cid = (b.scheme && b.scheme.clsId) || (b.scheme && b.scheme.classId) || b.classId || 'B2503';
+        let found = schemes.find(x => x.classId === cid || x.id === b.id);
+        if(!found){
+          found = { id: b.id, classId: cid, className: b.title };
+          schemes.unshift(found);
+        }
+        found.status = '已通过';
+        found.lock = '正式生效';
+        found.opinion = op;
+        found.approver = approverName;
+        found.approveTime = timeStr;
+        found.ccStatus = '已抄送 3级教务处领导 (王教务长/综合办)';
+        localStorage.setItem('TREA_SCHEME_APPROVALS', JSON.stringify(schemes));
+      } catch(e){}
+      toast(`👑 【${b.id}】方案审批核准通过！二级审核已通过，系统已自动抄送 3级教务处领导知悉备案，方案正式生效！`, 'success');
+    } else if(b.type==='计划审批'){
+      b.status='已通过';b.lock='正式下达';
+      try {
+        const syncData = { status: '已发布', approver: '陈建国 (常务副院长)', opinion: op, time: timeStr };
+        localStorage.setItem('TREA_PLAN_STATUS_2026', JSON.stringify(syncData));
+        const rawPlans = localStorage.getItem('TREA_ANNUAL_PLANS');
+        if(rawPlans){
+          const plans = JSON.parse(rawPlans);
+          const p26 = plans.find(p=>p.y==='2026');
+          if(p26){
+            p26.status = '已发布';
+            p26.approver = '陈建国 (常务副院长)';
+            p26.leaderOpinion = op;
+            p26.approveTime = timeStr;
+            p26.classes.forEach(c=>c.status='已发布');
+            p26.logs.push({ time: timeStr, user: '陈建国 (常务副院长)', action: '院领导审签通过 (审批管理)', note: '签批意见：' + op });
+            localStorage.setItem('TREA_ANNUAL_PLANS', JSON.stringify(plans));
+          }
+        }
+      } catch(e){}
+      toast(`👑 【${b.id}】计划审批核准通过！《2026年学院重点班次教学计划》已正式发布下达并生成学年排课任务！`, 'success');
+    } else if(b.type==='排课审批'){
+      b.status='已排课';b.lock='正式锁定';
+      toast(`✅ 【${b.id}】排课审批通过！资源已转正式锁定，班级/教师/教室三课表同步生成，短信已推送`, 'success');
+    } else if(b.type==='预算审批'){
+      b.status='已通过';b.lock='已锁定基线';
+      toast(`✅ 【${b.id}】预算审批通过！预算金额已正式固化为项目报销控制硬基线`, 'success');
+    } else if(b.type==='开结班审批'){
+      b.status='已通过';
+      toast(`✅ 【${b.id}】开结班核准通过！班次状态已自动同步更新`, 'success');
+    } else if(b.type==='调停课审批'){
+      b.status='已通过';b.lock='已释放';
+      toast(`✅ 【${b.id}】调停课审批通过！原资源已释放，新课表已更新并通知学员`, 'success');
+    } else {
+      b.status='已通过';
+      toast(`✅ 【${b.id}】请假审批核准通过！考勤系统已登记请假，学时已完成核减`, 'success');
+    }
+  } else {
+    if(b.type==='方案审批'){
+      b.status='审批驳回';b.lock='已释放';b.ccStatus='未抄送 (审核驳回)';
+      const approverName = b.mainLeader ? b.mainLeader.split(' ')[0] : '李处长';
+      if(b.chain){
+        const auditNode = b.chain.find(c => c.n === '处领导审核');
+        if(auditNode){ auditNode.s = 'done'; auditNode.t = timeStr; auditNode.op = '退回修改：' + op; }
+        const ccNode = b.chain.find(c => c.n.includes('抄送'));
+        if(ccNode){ ccNode.s = 'wait'; ccNode.t = '—'; ccNode.op = '【未触发抄送】审核未通过，不予以抄送 3级教务处领导'; }
+      }
+      try {
+        let schemes = [];
+        const rawSchemes = localStorage.getItem('TREA_SCHEME_APPROVALS');
+        if(rawSchemes){
+          try {
+            const parsed = JSON.parse(rawSchemes);
+            schemes = Array.isArray(parsed) ? parsed : Object.values(parsed);
+          } catch(e){}
+        }
+        const cid = (b.scheme && b.scheme.clsId) || (b.scheme && b.scheme.classId) || b.classId || 'B2503';
+        let found = schemes.find(x => x.classId === cid || x.id === b.id);
+        if(!found){
+          found = { id: b.id, classId: cid, className: b.title };
+          schemes.unshift(found);
+        }
+        found.status = '审批驳回';
+        found.lock = '已释放';
+        found.opinion = op;
+        found.approver = approverName;
+        found.approveTime = timeStr;
+        found.ccStatus = '未抄送 (审核驳回)';
+        localStorage.setItem('TREA_SCHEME_APPROVALS', JSON.stringify(schemes));
+      } catch(e){}
+      toast(`⛔ 【${b.id}】教学方案已审批驳回！批示意见已退回带班教务员修改重报（抄送已阻断）。`, 'warning');
+    } else if(b.type==='计划审批'){
+      b.status='已驳回';b.lock='已释放';
+      try {
+        const syncData = { status: '已驳回', approver: '陈建国 (常务副院长)', opinion: op, time: timeStr };
+        localStorage.setItem('TREA_PLAN_STATUS_2026', JSON.stringify(syncData));
+        const rawPlans = localStorage.getItem('TREA_ANNUAL_PLANS');
+        if(rawPlans){
+          const plans = JSON.parse(rawPlans);
+          const p26 = plans.find(p=>p.y==='2026');
+          if(p26){
+            p26.status = '已驳回';
+            p26.approver = '陈建国 (常务副院长)';
+            p26.leaderOpinion = op;
+            p26.approveTime = timeStr;
+            p26.classes.forEach(c=>c.status='已驳回(待修改)');
+            p26.logs.push({ time: timeStr, user: '陈建国 (常务副院长)', action: '院领导审签驳回 (审批管理)', note: '退回修改：' + op });
+            localStorage.setItem('TREA_ANNUAL_PLANS', JSON.stringify(plans));
+          }
+        }
+      } catch(e){}
+      toast(`⛔ 【${b.id}】教学计划已审批驳回！批示意见已退回教务部重新修订。`, 'warning');
+    } else {
+      b.status=b.type==='排课审批'?'审批驳回':'已驳回';
+      if(b.lock==='预锁定')b.lock='已释放';
+      toast(`⛔ 【${b.id}】已审批驳回！预锁定资源已全额释放，已退回申请人`, 'warning');
+    }
+  }
+
+  render();
+}
+
+/* ============ 轻量抽屉详情（辅助快捷审批） ============ */
+function openDrawer(id){
+  const b=findB(id);if(!b)return;
+  $('dwTitle').innerHTML=b.id+' · '+b.type;
+  const canApprove=todoOf(b);
+
+  $('dwBody').innerHTML=`
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap">
+      ${stTag(b.status)}<span class="tag ${LOCK[b.lock]||'tag-gray'}">${b.lock}</span>
+      <span style="font-size:12px;color:var(--text-3)">当前节点：${b.cur}</span>
+    </div>
+    <div class="d-sec" style="margin-top:0">申请基础信息</div>
+    <div class="d-grid">
+      <span class="k">单据编号</span><span><b>${b.id}</b></span>
+      <span class="k">标题</span><span>${b.title}</span>
+      <span class="k">申请人</span><span>${b.applicant}（${b.dept}）</span>
+      <span class="k">提交时间</span><span>${b.time}</span>
+    </div>
+    <div class="d-sec">审批流转轨迹</div>
+    ${chainHtml(b)}
+    ${canApprove?`
+      <div class="d-sec">快捷批示意见</div>
+      <textarea class="input" id="dwOpText" rows="3" placeholder="请输入审批意见…">同意。经核验符合管理规范。</textarea>
+    `:''}
+  `;
+
+  let foot=`<button class="btn btn-ghost" onclick="closeDrawer()">关闭</button>`;
+  if(canApprove){
+    foot+=`
+      <button class="btn btn-primary" onclick="openDocModal('${b.id}');closeDrawer()">调取公文大单据</button>
+      <button class="btn btn-danger" onclick="doApproveDrawer('${b.id}',false)">驳回</button>
+      <button class="btn btn-success" onclick="doApproveDrawer('${b.id}',true)">通过</button>
+    `;
+  }
+  $('dwFoot').innerHTML=foot;
+
+  $('drawerMask').classList.remove('hidden');
+  $('drawer').classList.remove('hidden');
+}
+
+function closeDrawer(){
+  $('drawerMask').classList.add('hidden');
+  $('drawer').classList.add('hidden');
+}
+
+function doWithdraw(id){
+  const b=findB(id);
+  if(!b) return;
+  if(!canWithdrawBill(b)){
+    toast('该审批单已有审核节点完成签批，无法撤销！若需调整请联系审批人驳回或沟通', 'warning');
+    return;
+  }
+  if(!confirm('确认撤销「'+b.id+'」？\n\n撤销后审批流转将立即终止，关联预锁定的场地、教室及师资等资源将解除锁定并释放。')) return;
+  const timeStr = new Date().toLocaleString('zh-CN', {hour12: false});
+  b.status='已撤销';
+  b.lock='已释放';
+  b.cur='—';
+  b.chain.push({
+    n:'撤销申请',
+    u:ME,
+    s:'done',
+    t:timeStr,
+    op:'申请人主动撤销申请，审批流转已终止，解除全部预锁定资源'
+  });
+
+  // 同步更新方案审批数据
+  try {
+    const rawSchemes = localStorage.getItem('TREA_SCHEME_APPROVALS');
+    if(rawSchemes){
+      let schemes = JSON.parse(rawSchemes);
+      if (!Array.isArray(schemes)) schemes = Object.values(schemes);
+      const cid = (b.scheme && (b.scheme.clsId || b.scheme.classId)) || b.classId || '';
+      const target = schemes.find(x => x.id === b.id || (cid && x.classId === cid));
+      if(target){
+        target.status = '已撤销';
+        target.lock = '已释放';
+        target.currentNode = '已撤销';
+        target.approver = '—';
+        target.chain = target.chain || [];
+        target.chain.push({
+          n: '撤销请示',
+          u: ME,
+          s: 'done',
+          t: timeStr,
+          op: '申请人主动撤销方案请示公文，流转终止'
+        });
+        localStorage.setItem('TREA_SCHEME_APPROVALS', JSON.stringify(schemes));
+      }
+    }
+  } catch(e){}
+
+  // 同步更新计划审批数据
+  if(b.type === '计划审批'){
+    try {
+      const syncData = { status: '已撤销', approver: '—', opinion: '申请人撤销提请', time: timeStr };
+      localStorage.setItem('TREA_PLAN_STATUS_2026', JSON.stringify(syncData));
+    } catch(e){}
+  }
+
+  toast('已成功撤销申请：单据流转已终止，关联预锁定资源已解锁释放', 'success');
+  render();
+}
+
+function doVoid(id){
+  const b=findB(id);
+  if(!confirm('确认作废「'+b.id+'」？'))return;
+  b.status='已作废';b.lock='已释放';b.cur='—';
+  b.chain.push({n:'作废',u:ME,s:'done',t:new Date().toLocaleString(),op:'单据作废，释放全部资源'});
+  toast('单据已作废');
+  render();
+}
+
+/* ============ URL 参数自适应路由初始化 ============ */
+const urlParams=new URLSearchParams(location.search);
+const pageParam=urlParams.get('page')||urlParams.get('tab')||urlParams.get('type');
+
+let initialView='apv-my';
+if(pageParam){
+  if(pageParam.includes('my')||pageParam==='我的审批'||pageParam.includes('todo')||pageParam.includes('mine')) initialView='apv-my';
+  else if(pageParam.includes('record')||pageParam==='审批记录'||pageParam==='all') initialView='apv-record';
+  else if(pageParam.includes('scheme')||pageParam==='方案审批') initialView='apv-scheme';
+  else if(pageParam.includes('plan')||pageParam==='计划审批') initialView='apv-plan';
+  else if(pageParam.includes('sched')) initialView='apv-schedule';
+  else if(pageParam.includes('budget')||pageParam==='预算审批') initialView='apv-budget';
+  else if(pageParam.includes('class')||pageParam==='开结班审批') initialView='apv-class';
+  else if(pageParam.includes('adjust')||pageParam==='调停课审批') initialView='apv-adjust';
+  else if(pageParam.includes('leave')||pageParam==='学员请假审批') initialView='apv-leave';
+}
+
+// 同步 localStorage 中的方案审批数据
+try {
+  const rawSchemes = localStorage.getItem('TREA_SCHEME_APPROVALS');
+  if(rawSchemes){
+    const schemes = JSON.parse(rawSchemes);
+    Object.keys(schemes).forEach(cid => {
+      const item = schemes[cid];
+      const existing = BILLS.find(b => b.id === item.id);
+      if(existing){
+        existing.status = item.status || existing.status;
+        existing.lock = item.lock || existing.lock;
+        existing.title = item.title || existing.title;
+        existing.cur = item.cur || existing.cur;
+        if(item.chain) existing.chain = item.chain;
+        if(item.scheme) existing.scheme = item.scheme;
+      } else {
+        BILLS.unshift({
+          id: item.id,
+          type: '方案审批',
+          title: item.title,
+          applicant: (item.applicant || '张三').split(' ')[0],
+          dept: item.deptName || '培训处',
+          time: item.submitTime || new Date().toLocaleString(),
+          status: item.status || '审核中',
+          lock: item.lock || '预锁定',
+          cur: item.status === '已通过' ? '—' : '二级审批',
+          mine: false,
+          scheme: item,
+          chain: item.chain || [
+            { n: '教务提请', u: item.applicant || '张三', s: 'done', t: item.submitTime, op: '编制教学方案并提请处领导审签，抄送教务部领导' },
+            { n: '处领导审核', u: '张三 (培训处处领导)', s: item.status === '审核中' ? 'cur' : 'done', t: item.approveTime || '', op: item.opinion || '' },
+            { n: '抄送教务部', u: '教务部领导', s: 'done', t: item.submitTime, op: '【抄送知悉】教学方案已分送教务部领导端同步阅览备案' }
+          ]
+        });
+      }
+    });
+  }
+} catch(e){}
+
+try {
+  const syncPlan = localStorage.getItem('TREA_PLAN_STATUS_2026');
+  if(syncPlan){
+    const sp = JSON.parse(syncPlan);
+    const bPlan = BILLS.find(b=>b.id==='JH-2026-0001');
+    if(bPlan && sp.status){
+      if(sp.status==='已发布'){
+        bPlan.status = '已通过';
+        bPlan.lock = '正式下达';
+        bPlan.cur = '—';
+        const node = bPlan.chain.find(c=>c.s==='cur');
+        if(node){ node.s='done'; node.t=sp.time||''; node.op='审签同意：'+(sp.opinion||''); }
+      } else if(sp.status==='已驳回'){
+        bPlan.status = '已驳回';
+        bPlan.lock = '已释放';
+        bPlan.cur = '—';
+        const node = bPlan.chain.find(c=>c.s==='cur');
+        if(node){ node.s='done'; node.t=sp.time||''; node.op='驳回：'+(sp.opinion||''); }
+      } else if(sp.status==='待院领导审批'){
+        bPlan.status = '审核中';
+        bPlan.lock = '预锁定';
+        bPlan.cur = '二级审批';
+      }
+    }
+  }
+} catch(e){}
+
+showView(initialView);
+const activeNavEl = document.querySelector('.nav-child[data-id="'+initialView+'"]') || document.querySelector('.nav-child[data-id="apv-my"]');
+if (typeof setNavActive === 'function' && activeNavEl) setNavActive(activeNavEl);
+
+const idParam=urlParams.get('id');
+if(idParam){
+  const found=findB(idParam);
+  if(found){
+    openDocModal(idParam);
+  }
+}
+
+window.showLib = function(id) {
+  if (VIEW_MAP[id] || id === 'apv-record' || id === 'apv-my') {
+    showView(id);
+  }
+};
+window.LIB_NAME = Object.assign({}, VIEW_MAP, {'apv-my':'我的审批', 'apv-record':'审批记录'});
+</script>
+</body>
+</html>

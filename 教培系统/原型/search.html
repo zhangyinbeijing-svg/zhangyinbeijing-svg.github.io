@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="stylesheet" href="common.css">
+<script src="store.js"></script>
+<script src="common.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全局检索结果中心 · 干部**学院教务管理系统 原型 V1.0</title>
+<style>
+/* 搜索专属样式设计 */
+.search-hero {
+  background: linear-gradient(135deg, #1F4E79 0%, #153755 100%);
+  border-radius: var(--r-card);
+  padding: 24px 28px;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(31,78,121,0.18);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.search-hero::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  bottom: -40px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 70%);
+  pointer-events: none;
+}
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 10px 6px 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  margin-top: 14px;
+}
+.search-input-wrap .search-icon {
+  font-size: 18px;
+  color: var(--primary-2);
+  flex-shrink: 0;
+}
+.search-input-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: var(--text);
+  background: transparent;
+}
+.search-input-wrap .clear-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
+  padding: 4px 8px;
+  display: none;
+}
+.search-input-wrap .clear-btn:hover { color: var(--danger); }
+.hot-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+.hot-tag-capsule {
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.hot-tag-capsule:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+
+/* 检索统计栏与分类 Tabs */
+.search-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.search-tabs {
+  display: flex;
+  background: #fff;
+  border-radius: var(--r);
+  padding: 4px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.search-tab-item {
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-2);
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+.search-tab-item:hover {
+  background: #f0f4f9;
+  color: var(--primary);
+}
+.search-tab-item.active {
+  background: var(--primary);
+  color: #fff;
+}
+.search-tab-item .tab-cnt {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.08);
+  color: inherit;
+}
+.search-tab-item.active .tab-cnt {
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+}
+
+/* 过滤与排序 */
+.search-filter-card {
+  background: #fff;
+  border-radius: var(--r-card);
+  padding: 12px 18px;
+  border: 1px solid var(--line);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+/* 命中高亮与结果卡片 */
+mark.hl {
+  background: #fff3c4;
+  color: #b76e00;
+  font-weight: 700;
+  padding: 1px 3px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(183,110,0,0.15);
+}
+
+.result-card {
+  background: #fff;
+  border-radius: var(--r-card);
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  margin-bottom: 12px;
+  transition: all 0.15s;
+  position: relative;
+}
+.result-card:hover {
+  border-color: var(--primary-2);
+  box-shadow: 0 4px 14px rgba(31,78,121,0.08);
+  transform: translateY(-1px);
+}
+.rc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.rc-title-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.rc-type-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.type-class { background: #e8f3fc; color: #1F4E79; border: 1px solid #b8d7f2; }
+.type-course { background: #fdf3e8; color: #b76e00; border: 1px solid #f9d8b1; }
+.type-teacher { background: #edf7ed; color: #2E7D32; border: 1px solid #c2e2c3; }
+.type-student { background: #f3eef8; color: #6a1b9a; border: 1px solid #d9c2ec; }
+.type-approval { background: #fcebeb; color: #C62828; border: 1px solid #f6bebe; }
+.type-resource { background: #e0f2f1; color: #00695c; border: 1px solid #b2dfdb; }
+
+.rc-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  cursor: pointer;
+}
+.rc-title:hover {
+  text-decoration: underline;
+  color: var(--primary-2);
+}
+.rc-badge-status {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+.rc-content {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.rc-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px 16px;
+  font-size: 12px;
+  color: var(--text-3);
+  background: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+.rc-meta-item b {
+  color: var(--text);
+  font-weight: 600;
+}
+.rc-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* 综合视图板块 */
+.agg-section {
+  background: #fff;
+  border-radius: var(--r-card);
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.agg-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.agg-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 详情弹窗 */
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.modal-box {
+  background: #fff;
+  border-radius: var(--r-modal);
+  width: 90%;
+  max-width: 760px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.modal-head {
+  padding: 14px 20px;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  line-height: 1.7;
+}
+.modal-foot {
+  padding: 12px 20px;
+  background: #f8fafc;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 空状态 */
+.empty-box {
+  background: #fff;
+  border-radius: var(--r-card);
+  padding: 60px 20px;
+  text-align: center;
+  border: 1px dashed var(--line);
+}
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+</style>
+</head>
+<body>
+
+<main class="content" id="mainContent">
+  <!-- 面包屑导航与返回 -->
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <div class="breadcrumb" style="margin-bottom:0">
+      <a onclick="location.href='workbench.html'">首页</a> / <span>全局综合检索</span>
+    </div>
+    <button class="btn btn-ghost" onclick="if(history.length>1){history.back()}else{location.href='workbench.html'}" style="height:28px;padding:0 12px;font-size:12px">‹ 返回上一页</button>
+  </div>
+
+  <!-- 搜索大头部 Hero -->
+  <div class="search-hero">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:4px;">🔍 全局综合搜索中心</h2>
+        <p style="font-size:12.5px;opacity:0.85;">跨模块聚合检索：全周期办训班次、教学课程体系、专家师资档案、学员花名册、多类型审批单据与题库资源</p>
+      </div>
+      <div style="font-size:12px;background:rgba(255,255,255,0.15);padding:4px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.2);">
+        🛡️ 涉密分保体系全文检索已启用
+      </div>
+    </div>
+
+    <!-- 搜索输入大框 -->
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="pageSearchInput" placeholder="输入关键词：班级名称/编号、课程名称、专家姓名、学员姓名/司局、审批单号(YS/PK/KB/TK/QJ)..." autofocus>
+      <button class="clear-btn" id="pageSearchClear" title="清空内容">×</button>
+      <button class="btn btn-primary" id="pageSearchBtn" style="height:36px;padding:0 20px;font-size:14px;">立即检索</button>
+    </div>
+
+    <!-- 快捷热搜词 -->
+    <div class="hot-tags-row">
+      <span style="opacity:0.8;">🔥 热门精准检索：</span>
+      <span class="hot-tag-capsule" onclick="quickSearch('习近平外交思想')">习近平外交思想</span>
+      <span class="hot-tag-capsule" onclick="quickSearch('涉外法治')">涉外法治</span>
+      <span class="hot-tag-capsule" onclick="quickSearch('2503期处级干部进修班')">2503期处级干部进修班</span>
+      <span class="hot-tag-capsule" onclick="quickSearch('欧阳文华')">欧阳文华 (专家)</span>
+      <span class="hot-tag-capsule" onclick="quickSearch('陈志强')">陈志强 (学员)</span>
+      <span class="hot-tag-capsule" onclick="quickSearch('带班老师')">带班老师</span>
+      <span class="hot-tag-capsule" onclick="quickSearch('YS-2026-0140')">YS-2026-0140 (预算审批单)</span>
+      <span class="hot-tag-capsule" onclick="quickSearch('排课申请')">排课申请</span>
+      <span class="hot-tag-capsule" onclick="quickSearch('外事礼仪')">外事礼仪</span>
+    </div>
+  </div>
+
+  <!-- 检索元数据与分类 Tab 栏 -->
+  <div class="search-meta-bar">
+    <div class="search-tabs" id="searchTabsNav">
+      <div class="search-tab-item active" data-tab="all" onclick="switchCategory('all')">
+        <span>全部结果</span><span class="tab-cnt" id="cnt-all">0</span>
+      </div>
+      <div class="search-tab-item" data-tab="classes" onclick="switchCategory('classes')">
+        <span>🏫 班次</span><span class="tab-cnt" id="cnt-classes">0</span>
+      </div>
+      <div class="search-tab-item" data-tab="courses" onclick="switchCategory('courses')">
+        <span>📚 课程</span><span class="tab-cnt" id="cnt-courses">0</span>
+      </div>
+      <div class="search-tab-item" data-tab="teachers" onclick="switchCategory('teachers')">
+        <span>👨‍🏫 师资</span><span class="tab-cnt" id="cnt-teachers">0</span>
+      </div>
+      <div class="search-tab-item" data-tab="students" onclick="switchCategory('students')">
+        <span>👨‍🎓 学员</span><span class="tab-cnt" id="cnt-students">0</span>
+      </div>
+      <div class="search-tab-item" data-tab="approvals" onclick="switchCategory('approvals')">
+        <span>📑 审批单据</span><span class="tab-cnt" id="cnt-approvals">0</span>
+      </div>
+      <div class="search-tab-item" data-tab="resources" onclick="switchCategory('resources')">
+        <span>📝 题库与资源</span><span class="tab-cnt" id="cnt-resources">0</span>
+      </div>
+    </div>
+
+    <!-- 耗时与总计信息 -->
+    <div style="font-size:13px;color:var(--text-3);" id="searchStatsText">
+      正在检索...
+    </div>
+  </div>
+
+  <!-- 二级过滤筛选栏 -->
+  <div class="search-filter-card">
+    <div class="filter-group">
+      <span>业务状态：</span>
+      <select class="sel" id="filterStatus" onchange="applyFilters()" style="width:140px;">
+        <option value="">全部状态</option>
+        <option value="在办">在办 / 进行中</option>
+        <option value="筹备">筹备中</option>
+        <option value="待审批">待审批 / 审核中</option>
+        <option value="已通过">已通过 / 已办结</option>
+        <option value="已结业">已结业 / 已归档</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <span>主办单位 / 司局：</span>
+      <select class="sel" id="filterDept" onchange="applyFilters()" style="width:160px;">
+        <option value="">全部司局部门</option>
+        <option value="办公厅">办公厅</option>
+        <option value="干部司">干部司</option>
+        <option value="条法司">条法司</option>
+        <option value="新闻司">新闻司</option>
+        <option value="礼宾司">礼宾司</option>
+        <option value="机关党委">机关党委</option>
+        <option value="培训部">培训部</option>
+        <option value="教务管理办">教务管理办</option>
+      </select>
+    </div>
+    <div class="filter-group" style="margin-left:auto;">
+      <span>排序规则：</span>
+      <select class="sel" id="filterSort" onchange="applyFilters()" style="width:130px;">
+        <option value="relevance">相关度最高</option>
+        <option value="timeDesc">时间倒序</option>
+        <option value="rankDesc">职级/优先级</option>
+      </select>
+      <button class="btn btn-ghost" onclick="resetFilters()">重置筛选</button>
+    </div>
+  </div>
+
+  <!-- 搜索结果列表容器 -->
+  <div id="searchResultsContainer">
+    <!-- 动态渲染 -->
+  </div>
+</main>
+
+<!-- 全局详情快速预览弹窗 -->
+<div class="modal-mask hidden" id="previewModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span id="previewModalTitle" style="font-weight:700;font-size:15px;">详情信息</span>
+      <button style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;" onclick="closePreviewModal()">×</button>
+    </div>
+    <div class="modal-body" id="previewModalBody">
+      <!-- 动态注入 -->
+    </div>
+    <div class="modal-foot" id="previewModalFoot">
+      <button class="btn btn-ghost" onclick="closePreviewModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== 全局搜索逻辑与数据处理 ====================
+let curKeyword = '';
+let curCategory = 'all'; // all, classes, courses, teachers, students, approvals, resources
+let filterStatusVal = '';
+let filterDeptVal = '';
+let filterSortVal = 'relevance';
+
+// 扩展资源与试卷数据池（与 exam-paper.html / resource.html 协同）
+const EXAM_RESOURCE_DATA = [
+  {
+    id: 'EX-2026-01',
+    type: '综合试卷',
+    name: '2026年秋季干部进修班结业理论统考卷（涉密A卷）',
+    cat: '党性理论与外交战略',
+    creator: '教研部 · 欧阳文华',
+    date: '2026-09-20',
+    totalScore: 100,
+    itemCount: 45,
+    status: '已发布',
+    desc: '覆盖习近平外交思想核心要义、大国外交博弈、海外利益安全合规等关键模块。'
+  },
+  {
+    id: 'EX-2026-02',
+    type: '综合试卷',
+    name: '涉外法治能力建设研讨班阶段性实务测评试卷',
+    cat: '涉外法治保障',
+    creator: '条法教研室 · 端木清',
+    date: '2026-09-18',
+    totalScore: 100,
+    itemCount: 30,
+    status: '已发布',
+    desc: '聚焦涉外法律合规、海外突发事件处置、国际公约适用分析。'
+  },
+  {
+    id: 'RES-DOC-01',
+    type: '教案教历',
+    name: '高层外事礼仪与多边涉外谈判全套教学案例讲义（V3.2）',
+    cat: '外事实践能力',
+    creator: '礼宾研究组 · 司马仪',
+    date: '2026-09-15',
+    totalScore: 0,
+    itemCount: 1,
+    status: '已归档',
+    desc: '含真实国宾会见座次排定、涉外礼宾文书撰写与突发外事应对方案演练。'
+  },
+  {
+    id: 'RES-QB-01',
+    type: '题库题集',
+    name: '干部党性理论与外交外事政策法规核心试题库（共500题）',
+    cat: '党性教育与规章',
+    creator: '教务管理办',
+    date: '2026-09-10',
+    totalScore: 500,
+    itemCount: 500,
+    status: '已启用',
+    desc: '支持单选、多选、判断、案例论述等多题型，支持一键智能抽题组卷。'
+  }
+];
+
+// 综合审批单据数据源（整合 store.js 与 approve.html）
+function getApprovalData() {
+  const storeApvs = (window.TREA_STORE && window.TREA_STORE.data && window.TREA_STORE.data.approvals) || [];
+  const extraApvs = [
+    {
+      id: 'YS-2026-0140',
+      type: '预算审批',
+      title: '2503期处级干部进修班 涉外考察与保障专项预算（¥185,000）',
+      classId: 'B2503',
+      applicant: '张三 (办训人员)',
+      dept: '教务管理办',
+      submitTime: '2026-09-24 16:40',
+      level: '一级审批 (院领导特批)',
+      currentApprover: '李院长 (院领导)',
+      status: '待审批',
+      amount: 185000,
+      detail: {
+        total: 185000,
+        reason: '因班次学员含司局级外聘指导及重点涉外保密考察，需单间封闭住宿并含现场教学调研。'
+      }
+    },
+    {
+      id: 'PK-2026-0092',
+      type: '排课审批',
+      title: '2503班 09-25 授课排课申请（欧阳文华 / 第一阶梯报告厅）',
+      classId: 'B2503',
+      applicant: '张三 (办训人员)',
+      dept: '教务管理办',
+      submitTime: '2026-09-22 09:30',
+      level: '二级审批 (处领导)',
+      currentApprover: '李处长',
+      status: '已通过',
+      amount: null,
+      detail: { course: '习近平外交思想核心要义深度解读', teacher: '欧阳文华', room: '第一多媒体阶梯报告厅' }
+    },
+    {
+      id: 'TK-2026-0041',
+      type: '调停课审批',
+      title: '2503班 09-28 涉外博弈策略 专家公差调课申请',
+      classId: 'B2503',
+      applicant: '张三 (办训人员)',
+      dept: '教务管理办',
+      submitTime: '2026-09-23 11:20',
+      level: '二级审批 (处领导)',
+      currentApprover: '李处长',
+      status: '待审批',
+      amount: null,
+      detail: { course: '大国外交与多边国际舞台博弈策略', teacher: '诸葛宏', reason: '专家应部委紧急涉外工作调遣' }
+    },
+    {
+      id: 'KB-2026-0008',
+      type: '开结班审批',
+      title: '2503期处级干部进修班 开班准入资质审核申请',
+      classId: 'B2503',
+      applicant: '张三 (办训人员)',
+      dept: '办公厅',
+      submitTime: '2026-08-28 10:00',
+      level: '二级审批 (处领导)',
+      currentApprover: '钱处长',
+      status: '已通过',
+      amount: null,
+      detail: { class: '2503期处级干部进修班', stuCount: 45, check: '学籍审查合规，排课已锁定' }
+    },
+    {
+      id: 'QJ-2026-0089',
+      type: '学员请假审批',
+      title: '学员 陈志强 2503班 09-26 公务请假 1 天申请',
+      classId: 'B2503',
+      applicant: '带班组织员',
+      dept: '北美大洋洲司',
+      submitTime: '2026-09-24 14:20',
+      level: '二级审批 (处领导)',
+      currentApprover: '李处长',
+      status: '待审批',
+      amount: null,
+      detail: { student: '陈志强 (北美大洋洲司 · 副司长)', days: 1, reason: '派出单位紧急涉外重要磋商' }
+    }
+  ];
+
+  // 合并去重
+  const map = new Map();
+  [...extraApvs, ...storeApvs].forEach(item => {
+    map.set(item.id, item);
+  });
+  return Array.from(map.values());
+}
+
+// 页面初始化
+document.addEventListener('DOMContentLoaded', () => {
+  // 读取 URL 参数
+  const params = new URLSearchParams(location.search);
+  const kw = params.get('keyword') || params.get('q') || params.get('search') || '';
+  const tab = params.get('tab') || 'all';
+
+  curKeyword = kw.trim();
+  curCategory = tab;
+
+  const input = document.getElementById('pageSearchInput');
+  const clearBtn = document.getElementById('pageSearchClear');
+  if (input) {
+    input.value = curKeyword;
+    if (curKeyword) clearBtn.style.display = 'block';
+
+    input.addEventListener('input', () => {
+      clearBtn.style.display = input.value.trim() ? 'block' : 'none';
+    });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        doSearch(input.value.trim());
+      }
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      clearBtn.style.display = 'none';
+      input.focus();
+      doSearch('');
+    });
+  }
+
+  const btn = document.getElementById('pageSearchBtn');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      doSearch(input.value.trim());
+    });
+  }
+
+  // 同步同步全局顶部栏中当前输入框内容
+  const topInput = document.getElementById('globalSearchInput');
+  if (topInput && curKeyword) {
+    topInput.value = curKeyword;
+  }
+
+  executeSearch();
+});
+
+// 快速点击热搜
+function quickSearch(kw) {
+  const input = document.getElementById('pageSearchInput');
+  if (input) input.value = kw;
+  const clearBtn = document.getElementById('pageSearchClear');
+  if (clearBtn) clearBtn.style.display = 'block';
+  doSearch(kw);
+}
+
+// 触发搜索
+function doSearch(kw) {
+  curKeyword = kw;
+  const url = new URL(location);
+  if (curKeyword) {
+    url.searchParams.set('keyword', curKeyword);
+  } else {
+    url.searchParams.delete('keyword');
+  }
+  url.searchParams.set('tab', curCategory);
+  history.replaceState(null, '', url.toString());
+
+  // 同步顶部导航栏输入框
+  const topInput = document.getElementById('globalSearchInput');
+  if (topInput) topInput.value = curKeyword;
+
+  executeSearch();
+}
+
+// 切换类别 Tab
+function switchCategory(cat) {
+  curCategory = cat;
+  document.querySelectorAll('.search-tab-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === cat);
+  });
+  const url = new URL(location);
+  url.searchParams.set('tab', curCategory);
+  history.replaceState(null, '', url.toString());
+
+  renderResults();
+}
+
+// 关键词高亮器
+function highlight(text, kw) {
+  if (!text) return '';
+  const str = String(text);
+  if (!kw) return escapeHtml(str);
+  const regex = new RegExp(`(${escapeRegex(kw)})`, 'gi');
+  return escapeHtml(str).replace(regex, '<mark class="hl">$1</mark>');
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// 过滤筛选
+function applyFilters() {
+  filterStatusVal = document.getElementById('filterStatus').value;
+  filterDeptVal = document.getElementById('filterDept').value;
+  filterSortVal = document.getElementById('filterSort').value;
+  renderResults();
+}
+
+function resetFilters() {
+  document.getElementById('filterStatus').value = '';
+  document.getElementById('filterDept').value = '';
+  document.getElementById('filterSort').value = 'relevance';
+  filterStatusVal = '';
+  filterDeptVal = '';
+  filterSortVal = 'relevance';
+  renderResults();
+}
+
+// 全局匹配数据池
+let matchedData = {
+  classes: [],
+  courses: [],
+  teachers: [],
+  students: [],
+  approvals: [],
+  resources: []
+};
+let searchStartTime = 0;
+
+function executeSearch() {
+  searchStartTime = performance.now();
+  const kw = curKeyword.toLowerCase();
+
+  const store = window.TREA_STORE ? window.TREA_STORE.data : {};
+  const allClasses = store.classes || [];
+  const allCourses = store.courses || [];
+  const allTeachers = store.teachers || [];
+  const allStudents = store.students || [];
+  const allApprovals = getApprovalData();
+  const allResources = EXAM_RESOURCE_DATA;
+
+  // 1. 班次匹配
+  matchedData.classes = allClasses.filter(c => {
+    if (!kw) return true;
+    const teacherStr = `${c.headTeacher || ''} ${c.admin || ''}`;
+    return (c.name && c.name.toLowerCase().includes(kw)) ||
+           (c.id && c.id.toLowerCase().includes(kw)) ||
+           (c.cat && c.cat.toLowerCase().includes(kw)) ||
+           (c.target && c.target.toLowerCase().includes(kw)) ||
+           (c.host && c.host.toLowerCase().includes(kw)) ||
+           (c.dept && c.dept.toLowerCase().includes(kw)) ||
+           (c.status && c.status.toLowerCase().includes(kw)) ||
+           (teacherStr.toLowerCase().includes(kw)) ||
+           (kw.includes('班') && c.name.toLowerCase().includes(kw.replace('班',''))) ||
+           (kw.includes('带班') && teacherStr.length > 0);
+  });
+
+  // 2. 课程匹配
+  matchedData.courses = allCourses.filter(c => {
+    if (!kw) return true;
+    return (c.name && c.name.toLowerCase().includes(kw)) ||
+           (c.id && c.id.toLowerCase().includes(kw)) ||
+           (c.system && c.system.toLowerCase().includes(kw)) ||
+           (c.type && c.type.toLowerCase().includes(kw)) ||
+           (c.field && c.field.toLowerCase().includes(kw)) ||
+           (c.tag && c.tag.toLowerCase().includes(kw));
+  });
+
+  // 3. 师资匹配
+  matchedData.teachers = allTeachers.filter(t => {
+    if (!kw) return true;
+    return (t.name && t.name.toLowerCase().includes(kw)) ||
+           (t.id && t.id.toLowerCase().includes(kw)) ||
+           (t.title && t.title.toLowerCase().includes(kw)) ||
+           (t.dept && t.dept.toLowerCase().includes(kw)) ||
+           (t.field && t.field.toLowerCase().includes(kw)) ||
+           (t.levelTag && t.levelTag.toLowerCase().includes(kw)) ||
+           (t.domainTag && t.domainTag.toLowerCase().includes(kw));
+  });
+
+  // 4. 学员匹配
+  matchedData.students = allStudents.filter(s => {
+    if (!kw) return true;
+    return (s.name && s.name.toLowerCase().includes(kw)) ||
+           (s.id && s.id.toLowerCase().includes(kw)) ||
+           (s.dept && s.dept.toLowerCase().includes(kw)) ||
+           (s.title && s.title.toLowerCase().includes(kw)) ||
+           (s.certNo && s.certNo.toLowerCase().includes(kw)) ||
+           (s.phone && s.phone.includes(kw));
+  });
+
+  // 5. 审批单匹配
+  matchedData.approvals = allApprovals.filter(a => {
+    if (!kw) return true;
+    const detailStr = a.detail ? JSON.stringify(a.detail) : '';
+    return (a.id && a.id.toLowerCase().includes(kw)) ||
+           (a.title && a.title.toLowerCase().includes(kw)) ||
+           (a.type && a.type.toLowerCase().includes(kw)) ||
+           (a.applicant && a.applicant.toLowerCase().includes(kw)) ||
+           (a.dept && a.dept.toLowerCase().includes(kw)) ||
+           (a.currentApprover && a.currentApprover.toLowerCase().includes(kw)) ||
+           (a.status && a.status.toLowerCase().includes(kw)) ||
+           detailStr.toLowerCase().includes(kw);
+  });
+
+  // 6. 题库与试卷匹配
+  matchedData.resources = allResources.filter(r => {
+    if (!kw) return true;
+    return (r.name && r.name.toLowerCase().includes(kw)) ||
+           (r.id && r.id.toLowerCase().includes(kw)) ||
+           (r.type && r.type.toLowerCase().includes(kw)) ||
+           (r.cat && r.cat.toLowerCase().includes(kw)) ||
+           (r.creator && r.creator.toLowerCase().includes(kw)) ||
+           (r.desc && r.desc.toLowerCase().includes(kw));
+  });
+
+  // 更新各分类数量
+  const countAll = matchedData.classes.length +
+                   matchedData.courses.length +
+                   matchedData.teachers.length +
+                   matchedData.students.length +
+                   matchedData.approvals.length +
+                   matchedData.resources.length;
+
+  document.getElementById('cnt-all').textContent = countAll;
+  document.getElementById('cnt-classes').textContent = matchedData.classes.length;
+  document.getElementById('cnt-courses').textContent = matchedData.courses.length;
+  document.getElementById('cnt-teachers').textContent = matchedData.teachers.length;
+  document.getElementById('cnt-students').textContent = matchedData.students.length;
+  document.getElementById('cnt-approvals').textContent = matchedData.approvals.length;
+  document.getElementById('cnt-resources').textContent = matchedData.resources.length;
+
+  renderResults();
+}
+
+// 渲染结果
+function renderResults() {
+  const container = document.getElementById('searchResultsContainer');
+  const elapsed = ((performance.now() - searchStartTime) / 1000).toFixed(3);
+
+  // 获取当前类别的筛选后数据
+  const listClasses = filterList(matchedData.classes, 'classes');
+  const listCourses = filterList(matchedData.courses, 'courses');
+  const listTeachers = filterList(matchedData.teachers, 'teachers');
+  const listStudents = filterList(matchedData.students, 'students');
+  const listApprovals = filterList(matchedData.approvals, 'approvals');
+  const listResources = filterList(matchedData.resources, 'resources');
+
+  const currentCount = curCategory === 'all'
+    ? (listClasses.length + listCourses.length + listTeachers.length + listStudents.length + listApprovals.length + listResources.length)
+    : (curCategory === 'classes' ? listClasses.length :
+       curCategory === 'courses' ? listCourses.length :
+       curCategory === 'teachers' ? listTeachers.length :
+       curCategory === 'students' ? listStudents.length :
+       curCategory === 'approvals' ? listApprovals.length : listResources.length);
+
+  document.getElementById('searchStatsText').innerHTML = curKeyword
+    ? `检索词【<b>${escapeHtml(curKeyword)}</b>】共找到 <b>${currentCount}</b> 条匹配结果 (耗时 ${elapsed} 秒)`
+    : `展示全部数据，共 <b>${currentCount}</b> 条记录`;
+
+  if (currentCount === 0) {
+    container.innerHTML = `
+      <div class="empty-box">
+        <div class="empty-icon">🔎</div>
+        <h3 style="font-size:16px;color:var(--text);margin-bottom:8px;">未找到与“${escapeHtml(curKeyword || '当前条件')}”匹配的数据</h3>
+        <p style="color:var(--text-3);font-size:13px;margin-bottom:16px;">建议检查关键词拼写、缩短检索词或放宽筛选条件</p>
+        <div style="display:flex;justify-content:center;gap:10px;">
+          <button class="btn btn-primary" onclick="quickSearch('')">清空条件查看全部</button>
+          <button class="btn btn-ghost" onclick="quickSearch('2503期')">搜索热门班次</button>
+          <button class="btn btn-ghost" onclick="quickSearch('欧阳文华')">搜索资深专家</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+
+  if (curCategory === 'all') {
+    // 综合视图：按类型分组展示 Top 3
+    if (listClasses.length > 0) {
+      html += renderAggSection('🏫 班次信息 (' + listClasses.length + ')', 'classes', listClasses.slice(0, 3).map(renderClassCard).join(''), listClasses.length > 3);
+    }
+    if (listApprovals.length > 0) {
+      html += renderAggSection('📑 审批单据 (' + listApprovals.length + ')', 'approvals', listApprovals.slice(0, 3).map(renderApprovalCard).join(''), listApprovals.length > 3);
+    }
+    if (listCourses.length > 0) {
+      html += renderAggSection('📚 教学课程 (' + listCourses.length + ')', 'courses', listCourses.slice(0, 3).map(renderCourseCard).join(''), listCourses.length > 3);
+    }
+    if (listTeachers.length > 0) {
+      html += renderAggSection('👨‍🏫 师资专家 (' + listTeachers.length + ')', 'teachers', listTeachers.slice(0, 3).map(renderTeacherCard).join(''), listTeachers.length > 3);
+    }
+    if (listStudents.length > 0) {
+      html += renderAggSection('👨‍🎓 参训学员 (' + listStudents.length + ')', 'students', listStudents.slice(0, 3).map(renderStudentCard).join(''), listStudents.length > 3);
+    }
+    if (listResources.length > 0) {
+      html += renderAggSection('📝 题库与试卷 (' + listResources.length + ')', 'resources', listResources.slice(0, 3).map(renderResourceCard).join(''), listResources.length > 3);
+    }
+  } else if (curCategory === 'classes') {
+    html = listClasses.map(renderClassCard).join('');
+  } else if (curCategory === 'courses') {
+    html = listCourses.map(renderCourseCard).join('');
+  } else if (curCategory === 'teachers') {
+    html = listTeachers.map(renderTeacherCard).join('');
+  } else if (curCategory === 'students') {
+    html = listStudents.map(renderStudentCard).join('');
+  } else if (curCategory === 'approvals') {
+    html = listApprovals.map(renderApprovalCard).join('');
+  } else if (curCategory === 'resources') {
+    html = listResources.map(renderResourceCard).join('');
+  }
+
+  container.innerHTML = html;
+}
+
+// 统一过滤
+function filterList(arr, type) {
+  let res = [...arr];
+
+  if (filterStatusVal) {
+    res = res.filter(item => {
+      const s = item.status || '';
+      return s.includes(filterStatusVal);
+    });
+  }
+
+  if (filterDeptVal) {
+    res = res.filter(item => {
+      const d = `${item.host || ''} ${item.dept || ''}`;
+      return d.includes(filterDeptVal);
+    });
+  }
+
+  if (filterSortVal === 'timeDesc') {
+    res.sort((a, b) => {
+      const tA = a.start || a.submitTime || a.date || '';
+      const tB = b.start || b.submitTime || b.date || '';
+      return tB.localeCompare(tA);
+    });
+  } else if (filterSortVal === 'rankDesc') {
+    res.sort((a, b) => {
+      const rA = a.rankWeight || (a.amount ? a.amount / 1000 : 0) || 0;
+      const rB = b.rankWeight || (b.amount ? b.amount / 1000 : 0) || 0;
+      return rB - rA;
+    });
+  }
+
+  return res;
+}
+
+// 综合视图模块包装
+function renderAggSection(title, catKey, itemsHtml, hasMore) {
+  return `
+    <div class="agg-section">
+      <div class="agg-head">
+        <span class="agg-title">${title}</span>
+        ${hasMore ? `<a onclick="switchCategory('${catKey}')" style="font-size:12.5px;color:var(--primary-2);font-weight:600;">查看全部 ${title.match(/\d+/)[0]} 项 &gt;</a>` : ''}
+      </div>
+      <div>
+        ${itemsHtml}
+      </div>
+    </div>
+  `;
+}
+
+// ==================== 各类型卡片渲染 ====================
+
+// 1. 班次卡片
+function renderClassCard(c) {
+  const stCls = c.status === '在办' ? 'tag-green' : c.status === '筹备' ? 'tag-orange' : c.status === '待结班' ? 'tag-blue' : 'tag-gray';
+  const headTeacherName = c.headTeacher || c.admin || '未指定';
+  return `
+    <div class="result-card">
+      <div class="rc-header">
+        <div class="rc-title-box">
+          <span class="rc-type-tag type-class">班次档案</span>
+          <span class="rc-title" onclick="location.href='training.html?tab=class&detail=${c.id}'">${highlight(c.name, curKeyword)}</span>
+          <span class="tag ${stCls}">${c.status}</span>
+          <span class="tag tag-gray">${c.id}</span>
+        </div>
+        <div class="rc-actions">
+          <button class="btn btn-ghost btn-sm" onclick="location.href='training-schedule.html?classId=${c.id}'">📅 班级课表</button>
+          <button class="btn btn-primary btn-sm" onclick="location.href='training.html?tab=class&detail=${c.id}'">进入班级主页</button>
+        </div>
+      </div>
+      <div class="rc-content">
+        班次类型：<b>${highlight(c.cat, curKeyword)}</b> · 培训对象：${highlight(c.target, curKeyword)} · 计划学制：${c.days}天 · 学员编制：${c.stuCount}人 (当前进度 ${c.prog}%)
+      </div>
+      <div class="rc-meta-grid">
+        <div class="rc-meta-item"><b>带班老师：</b>${highlight(headTeacherName, curKeyword)} (全流程负责)</div>
+        <div class="rc-meta-item"><b>主办单位：</b>${highlight(c.host || '办公厅', curKeyword)}</div>
+        <div class="rc-meta-item"><b>办训部门：</b>${highlight(c.dept || '教务管理办', curKeyword)}</div>
+        <div class="rc-meta-item"><b>起止周期：</b>${c.start} 至 ${c.end}</div>
+        <div class="rc-meta-item"><b>预算执行：</b>¥${(c.budgetTotal || 0).toLocaleString()} (预算总额)</div>
+      </div>
+    </div>
+  `;
+}
+
+// 2. 课程卡片
+function renderCourseCard(c) {
+  return `
+    <div class="result-card">
+      <div class="rc-header">
+        <div class="rc-title-box">
+          <span class="rc-type-tag type-course">教学课程</span>
+          <span class="rc-title" onclick="location.href='resource.html?tab=course'">${highlight(c.name, curKeyword)}</span>
+          <span class="tag tag-blue">${c.status || '启用'}</span>
+          <span class="tag tag-gray">${c.id}</span>
+        </div>
+        <div class="rc-actions">
+          <button class="btn btn-ghost btn-sm" onclick="location.href='training-schedule.html'">🗓️ 安排排课</button>
+          <button class="btn btn-primary btn-sm" onclick="location.href='resource.html?tab=course'">课程体系详情</button>
+        </div>
+      </div>
+      <div class="rc-content">
+        所属体系：<b>${highlight(c.system, curKeyword)}</b> · 授课形式：${highlight(c.type, curKeyword)} · 领域方向：${highlight(c.field, curKeyword)} · 模块标签：${highlight(c.tag, curKeyword)}
+      </div>
+      <div class="rc-meta-grid">
+        <div class="rc-meta-item"><b>课程层级：</b>${c.level || '中阶'}</div>
+        <div class="rc-meta-item"><b>标准学时：</b>${c.hours} 学时</div>
+        <div class="rc-meta-item"><b>适用班次：</b>党校班 / 政能班 / 涉外专题研讨班</div>
+        <div class="rc-meta-item"><b>教学状态：</b>标准教学大纲已审核入库</div>
+      </div>
+    </div>
+  `;
+}
+
+// 3. 师资卡片
+function renderTeacherCard(t) {
+  return `
+    <div class="result-card">
+      <div class="rc-header">
+        <div class="rc-title-box">
+          <span class="rc-type-tag type-teacher">专家师资</span>
+          <span class="rc-title" onclick="previewTeacher('${t.id}')">${highlight(t.name, curKeyword)}</span>
+          <span class="tag tag-green">${t.levelTag}</span>
+          <span class="tag tag-orange">综合评分 ${t.score}</span>
+        </div>
+        <div class="rc-actions">
+          <button class="btn btn-ghost btn-sm" onclick="previewTeacher('${t.id}')">👤 查看档案</button>
+          <button class="btn btn-primary btn-sm" onclick="location.href='teacher-lib.html'">师资库维护</button>
+        </div>
+      </div>
+      <div class="rc-content">
+        职称职位：<b>${highlight(t.title, curKeyword)}</b> · 工作单位：${highlight(t.dept, curKeyword)} · 研究专长：${highlight(t.field, curKeyword)}
+      </div>
+      <div class="rc-meta-grid">
+        <div class="rc-meta-item"><b>专长领域：</b>${highlight(t.domainTag || '外事理论', curKeyword)}</div>
+        <div class="rc-meta-item"><b>授课总计：</b>累计授课 ${t.hoursTotal || 0} 学时</div>
+        <div class="rc-meta-item"><b>当前排课状态：</b>${t.status || '空闲'} (无时间冲突)</div>
+        <div class="rc-meta-item"><b>库内编号：</b>${t.id}</div>
+      </div>
+    </div>
+  `;
+}
+
+// 4. 学员卡片
+function renderStudentCard(s) {
+  const stCls = s.status === '在训' ? 'tag-green' : s.status === '请假中' ? 'tag-orange' : 'tag-gray';
+  return `
+    <div class="result-card">
+      <div class="rc-header">
+        <div class="rc-title-box">
+          <span class="rc-type-tag type-student">参训学员</span>
+          <span class="rc-title" onclick="previewStudent('${s.id}')">${highlight(s.name, curKeyword)}</span>
+          <span class="tag ${stCls}">${s.status}</span>
+          <span class="tag tag-gray">${s.gender}</span>
+        </div>
+        <div class="rc-actions">
+          <button class="btn btn-ghost btn-sm" onclick="previewStudent('${s.id}')">📋 学员档案</button>
+          <button class="btn btn-primary btn-sm" onclick="location.href='student-lib.html'">学员库中心</button>
+        </div>
+      </div>
+      <div class="rc-content">
+        选派单位：<b>${highlight(s.dept, curKeyword)}</b> · 干部职级：${highlight(s.title, curKeyword)} · 礼宾序列权重：${s.rankWeight}分 · 考核成绩：${s.score}分
+      </div>
+      <div class="rc-meta-grid">
+        <div class="rc-meta-item"><b>在训班次：</b>2503期处级干部进修班</div>
+        <div class="rc-meta-item"><b>考勤出勤率：</b>${s.attendRate}% (满足结业准入标准)</div>
+        <div class="rc-meta-item"><b>培训证书编号：</b>${highlight(s.certNo, curKeyword)}</div>
+        <div class="rc-meta-item"><b>联系电话：</b>${s.phone ? s.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') : '—'}</div>
+      </div>
+    </div>
+  `;
+}
+
+// 5. 审批单据卡片
+function renderApprovalCard(a) {
+  const stCls = a.status === '待审批' || a.status === '审核中' ? 'tag-orange' : a.status === '已通过' ? 'tag-green' : 'tag-red';
+  return `
+    <div class="result-card">
+      <div class="rc-header">
+        <div class="rc-title-box">
+          <span class="rc-type-tag type-approval">公文单据</span>
+          <span class="rc-title" onclick="location.href='approve.html?id=${a.id}'">${highlight(a.title, curKeyword)}</span>
+          <span class="tag ${stCls}">${a.status}</span>
+          <span class="tag tag-blue">${highlight(a.type, curKeyword)}</span>
+          <span class="tag tag-gray">${a.id}</span>
+        </div>
+        <div class="rc-actions">
+          <button class="btn btn-ghost btn-sm" onclick="previewApproval('${a.id}')">📄 审签公文单</button>
+          <button class="btn btn-primary btn-sm" onclick="location.href='approve.html?id=${a.id}'">办理审批</button>
+        </div>
+      </div>
+      <div class="rc-content">
+        审批层级：<b>${a.level || '二级审批 (处领导)'}</b> · 提请人：${highlight(a.applicant, curKeyword)} · 提交时间：${a.submitTime}
+        ${a.amount ? ` · 申报金额：<b style="color:var(--danger)">¥${a.amount.toLocaleString()}</b>` : ''}
+      </div>
+      <div class="rc-meta-grid">
+        <div class="rc-meta-item"><b>当前审批人：</b>${highlight(a.currentApprover || '李处长', curKeyword)}</div>
+        <div class="rc-meta-item"><b>关联班次：</b>${a.classId || '2503期'}</div>
+        <div class="rc-meta-item"><b>所属部门：</b>${highlight(a.dept || '教务管理办', curKeyword)}</div>
+        <div class="rc-meta-item"><b>公文留痕：</b>全流程线上安可归档</div>
+      </div>
+    </div>
+  `;
+}
+
+// 6. 题库与资源卡片
+function renderResourceCard(r) {
+  return `
+    <div class="result-card">
+      <div class="rc-header">
+        <div class="rc-title-box">
+          <span class="rc-type-tag type-resource">${r.type}</span>
+          <span class="rc-title" onclick="location.href='exam-paper.html'">${highlight(r.name, curKeyword)}</span>
+          <span class="tag tag-green">${r.status}</span>
+          <span class="tag tag-gray">${r.id}</span>
+        </div>
+        <div class="rc-actions">
+          <button class="btn btn-ghost btn-sm" onclick="location.href='exam-paper.html'">📝 查看试卷</button>
+          <button class="btn btn-primary btn-sm" onclick="location.href='resource.html'">教学资源库</button>
+        </div>
+      </div>
+      <div class="rc-content">
+        分类归属：<b>${highlight(r.cat, curKeyword)}</b> · 编制人员/科室：${highlight(r.creator, curKeyword)} · 更新时间：${r.date}
+      </div>
+      <div class="rc-meta-grid">
+        <div class="rc-meta-item"><b>资源摘要：</b>${highlight(r.desc, curKeyword)}</div>
+        <div class="rc-meta-item"><b>题目数量：</b>${r.itemCount} 题</div>
+        <div class="rc-meta-item"><b>试卷总分：</b>${r.totalScore} 分</div>
+        <div class="rc-meta-item"><b>保密等级：</b>干部教育内部教研用</div>
+      </div>
+    </div>
+  `;
+}
+
+// ==================== 模态框预览功能 ====================
+function openModal(title, bodyHtml, footHtml) {
+  document.getElementById('previewModalTitle').innerHTML = title;
+  document.getElementById('previewModalBody').innerHTML = bodyHtml;
+  if (footHtml) {
+    document.getElementById('previewModalFoot').innerHTML = footHtml;
+  } else {
+    document.getElementById('previewModalFoot').innerHTML = '<button class="btn btn-ghost" onclick="closePreviewModal()">关闭</button>';
+  }
+  document.getElementById('previewModal').classList.remove('hidden');
+}
+
+function closePreviewModal() {
+  document.getElementById('previewModal').classList.add('hidden');
+}
+
+// 预览师资
+function previewTeacher(tid) {
+  const t = (window.TREA_STORE && window.TREA_STORE.data.teachers.find(x => x.id === tid)) || {
+    id: tid, name: '欧阳文华', title: '特聘教授 / 博士生导师', dept: '中国国际问题研究院', field: '国际战略、习近平外交思想', score: 9.8, hoursTotal: 120, levelTag: '国家部委级', domainTag: '外交理论'
+  };
+  const body = `
+    <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:16px;">
+      <div style="width:70px;height:70px;border-radius:50%;background:#1F4E79;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;">
+        ${t.name[0]}
+      </div>
+      <div style="flex:1;">
+        <h3 style="font-size:18px;color:var(--text);">${t.name} <span class="tag tag-green">${t.levelTag}</span></h3>
+        <p style="color:var(--text-2);margin-top:4px;"><b>工作单位：</b>${t.dept}</p>
+        <p style="color:var(--text-2);margin-top:2px;"><b>专家职称：</b>${t.title}</p>
+      </div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;line-height:2;">
+      <tr><td style="width:120px;color:var(--text-3);">主讲领域：</td><td><b>${t.field}</b></td></tr>
+      <tr><td style="color:var(--text-3);">所属领域标签：</td><td>${t.domainTag || '外事理论与战略'}</td></tr>
+      <tr><td style="color:var(--text-3);">学员满意度：</td><td><span style="color:var(--warning);font-weight:700;">⭐ ${t.score} 分</span> (近3年高分优选)</td></tr>
+      <tr><td style="color:var(--text-3);">累计授课：</td><td>${t.hoursTotal} 学时</td></tr>
+      <tr><td style="color:var(--text-3);">专家涉密级别：</td><td>符合安可涉密教学准入，已签署外事专家保密承诺书</td></tr>
+    </table>
+  `;
+  const foot = `
+    <button class="btn btn-ghost" onclick="closePreviewModal()">关闭</button>
+    <button class="btn btn-primary" onclick="location.href='teacher-lib.html'">查看师资库全部档案</button>
+  `;
+  openModal('师资专家档案明细 · ' + t.name, body, foot);
+}
+
+// 预览学员
+function previewStudent(sid) {
+  const s = (window.TREA_STORE && window.TREA_STORE.data.students.find(x => x.id === sid)) || {
+    id: sid, name: '陈志强', dept: '北美大洋洲司', title: '副司长 / 巡视员', rankWeight: 100, attendRate: 92, score: 94, certNo: 'WJ-2026-0902', phone: '13800010002', status: '请假中'
+  };
+  const body = `
+    <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:16px;">
+      <div style="width:70px;height:70px;border-radius:50%;background:#2E75B6;color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;">
+        ${s.name[0]}
+      </div>
+      <div style="flex:1;">
+        <h3 style="font-size:18px;color:var(--text);">${s.name} <span class="tag tag-blue">${s.title}</span></h3>
+        <p style="color:var(--text-2);margin-top:4px;"><b>选派单位：</b>${s.dept}</p>
+        <p style="color:var(--text-2);margin-top:2px;"><b>所在班次：</b>2503期处级干部进修班</p>
+      </div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;line-height:2;">
+      <tr><td style="width:120px;color:var(--text-3);">政治礼宾权重：</td><td><b>${s.rankWeight}分</b> (排座系统自动依据权重优先排列)</td></tr>
+      <tr><td style="color:var(--text-3);">当前出勤率：</td><td>${s.attendRate}%</td></tr>
+      <tr><td style="color:var(--text-3);">阶段综合成绩：</td><td><b style="color:var(--primary);">${s.score}分</b></td></tr>
+      <tr><td style="color:var(--text-3);">结业证书编号：</td><td>${s.certNo}</td></tr>
+      <tr><td style="color:var(--text-3);">联系电话：</td><td>${s.phone}</td></tr>
+    </table>
+  `;
+  const foot = `
+    <button class="btn btn-ghost" onclick="closePreviewModal()">关闭</button>
+    <button class="btn btn-primary" onclick="location.href='student-lib.html'">进入学员花名册</button>
+  `;
+  openModal('参训学员学籍档案 · ' + s.name, body, foot);
+}
+
+// 预览审批单据
+function previewApproval(apvId) {
+  const all = getApprovalData();
+  const a = all.find(x => x.id === apvId) || {
+    id: apvId, title: '审批单据', type: '预算审批', applicant: '张三', level: '二级审批', submitTime: '2026-09-24', status: '待审批'
+  };
+  const body = `
+    <div style="background:#f8fafc;padding:14px;border-radius:6px;border:1px solid var(--line);margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h4 style="font-size:16px;color:var(--primary);">${a.title}</h4>
+        <span class="tag tag-orange">${a.status}</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--text-3);margin-top:6px;">
+        单据编号：${a.id} · 审批类型：${a.type} · 提交时间：${a.submitTime}
+      </div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px;line-height:2;">
+      <tr><td style="width:120px;color:var(--text-3);">申请人：</td><td><b>${a.applicant}</b></td></tr>
+      <tr><td style="color:var(--text-3);">审批层级：</td><td>${a.level || '二级审批 (处领导)'}</td></tr>
+      <tr><td style="color:var(--text-3);">当前待办人：</td><td><b style="color:var(--primary);">${a.currentApprover || '李处长'}</b></td></tr>
+      ${a.amount ? `<tr><td style="color:var(--text-3);">申报金额：</td><td><b style="color:var(--danger);font-size:16px;">¥${a.amount.toLocaleString()}</b></td></tr>` : ''}
+      <tr><td style="color:var(--text-3);">事由说明：</td><td>${(a.detail && a.detail.reason) || '符合培训制度规范，提请领导审阅批示。'}</td></tr>
+    </table>
+  `;
+  const foot = `
+    <button class="btn btn-ghost" onclick="closePreviewModal()">关闭</button>
+    <button class="btn btn-primary" onclick="location.href='approve.html?id=${a.id}'">前往审批工作台办理</button>
+  `;
+  openModal('公文审批单详情 · ' + a.id, body, foot);
+}
+</script>
+</body>
+</html>

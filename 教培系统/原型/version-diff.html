@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教案版本对比与留痕审阅 · 干部**学院教务管理系统 原型 V1.0</title>
+<link rel="stylesheet" href="common.css">
+<script src="common.js"></script>
+<style>
+/* ============ 版本对比工作台专属样式 ============ */
+.diff-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.diff-header-card {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 16px 20px;
+  box-shadow: var(--shadow);
+}
+.diff-toolbar-card {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.diff-stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.stat-box {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex: none;
+}
+.stat-info .num {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: Consolas, monospace;
+}
+.stat-info .lbl {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+
+/* 对比工作视窗 */
+.diff-viewer-card {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+  min-height: 580px;
+}
+.diff-view-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 580px;
+}
+.diff-pane {
+  padding: 20px 24px;
+  font-size: 13.5px;
+  line-height: 2;
+  position: relative;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+}
+.diff-pane:last-child {
+  border-right: none;
+}
+.diff-pane-head {
+  position: sticky;
+  top: 0;
+  background: rgba(248, 250, 252, 0.98);
+  backdrop-filter: blur(6px);
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  font-weight: 700;
+}
+.diff-ins {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border-bottom: 2px solid #22c55e;
+}
+.diff-del {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 2px 5px;
+  border-radius: 3px;
+  text-decoration: line-through;
+  border-bottom: 2px solid #ef4444;
+}
+.diff-mod {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border-bottom: 2px solid #f59e0b;
+}
+.diff-active-target {
+  box-shadow: 0 0 0 3px #2563eb, 0 4px 14px rgba(37,99,235,0.3);
+  transition: box-shadow .3s;
+}
+.diff-inline-view {
+  padding: 30px 48px;
+  font-size: 14px;
+  line-height: 2.3;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.watermark-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.04;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  transform: rotate(-15deg);
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  user-select: none;
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-logo" onclick="location.href='workbench.html'">
+    <div class="mark">院</div>
+    <div class="title-box">
+      <span class="name">**学院教培管理系统</span>
+      <span class="sub">全国干部教育培训 · 安可涉密内网专版</span>
+    </div>
+  </div>
+  <div class="tb-search"><input class="input" placeholder="🔍 全局搜索：教案 / 课程 / 师资 / 版本…"></div>
+  <div class="tb-right">
+    <span class="tb-tag-sec">🛡️ 等保三级分保内网运行中</span>
+    <div class="tb-icon" onclick="location.href='notice.html'" title="通知与待办">🔔<span class="tb-badge">5</span></div>
+    <div class="tb-user"><div class="tb-avatar">张</div><span>张三</span><span style="font-size:10px">▼</span></div>
+  </div>
+</header>
+
+<aside class="sidenav" id="sidenav"></aside>
+
+<main class="content">
+  <!-- 面包屑与头部 -->
+  <div class="page-head">
+    <div>
+      <div class="breadcrumb">首页 / 资源管理 / 教案库 / 版本对比与审阅</div>
+      <h2 class="page-title">🔀 教案版本差异对比与留痕审阅中心</h2>
+    </div>
+    <div class="page-ops">
+      <button class="btn btn-ghost" onclick="location.href='resource.html?page=res-plan'">‹ 返回教案库</button>
+      <button class="btn btn-ghost" onclick="toast('已生成版本差异比对清单，正在导出PDF审查报表…')">📥 导出留痕报告</button>
+      <button class="btn btn-primary" onclick="rollbackVersion()">⏮️ 采纳并回退至左侧历史版本</button>
+    </div>
+  </div>
+
+  <div class="diff-container">
+    <!-- 当前教案基本信息卡片 -->
+    <div class="diff-header-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <h3 style="font-size:17px;font-weight:700;margin:0" id="diffPlanTitle">《习近平外交思想概论》标准教案</h3>
+            <span class="tag tag-blue">编号：P-101</span>
+            <span class="tag tag-green">教研室协同版本</span>
+            <span class="tag tag-orange">🔒 受控版本对比</span>
+          </div>
+          <div style="font-size:13px;color:var(--text-2);display:flex;gap:20px;flex-wrap:wrap">
+            <span><b>主编教师：</b>欧阳文华 教授 / 王教授</span>
+            <span><b>所属科室：</b>涉外事务教研室</span>
+            <span><b>适用班次：</b>省部级与厅局级领导干部进修班</span>
+            <span><b>当前线上版本：</b><b style="color:var(--primary)">V3 (最新定稿)</b></span>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <span style="font-size:12px;color:var(--text-3)">审查流向：主备人撰写 ➔ 教研室集体备课 ➔ 主任审核定稿</span>
+          <div style="margin-top:6px">
+            <button class="btn btn-ghost btn-sm" style="color:#DC2626;border-color:#FCA5A5;background:#FEF2F2" onclick="location.href='resource.html?page=res-plan&transfer=JA01'">🔄 移交主编所有权</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 差异统计看板 -->
+    <div class="diff-stat-cards">
+      <div class="stat-box">
+        <div class="stat-icon" style="background:#dcfce7;color:#15803d">➕</div>
+        <div class="stat-info">
+          <div class="num" style="color:#15803d" id="statAddCount">+4 处</div>
+          <div class="lbl">新增内容 / 教学环节</div>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon" style="background:#fee2e2;color:#b91c1c">➖</div>
+        <div class="stat-info">
+          <div class="num" style="color:#b91c1c" id="statDelCount">-2 处</div>
+          <div class="lbl">精简删减 / 压缩讲授</div>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon" style="background:#fef3c7;color:#b45309">✏️</div>
+        <div class="stat-info">
+          <div class="num" style="color:#b45309" id="statModCount">~3 处</div>
+          <div class="lbl">核心表述与学时微调</div>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon" style="background:#e0f2fe;color:#0369a1">⏱️</div>
+        <div class="stat-info">
+          <div class="num" style="color:#0369a1">10 天</div>
+          <div class="lbl">修订间隔 · 3人协同留痕</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 交互控制条：版本选择、快捷对换、模式切换、差异导航 -->
+    <div class="diff-toolbar-card">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:700;color:var(--text-2)">对比版本选择：</span>
+        <span style="font-size:12px;color:var(--text-3)">基准(旧)：</span>
+        <select class="sel" id="verSelLeft" style="height:32px;font-size:13px;width:170px" onchange="renderDiff()">
+          <option value="V1">V1 (09-10 初始版)</option>
+          <option value="V2" selected>V2 (09-20 初审版)</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="swapVers()" title="左右版本互换">⇄ 换位</button>
+        <span style="font-size:12px;color:var(--text-3)">目标(新)：</span>
+        <select class="sel" id="verSelRight" style="height:32px;font-size:13px;width:190px" onchange="renderDiff()">
+          <option value="V2">V2 (09-20 初审版)</option>
+          <option value="V3" selected>V3 (09-30 当前定稿版)</option>
+        </select>
+        <span style="border-right:1px solid #cbd5e1;height:20px;margin:0 4px"></span>
+        <button class="btn btn-ghost btn-sm" onclick="quickSelect('V2','V3')">⚡ 对比最近两次修订 (V2 vs V3)</button>
+        <button class="btn btn-ghost btn-sm" onclick="quickSelect('V1','V3')">⚡ 对比初稿与定稿 (V1 vs V3)</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px">
+        <!-- 视图切换 -->
+        <div class="view-switch" style="display:flex">
+          <button class="btn btn-sm btn-primary" id="btnModeSplit" onclick="setMode('split')">左右分栏对照</button>
+          <button class="btn btn-sm btn-ghost" id="btnModeInline" onclick="setMode('inline')">单栏合并留痕</button>
+        </div>
+        <!-- 差异跳转 -->
+        <span style="border-right:1px solid #cbd5e1;height:20px"></span>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="btn btn-ghost btn-sm" onclick="navDiff(-1)" title="定位上一处差异">⬆ 上一处</button>
+          <span id="navIndicator" style="font-size:12px;color:var(--text-2);font-family:Consolas,monospace;font-weight:700">1 / 4</span>
+          <button class="btn btn-ghost btn-sm" onclick="navDiff(1)" title="定位下一处差异">⬇ 下一处</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 对比主内容视窗 -->
+    <div class="diff-viewer-card">
+      <!-- 动态安全水印 -->
+      <div class="watermark-overlay">
+        <span>**学院教务管理 · 张三 (2024008) · 版本对比审阅</span>
+        <span>**学院教务管理 · 张三 (2024008) · 版本对比审阅</span>
+        <span>**学院教务管理 · 张三 (2024008) · 版本对比审阅</span>
+      </div>
+
+      <!-- 左右分栏模式 -->
+      <div class="diff-view-split" id="viewSplit">
+        <div class="diff-pane" id="paneLeft"></div>
+        <div class="diff-pane" id="paneRight"></div>
+      </div>
+
+      <!-- 单栏合并留痕模式 -->
+      <div class="diff-inline-view hidden" id="viewInline"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+function $(id){return document.getElementById(id)}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2400)}
+
+/* ============ 版本数据源 ============ */
+const VERSIONS = {
+  'V1': {
+    ver: 'V1',
+    author: '欧阳文华 (主讲教授)',
+    dept: '涉外事务教研室',
+    time: '2026-09-10 14:30',
+    title: '《习近平外交思想概论》标准教案 (初稿)',
+    hours: '6 学时（1天）',
+    teacher: '欧阳文华 教授',
+    summary: '初始版本创建，包含基础框架与大课讲授内容。',
+    sections: [
+      { id: 's1', title: '一、教学基本信息', html: '<b>适用班次：</b>省部级干部进修班 &nbsp;&nbsp;|&nbsp;&nbsp; <b>计划学时：</b><span class="diff-del">6 学时（1天）</span> &nbsp;&nbsp;|&nbsp;&nbsp; <b>授课教师：</b><span class="diff-del">欧阳文华 教授</span>' },
+      { id: 's2', title: '二、教学目标与思政指引', html: '1. 深入领会习近平外交思想的核心要义。<br>2. 把握新时代中国特色大国外交的宝贵经验。' },
+      { id: 's3', title: '三、课堂教学重点与难点', html: '<b>重点：</b>推动构建人类命运共同体战略思想的科学内涵。<br><b>难点：</b>国际变局下的战略定力。' },
+      { id: 's4', title: '四、教学环节与互动研讨设计', html: '<b>【环节一：大课理论讲授 180分钟】</b> 系统解读习近平外交思想体系。<br><b>【环节二：课堂自由提问与交流 30分钟】</b> 学员现场自由提问。' }
+    ]
+  },
+  'V2': {
+    ver: 'V2',
+    author: '李建立 (教研室骨干)',
+    dept: '涉外事务教研室',
+    time: '2026-09-20 10:15',
+    title: '《习近平外交思想概论》标准教案 (教研室初审版)',
+    hours: '4 学时（半天）',
+    teacher: '王教授',
+    summary: '根据教学大纲调整学时为半天4学时，拆分单一讲授为案例剖析与答疑，强化政治站位。',
+    sections: [
+      { id: 's1', title: '一、教学基本信息', html: '<b>适用班次：</b>省部级与厅局级领导干部进修班 &nbsp;&nbsp;|&nbsp;&nbsp; <b>计划学时：</b>4 学时（半天） &nbsp;&nbsp;|&nbsp;&nbsp; <b>授课教师：</b>王教授' },
+      { id: 's2', title: '二、教学目标与思政指引', html: '1. 深入领会习近平外交思想的核心要义、精神实质与实践要求，深刻领悟“两个确立”的决定性意义。<br>2. 把握新时代中国特色大国外交的历史性成就与宝贵经验，提升涉外治理能力。' },
+      { id: 's3', title: '三、课堂教学重点与难点', html: '<b>重点：</b>推动构建人类命运共同体战略思想的科学内涵。<br><b>难点：</b>在百年未有之大变局背景下，统筹发展与安全。' },
+      { id: 's4', title: '四、教学环节与互动研讨设计', html: '<b>【环节一：理论讲授 <span class="diff-del">120分钟</span>】</b> 系统解读“十个坚持”的核心要义。<br><b>【环节二：<span class="diff-del">典型案例剖析 45分钟</span>】</b> 选取国际组织谈判案例进行宣讲。<br><b>【环节三：<span class="diff-del">答疑互动 15分钟</span>】</b> 学员互动交流。' }
+    ]
+  },
+  'V3': {
+    ver: 'V3',
+    author: '王振华 (教研室主任) / 张三',
+    dept: '涉外事务教研室',
+    time: '2026-09-30 09:40',
+    title: '《习近平外交思想概论》标准教案 (最新协同定稿版)',
+    hours: '4 学时（半天）',
+    teacher: '王教授',
+    summary: '强化实战推演，新增“学员案例研讨60分钟”分组攻防对抗；压缩单向讲授至90分钟；难点强化伟大涉外斗争策略。',
+    sections: [
+      { id: 's1', title: '一、教学基本信息', html: '<b>适用班次：</b>省部级与厅局级领导干部进修班 &nbsp;&nbsp;|&nbsp;&nbsp; <b>计划学时：</b>4 学时（半天） &nbsp;&nbsp;|&nbsp;&nbsp; <b>授课教师：</b>王教授' },
+      { id: 's2', title: '二、教学目标与思政指引', html: '1. 深入领会习近平外交思想的核心要义、精神实质与实践要求，深刻领悟“两个确立”的决定性意义。<br>2. 把握新时代中国特色大国外交的历史性成就与宝贵经验，提升涉外治理<span class="diff-ins diff-target" data-diff-idx="1">与国际战略研判能力</span>。' },
+      { id: 's3', title: '三、课堂教学重点与难点', html: '<b>重点：</b>推动构建人类命运共同体战略思想的科学内涵。<br><b>难点：</b>在百年未有之大变局背景下，统筹发展与安全<span class="diff-ins diff-target" data-diff-idx="2">、进行伟大涉外斗争的策略与艺术</span>。' },
+      { id: 's4', title: '四、教学环节与互动研讨设计（协同更新部分）', html: '<b>【环节一：理论讲授 <span class="diff-mod diff-target" data-diff-idx="3">90分钟</span>】</b> 系统解读“十个坚持”的<span class="diff-mod">根本遵循</span>。<br><b>【环节二：<span class="diff-ins diff-target" data-diff-idx="4">学员案例研讨 60分钟</span>】</b> <span class="diff-ins">结合我国参与全球多边治理典型案例展开小组推演与攻防辩论。</span><br><b>【环节三：<span class="diff-ins">教学总结与提问答疑 30分钟</span>】</b> <span class="diff-ins">梳理学员研讨成果，结合最新政策精神总结提升。</span>' }
+    ]
+  }
+};
+
+let viewMode = 'split';
+let curDiffIndex = 1;
+const TOTAL_CHANGES = 4;
+
+function quickSelect(l, r) {
+  $('verSelLeft').value = l;
+  $('verSelRight').value = r;
+  curDiffIndex = 1;
+  renderDiff();
+}
+
+function swapVers() {
+  const l = $('verSelLeft').value;
+  const r = $('verSelRight').value;
+  $('verSelLeft').value = r;
+  $('verSelRight').value = l;
+  curDiffIndex = 1;
+  renderDiff();
+}
+
+function setMode(m) {
+  viewMode = m;
+  $('btnModeSplit').className = 'btn btn-sm ' + (m === 'split' ? 'btn-primary' : 'btn-ghost');
+  $('btnModeInline').className = 'btn btn-sm ' + (m === 'inline' ? 'btn-primary' : 'btn-ghost');
+  $('viewSplit').classList.toggle('hidden', m !== 'split');
+  $('viewInline').classList.toggle('hidden', m !== 'inline');
+  renderDiff();
+}
+
+function navDiff(dir) {
+  curDiffIndex += dir;
+  if (curDiffIndex > TOTAL_CHANGES) curDiffIndex = 1;
+  if (curDiffIndex < 1) curDiffIndex = TOTAL_CHANGES;
+  $('navIndicator').textContent = `${curDiffIndex} / ${TOTAL_CHANGES}`;
+
+  document.querySelectorAll('.diff-target').forEach(el => el.classList.remove('diff-active-target'));
+  const target = document.querySelector(`.diff-target[data-diff-idx="${curDiffIndex}"]`);
+  if (target) {
+    target.classList.add('diff-active-target');
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    toast(`已定位至第 ${curDiffIndex}/${TOTAL_CHANGES} 处修订`);
+  }
+}
+
+function renderDiff() {
+  const lv = $('verSelLeft').value;
+  const rv = $('verSelRight').value;
+  const lData = VERSIONS[lv] || VERSIONS['V2'];
+  const rData = VERSIONS[rv] || VERSIONS['V3'];
+
+  // 统计指标
+  $('statAddCount').textContent = lv === 'V1' ? '+6 处' : '+4 处';
+  $('statDelCount').textContent = lv === 'V1' ? '-3 处' : '-2 处';
+  $('navIndicator').textContent = `${curDiffIndex} / ${TOTAL_CHANGES}`;
+
+  // 左右分栏
+  const leftHtml = `
+    <div class="diff-pane-head">
+      <div>
+        <span style="font-size:14px;color:#991B1B">⏮️ 基准版本：${lData.ver}</span>
+        <span style="font-size:11px;color:var(--text-3);margin-left:8px">${lData.time}</span>
+      </div>
+      <span class="tag tag-gray">${lData.author}</span>
+    </div>
+    <div style="background:#FFF5F5;border:1px solid #FED7D7;border-radius:4px;padding:8px 12px;margin-bottom:14px;font-size:12px;color:#C53030">
+      <b>版本说明：</b>${lData.summary}
+    </div>
+    ${lData.sections.map((sec, idx) => `
+      <div style="margin-bottom:16px;border-bottom:1px dashed #E2E8F0;padding-bottom:12px">
+        <h4 style="margin:0 0 8px;font-size:14px;color:#1E293B;display:flex;align-items:center;justify-content:space-between">
+          <span>${sec.title}</span>
+          <span style="font-size:11px;color:var(--text-3);font-family:Consolas">#段落 ${idx + 1}</span>
+        </h4>
+        <div style="color:#334155">${sec.html}</div>
+      </div>
+    `).join('')}
+  `;
+
+  const rightHtml = `
+    <div class="diff-pane-head">
+      <div>
+        <span style="font-size:14px;color:#15803D">⏭️ 对比目标：${rData.ver}</span>
+        <span style="font-size:11px;color:var(--text-3);margin-left:8px">${rData.time}</span>
+      </div>
+      <span class="tag tag-blue">${rData.author}</span>
+    </div>
+    <div style="background:#F0FDF4;border:1px solid #BBF7D0;padding:8px 12px;border-radius:4px;margin-bottom:14px;font-size:12px;color:#166534">
+      <b>版本说明：</b>${rData.summary}
+    </div>
+    ${rData.sections.map((sec, idx) => `
+      <div style="margin-bottom:16px;border-bottom:1px dashed #E2E8F0;padding-bottom:12px">
+        <h4 style="margin:0 0 8px;font-size:14px;color:#1E293B;display:flex;align-items:center;justify-content:space-between">
+          <span>${sec.title}</span>
+          <span style="font-size:11px;color:var(--text-3);font-family:Consolas">#段落 ${idx + 1}</span>
+        </h4>
+        <div style="color:#334155">${sec.html}</div>
+      </div>
+    `).join('')}
+  `;
+
+  $('paneLeft').innerHTML = leftHtml;
+  $('paneRight').innerHTML = rightHtml;
+
+  // 单栏合并留痕
+  $('viewInline').innerHTML = `
+    <div style="border-bottom:2px solid var(--primary);padding-bottom:14px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:flex-end">
+      <div>
+        <h2 style="font-size:20px;margin:0 0 6px">《习近平外交思想概论》标准教案 · 修订留痕审查表</h2>
+        <div style="font-size:12px;color:var(--text-3)">对比跨度：${lv} ➔ ${rv} ｜ 差异汇总：4处新增 / 2处删除 / 3处表述调整</div>
+      </div>
+      <div style="text-align:right;font-size:12px">
+        <span class="tag tag-blue">${rData.author}</span>
+        <div style="color:var(--text-3);margin-top:4px">${rData.time}</div>
+      </div>
+    </div>
+
+    <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:12.5px;line-height:1.8">
+      <b>📌 修订批注与协同记录：</b><br>
+      1. ［李建立 09-20］：落实中央党校课时规范，将原1天大课精简为半天4学时；<br>
+      2. ［王振华 09-30］：新增“学员案例研讨60分钟”实战模拟辩论，系统解读“十个坚持”根本遵循。
+    </div>
+
+    <h3>一、教学基本信息</h3>
+    <p><b>适用班次：</b>省部级与厅局级领导干部进修班 &nbsp;&nbsp;|&nbsp;&nbsp; <b>计划学时：</b>4 学时（半天） &nbsp;&nbsp;|&nbsp;&nbsp; <b>授课教师：</b>王教授</p>
+
+    <h3 style="margin-top:20px">二、教学目标与思政指引</h3>
+    <p>1. 深入领会习近平外交思想的核心要义、精神实质与实践要求，深刻领悟“两个确立”的决定性意义。<br>
+    2. 把握新时代中国特色大国外交的历史性成就与宝贵经验，提升涉外治理<span class="diff-ins diff-target" data-diff-idx="1">与国际战略研判能力</span>。</p>
+
+    <h3 style="margin-top:20px">三、课堂教学重点与难点</h3>
+    <p><b>重点：</b>推动构建人类命运共同体战略思想的科学内涵。<br>
+    <b>难点：</b>在百年未有之大变局背景下，统筹发展与安全<span class="diff-ins diff-target" data-diff-idx="2">、进行伟大涉外斗争的策略与艺术</span>。</p>
+
+    <h3 style="margin-top:20px">四、教学环节与互动研讨设计（协同更新部分）</h3>
+    <p>
+      <b>【环节一：理论讲授 <del class="diff-del">120分钟</del> <span class="diff-ins diff-target" data-diff-idx="3">90分钟</span>】</b> 系统解读“十个坚持”的<del class="diff-del">核心要义</del> <span class="diff-ins">根本遵循</span>。<br>
+      <b>【环节二：<del class="diff-del">典型案例剖析 45分钟</del> <span class="diff-ins diff-target" data-diff-idx="4">学员案例研讨 60分钟</span>】</b> <del class="diff-del">选取国际组织谈判案例进行宣讲。</del> <span class="diff-ins">结合我国参与全球多边治理典型案例展开小组推演与攻防辩论。</span><br>
+      <b>【环节三：教学总结与提问答疑 30分钟】</b> <span class="diff-ins">梳理学员研讨成果，结合最新政策精神总结提升。</span>
+    </p>
+  `;
+}
+
+function rollbackVersion() {
+  const lv = $('verSelLeft').value;
+  if (confirm(`确定要采纳并回退至历史版本【${lv}】吗？\n回退后将生成版本归档日志，并以该版本为基准继续编辑。`)) {
+    toast(`已成功回退至【${lv}】版本，正在跳转回教案库…`, 'success');
+    setTimeout(() => {
+      location.href = 'resource.html?page=res-plan';
+    }, 1200);
+  }
+}
+
+// 初始化
+renderDiff();
+</script>
+</body>
+</html>

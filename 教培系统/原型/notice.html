@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>消息通知与协同待办中心 · 干部**学院教培管理系统</title>
+<link rel="stylesheet" href="common.css">
+<script src="store.js"></script>
+<script src="common.js"></script>
+<style>
+/* ============ 通知中心专属样式 ============ */
+.stat-banner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: #fff;
+  border-radius: var(--r-card);
+  padding: 16px 20px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+.stat-card.active-stat {
+  border-color: var(--primary);
+  background: #fafcff;
+}
+.sc-info .sc-title { font-size: 13px; color: var(--text-3); font-weight: 500; }
+.sc-info .sc-num { font-size: 26px; font-weight: 700; font-family: Consolas, monospace; margin-top: 4px; color: var(--text); }
+.sc-info .sc-num.danger { color: var(--danger); }
+.sc-info .sc-num.warning { color: var(--warning); }
+.sc-info .sc-num.primary { color: var(--primary); }
+.sc-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  background: #f0f4f9;
+}
+.sc-icon.red { background: rgba(198, 40, 40, 0.1); color: var(--danger); }
+.sc-icon.orange { background: rgba(245, 127, 23, 0.1); color: var(--warning); }
+.sc-icon.blue { background: rgba(46, 117, 182, 0.1); color: var(--primary-2); }
+.sc-icon.green { background: rgba(46, 125, 50, 0.1); color: var(--success); }
+
+/* 主工作区布局 */
+.notice-box {
+  background: #fff;
+  border-radius: var(--r-card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* 分类与操作条 */
+.notice-tabs-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding: 0 16px;
+  background: #fafbfc;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.tab-list {
+  display: flex;
+  gap: 6px;
+}
+.tab-btn {
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s;
+  user-select: none;
+}
+.tab-btn:hover { color: var(--primary); }
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: #fff;
+}
+.tab-badge {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #edf0f5;
+  color: var(--text-2);
+  font-weight: 700;
+}
+.tab-btn.active .tab-badge {
+  background: rgba(31, 78, 121, 0.12);
+  color: var(--primary);
+}
+.tab-badge.badge-red { background: var(--danger); color: #fff; }
+.tab-badge.badge-orange { background: var(--warning); color: #fff; }
+
+.filter-bar {
+  padding: 14px 20px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+/* 通知列表 */
+.notice-list {
+  divide-y: 1px solid var(--line);
+}
+.notice-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  transition: all 0.15s;
+  cursor: pointer;
+  position: relative;
+  background: #fff;
+}
+.notice-item:hover {
+  background: #f7fafd;
+}
+.notice-item.unread {
+  background: #fbfdff;
+}
+.notice-item.unread::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3.5px;
+  background: var(--primary-2);
+}
+.notice-item.unread.urgent::before {
+  background: var(--danger);
+}
+.notice-item.unread.warning::before {
+  background: var(--warning);
+}
+
+/* 图标坞 */
+.ni-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex: none;
+  background: #f0f4f9;
+}
+.ni-icon-box.todo { background: rgba(46, 117, 182, 0.12); color: var(--primary-2); }
+.ni-icon-box.remind { background: rgba(123, 80, 160, 0.12); color: #7B50A0; }
+.ni-icon-box.warn { background: rgba(245, 127, 23, 0.12); color: var(--warning); }
+.ni-icon-box.danger { background: rgba(198, 40, 40, 0.12); color: var(--danger); }
+.ni-icon-box.notice { background: rgba(46, 125, 50, 0.12); color: var(--success); }
+
+/* 内容主体 */
+.ni-body {
+  flex: 1;
+  min-width: 0;
+}
+.ni-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.ni-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+.notice-item.read .ni-title {
+  color: var(--text-2);
+  font-weight: 600;
+}
+.ni-desc {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.ni-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-3);
+  flex-wrap: wrap;
+}
+.ni-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 右侧操作区 */
+.ni-ops {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 120px;
+}
+.ni-time {
+  font-size: 12px;
+  color: var(--text-3);
+}
+.ni-btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+/* 抽屉详情 */
+.drawer-mask {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.38);
+  z-index: 210;
+}
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: 580px;
+  background: #fff;
+  box-shadow: -6px 0 24px rgba(0, 0, 0, 0.18);
+  z-index: 220;
+  display: flex;
+  flex-direction: column;
+  animation: drawerSlide 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes drawerSlide {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.drawer-head {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafbfc;
+}
+.drawer-head h3 { font-size: 16px; font-weight: 700; color: var(--primary); }
+.drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+.drawer-foot {
+  padding: 14px 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafbfc;
+}
+
+.detail-card {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 8px 14px;
+  font-size: 13px;
+}
+.detail-grid .k { color: var(--text-3); }
+
+/* 空状态 */
+.empty-box {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-3);
+}
+.empty-box .ei { font-size: 44px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<main class="content">
+  <!-- 面包屑与页头 -->
+  <div class="page-head">
+    <div>
+      <div class="breadcrumb">教培系统 / 全局消息通知与协同待办中心</div>
+      <h2 class="page-title">🔔 全局消息通知与协同待办中心</h2>
+    </div>
+    <div class="page-ops">
+      <button class="btn btn-ghost" onclick="markAllAsRead()">✓ 全部标为已读</button>
+      <button class="btn btn-ghost" onclick="resetNoticesDemo()">🔄 重置模拟通知</button>
+      <button class="btn btn-primary" onclick="syncWithCurrentRole()">👤 切换当前角色视角</button>
+    </div>
+  </div>
+
+  <!-- 顶部统计看板 -->
+  <div class="stat-banner">
+    <div class="stat-card" onclick="filterByTab('all')">
+      <div class="sc-info">
+        <div class="sc-title">全部通知总数</div>
+        <div class="sc-num primary" id="statTotalCount">18</div>
+      </div>
+      <div class="sc-icon blue">📬</div>
+    </div>
+    <div class="stat-card" onclick="filterByTab('todo')">
+      <div class="sc-info">
+        <div class="sc-title">待办审批事项</div>
+        <div class="sc-num danger" id="statTodoCount">6</div>
+      </div>
+      <div class="sc-icon red">📝</div>
+    </div>
+    <div class="stat-card" onclick="filterByTab('remind')">
+      <div class="sc-info">
+        <div class="sc-title">业务协同提醒</div>
+        <div class="sc-num" id="statRemindCount">5</div>
+      </div>
+      <div class="sc-icon blue">🔔</div>
+    </div>
+    <div class="stat-card" onclick="filterByTab('warn')">
+      <div class="sc-info">
+        <div class="sc-title">风险安全预警</div>
+        <div class="sc-num warning" id="statWarnCount">4</div>
+      </div>
+      <div class="sc-icon orange">⚠️</div>
+    </div>
+  </div>
+
+  <!-- 通知主体容器 -->
+  <div class="notice-box">
+    <!-- 分类标签条 -->
+    <div class="notice-tabs-bar">
+      <div class="tab-list">
+        <div class="tab-btn active" id="tab-all" onclick="switchCategory('all')">
+          <span>全部通知</span><span class="tab-badge" id="tabBadgeAll">18</span>
+        </div>
+        <div class="tab-btn" id="tab-todo" onclick="switchCategory('todo')">
+          <span>📋 待办审批</span><span class="tab-badge badge-red" id="tabBadgeTodo">6</span>
+        </div>
+        <div class="tab-btn" id="tab-remind" onclick="switchCategory('remind')">
+          <span>🔔 业务提醒</span><span class="tab-badge" id="tabBadgeRemind">5</span>
+        </div>
+        <div class="tab-btn" id="tab-warn" onclick="switchCategory('warn')">
+          <span>⚠️ 风险预警</span><span class="tab-badge badge-orange" id="tabBadgeWarn">4</span>
+        </div>
+        <div class="tab-btn" id="tab-notice" onclick="switchCategory('notice')">
+          <span>📢 系统公告</span><span class="tab-badge" id="tabBadgeNotice">3</span>
+        </div>
+      </div>
+
+      <div style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:6px">
+        <span class="tag tag-blue" id="currentRoleTag">当前视角：三级管理员 (张三)</span>
+      </div>
+    </div>
+
+    <!-- 筛选过滤操作栏 -->
+    <div class="filter-bar">
+      <div class="filter-item">
+        <span>适用角色：</span>
+        <select class="sel" id="roleFilter" onchange="renderNoticeList()" style="width:170px">
+          <option value="ALL">全部角色 (全局总览)</option>
+          <option value="办训人员">办训人员 · 张三</option>
+          <option value="处领导">处领导 · 李处长</option>
+          <option value="院领导">院领导 · 李院长</option>
+          <option value="教研教师">教研教师 · 欧阳文华</option>
+          <option value="安全保密管理员">安全保密管理员 · 陈保密</option>
+          <option value="安全审计员">安全审计员 · 张审计</option>
+          <option value="系统管理员">系统管理员 · 刘系统</option>
+          <option value="财务管理员">财务管理员 · 冯处长</option>
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <span>优先级：</span>
+        <select class="sel" id="urgencyFilter" onchange="renderNoticeList()" style="width:130px">
+          <option value="ALL">全部优先级</option>
+          <option value="high">🔴 紧急优先</option>
+          <option value="mid">🟠 重要事务</option>
+          <option value="normal">🔵 常规通知</option>
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <span>阅读状态：</span>
+        <select class="sel" id="readFilter" onchange="renderNoticeList()" style="width:120px">
+          <option value="ALL">全部状态</option>
+          <option value="UNREAD">仅未读</option>
+          <option value="READ">仅已读</option>
+        </select>
+      </div>
+
+      <div class="filter-item" style="flex:1;min-width:240px">
+        <input class="input" id="searchKeyword" placeholder="🔍 检索通知标题 / 关联班次 / 发起人 / 单号…" oninput="renderNoticeList()" style="width:100%">
+      </div>
+
+      <button class="btn btn-ghost btn-sm" onclick="clearFilters()">重置筛选</button>
+    </div>
+
+    <!-- 通知卡片列表 -->
+    <div class="notice-list" id="noticeContainer"></div>
+  </div>
+</main>
+
+<!-- 通知详情侧拉抽屉 -->
+<div class="drawer-mask hidden" id="drawerMask" onclick="closeDrawer()"></div>
+<div class="drawer hidden" id="noticeDrawer">
+  <div class="drawer-head">
+    <h3 id="dwTypeTitle">📋 待办审批详情</h3>
+    <span class="btn-text" onclick="closeDrawer()" style="font-size:16px">✕</span>
+  </div>
+  <div class="drawer-body" id="dwBody"></div>
+  <div class="drawer-foot">
+    <div style="font-size:12px;color:var(--text-3)" id="dwFootTime"></div>
+    <div style="display:flex;gap:8px" id="dwFootBtns"></div>
+  </div>
+</div>
+
+<script>
+// ==========================================
+// 模拟全角色协同通知全景数据集
+// ==========================================
+const DEFAULT_NOTICES = [
+  // 1. 待办审批类
+  {
+    id: 'N01',
+    type: 'todo',
+    urgency: 'high',
+    role: '处领导',
+    title: '【排课审批】2503期处级干部进修班排课计划待您审批',
+    module: '教务组织 / 培训排课',
+    sender: '教务管理办 · 张三',
+    time: '10分钟前',
+    timestamp: '2026-09-24 09:12',
+    refObj: '班次 B2503',
+    summary: '班主任张三已完成《2503期进修班》第3周排课日程编制，涉及4门专题课、3名校外特聘专家，教室及时间冲突校验均已通过，请处领导审批发布。',
+    details: {
+      '班次名称': '2503期处级干部进修班 (在办 · 45人)',
+      '排课周期': '2026-09-25 至 2026-09-30 (共12课时)',
+      '涉及师资': '欧阳文华教授(正部级特聘)、王教授、李副司长',
+      '教室规格': '主教学场地 501教室 (多媒体教室)',
+      '冲突校验结果': '✅ 师资时间无冲突 · ✅ 教室空间已锁闭 · ✅ 经费标准在定额内',
+      '审批要求': '按照 PRD 4.9-P01 规范，排课计划需由二级管理员（处领导）签字确认后自动同步全院大课表。'
+    },
+    actionText: '立即审批排课 ›',
+    actionUrl: 'approve.html?tab=sched',
+    read: false
+  },
+  {
+    id: 'N02',
+    type: 'warn',
+    urgency: 'high',
+    role: '财务管理员',
+    title: '【预算超支预警】2503班师资讲课费超标准 12%，已触发警戒线',
+    module: '培训管理 / 预算管理',
+    sender: '预算费控规则引擎 (FY-2026)',
+    time: '25分钟前',
+    timestamp: '2026-09-24 08:47',
+    refObj: '班次 B2503',
+    summary: '2503班邀请部委正部级领导作大课报告，讲课费测算为 40,320 元，超出班次定额预算 36,000 元达 12%，报销流程已预警拦截，需在报销前补办特批审批。',
+    details: {
+      '申报班次': '2503期处级干部进修班',
+      '超标科目': '师资讲课费 (特聘专职师资)',
+      '预算定额': '36,000 元 (基准上限)',
+      '实际申请': '40,320 元 (超支 +4,320 元，+12%)',
+      '处理建议': '根据《学院干部培训经费管理办法》(PRD 4.11-P04)，超标10%以上需经处领导审核后报分管院领导一级特批。'
+    },
+    actionText: '查看预算与特批 ›',
+    actionUrl: 'training.html',
+    read: false
+  },
+  {
+    id: 'N03',
+    type: 'remind',
+    urgency: 'mid',
+    role: '办训人员',
+    title: '【开班提醒】2505期青年干部培训班将于明日 08:30 开班',
+    module: '培训管理 / 培训班管理',
+    sender: '教务运行管理系统',
+    time: '1小时前',
+    timestamp: '2026-09-24 08:00',
+    refObj: '班次 B2505',
+    summary: '明日将在学院学术报告厅举行开班典礼。当前已报到 46/48 人，学员手册、座签及考勤人脸底库已就绪，尚有2名学员未上传照片，请班主任及时跟进。',
+    details: {
+      '班次全称': '2505期青年干部培训班 (政能班 · 干部司委托)',
+      '开班时间': '2026-09-25 08:30',
+      '开班地点': '学院主楼5层 学术报告厅',
+      '报到进展': '应到 48 人，实到 46 人 (完成率 95.8%)',
+      '待办清单': '① 督促2名未采相学员补录底库；② 确认主席台电子席卡与音响麦克风联调。'
+    },
+    actionText: '进入班次管理 ›',
+    actionUrl: 'training.html',
+    read: false
+  },
+  {
+    id: 'N04',
+    type: 'todo',
+    urgency: 'high',
+    role: '处领导',
+    title: '【超标住宿特批】学员李明因术后康复申请安排单人间特批',
+    module: '审批管理 / 预算审批',
+    sender: '办训带班组 · 张三',
+    time: '2小时前',
+    timestamp: '2026-09-24 07:15',
+    refObj: '申请单 APV-202609-08',
+    summary: '2503班学员李明（发改委处长）因腿部术后康复轮椅出行需要，申请由双人标间调整为专家公寓单人间，产生住宿差价 120元/天，待处领导核批。',
+    details: {
+      '申请人': '张三 (替学员申报)',
+      '受训干部': '李明 (国家发改委某司 处长)',
+      '申请原由': '术后康复期需独立护理空间及无障碍卫生间',
+      '标准间定额': '340 元/间/天 (学员双人间分摊 170元)',
+      '特批单间费': '290 元/间/天 (增加预算总计 1,440 元)',
+      '审核指引': '符合特殊情况特批范畴，审批通过后将自动联动住宿排房与财务预算报销系统。'
+    },
+    actionText: '审批特批申请 ›',
+    actionUrl: 'approve.html?tab=budget',
+    read: false
+  },
+  {
+    id: 'N05',
+    type: 'remind',
+    urgency: 'mid',
+    role: '教研教师',
+    title: '【授课邀请】您收到《新时代大国外交战略实务》正式授课邀请函',
+    module: '师资库 / 授课邀请函',
+    sender: '教培部 教学组织办公室',
+    time: '3小时前',
+    timestamp: '2026-09-24 06:30',
+    refObj: '邀请函 INV-20260925-01',
+    summary: '教务部诚挚邀请欧阳文华教授于 2026年9月25日 08:30-11:30 在 501教室 为2503期学员讲授《新时代大国外交战略实务》，请在3日内确认邀请回执。',
+    details: {
+      '受邀专家': '欧阳文华 (特聘教授 / 资深外交官)',
+      '授课班次': '2503期处级干部进修班',
+      '拟定课时': '4 学时 (理论讲授 90min + 研讨 60min + 答疑 30min)',
+      '提供保障': '多媒体教室、课件保密刻录、专用休息室与专家就餐',
+      '回执时效': '请于 9月24日 17:00 前点击确认，以便锁定日程印制学员课表。'
+    },
+    actionText: '查看并确认邀请 ›',
+    actionUrl: 'teacher-lib.html?page=tea-invite',
+    read: false
+  },
+  {
+    id: 'N06',
+    type: 'warn',
+    urgency: 'high',
+    role: '系统管理员',
+    title: '【设备离线报警】508多媒体教室人脸考勤机【EQ-05】网络失联',
+    module: '教室设备 / 人脸考勤设备',
+    sender: '内网设备心跳监控探针',
+    time: '35分钟前',
+    timestamp: '2026-09-24 08:37',
+    refObj: '设备 EQ-05',
+    summary: '内网探针检测到 508 教室人脸考勤机连续 15 分钟无心跳上报，可能导致下午 14:00 大课自动考勤打卡失败，请系统管理员迅速排查网络或设备电源。',
+    details: {
+      '设备编号': 'EQ-05 (海康专用人脸考勤门禁一体机)',
+      '部署位置': '学院主楼5层 508多媒体教室入口',
+      'IP地址': '192.168.10.105 (涉密内网专网段)',
+      '告警详情': 'Ping 不通，SNMP 链路中断，上次心跳时间 08:22:14',
+      '影响范围': '下午 2503/2505 合班课 90 名学员刷脸入场考勤记录'
+    },
+    actionText: '前往设备运维 ›',
+    actionUrl: 'room.html?page=room-device',
+    read: false
+  },
+  {
+    id: 'N07',
+    type: 'todo',
+    urgency: 'high',
+    role: '安全保密管理员',
+    title: '【涉密刻录鉴证】2498期结班档案摆渡包已生成，待保密员现场鉴证',
+    module: '归档档案 / 标准化摆渡包',
+    sender: '档案完整性校验自动化引擎',
+    time: '4小时前',
+    timestamp: '2026-09-24 05:20',
+    refObj: '摆渡包 PKG-2498-EXP',
+    summary: '2498期专题研讨班档案已通过 100% 完整性校验，已生成加密摆渡压缩包，包含学员敏感履历与成绩，需安全保密管理员现场监督光盘刻录并登记。',
+    details: {
+      '归档班次': '2498期涉外战略研讨班 (已结班)',
+      '校验结果': '12 项指标全量合格（学籍、考勤、成绩、证书哈希均匹配）',
+      '介质规范': '采用一次性写入涉密光盘，配发介质唯一条码登记号',
+      '保密纪律': '根据国家保密局涉密信息系统物理隔离摆渡要求，必须双人鉴证刻录并填写入库台账。'
+    },
+    actionText: '执行摆渡刻录 ›',
+    actionUrl: 'archive.html?tab=export',
+    read: false
+  },
+  {
+    id: 'N08',
+    type: 'todo',
+    urgency: 'mid',
+    role: '处领导',
+    title: '【调课申请】涉外法治教研室申请调整周五下午研讨课时',
+    module: '审批管理 / 请假与调课',
+    sender: '涉外法治教研室 · 欧阳文华',
+    time: '5小时前',
+    timestamp: '2026-09-24 04:15',
+    refObj: '调课申请 LEV-202609-12',
+    summary: '王教授因部里临时紧急外事外访任务，申请将 9月25日下午《国际仲裁实务演练》调整至 9月27日上午，总学时不变，教室场地已协调无冲突。',
+    details: {
+      '原课时': '2026-09-25 (周五) 14:00-17:00 · 研讨室201',
+      '拟调课时': '2026-09-27 (周日) 09:00-12:00 · 研讨室201',
+      '涉及学员': '2510期涉外法治研讨班 35人',
+      '班主任意见': '已征询全体学员意见，无教学进度冲突，建议予以批准。'
+    },
+    actionText: '审批调课申请 ›',
+    actionUrl: 'approve.html?tab=leave',
+    read: false
+  },
+  {
+    id: 'N09',
+    type: 'remind',
+    urgency: 'normal',
+    role: '教研教师',
+    title: '【评教结果就绪】2502期《国际形势与政策》学员评教满意度 95.2分',
+    module: '培训管理 / 教学评估',
+    sender: '学员匿名评教系统',
+    time: '昨天 17:30',
+    timestamp: '2026-09-23 17:30',
+    refObj: '评教报告 EVA-2502-01',
+    summary: '全班 42 份匿名评教问卷全部回收完毕，综合评分 95.2 分（高分标绿）。学员反馈研讨案例贴近外交一线实战，详细评估报告已自动存入教师授课质量档案。',
+    details: {
+      '评估课程': '国际形势与大国外交策略',
+      '综合得分': '95.2 分 (全院排名前 10%)',
+      '打分维度': '教学态度 97.5 · 内容深度 96.0 · 启发性 94.8 · 实效性 92.5',
+      '学员留言': '“老师案例极其鲜活，多边谈判演练受益匪浅，希望增加模拟对抗时间。”'
+    },
+    actionText: '查看评教看板 ›',
+    actionUrl: 'workbench.html',
+    read: true
+  },
+  {
+    id: 'N10',
+    type: 'todo',
+    urgency: 'high',
+    role: '安全审计员',
+    title: '【安全审计复核】昨日产生 2 条涉密摆渡包离线导出记录待复核',
+    module: '组织管理 / 三员审计',
+    sender: '安全审计自动化引擎',
+    time: '昨天 18:20',
+    timestamp: '2026-09-23 18:20',
+    refObj: '审计批次 AUD-20260923',
+    summary: '系统管理员与保密管理员昨日完成了 2 批次涉密档案摆渡包离线介质刻录，按照等保分保规范，安全审计员须在 24 小时内完成独立操作留痕复核签章。',
+    details: {
+      '审计事件': '标准化摆渡包生成与导出 (涉密介质刻录)',
+      '涉及批次': 'PKG-2495 与 PKG-2496 两份外交骨干研修班结业档案',
+      '操作人': '系统管理员 刘工 · 监督保密员 陈保密',
+      '复核要点': '光盘编号登记是否齐全、数据哈希摘要值与数据库一致性比对。'
+    },
+    actionText: '执行审计签章 ›',
+    actionUrl: 'archive.html?tab=log',
+    read: false
+  },
+  {
+    id: 'N11',
+    type: 'warn',
+    urgency: 'mid',
+    role: '办训人员',
+    title: '【资源瓶颈预警】学院学术报告厅下周综合占用率已达 92%',
+    module: '教室设备 / 教室规格',
+    sender: '全院大课表资源调度中心',
+    time: '昨天 15:40',
+    timestamp: '2026-09-23 15:40',
+    refObj: '场地 学术报告厅',
+    summary: '下周共有 3 个在办班次集中申请学术报告厅开展全院大课，周三下午与周四上午处于超饱和状态，建议教务调度将政能班分流至第一研讨教室或错峰排课。',
+    details: {
+      '受限场地': '学院主楼5层 学术报告厅 (容量 320人)',
+      '申请占用班次': '2503期处级班、2505期青干班、涉外法治研讨班',
+      '冲突时段': '2026-09-28 (周三) 14:00-17:00 冲突率 100%',
+      '调度建议': '将2505班专题研讨调剂至 601 研讨教室，即可平衡场地负载。'
+    },
+    actionText: '查看大课表调度 ›',
+    actionUrl: 'edu.html?page=edu-plan&tab=allsched',
+    read: true
+  },
+  {
+    id: 'N12',
+    type: 'warn',
+    urgency: 'high',
+    role: '安全审计员',
+    title: '【账号安全风控】检测到账户 [liugong] 连续 3 次登录密码错误',
+    module: '组织管理 / 账户管理',
+    sender: '三员安全风险监控网关',
+    time: '昨天 14:10',
+    timestamp: '2026-09-23 14:10',
+    refObj: '账户 liugong',
+    summary: '来自内网终端 192.168.10.42 的登录请求连续 3 次密码认证失败，系统已触发防暴力破解安全保护，自动锁定该账户 30 分钟并留痕审计。',
+    details: {
+      '目标账户': '行政处 刘工 (liugong · 普通用户)',
+      '来源IP': '192.168.10.42 (行政处内网办公区)',
+      '触发规则': '连续3次密码校验失败锁定30分钟 (PRD 4.10-P02)',
+      '处置情况': '系统已阻断会话，需本人向管理员申请重置或等待冷却解锁。'
+    },
+    actionText: '查看账户管理 ›',
+    actionUrl: 'org.html?page=org-account',
+    read: true
+  },
+  {
+    id: 'N13',
+    type: 'remind',
+    urgency: 'mid',
+    role: '办训人员',
+    title: '【结班归档待办】2498期专题研讨班已结课 3 天，请启动归档程序',
+    module: '培训管理 / 班次结班',
+    sender: '教务质控与归档预警',
+    time: '前天 10:00',
+    timestamp: '2026-09-22 10:00',
+    refObj: '班次 B2498',
+    summary: '该班次已完成结业证书发放与结班总结，按照《学院教学档案管理规定》，须在结班后 5 个工作日内完成学员成绩、考勤日志及评估报告结构化归档。',
+    details: {
+      '班次名称': '2498期专题研讨班 (已完结)',
+      '结班日期': '2026-09-19',
+      '已具备材料': '学员花名册、考试成绩表、考勤打卡原始记录、电子证书存根',
+      '待补齐材料': '带班组织员结班总结报告 (待上传)'
+    },
+    actionText: '办理班次归档 ›',
+    actionUrl: 'archive.html?tab=check',
+    read: true
+  },
+  {
+    id: 'N14',
+    type: 'todo',
+    urgency: 'mid',
+    role: '院领导',
+    title: '【年度规则特批】2026年度涉外涉密班次经费专项补助规则待审批',
+    module: '基础设置 / FY经费规则库',
+    sender: '财务处 · 冯处长',
+    time: '前天 16:30',
+    timestamp: '2026-09-22 16:30',
+    refObj: '规则编号 RULE-2026-04',
+    summary: '财务处联合培训部修订了《涉外法律人才培训班特别生均定额标准》，调整生均伙食补贴上限至 180元/天，待分管院领导最终审定后生效。',
+    details: {
+      '规则名称': '涉外法律与高端涉密人才办训生均综合补助限额',
+      '原定限额': '150 元/人/天',
+      '调整申报': '180 元/人/天 (+20%)',
+      '测算依据': '外宾互访模拟及高强度全封闭研讨保密就餐实际开支测算',
+      '影响范围': '全院涉外法治能力建设相关培训班次'
+    },
+    actionText: '审阅规则库 ›',
+    actionUrl: 'base.html?page=base-rule',
+    read: true
+  },
+  {
+    id: 'N15',
+    type: 'notice',
+    urgency: 'normal',
+    role: '全体人员',
+    title: '【系统运维公告】等保三级涉密分保内网安全基线自动化巡检通过',
+    module: '系统运维 / 安全保密',
+    sender: '学院网络安全与信息技术中心',
+    time: '3天前',
+    timestamp: '2026-09-21 09:00',
+    refObj: '安全通报 2026-11',
+    summary: '学院信息安全中心已于今日凌晨完成教培管理系统等保三级与涉密分保自动化基线巡检，数据库异地备份正常、物理摆渡验签通过哈希校验，系统平稳运行。',
+    details: {
+      '巡检周期': '2026年第3季度例行月度安全基线巡检',
+      '巡检范围': '应用服务器、主备数据库、安全审计堡垒机、人脸考勤专用专网',
+      '检测项': '共计 142 项合规控制点，合规达标率 100%',
+      '备份校验': '增量备份与全量快照恢复测试用时 14 分钟，数据零丢失。'
+    },
+    actionText: '查看系统日志 ›',
+    actionUrl: 'base.html?page=base-log',
+    read: true
+  },
+  {
+    id: 'N16',
+    type: 'notice',
+    urgency: 'normal',
+    role: '教研教师',
+    title: '【教研通报】关于规范 2026 秋季教案版本定稿与分级共享的通知',
+    module: '资源管理 / 教案库',
+    sender: '教务处 教研督导组',
+    time: '3天前',
+    timestamp: '2026-09-21 14:00',
+    refObj: '通知 [2026] 34号',
+    summary: '请各教研室骨干教师于本月底前将 2026 秋季主体班次核心教案在教案库完成 V2.0 终审定稿，并设置合理的“教研室共享/指定人员”查看权限。',
+    details: {
+      '执行部门': '国际战略教研室、外交业务教研室、党的建设教研室',
+      '重点任务': '教案增加学员攻防对抗案例研讨环节；规范操作权限分配。',
+      '安全要求': '涉密内容严禁上传至开放共享库，仅可在指定人员授信模式下流通。'
+    },
+    actionText: '前往教案库 ›',
+    actionUrl: 'resource.html?page=res-plan',
+    read: true
+  },
+  {
+    id: 'N17',
+    type: 'todo',
+    urgency: 'mid',
+    role: '处领导',
+    title: '【师资外聘请示】关于特聘部委资深司长欧阳文华授课请示件',
+    module: '师资库 / 师资档案',
+    sender: '培训部 · 张三',
+    time: '4天前',
+    timestamp: '2026-09-20 11:20',
+    refObj: '请示件 Q-20260920-03',
+    summary: '培训部拟外聘外交业务专家欧阳文华为 2506 期研修班授课，讲授《国际双边谈判实战演练》，政治审查与外聘资格预审已通过，请处领导审批签发。',
+    details: {
+      '外聘专家': '欧阳文华 (部委原驻外大使 / 司长 / 特聘教授)',
+      '政审结论': '政审合格，党纪外事纪律合规，符合高层次专家聘任标准',
+      '课酬标准': '按照财政部中央和国家机关培训费标准正部级特聘标准执行',
+      '授课班次': '2506期驻外使节任职培训班'
+    },
+    actionText: '查看师资档案 ›',
+    actionUrl: 'teacher-lib.html?page=tea-list',
+    read: true
+  },
+  {
+    id: 'N18',
+    type: 'remind',
+    urgency: 'normal',
+    role: '财务管理员',
+    title: '【课酬结算单推送】8月份外聘与校内教师授课课酬报销汇总单已生成',
+    module: '教务组织 / 结算报告模板',
+    sender: '教务财务一体化结算服务',
+    time: '5天前',
+    timestamp: '2026-09-19 16:50',
+    refObj: '结算单 SETTLE-202608',
+    summary: '8月份共完成 18 个班次计 142 课时的教学授课，系统已根据师资职级自动匹配课酬标准并扣缴个税，结算汇总凭证已生成，待财务审核发放。',
+    details: {
+      '涉及师资': '校内专职教师 14人 · 校外特聘专家 8人',
+      '课酬总计': '128,400 元 (税前)',
+      '代扣个税': '18,520 元 (系统自动预扣)',
+      '实发总额': '109,880 元 (银联公务打卡)'
+    },
+    actionText: '查看结算凭证 ›',
+    actionUrl: 'edu.html?page=edu-settle',
+    read: true
+  }
+];
+
+// ==========================================
+// 状态管理中心
+// ==========================================
+let NOTICES = [];
+let currentCategory = 'all';
+
+function initNotices() {
+  const stored = localStorage.getItem('TREA_NOTICES_V1');
+  if (stored) {
+    try {
+      NOTICES = JSON.parse(stored);
+    } catch(e) {
+      NOTICES = JSON.parse(JSON.stringify(DEFAULT_NOTICES));
+    }
+  } else {
+    NOTICES = JSON.parse(JSON.stringify(DEFAULT_NOTICES));
+    saveNotices();
+  }
+  updateStats();
+  renderNoticeList();
+}
+
+function saveNotices() {
+  localStorage.setItem('TREA_NOTICES_V1', JSON.stringify(NOTICES));
+  updateStats();
+  syncGlobalBadge();
+}
+
+function syncGlobalBadge() {
+  const unreadCount = NOTICES.filter(n => !n.read).length;
+  const badge = document.getElementById('topbarPendingBadge');
+  if (badge) {
+    badge.textContent = unreadCount;
+    badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+  }
+}
+
+function updateStats() {
+  const total = NOTICES.length;
+  const unreadTodo = NOTICES.filter(n => n.type === 'todo' && !n.read).length;
+  const unreadRemind = NOTICES.filter(n => n.type === 'remind' && !n.read).length;
+  const unreadWarn = NOTICES.filter(n => n.type === 'warn' && !n.read).length;
+  const unreadNotice = NOTICES.filter(n => n.type === 'notice' && !n.read).length;
+
+  document.getElementById('statTotalCount').textContent = total;
+  document.getElementById('statTodoCount').textContent = unreadTodo;
+  document.getElementById('statRemindCount').textContent = unreadRemind;
+  document.getElementById('statWarnCount').textContent = unreadWarn;
+
+  document.getElementById('tabBadgeAll').textContent = total;
+  document.getElementById('tabBadgeTodo').textContent = unreadTodo;
+  document.getElementById('tabBadgeRemind').textContent = unreadRemind;
+  document.getElementById('tabBadgeWarn').textContent = unreadWarn;
+  document.getElementById('tabBadgeNotice').textContent = unreadNotice;
+}
+
+// 选项卡切换
+function switchCategory(cat) {
+  currentCategory = cat;
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById('tab-' + cat);
+  if (targetBtn) targetBtn.classList.add('active');
+  renderNoticeList();
+}
+
+function filterByTab(cat) {
+  switchCategory(cat);
+}
+
+// 角色联动与筛选
+function syncWithCurrentRole() {
+  const curUser = window.TREA_STORE ? window.TREA_STORE.getCurrentUser() : { role: '三级管理员', name: '张三' };
+  const roleSelect = document.getElementById('roleFilter');
+  if (!roleSelect) return;
+
+  let matchedVal = '办训人员';
+  if (curUser.role.includes('处领导') || curUser.role.includes('二级')) matchedVal = '处领导';
+  else if (curUser.role.includes('院领导') || curUser.role.includes('一级')) matchedVal = '院领导';
+  else if (curUser.role.includes('教师') || curUser.role.includes('教授')) matchedVal = '教研教师';
+  else if (curUser.role.includes('保密')) matchedVal = '安全保密管理员';
+  else if (curUser.role.includes('审计')) matchedVal = '安全审计员';
+  else if (curUser.role.includes('系统')) matchedVal = '系统管理员';
+
+  roleSelect.value = matchedVal;
+  document.getElementById('currentRoleTag').textContent = `当前视角：${curUser.role} (${curUser.name})`;
+  renderNoticeList();
+  toast(`已切换至当前登录角色「${curUser.role}」专属协同通知待办`, 'success');
+}
+
+function clearFilters() {
+  document.getElementById('roleFilter').value = 'ALL';
+  document.getElementById('urgencyFilter').value = 'ALL';
+  document.getElementById('readFilter').value = 'ALL';
+  document.getElementById('searchKeyword').value = '';
+  switchCategory('all');
+}
+
+// 渲染通知卡片列表
+function renderNoticeList() {
+  const roleVal = document.getElementById('roleFilter').value;
+  const urgencyVal = document.getElementById('urgencyFilter').value;
+  const readVal = document.getElementById('readFilter').value;
+  const kw = (document.getElementById('searchKeyword').value || '').trim().toLowerCase();
+
+  const container = document.getElementById('noticeContainer');
+  if (!container) return;
+
+  const filtered = NOTICES.filter(n => {
+    // 1. 分类 Tab 过滤
+    if (currentCategory !== 'all' && n.type !== currentCategory) return false;
+
+    // 2. 角色过滤
+    if (roleVal !== 'ALL') {
+      if (n.role !== '全体人员' && !n.role.includes(roleVal) && !roleVal.includes(n.role)) {
+        return false;
+      }
+    }
+
+    // 3. 优先级过滤
+    if (urgencyVal !== 'ALL' && n.urgency !== urgencyVal) return false;
+
+    // 4. 阅读状态
+    if (readVal === 'UNREAD' && n.read) return false;
+    if (readVal === 'READ' && !n.read) return false;
+
+    // 5. 关键词检索
+    if (kw) {
+      const matchTitle = n.title.toLowerCase().includes(kw);
+      const matchSummary = n.summary.toLowerCase().includes(kw);
+      const matchSender = n.sender.toLowerCase().includes(kw);
+      const matchRef = (n.refObj || '').toLowerCase().includes(kw);
+      const matchMod = n.module.toLowerCase().includes(kw);
+      if (!matchTitle && !matchSummary && !matchSender && !matchRef && !matchMod) return false;
+    }
+
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="empty-box">
+        <div class="ei">📭</div>
+        <p style="font-size:14px;font-weight:600">暂无符合条件的通知与待办事项</p>
+        <p style="font-size:12px;margin-top:4px">您可以尝试更换分类标签、重置角色条件或清空搜索关键词</p>
+        <button class="btn btn-ghost btn-sm" onclick="clearFilters()" style="margin-top:12px">清空全部筛选</button>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(n => {
+    const isUnread = !n.read;
+    const urgencyClass = n.urgency === 'high' ? 'urgent' : (n.urgency === 'mid' ? 'warning' : '');
+    
+    // 图标和徽标定制
+    let icon = '📝';
+    let iconClass = 'todo';
+    let typeName = '待办审批';
+    let typeBadge = '<span class="tag tag-blue">待办审批</span>';
+    if (n.type === 'remind') {
+      icon = '🔔';
+      iconClass = 'remind';
+      typeName = '业务提醒';
+      typeBadge = '<span class="tag tag-purple">业务提醒</span>';
+    } else if (n.type === 'warn') {
+      icon = '⚠️';
+      iconClass = 'warn';
+      typeName = '风险预警';
+      typeBadge = '<span class="tag tag-orange">风险预警</span>';
+    } else if (n.type === 'notice') {
+      icon = '📢';
+      iconClass = 'notice';
+      typeName = '系统公告';
+      typeBadge = '<span class="tag tag-green">系统公告</span>';
+    }
+
+    let urgencyBadge = '<span class="tag tag-gray">常规</span>';
+    if (n.urgency === 'high') urgencyBadge = '<span class="tag tag-red">紧急优先</span>';
+    else if (n.urgency === 'mid') urgencyBadge = '<span class="tag tag-orange">重要事务</span>';
+
+    return `
+      <div class="notice-item ${isUnread ? 'unread ' + urgencyClass : 'read'}" onclick="openNoticeDetail('${n.id}')">
+        <div class="ni-icon-box ${iconClass}">
+          ${icon}
+        </div>
+        <div class="ni-body">
+          <div class="ni-head">
+            ${urgencyBadge}
+            ${typeBadge}
+            <span class="tag tag-gray">${n.role}</span>
+            <span class="ni-title">${n.title}</span>
+            ${isUnread ? '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--danger)"></span>' : ''}
+          </div>
+          <div class="ni-desc">${n.summary}</div>
+          <div class="ni-meta">
+            <span>📂 业务模块：${n.module}</span>
+            <span>👤 发起/来源：${n.sender}</span>
+            <span>🔖 关联对象：${n.refObj || '系统'}</span>
+            <span>🕒 ${n.timestamp}</span>
+          </div>
+        </div>
+        <div class="ni-ops" onclick="event.stopPropagation()">
+          <div class="ni-time">${n.time}</div>
+          <div class="ni-btn-group">
+            <button class="btn btn-sm ${isUnread ? 'btn-primary' : 'btn-ghost'}" onclick="handleNoticeAction('${n.id}', '${n.actionUrl}')">
+              ${n.actionText}
+            </button>
+            ${isUnread ? `<button class="btn btn-ghost btn-sm" onclick="toggleRead('${n.id}', true)" title="标为已读">✓</button>` : `<button class="btn btn-ghost btn-sm" onclick="toggleRead('${n.id}', false)" title="标为未读">○</button>`}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// 标为已读/未读
+function toggleRead(id, status) {
+  const item = NOTICES.find(n => n.id === id);
+  if (item) {
+    item.read = status;
+    saveNotices();
+    renderNoticeList();
+    toast(status ? '已标记为已读' : '已标记为未读', 'info');
+  }
+}
+
+// 一键全部标为已读
+function markAllAsRead() {
+  NOTICES.forEach(n => n.read = true);
+  saveNotices();
+  renderNoticeList();
+  toast('已全部标记为已读', 'success');
+}
+
+// 重置模拟通知
+function resetNoticesDemo() {
+  NOTICES = JSON.parse(JSON.stringify(DEFAULT_NOTICES));
+  saveNotices();
+  renderNoticeList();
+  toast('模拟通知数据集已重置恢复！', 'success');
+}
+
+// 点击办理动作
+function handleNoticeAction(id, url) {
+  const item = NOTICES.find(n => n.id === id);
+  if (item) {
+    item.read = true;
+    saveNotices();
+  }
+  if (url) {
+    location.href = url;
+  }
+}
+
+// 打开详情抽屉
+function openNoticeDetail(id) {
+  const n = NOTICES.find(x => x.id === id);
+  if (!n) return;
+
+  // 标为已读
+  if (!n.read) {
+    n.read = true;
+    saveNotices();
+    renderNoticeList();
+  }
+
+  let icon = '📝';
+  if (n.type === 'remind') icon = '🔔';
+  else if (n.type === 'warn') icon = '⚠️';
+  else if (n.type === 'notice') icon = '📢';
+
+  document.getElementById('dwTypeTitle').textContent = `${icon} ${n.title}`;
+
+  let detailsHtml = '';
+  if (n.details) {
+    detailsHtml = `
+      <div class="sec-title" style="margin-top:16px">📋 详细业务上下文指标</div>
+      <div class="detail-card">
+        <div class="detail-grid">
+          ${Object.entries(n.details).map(([k, v]) => `
+            <div class="k">${k}</div>
+            <div class="v" style="font-weight:500;color:var(--text)">${v}</div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('dwBody').innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <span class="tag ${n.urgency==='high'?'tag-red':(n.urgency==='mid'?'tag-orange':'tag-blue')}">${n.urgency==='high'?'紧急优先':(n.urgency==='mid'?'重要事务':'常规通知')}</span>
+      <span class="tag tag-gray">${n.role}</span>
+      <span class="tag tag-blue">${n.module}</span>
+      <span style="font-size:12px;color:var(--text-3);margin-left:auto">${n.timestamp}</span>
+    </div>
+
+    <div style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--primary)">${n.title}</div>
+    <div style="font-size:13.5px;color:var(--text-2);line-height:1.7;background:#fff;padding:14px;border-radius:var(--r);border:1px solid var(--line)">
+      ${n.summary}
+    </div>
+
+    ${detailsHtml}
+
+    <div style="margin-top:20px;padding:12px;background:#f0f5fa;border-radius:var(--r);font-size:12.5px;color:var(--text-2)">
+      💡 <b>处理指引：</b>此通知由系统流转引擎自动化推送，点击下方操作按钮可直接下钻至相应业务模块开展审批、排障或归档作业。
+    </div>
+  `;
+
+  document.getElementById('dwFootTime').textContent = `单号/编号：${n.refObj || '无'} · 来源：${n.sender}`;
+  document.getElementById('dwFootBtns').innerHTML = `
+    <button class="btn btn-ghost" onclick="closeDrawer()">关闭</button>
+    <button class="btn btn-primary" onclick="handleNoticeAction('${n.id}', '${n.actionUrl}')">${n.actionText}</button>
+  `;
+
+  document.getElementById('drawerMask').classList.remove('hidden');
+  document.getElementById('noticeDrawer').classList.remove('hidden');
+}
+
+function closeDrawer() {
+  document.getElementById('drawerMask').classList.add('hidden');
+  document.getElementById('noticeDrawer').classList.add('hidden');
+}
+
+// 页面加载自动初始化
+document.addEventListener('DOMContentLoaded', () => {
+  initNotices();
+
+  // 若 URL 带特定参数，如 ?tab=todo，自动激活对应选项卡
+  const p = new URLSearchParams(location.search);
+  const tabParam = p.get('tab');
+  if (tabParam && ['all', 'todo', 'remind', 'warn', 'notice'].includes(tabParam)) {
+    switchCategory(tabParam);
+  }
+});
+</script>
+</body>
+</html>
