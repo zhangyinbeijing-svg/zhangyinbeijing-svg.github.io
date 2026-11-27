@@ -725,11 +725,11 @@
             </div>
             <div class="ceiling-ctrl">
               <span>假设最高限价：</span>
-              <input type="number" id="ceilingInput" value="250" min="50" max="2000" step="10" />
+              <input type="number" id="ceilingInput" value="150" min="50" max="2000" step="10" />
               <span>万元</span>
+              <button class="ceiling-preset" onclick="setCeiling(120)">120万</button>
+              <button class="ceiling-preset" onclick="setCeiling(150)">150万</button>
               <button class="ceiling-preset" onclick="setCeiling(200)">200万</button>
-              <button class="ceiling-preset" onclick="setCeiling(250)">250万</button>
-              <button class="ceiling-preset" onclick="setCeiling(300)">300万</button>
             </div>
           </div>
 
@@ -751,7 +751,7 @@
                   <td><strong style="color:#065F46;">🏆 我方（推荐黄金策略）</strong></td>
                   <td>稳健略低于明高、不陪知学云打血拼低价；兼顾高毛利与防低价质疑，锁定总分第一。</td>
                   <td><strong style="color:#047857;">89%（下浮11%）</strong></td>
-                  <td style="text-align:right;font-weight:800;color:#047857;" id="simOurPrice">222.50</td>
+                  <td style="text-align:right;font-weight:800;color:#047857;" id="simOurPrice">133.50</td>
                   <td style="text-align:right;font-weight:700;" id="simOurPScore">26.97</td>
                   <td style="text-align:right;font-weight:700;">64.50</td>
                   <td style="text-align:right;font-weight:800;font-size:14.5px;color:#047857;" id="simOurTotal">91.47</td>
@@ -760,7 +760,7 @@
                   <td><strong style="color:#92400E;">🟠 明高软件（稳健贴高限）</strong></td>
                   <td>亳州党校限价28.4万报<strong>28.35万(99.8%)</strong>、聊城691万；对党校产品极自信，常规下浮仅 4%–9%。</td>
                   <td><strong>93%（下浮7%）</strong></td>
-                  <td style="text-align:right;font-weight:700;color:#92400E;" id="simMgPrice">232.50</td>
+                  <td style="text-align:right;font-weight:700;color:#92400E;" id="simMgPrice">139.50</td>
                   <td style="text-align:right;font-weight:700;" id="simMgPScore">25.81</td>
                   <td style="text-align:right;font-weight:700;">52.50</td>
                   <td style="text-align:right;font-weight:800;font-size:14px;color:#92400E;" id="simMgTotal">78.31</td>
@@ -769,7 +769,7 @@
                   <td><strong style="color:#991B1B;">⚠️ 知学云（低切高收型）</strong></td>
                   <td>福建农信限价120万报<strong>93.6万(78%)</strong>+10%年维保；安全教育130万比对手低10%；靠低价抢30分后靠人天/单一来源回收。</td>
                   <td><strong>80%（下浮20%）</strong></td>
-                  <td style="text-align:right;font-weight:700;color:#B91C1C;" id="simZxyPrice">200.00</td>
+                  <td style="text-align:right;font-weight:700;color:#B91C1C;" id="simZxyPrice">120.00</td>
                   <td style="text-align:right;font-weight:700;color:#B91C1C;" id="simZxyPScore">30.00</td>
                   <td style="text-align:right;font-weight:700;">42.00</td>
                   <td style="text-align:right;font-weight:800;font-size:14px;color:#B91C1C;" id="simZxyTotal">72.00</td>
@@ -2379,7 +2379,7 @@
     function recalcPriceSim() {
       const inp = document.getElementById('ceilingInput');
       if (!inp) return;
-      const P = Math.max(10, parseFloat(inp.value) || 250);
+      const P = Math.max(10, parseFloat(inp.value) || 150);
       const ourP = P * 0.89;
       const mgP = P * 0.93;
       const zxyP = P * 0.80;
