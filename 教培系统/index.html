@@ -639,9 +639,9 @@
             <div class="kpi-note">满分5分 · 高峰白屏/定位活体报错</div>
           </div>
           <div class="kpi-card">
-            <div class="kpi-label">纯书面评标胜局推演</div>
-            <div class="kpi-value" style="color:#6EE7B7;">净胜 13–19 分</div>
-            <div class="kpi-note">计入竞对前期沟通定制因素后仍稳锁胜局</div>
+            <div class="kpi-label">公开招标胜局推演</div>
+            <div class="kpi-value" style="color:#6EE7B7;">净胜 6–11 分</div>
+            <div class="kpi-note">无控标口径（竞对网院业绩照常得分）下稳居第一</div>
           </div>
         </div>
       </header>
@@ -678,58 +678,58 @@
             </p>
           </div>
           <div class="callout callout-info" style="margin:0;">
-            <div class="callout-title">🛡️ 纯书面评标锁胜闭环</div>
+            <div class="callout-title">🛡️ 常规公开招标锁胜思路（无控标口径）</div>
             <p style="font-size:13px;margin:0;">
-              通过《控标策略 V2.1》<strong>压降通用认证至 2 分、剔除纯网院业绩</strong>，并在技术标单列 <strong>20 分「核心场景真实系统界面截图与院区点位深化实证」</strong>+<strong>首周内网核验解约承诺</strong>，让竞对在 20 天等标期内无图可贴、无路可蹭。
+              基于<strong>“仅了解需求、无法控标”</strong>的现实前提，公开招标下知学云的网院业绩与通用资质将照常拿高分（商务分三方接近）。胜负手在于<strong>把 21 页可交互原型、五/六层 64 口精准深化布线图与外事/经费/离线算法</strong>做成降维级标书实证，同时以合理下浮报价守住总分第一。
             </p>
           </div>
         </div>
 
-        <!-- 100-Point Total Bid Simulation (Pure Written Evaluation) -->
+        <!-- 100-Point Total Bid Simulation (Synced with Price Simulator) -->
         <div class="score-sim">
           <div class="score-sim-hd">
-            <strong style="color:var(--navy-900);font-size:14.5px;">📊 100 分制三方综合评标胜局推演（假设三方报价接近，价格分均按 28 分计）</strong>
+            <strong style="color:var(--navy-900);font-size:14.5px;">📊 100 分制三方综合评标胜局推演（常规公开招标无控标 · 与下方限价 <span id="topCeilingVal" style="color:#1D4ED8;">150</span>万 / 我方下浮 <span id="topDiscVal" style="color:#047857;">11</span>% 实时联动）</strong>
             <span style="font-size:12px;color:var(--slate-600);">图例：⬛ 价格(30) ｜ 🟧 商务(15) ｜ 🟦 技术与算法方案(35) ｜ 🟩 标书真实界面与工程深化实证(20)</span>
           </div>
           <div class="score-bars">
             <div class="score-party" style="border-color:#6EE7B7;">
               <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-weight:800;font-size:13.8px;color:#065F46;">
                 <span>🏆 我方方案（21页原型高清实证入标）</span>
-                <span style="background:#D1FAE5;color:#065F46;padding:2px 9px;border-radius:999px;font-size:12.5px;white-space:nowrap;">预估总分：90.5 – 94.5 分</span>
+                <span id="topOurBadge" style="background:#D1FAE5;color:#065F46;padding:2px 9px;border-radius:999px;font-size:12.5px;white-space:nowrap;">模拟总分：90.47 分（区间 88.0–93.0）</span>
               </div>
               <div class="score-seg-bar">
-                <div class="seg-price" style="width:28%" title="价格分 28"></div>
-                <div class="seg-biz" style="width:14%" title="商务分 13.5-15"></div>
-                <div class="seg-tech" style="width:32%" title="技术架构与算法分 30.5-32.5"></div>
-                <div class="seg-proof" style="width:19%" title="标书界面与工程深化实证分 18.5-19.5"></div>
+                <div class="seg-price" id="barOurPrice" style="width:26.97%" title="价格分 26.97"></div>
+                <div class="seg-biz" style="width:13.25%" title="商务分 12.5-14.0"></div>
+                <div class="seg-tech" style="width:31.5%" title="技术架构与算法分 30.5-32.5"></div>
+                <div class="seg-proof" style="width:18.75%" title="标书界面与工程深化实证分 18.0-19.5"></div>
               </div>
-              <div style="font-size:12px;color:var(--slate-600);">价格 ~28分 ｜ 商务 13.5–15分（线下业绩+4软著） ｜ 技术算法 30.5–32.5分 ｜ <strong>标书界面与点位实证 18.5–19.5分</strong></div>
+              <div style="font-size:12px;color:var(--slate-600);">价格 <strong id="topOurP">26.97</strong>分（报 <span id="topOurAmt">133.50</span>万）｜ 商务 12.5–14分 ｜ 技术算法 30.5–32.5分 ｜ <strong>标书界面与点位实证 18–19.5分</strong></div>
             </div>
             <div class="score-party" style="border-color:#FCD34D;">
               <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-weight:800;font-size:13.5px;color:#92400E;">
                 <span>🟠 明高软件（垂直党校头号劲敌）</span>
-                <span style="background:#FEF3C7;color:#92400E;padding:2px 9px;border-radius:999px;font-size:12px;white-space:nowrap;">预估：77.5 – 83.5 分（落后9–13分）</span>
+                <span id="topMgBadge" style="background:#FEF3C7;color:#92400E;padding:2px 9px;border-radius:999px;font-size:12px;white-space:nowrap;">模拟：79.81 分（落后 10.66 分）</span>
               </div>
               <div class="score-seg-bar">
-                <div class="seg-price" style="width:28%" title="价格分 28"></div>
-                <div class="seg-biz" style="width:12.5%" title="商务分 12-13.5（CMMI5+党校线下业绩）"></div>
-                <div class="seg-tech" style="width:27.5%" title="技术架构与算法分 26.5-29"></div>
+                <div class="seg-price" id="barMgPrice" style="width:25.81%" title="价格分 25.81"></div>
+                <div class="seg-biz" style="width:14.25%" title="商务分 13.5-15.0（CMMI5+党校业绩）"></div>
+                <div class="seg-tech" style="width:28.25%" title="技术架构与算法分 27.0-29.5"></div>
                 <div class="seg-proof" style="width:11.5%" title="标书界面与点位实证分 10.5-12.5"></div>
               </div>
-              <div style="font-size:12px;color:var(--slate-600);">价格 ~28分 ｜ 商务 12–13.5分（CMMI5+党校业绩） ｜ 技术算法 26.5–29分 ｜ <strong>标书界面与点位实证 10.5–12.5分</strong></div>
+              <div style="font-size:12px;color:var(--slate-600);">价格 <strong id="topMgP">25.81</strong>分（报 <span id="topMgAmt">139.50</span>万）｜ 商务 13.5–15分（CMMI5+党校业绩） ｜ 技术算法 27–29.5分 ｜ <strong>标书界面与点位实证 10.5–12.5分</strong></div>
             </div>
             <div class="score-party" style="border-color:#FECACA;">
               <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-weight:800;font-size:13.5px;color:#991B1B;">
                 <span>⚠️ 知学云（前期已接触客户，定向定制应标）</span>
-                <span style="background:#FEE2E2;color:#991B1B;padding:2px 9px;border-radius:999px;font-size:12px;white-space:nowrap;">预估：71.5 – 79.0 分（落后13–19分）</span>
+                <span id="topZxyBadge" style="background:#FEE2E2;color:#991B1B;padding:2px 9px;border-radius:999px;font-size:12px;white-space:nowrap;">模拟：83.75 分（落后 6.72 分）</span>
               </div>
               <div class="score-seg-bar">
-                <div class="seg-price" style="width:28%" title="价格分 28"></div>
-                <div class="seg-biz" style="width:7%" title="商务分 6.0-8.0"></div>
+                <div class="seg-price" id="barZxyPrice" style="width:30%" title="价格分 30.00"></div>
+                <div class="seg-biz" style="width:13.5%" title="商务分 12.5-14.5（公开招标下网院/政企培训业绩与资质照常得分）"></div>
                 <div class="seg-tech" style="width:28.25%" title="技术架构与算法分 27.0-29.5"></div>
                 <div class="seg-proof" style="width:12%" title="标书界面与工程深化实证分 10.5-13.5"></div>
               </div>
-              <div style="font-size:12px;color:var(--slate-600);">价格 ~28分 ｜ 商务 6–8分（纯网院业绩被剔除） ｜ 技术算法 27–29.5分（熟悉需求可定向写方案） ｜ <strong>标书界面与点位实证 10.5–13.5分（定制原型图可拿基础分，缺真系统闭环）</strong></div>
+              <div style="font-size:12px;color:var(--slate-600);">价格 <strong id="topZxyP">30.00</strong>分（报 <span id="topZxyAmt">120.00</span>万）｜ 商务 12.5–14.5分（公开招标下网院/政企培训业绩与资质照常得分） ｜ 技术算法 27–29.5分（熟悉需求可定向写方案） ｜ <strong>标书界面与点位实证 10.5–13.5分（定制原型图可拿基础分）</strong></div>
             </div>
           </div>
         </div>
@@ -773,8 +773,8 @@
                   </td>
                   <td style="text-align:right;font-weight:800;color:#047857;" id="simOurPrice">133.50</td>
                   <td style="text-align:right;font-weight:700;" id="simOurPScore">26.97</td>
-                  <td style="text-align:right;font-weight:700;">64.50</td>
-                  <td style="text-align:right;font-weight:800;font-size:14.5px;color:#047857;" id="simOurTotal">91.47</td>
+                  <td style="text-align:right;font-weight:700;">63.50</td>
+                  <td style="text-align:right;font-weight:800;font-size:14.5px;color:#047857;" id="simOurTotal">90.47</td>
                 </tr>
                 <tr style="background:#FFFBEB;">
                   <td><strong style="color:#92400E;">🟠 明高软件（稳健贴高限）</strong></td>
@@ -782,8 +782,8 @@
                   <td><strong>93%（下浮7%）</strong></td>
                   <td style="text-align:right;font-weight:700;color:#92400E;" id="simMgPrice">139.50</td>
                   <td style="text-align:right;font-weight:700;" id="simMgPScore">25.81</td>
-                  <td style="text-align:right;font-weight:700;">52.50</td>
-                  <td style="text-align:right;font-weight:800;font-size:14px;color:#92400E;" id="simMgTotal">78.31</td>
+                  <td style="text-align:right;font-weight:700;">54.00</td>
+                  <td style="text-align:right;font-weight:800;font-size:14px;color:#92400E;" id="simMgTotal">79.81</td>
                 </tr>
                 <tr style="background:#FFFBFB;">
                   <td><strong style="color:#991B1B;">⚠️ 知学云（低切高收型）</strong></td>
@@ -791,8 +791,8 @@
                   <td><strong>80%（下浮20%）</strong></td>
                   <td style="text-align:right;font-weight:700;color:#B91C1C;" id="simZxyPrice">120.00</td>
                   <td style="text-align:right;font-weight:700;color:#B91C1C;" id="simZxyPScore">30.00</td>
-                  <td style="text-align:right;font-weight:700;">47.50</td>
-                  <td style="text-align:right;font-weight:800;font-size:14px;color:#B91C1C;" id="simZxyTotal">77.50</td>
+                  <td style="text-align:right;font-weight:700;">53.75</td>
+                  <td style="text-align:right;font-weight:800;font-size:14px;color:#B91C1C;" id="simZxyTotal">83.75</td>
                 </tr>
               </tbody>
             </table>
@@ -801,10 +801,10 @@
           <div class="callout callout-success" style="margin:12px 0 0;">
             <div class="callout-title">🎯 我方最终报价策略建议：锁定「最高限价的 88% – 92%（下浮 8%–12%）」黄金保利带</div>
             <p style="font-size:13px;margin-bottom:5px;">
-              1. <strong>绝对不要陪知学云打 78%–80% 的流血价格战</strong>：即便充分计入知学云前期已接触客户、定向定制技术方案与原型图（非价格分按较高口径 <strong>47.50 分</strong> 计），且按福建农信老套路下浮 20% 抢走价格满分，我方报 <strong id="dynOurRate1">89%</strong>（<strong id="dynOurPrice1">133.50 万</strong>）仍可拿 <strong id="dynOurPScore1">26.97 分</strong>（<span id="dynDiffZxyP">价格分仅差 3.03 分</span>），叠加非价格分领先知学云 <strong>17.0 分</strong>，总分仍净胜 <strong id="dynLeadZxy">13.97 分</strong>，<span id="dynMarginZxy">且比知学云多保住 <strong>9%（+13.50 万）</strong>报价空间</span>！
+              1. <strong>无控标下警惕知学云“高商务分 + 低价满分”组合拳，但不必陪打流血战</strong>：公开招标不剔除网院业绩，知学云商务分与定向定制方案合计可达 <strong>53.75 分</strong>，若其再下浮 20% 抢走 30 分价格满分，总分将达 <strong id="dynZxyTotal1">83.75 分</strong>（反超明高软件）。此时我方报 <strong id="dynOurRate1">89%</strong>（<strong id="dynOurPrice1">133.50 万</strong>）可拿 <strong id="dynOurPScore1">26.97 分</strong>（<span id="dynDiffZxyP">价格分仅差 3.03 分</span>），凭借非价格分领先知学云 <strong>9.75 分</strong>，总分仍稳胜 <strong id="dynLeadZxy">6.72 分</strong>，<span id="dynMarginZxy">且比知学云多保住 <strong>9%（+13.50 万）</strong>报价空间</span>！
             </p>
             <p style="font-size:13px;margin-bottom:5px;">
-              2. <strong>精准卡位压制明高软件（92%–96%）</strong>：明高软件重度依赖线下定制驻场、报价偏刚性（惯常 92%–96%）。按当前下浮测算，我方价格分较明高 <strong id="dynDiffMgP">+1.16 分</strong>，叠加非价格分领先 12 分，总分对头号劲敌形成 <strong id="dynLeadMg">13.16 分</strong>安全垫。
+              2. <strong>精准卡位压制明高软件（92%–96%）</strong>：明高软件重度依赖线下定制驻场、报价偏刚性（惯常 92%–96%）。按当前下浮测算，我方价格分较明高 <strong id="dynDiffMgP">+1.16 分</strong>，叠加非价格分领先 <strong>9.50 分</strong>，总分对明高形成 <strong id="dynLeadMg">10.66 分</strong>安全垫。
             </p>
             <p style="font-size:13px;margin-bottom:0;">
               3. <strong>商务分项报价话术配合</strong>：在分项报价表中明确<strong>“含首年免费驻场维保 + 后续年维保费率 ≤ 6%–8%（远低于知学云 10% 行业高位）+ 零隐藏人天二开费”</strong>，同时严防触发财政部 87 号令第六十条“明显低于成本价质疑”，做到利益最大化与中标确定性双赢。
@@ -2461,9 +2461,9 @@
       const ourS = 30 * (minP / ourP);
       const mgS = 30 * (minP / mgP);
       const zxyS = 30 * (minP / zxyP);
-      const ourTotal = ourS + 64.5;
-      const mgTotal = mgS + 52.5;
-      const zxyTotal = zxyS + 47.5;
+      const ourTotal = ourS + 63.5;
+      const mgTotal = mgS + 54.0;
+      const zxyTotal = zxyS + 53.75;
 
       const rateLabel = fmtPct(ourRate) + '%';
       const simOurRateEl = document.getElementById('simOurRate');
@@ -2478,7 +2478,53 @@
       document.getElementById('simMgTotal').textContent = mgTotal.toFixed(2);
       document.getElementById('simZxyTotal').textContent = zxyTotal.toFixed(2);
 
+      // Sync top 100-point win simulation card
+      const topCeilEl = document.getElementById('topCeilingVal');
+      if (topCeilEl) topCeilEl.textContent = fmtPct(P);
+      const topDiscEl = document.getElementById('topDiscVal');
+      if (topDiscEl) topDiscEl.textContent = fmtPct(disc);
+
+      const barOur = document.getElementById('barOurPrice');
+      if (barOur) { barOur.style.width = ourS.toFixed(2) + '%'; barOur.title = '价格分 ' + ourS.toFixed(2); }
+      const barMg = document.getElementById('barMgPrice');
+      if (barMg) { barMg.style.width = mgS.toFixed(2) + '%'; barMg.title = '价格分 ' + mgS.toFixed(2); }
+      const barZxy = document.getElementById('barZxyPrice');
+      if (barZxy) { barZxy.style.width = zxyS.toFixed(2) + '%'; barZxy.title = '价格分 ' + zxyS.toFixed(2); }
+
+      const topOurP = document.getElementById('topOurP');
+      if (topOurP) topOurP.textContent = ourS.toFixed(2);
+      const topMgP = document.getElementById('topMgP');
+      if (topMgP) topMgP.textContent = mgS.toFixed(2);
+      const topZxyP = document.getElementById('topZxyP');
+      if (topZxyP) topZxyP.textContent = zxyS.toFixed(2);
+
+      const topOurAmt = document.getElementById('topOurAmt');
+      if (topOurAmt) topOurAmt.textContent = ourP.toFixed(2);
+      const topMgAmt = document.getElementById('topMgAmt');
+      if (topMgAmt) topMgAmt.textContent = mgP.toFixed(2);
+      const topZxyAmt = document.getElementById('topZxyAmt');
+      if (topZxyAmt) topZxyAmt.textContent = zxyP.toFixed(2);
+
+      const topOurBadge = document.getElementById('topOurBadge');
+      if (topOurBadge) {
+        const low = (ourS + 61.0).toFixed(1);
+        const high = (ourS + 66.0).toFixed(1);
+        topOurBadge.textContent = '模拟总分：' + ourTotal.toFixed(2) + ' 分（区间 ' + low + '–' + high + '）';
+      }
+      const topMgBadge = document.getElementById('topMgBadge');
+      if (topMgBadge) {
+        const gapMg = ourTotal - mgTotal;
+        topMgBadge.textContent = '模拟：' + mgTotal.toFixed(2) + ' 分（' + (gapMg >= 0 ? '落后 ' + gapMg.toFixed(2) : '反超 +' + Math.abs(gapMg).toFixed(2)) + ' 分）';
+      }
+      const topZxyBadge = document.getElementById('topZxyBadge');
+      if (topZxyBadge) {
+        const gapZxy = ourTotal - zxyTotal;
+        topZxyBadge.textContent = '模拟：' + zxyTotal.toFixed(2) + ' 分（' + (gapZxy >= 0 ? '落后 ' + gapZxy.toFixed(2) : '反超 +' + Math.abs(gapZxy).toFixed(2)) + ' 分）';
+      }
+
       // Sync strategy callout numbers
+      const elZxyTotal1 = document.getElementById('dynZxyTotal1');
+      if (elZxyTotal1) elZxyTotal1.textContent = zxyTotal.toFixed(2) + ' 分';
       const elRate1 = document.getElementById('dynOurRate1');
       if (elRate1) elRate1.textContent = rateLabel;
       const elPrice1 = document.getElementById('dynOurPrice1');
