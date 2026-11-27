@@ -393,6 +393,24 @@
       text-align: center;
       outline: none;
     }
+    .discount-input {
+      width: 52px;
+      padding: 2px 4px;
+      margin: 0 2px;
+      border: 1px solid #6EE7B7;
+      border-radius: 5px;
+      background: #FFFFFF;
+      font-weight: 800;
+      font-size: 13px;
+      color: #047857;
+      text-align: center;
+      outline: none;
+      vertical-align: middle;
+    }
+    .discount-input:focus {
+      border-color: #059669;
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.18);
+    }
     .ceiling-preset {
       border: 1px solid #CBD5E1;
       background: #FFFFFF;
@@ -721,7 +739,7 @@
           <div class="price-sim-top">
             <div>
               <strong style="font-size:14.8px;color:var(--navy-900);">💰 竞品报价习惯拆解、本次项目出价模拟与我方报价策略（低价优先法 30 分）</strong>
-              <div style="font-size:12px;color:var(--slate-500);margin-top:2px;">公式（财政部87号令）：<code>价格得分 = 30 × (有效最低报价 ÷ 本方投标报价)</code> ｜ 可自由输入本项目实际最高限价实时测算</div>
+              <div style="font-size:12px;color:var(--slate-500);margin-top:2px;">公式（财政部87号令）：<code>价格得分 = 30 × (有效最低报价 ÷ 本方投标报价)</code> ｜ 可自由修改最高限价与我方下浮比例实时测算</div>
             </div>
             <div class="ceiling-ctrl">
               <span>假设最高限价：</span>
@@ -738,19 +756,21 @@
               <thead>
                 <tr>
                   <th style="width:125px;">投标主体</th>
-                  <th style="width:240px;">历年真实项目报价习惯实证</th>
-                  <th style="width:120px;">本次模拟报价率</th>
-                  <th style="width:115px;text-align:right;">模拟出价(万)</th>
-                  <th style="width:95px;text-align:right;">价格分(30)</th>
-                  <th style="width:105px;text-align:right;">非价格分(70)</th>
-                  <th style="width:115px;text-align:right;">模拟总分(100)</th>
+                  <th style="width:225px;">历年真实项目报价习惯实证</th>
+                  <th style="width:165px;">本次模拟报价率</th>
+                  <th style="width:110px;text-align:right;">模拟出价(万)</th>
+                  <th style="width:92px;text-align:right;">价格分(30)</th>
+                  <th style="width:102px;text-align:right;">非价格分(70)</th>
+                  <th style="width:110px;text-align:right;">模拟总分(100)</th>
                 </tr>
               </thead>
               <tbody>
                 <tr style="background:#F0FDF4;">
                   <td><strong style="color:#065F46;">🏆 我方（推荐黄金策略）</strong></td>
                   <td>稳健略低于明高、不陪知学云打血拼低价；兼顾高毛利与防低价质疑，锁定总分第一。</td>
-                  <td><strong style="color:#047857;">89%（下浮11%）</strong></td>
+                  <td style="white-space:nowrap;">
+                    <strong style="color:#047857;" id="simOurRate">89%</strong><span style="color:#065F46;font-size:12.5px;">（下浮<input type="number" id="ourDiscountInput" class="discount-input" value="11" min="0" max="50" step="1" aria-label="我方下浮比例(%)" />%）</span>
+                  </td>
                   <td style="text-align:right;font-weight:800;color:#047857;" id="simOurPrice">133.50</td>
                   <td style="text-align:right;font-weight:700;" id="simOurPScore">26.97</td>
                   <td style="text-align:right;font-weight:700;">64.50</td>
@@ -781,10 +801,10 @@
           <div class="callout callout-success" style="margin:12px 0 0;">
             <div class="callout-title">🎯 我方最终报价策略建议：锁定「最高限价的 88% – 92%（下浮 8%–12%）」黄金保利带</div>
             <p style="font-size:13px;margin-bottom:5px;">
-              1. <strong>绝对不要陪知学云打 78%–80% 的流血价格战</strong>：即便知学云按福建农信老套路下浮 20% 抢走 30 分价格满分，我方报 <strong>89%</strong> 仍可拿 <strong>26.97 分</strong>（价格仅差 3.03 分），而我方非价格分领先知学云 <strong>22.5 分</strong>，总分仍净胜 <strong>19+ 分</strong>，且多保住近 <strong>9% 净利润</strong>！
+              1. <strong>绝对不要陪知学云打 78%–80% 的流血价格战</strong>：当前测算下，即便知学云按福建农信老套路下浮 20%，我方报 <strong id="dynOurRate1">89%</strong>（<strong id="dynOurPrice1">133.50 万</strong>）仍可拿 <strong id="dynOurPScore1">26.97 分</strong>（<span id="dynDiffZxyP">价格分仅差 3.03 分</span>），叠加非价格分领先知学云 <strong>22.5 分</strong>，总分仍净胜 <strong id="dynLeadZxy">19.47 分</strong>，<span id="dynMarginZxy">且比知学云多保住 <strong>9%（+13.50 万）</strong>报价空间</span>！
             </p>
             <p style="font-size:13px;margin-bottom:5px;">
-              2. <strong>精准卡位压制明高软件（92%–96%）</strong>：明高软件重度依赖线下定制驻场、报价偏刚性（惯常 92%–96%）。我方落在 <strong>88%–91%</strong> 区间，不仅价格分反超明高 <strong>+1.1 分</strong>，叠加非价格分领先 12 分，总分对头号劲敌形成 <strong>13 分以上安全垫</strong>。
+              2. <strong>精准卡位压制明高软件（92%–96%）</strong>：明高软件重度依赖线下定制驻场、报价偏刚性（惯常 92%–96%）。按当前下浮测算，我方价格分较明高 <strong id="dynDiffMgP">+1.16 分</strong>，叠加非价格分领先 12 分，总分对头号劲敌形成 <strong id="dynLeadMg">13.16 分</strong>安全垫。
             </p>
             <p style="font-size:13px;margin-bottom:0;">
               3. <strong>商务分项报价话术配合</strong>：在分项报价表中明确<strong>“含首年免费驻场维保 + 后续年维保费率 ≤ 6%–8%（远低于知学云 10% 行业高位）+ 零隐藏人天二开费”</strong>，同时严防触发财政部 87 号令第六十条“明显低于成本价质疑”，做到利益最大化与中标确定性双赢。
@@ -2422,37 +2442,91 @@
     }, { passive: true });
 
     // 9. Interactive Bidding Price Simulator
+    function fmtPct(v) {
+      return Number.isInteger(Math.round(v * 100) / 100) ? String(Math.round(v)) : (Math.round(v * 10) / 10).toFixed(1);
+    }
     function recalcPriceSim() {
       const inp = document.getElementById('ceilingInput');
       if (!inp) return;
       const P = Math.max(10, parseFloat(inp.value) || 150);
-      const ourP = P * 0.89;
+      const discInp = document.getElementById('ourDiscountInput');
+      const rawDisc = discInp ? parseFloat(discInp.value) : 11;
+      const disc = isNaN(rawDisc) ? 11 : Math.min(50, Math.max(0, rawDisc));
+      const ourRate = 100 - disc;
+
+      const ourP = P * (ourRate / 100);
       const mgP = P * 0.93;
       const zxyP = P * 0.80;
       const minP = Math.min(ourP, mgP, zxyP);
       const ourS = 30 * (minP / ourP);
       const mgS = 30 * (minP / mgP);
       const zxyS = 30 * (minP / zxyP);
+      const ourTotal = ourS + 64.5;
+      const mgTotal = mgS + 52.5;
+      const zxyTotal = zxyS + 42.0;
 
+      const rateLabel = fmtPct(ourRate) + '%';
+      const simOurRateEl = document.getElementById('simOurRate');
+      if (simOurRateEl) simOurRateEl.textContent = rateLabel;
       document.getElementById('simOurPrice').textContent = ourP.toFixed(2);
       document.getElementById('simMgPrice').textContent = mgP.toFixed(2);
       document.getElementById('simZxyPrice').textContent = zxyP.toFixed(2);
       document.getElementById('simOurPScore').textContent = ourS.toFixed(2);
       document.getElementById('simMgPScore').textContent = mgS.toFixed(2);
       document.getElementById('simZxyPScore').textContent = zxyS.toFixed(2);
-      document.getElementById('simOurTotal').textContent = (ourS + 64.5).toFixed(2);
-      document.getElementById('simMgTotal').textContent = (mgS + 52.5).toFixed(2);
-      document.getElementById('simZxyTotal').textContent = (zxyS + 42.0).toFixed(2);
+      document.getElementById('simOurTotal').textContent = ourTotal.toFixed(2);
+      document.getElementById('simMgTotal').textContent = mgTotal.toFixed(2);
+      document.getElementById('simZxyTotal').textContent = zxyTotal.toFixed(2);
+
+      // Sync strategy callout numbers
+      const elRate1 = document.getElementById('dynOurRate1');
+      if (elRate1) elRate1.textContent = rateLabel;
+      const elPrice1 = document.getElementById('dynOurPrice1');
+      if (elPrice1) elPrice1.textContent = ourP.toFixed(2) + ' 万';
+      const elPScore1 = document.getElementById('dynOurPScore1');
+      if (elPScore1) elPScore1.textContent = ourS.toFixed(2) + ' 分';
+
+      const diffZxyP = ourS - zxyS;
+      const elDiffZxyP = document.getElementById('dynDiffZxyP');
+      if (elDiffZxyP) {
+        if (Math.abs(diffZxyP) < 0.005) elDiffZxyP.textContent = '价格分与知学云持平';
+        else if (diffZxyP < 0) elDiffZxyP.textContent = '价格分仅差 ' + Math.abs(diffZxyP).toFixed(2) + ' 分';
+        else elDiffZxyP.textContent = '价格分反超知学云 +' + diffZxyP.toFixed(2) + ' 分';
+      }
+
+      const elLeadZxy = document.getElementById('dynLeadZxy');
+      if (elLeadZxy) elLeadZxy.textContent = (ourTotal - zxyTotal).toFixed(2) + ' 分';
+
+      const rateGapZxy = ourRate - 80;
+      const priceGapZxy = ourP - zxyP;
+      const elMarginZxy = document.getElementById('dynMarginZxy');
+      if (elMarginZxy) {
+        if (rateGapZxy > 0.001) {
+          elMarginZxy.innerHTML = '且比知学云多保住 <strong>' + fmtPct(rateGapZxy) + '%（+' + priceGapZxy.toFixed(2) + ' 万）</strong>报价空间';
+        } else if (Math.abs(rateGapZxy) <= 0.001) {
+          elMarginZxy.innerHTML = '但报价已与知学云持平（<strong>' + ourP.toFixed(2) + ' 万</strong>），利润空间被大幅压缩';
+        } else {
+          elMarginZxy.innerHTML = '但报价已低于知学云 <strong>' + Math.abs(priceGapZxy).toFixed(2) + ' 万</strong>，需警惕利润压缩及财政部87号令低价质疑风险';
+        }
+      }
+
+      const diffMgP = ourS - mgS;
+      const elDiffMgP = document.getElementById('dynDiffMgP');
+      if (elDiffMgP) {
+        elDiffMgP.textContent = (diffMgP >= 0 ? '+' : '') + diffMgP.toFixed(2) + ' 分';
+      }
+      const elLeadMg = document.getElementById('dynLeadMg');
+      if (elLeadMg) elLeadMg.textContent = (ourTotal - mgTotal).toFixed(2) + ' 分';
     }
     function setCeiling(val) {
       const inp = document.getElementById('ceilingInput');
       if (inp) { inp.value = val; recalcPriceSim(); }
     }
     const ceilingEl = document.getElementById('ceilingInput');
-    if (ceilingEl) {
-      ceilingEl.addEventListener('input', recalcPriceSim);
-      recalcPriceSim();
-    }
+    const ourDiscEl = document.getElementById('ourDiscountInput');
+    if (ceilingEl) ceilingEl.addEventListener('input', recalcPriceSim);
+    if (ourDiscEl) ourDiscEl.addEventListener('input', recalcPriceSim);
+    if (ceilingEl || ourDiscEl) recalcPriceSim();
   </script>
 </body>
 </html>
