@@ -351,6 +351,60 @@
     .seg-tech { background: #2563EB; }
     .seg-proof { background: #059669; }
 
+
+    /* Interactive Bidding Price Simulator */
+    .price-sim-box {
+      margin-top: 16px;
+      background: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .price-sim-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--slate-200);
+    }
+    .ceiling-ctrl {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #EFF6FF;
+      border: 1px solid #BFDBFE;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--navy-900);
+    }
+    .ceiling-ctrl input {
+      width: 78px;
+      padding: 3px 8px;
+      border: 1px solid #93C5FD;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 13.5px;
+      color: #1D4ED8;
+      text-align: center;
+      outline: none;
+    }
+    .ceiling-preset {
+      border: 1px solid #CBD5E1;
+      background: #FFFFFF;
+      color: var(--slate-700);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .ceiling-preset:hover { border-color: #2563EB; color: #1D4ED8; }
+
     /* Tables */
     .table-wrap { overflow-x: auto; margin: 12px 0; border-radius: var(--radius-md); border: 1px solid var(--slate-200); }
     table { width: 100%; border-collapse: collapse; font-size: 13.3px; background: var(--white); }
@@ -659,6 +713,82 @@
               </div>
               <div style="font-size:12px;color:var(--slate-600);">价格 ~28分 ｜ 商务 5.5–7.5分（纯网院业绩被剔除） ｜ 技术算法 23–25.5分 ｜ <strong>标书界面与点位实证 6.5–8.5分</strong></div>
             </div>
+          </div>
+        </div>
+
+        <!-- Bidding Price Habit Analysis & Interactive Simulator -->
+        <div class="price-sim-box">
+          <div class="price-sim-top">
+            <div>
+              <strong style="font-size:14.8px;color:var(--navy-900);">💰 竞品报价习惯拆解、本次项目出价模拟与我方报价策略（低价优先法 30 分）</strong>
+              <div style="font-size:12px;color:var(--slate-500);margin-top:2px;">公式（财政部87号令）：<code>价格得分 = 30 × (有效最低报价 ÷ 本方投标报价)</code> ｜ 可自由输入本项目实际最高限价实时测算</div>
+            </div>
+            <div class="ceiling-ctrl">
+              <span>假设最高限价：</span>
+              <input type="number" id="ceilingInput" value="250" min="50" max="2000" step="10" />
+              <span>万元</span>
+              <button class="ceiling-preset" onclick="setCeiling(200)">200万</button>
+              <button class="ceiling-preset" onclick="setCeiling(250)">250万</button>
+              <button class="ceiling-preset" onclick="setCeiling(300)">300万</button>
+            </div>
+          </div>
+
+          <div class="table-wrap" style="margin-top:0;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:125px;">投标主体</th>
+                  <th style="width:240px;">历年真实项目报价习惯实证</th>
+                  <th style="width:120px;">本次模拟报价率</th>
+                  <th style="width:115px;text-align:right;">模拟出价(万)</th>
+                  <th style="width:95px;text-align:right;">价格分(30)</th>
+                  <th style="width:105px;text-align:right;">非价格分(70)</th>
+                  <th style="width:115px;text-align:right;">模拟总分(100)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:#F0FDF4;">
+                  <td><strong style="color:#065F46;">🏆 我方（推荐黄金策略）</strong></td>
+                  <td>稳健略低于明高、不陪知学云打血拼低价；兼顾高毛利与防低价质疑，锁定总分第一。</td>
+                  <td><strong style="color:#047857;">89%（下浮11%）</strong></td>
+                  <td style="text-align:right;font-weight:800;color:#047857;" id="simOurPrice">222.50</td>
+                  <td style="text-align:right;font-weight:700;" id="simOurPScore">26.97</td>
+                  <td style="text-align:right;font-weight:700;">64.50</td>
+                  <td style="text-align:right;font-weight:800;font-size:14.5px;color:#047857;" id="simOurTotal">91.47</td>
+                </tr>
+                <tr style="background:#FFFBEB;">
+                  <td><strong style="color:#92400E;">🟠 明高软件（稳健贴高限）</strong></td>
+                  <td>亳州党校限价28.4万报<strong>28.35万(99.8%)</strong>、聊城691万；对党校产品极自信，常规下浮仅 4%–9%。</td>
+                  <td><strong>93%（下浮7%）</strong></td>
+                  <td style="text-align:right;font-weight:700;color:#92400E;" id="simMgPrice">232.50</td>
+                  <td style="text-align:right;font-weight:700;" id="simMgPScore">25.81</td>
+                  <td style="text-align:right;font-weight:700;">52.50</td>
+                  <td style="text-align:right;font-weight:800;font-size:14px;color:#92400E;" id="simMgTotal">78.31</td>
+                </tr>
+                <tr style="background:#FFFBFB;">
+                  <td><strong style="color:#991B1B;">⚠️ 知学云（低切高收型）</strong></td>
+                  <td>福建农信限价120万报<strong>93.6万(78%)</strong>+10%年维保；安全教育130万比对手低10%；靠低价抢30分后靠人天/单一来源回收。</td>
+                  <td><strong>80%（下浮20%）</strong></td>
+                  <td style="text-align:right;font-weight:700;color:#B91C1C;" id="simZxyPrice">200.00</td>
+                  <td style="text-align:right;font-weight:700;color:#B91C1C;" id="simZxyPScore">30.00</td>
+                  <td style="text-align:right;font-weight:700;">42.00</td>
+                  <td style="text-align:right;font-weight:800;font-size:14px;color:#B91C1C;" id="simZxyTotal">72.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout callout-success" style="margin:12px 0 0;">
+            <div class="callout-title">🎯 我方最终报价策略建议：锁定「最高限价的 88% – 92%（下浮 8%–12%）」黄金保利带</div>
+            <p style="font-size:13px;margin-bottom:5px;">
+              1. <strong>绝对不要陪知学云打 78%–80% 的流血价格战</strong>：即便知学云按福建农信老套路下浮 20% 抢走 30 分价格满分，我方报 <strong>89%</strong> 仍可拿 <strong>26.97 分</strong>（价格仅差 3.03 分），而我方非价格分领先知学云 <strong>22.5 分</strong>，总分仍净胜 <strong>19+ 分</strong>，且多保住近 <strong>9% 净利润</strong>！
+            </p>
+            <p style="font-size:13px;margin-bottom:5px;">
+              2. <strong>精准卡位压制明高软件（92%–96%）</strong>：明高软件重度依赖线下定制驻场、报价偏刚性（惯常 92%–96%）。我方落在 <strong>88%–91%</strong> 区间，不仅价格分反超明高 <strong>+1.1 分</strong>，叠加非价格分领先 12 分，总分对头号劲敌形成 <strong>13 分以上安全垫</strong>。
+            </p>
+            <p style="font-size:13px;margin-bottom:0;">
+              3. <strong>商务分项报价话术配合</strong>：在分项报价表中明确<strong>“含首年免费驻场维保 + 后续年维保费率 ≤ 6%–8%（远低于知学云 10% 行业高位）+ 零隐藏人天二开费”</strong>，同时严防触发财政部 87 号令第六十条“明显低于成本价质疑”，做到利益最大化与中标确定性双赢。
+            </p>
           </div>
         </div>
       </section>
@@ -2244,6 +2374,39 @@
         link.classList.toggle('active', link.getAttribute('href') === '#' + current);
       });
     }, { passive: true });
+
+    // 9. Interactive Bidding Price Simulator
+    function recalcPriceSim() {
+      const inp = document.getElementById('ceilingInput');
+      if (!inp) return;
+      const P = Math.max(10, parseFloat(inp.value) || 250);
+      const ourP = P * 0.89;
+      const mgP = P * 0.93;
+      const zxyP = P * 0.80;
+      const minP = Math.min(ourP, mgP, zxyP);
+      const ourS = 30 * (minP / ourP);
+      const mgS = 30 * (minP / mgP);
+      const zxyS = 30 * (minP / zxyP);
+
+      document.getElementById('simOurPrice').textContent = ourP.toFixed(2);
+      document.getElementById('simMgPrice').textContent = mgP.toFixed(2);
+      document.getElementById('simZxyPrice').textContent = zxyP.toFixed(2);
+      document.getElementById('simOurPScore').textContent = ourS.toFixed(2);
+      document.getElementById('simMgPScore').textContent = mgS.toFixed(2);
+      document.getElementById('simZxyPScore').textContent = zxyS.toFixed(2);
+      document.getElementById('simOurTotal').textContent = (ourS + 64.5).toFixed(2);
+      document.getElementById('simMgTotal').textContent = (mgS + 52.5).toFixed(2);
+      document.getElementById('simZxyTotal').textContent = (zxyS + 42.0).toFixed(2);
+    }
+    function setCeiling(val) {
+      const inp = document.getElementById('ceilingInput');
+      if (inp) { inp.value = val; recalcPriceSim(); }
+    }
+    const ceilingEl = document.getElementById('ceilingInput');
+    if (ceilingEl) {
+      ceilingEl.addEventListener('input', recalcPriceSim);
+      recalcPriceSim();
+    }
   </script>
 </body>
 </html>
