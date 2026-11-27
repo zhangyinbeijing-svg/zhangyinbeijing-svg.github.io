@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>知学云及党政干院教务系统深度竞品调研报告 V2.0（终审优化版）</title>
+  <style>
+    :root {
+      --navy-900: #0B1F36;
+      --navy-800: #122E4F;
+      --navy-700: #1B426E;
+      --blue-600: #1D4ED8;
+      --blue-500: #2563EB;
+      --blue-100: #DBEAFE;
+      --blue-50: #EFF6FF;
+      --slate-900: #0F172A;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-500: #64748B;
+      --slate-300: #CBD5E1;
+      --slate-200: #E2E8F0;
+      --slate-100: #F1F5F9;
+      --bg-page: #F4F6FA;
+      --white: #FFFFFF;
+      --green-700: #047857;
+      --green-100: #D1FAE5;
+      --green-50: #ECFDF5;
+      --amber-700: #B45309;
+      --amber-100: #FEF3C7;
+      --amber-50: #FFFBEB;
+      --red-700: #B91C1C;
+      --red-100: #FEE2E2;
+      --red-50: #FEF2F2;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-page);
+      color: var(--slate-900);
+      line-height: 1.65;
+      font-size: 14.5px;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar TOC with Group Headers */
+    .sidebar {
+      width: 276px;
+      background: var(--navy-900);
+      color: #CBD5E1;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-brand {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-brand .tag {
+      display: inline-block;
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #93C5FD;
+      background: rgba(59,130,246,0.2);
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    .sidebar-brand h1 { font-size: 15.5px; color: #FFFFFF; font-weight: 700; line-height: 1.38; }
+    .sidebar-brand p { font-size: 11.5px; color: #94A3B8; margin-top: 4px; }
+
+    .nav-list {
+      list-style: none;
+      padding: 10px 12px 16px;
+      overflow-y: auto;
+      flex: 1;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(148, 163, 184, 0.28) transparent;
+    }
+    .nav-list::-webkit-scrollbar {
+      width: 5px;
+    }
+    .nav-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .nav-list::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.28);
+      border-radius: 999px;
+    }
+    .nav-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.48);
+    }
+    .nav-group-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #64748B;
+      padding: 10px 10px 4px;
+      text-transform: uppercase;
+    }
+    .nav-list li { margin-bottom: 2px; }
+    .nav-list a {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7.5px 11px;
+      color: #CBD5E1;
+      text-decoration: none;
+      border-radius: 7px;
+      font-size: 13px;
+      transition: all 0.16s ease;
+    }
+    .nav-list a:hover { background: rgba(255,255,255,0.07); color: #FFFFFF; }
+    .nav-list a.active {
+      background: linear-gradient(90deg, rgba(37,99,235,0.34), rgba(37,99,235,0.12));
+      color: #FFFFFF;
+      font-weight: 600;
+      box-shadow: inset 3px 0 0 #60A5FA;
+    }
+    .nav-num { font-size: 11px; font-weight: 700; color: #60A5FA; min-width: 19px; }
+    .sidebar-footer {
+      padding: 12px 14px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      gap: 8px;
+    }
+    .btn-print {
+      flex: 1;
+      background: rgba(255,255,255,0.1);
+      color: #FFFFFF;
+      border: 1px solid rgba(255,255,255,0.16);
+      padding: 7px 10px;
+      border-radius: 7px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.18s;
+    }
+    .btn-print:hover { background: rgba(255,255,255,0.2); }
+
+    /* Main Content */
+    .main {
+      margin-left: 276px;
+      flex: 1;
+      min-width: 0;
+      width: calc(100% - 276px);
+      max-width: 1400px;
+      padding: 26px 34px 64px;
+    }
+
+    /* Hero Banner */
+    .hero {
+      background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 58%, #1E40AF 100%);
+      color: #FFFFFF;
+      border-radius: 16px;
+      padding: 30px 34px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -60px; top: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(96,165,250,0.22) 0%, rgba(96,165,250,0) 70%);
+      pointer-events: none;
+    }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11.5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .pill-light { background: rgba(255,255,255,0.14); color: #E0F2FE; }
+    .pill-warn { background: rgba(251,191,36,0.24); color: #FDE68A; }
+    .hero h2 { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 9px; }
+    .hero-sub { color: #CBD5E1; font-size: 13.8px; max-width: 980px; line-height: 1.65; }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+    .kpi-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 13px 15px;
+      backdrop-filter: blur(6px);
+    }
+    .kpi-label { font-size: 11.5px; color: #BFDBFE; margin-bottom: 3px; }
+    .kpi-value { font-size: 19px; font-weight: 800; color: #FFFFFF; }
+    .kpi-note { font-size: 11px; color: #CBD5E1; opacity: 0.85; margin-top: 3px; }
+
+    /* Section Card */
+    .section {
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-lg);
+      padding: 26px 30px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow-sm);
+      scroll-margin-top: 18px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--slate-100);
+      padding-bottom: 13px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18.5px;
+      font-weight: 800;
+      color: var(--navy-900);
+    }
+    .section-badge {
+      background: var(--blue-600);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+
+    h3 {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--navy-800);
+      margin: 20px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h3::before {
+      content: "";
+      width: 4px; height: 15px;
+      background: var(--blue-500);
+      border-radius: 2px;
+      display: inline-block;
+    }
+    p { margin-bottom: 10px; color: var(--slate-700); }
+
+    /* Badges */
+    .src {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+    .src-official { background: #E0E7FF; color: #3730A3; }
+    .src-verified { background: #DCFCE7; color: #166534; }
+    .src-analysis { background: #FEF3C7; color: #92400E; }
+
+    /* Callouts */
+    .callout {
+      border-radius: var(--radius-md);
+      padding: 15px 18px;
+      margin: 14px 0 16px;
+      border-left: 4px solid;
+    }
+    .callout-info { background: var(--blue-50); border-color: var(--blue-600); }
+    .callout-warn { background: var(--amber-50); border-color: #D97706; }
+    .callout-danger { background: var(--red-50); border-color: #DC2626; }
+    .callout-success { background: var(--green-50); border-color: #059669; }
+    .callout-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; color: var(--slate-900); }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 14px 0; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 14px 0; }
+    .info-card {
+      background: #F8FAFC;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      padding: 15px 17px;
+    }
+    .info-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .info-card ul { padding-left: 17px; color: var(--slate-700); font-size: 13.3px; }
+    .info-card li { margin-bottom: 5px; }
+
+    /* Score Simulation Compare Box */
+    .score-sim {
+      background: linear-gradient(90deg, #F0FDF4 0%, #EFF6FF 100%);
+      border: 1px solid #A7F3D0;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-top: 16px;
+    }
+    .score-sim-hd {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .score-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .score-party {
+      background: #FFFFFF;
+      border: 1px solid var(--slate-200);
+      border-radius: 9px;
+      padding: 12px 14px;
+    }
+    .score-seg-bar {
+      display: flex;
+      height: 14px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #E2E8F0;
+      margin: 8px 0 6px;
+    }
+    .seg-price { background: #64748B; }
+    .seg-biz { background: #F59E0B; }
+    .seg-tech { background: #2563EB; }
+    .seg-poc { background: #059669; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; margin: 12px 0; border-radius: var(--radius-md); border: 1px solid var(--slate-200); }
+    table { width: 100%; border-collapse: collapse; font-size: 13.3px; background: var(--white); }
+    thead th {
+      background: #F1F5F9;
+      color: var(--navy-900);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 13px;
+      border-bottom: 1px solid var(--slate-300);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 10px 13px;
+      border-bottom: 1px solid var(--slate-200);
+      vertical-align: top;
+      color: var(--slate-700);
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #F8FAFC; }
+
+    .status {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .st-win-strong { background: #047857; color: #FFFFFF; }
+    .st-win { background: var(--green-100); color: var(--green-700); }
+    .st-warn { background: var(--amber-100); color: var(--amber-700); }
+    .st-danger { background: var(--red-100); color: var(--red-700); }
+    .st-comp { background: #E0E7FF; color: #3730A3; }
+    .cov-none { background: #FEE2E2; color: #991B1B; }
+    .cov-basic { background: #FEF3C7; color: #92400E; }
+    .cov-diff { background: #E0E7FF; color: #3730A3; }
+
+    /* Architecture Diagram */
+    .arch-box { background: #F8FAFC; border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 16px; margin: 14px 0; }
+    .arch-layer { border-radius: 10px; padding: 13px 15px; margin-bottom: 10px; border: 1px solid; }
+    .arch-layer:last-child { margin-bottom: 0; }
+    .arch-layer-title { font-size: 13px; font-weight: 800; margin-bottom: 9px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+    .arch-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip { background: #FFFFFF; border: 1px solid rgba(15,23,42,0.12); padding: 5px 10px; border-radius: 7px; font-size: 12.3px; font-weight: 600; color: var(--slate-900); }
+    .chip.highlight { border-color: #DC2626; background: #FEF2F2; color: #991B1B; }
+    .layer-ai { background: #EEF2FF; border-color: #C7D2FE; color: #312E81; }
+    .layer-app { background: #EFF6FF; border-color: #BFDBFE; color: #1E3A8A; }
+    .layer-paas { background: #F0FDF4; border-color: #BBF7D0; color: #14532D; }
+    .layer-eco { background: #FFFBEB; border-color: #FDE68A; color: #78350F; }
+
+    /* Filter Bar */
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .filter-btn {
+      padding: 5.5px 13px;
+      border-radius: 999px;
+      border: 1px solid var(--slate-300);
+      background: var(--white);
+      color: var(--slate-700);
+      font-size: 12.3px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--blue-500); color: var(--blue-600); }
+    .filter-btn.active { background: var(--navy-900); color: #FFFFFF; border-color: var(--navy-900); }
+
+    /* Bar Chart */
+    .chart-card { background: #F8FAFC; border: 1px solid var(--slate-200); border-radius: var(--radius-md); padding: 16px 18px; margin: 12px 0 16px; }
+    .bar-row { display: grid; grid-template-columns: 265px 1fr 105px; align-items: center; gap: 12px; margin-bottom: 9px; font-size: 12.8px; }
+    .bar-row:last-child { margin-bottom: 0; }
+    .bar-label { font-weight: 600; color: var(--slate-700); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar-track { background: #E2E8F0; height: 16px; border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #1D4ED8, #3B82F6); }
+    .bar-fill.top { background: linear-gradient(90deg, #B91C1C, #EF4444); }
+    .bar-fill.recent { background: linear-gradient(90deg, #047857, #10B981); }
+    .bar-val { font-weight: 700; color: var(--navy-900); text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* Battlecards */
+    .battle-card { border: 1px solid var(--slate-200); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 13px; background: var(--white); }
+    .battle-head { background: #FEF2F2; padding: 12px 16px; border-bottom: 1px solid #FECACA; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .battle-q { font-weight: 700; color: #991B1B; font-size: 13.8px; }
+    .battle-body { padding: 14px 16px; background: #F0FDF4; color: #14532D; font-size: 13.5px; line-height: 1.68; }
+    .btn-copy { background: #FFFFFF; border: 1px solid #FCA5A5; color: #991B1B; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    .btn-copy:hover { background: #FEE2E2; }
+
+    /* Timeline */
+    .timeline { border-left: 2px solid var(--blue-500); padding-left: 18px; margin: 12px 0 14px 6px; }
+    .tl-item { position: relative; margin-bottom: 13px; }
+    .tl-item:last-child { margin-bottom: 0; }
+    .tl-item::before {
+      content: ""; width: 10px; height: 10px; background: var(--blue-600);
+      border: 2px solid #FFFFFF; box-shadow: 0 0 0 2px var(--blue-500);
+      border-radius: 50%; position: absolute; left: -24px; top: 5px;
+    }
+    .tl-date { font-size: 12px; font-weight: 700; color: var(--blue-600); }
+    a.ext { color: var(--blue-600); text-decoration: none; font-weight: 600; }
+    a.ext:hover { text-decoration: underline; }
+
+    /* V2.0 Dissection & Dual-Dimension Switcher */
+    .dissect-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0 18px; }
+    .dissect-card { background: linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%); border: 1px solid #BFDBFE; border-radius: 10px; padding: 13px 15px; }
+    .dissect-num { font-size: 20px; font-weight: 800; color: var(--navy-900); line-height: 1.2; }
+    .dissect-num span { font-size: 11.5px; font-weight: 700; color: var(--blue-600); margin-left: 3px; }
+    .dissect-lbl { font-size: 12.5px; font-weight: 700; color: var(--navy-800); margin-top: 4px; }
+    .dissect-sub { font-size: 11.5px; color: var(--slate-600); margin-top: 2px; line-height: 1.45; }
+    .proto-tag { display: inline-block; font-family: Consolas, Monaco, monospace; font-size: 11px; background: #EEF2FF; color: #3730A3; border: 1px solid #C7D2FE; border-radius: 4px; padding: 1px 6px; margin: 2px 4px 2px 0; }
+    .prd-tag { display: inline-block; font-size: 11px; font-weight: 600; background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; border-radius: 4px; padding: 1px 6px; margin: 2px 4px 2px 0; }
+    .sop-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 12px 0 18px; }
+    .sop-stage { border: 1px solid var(--slate-200); border-radius: 10px; padding: 12px 14px; background: #FAFAFA; }
+    .sop-stage-hd { font-size: 13px; font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+    .sop-stage p { font-size: 12px; color: var(--slate-600); margin: 0; line-height: 1.55; }
+    .bullet-tight { margin: 0; padding-left: 16px; font-size: 13px; line-height: 1.6; }
+    .bullet-tight li { margin-bottom: 4px; }
+    .bullet-tight li:last-child { margin-bottom: 0; }
+
+    .dim-switcher { display: inline-flex; flex-wrap: wrap; gap: 6px; background: #E2E8F0; padding: 5px; border-radius: 12px; margin: 6px 0 16px; }
+    .dim-tab { border: none; background: transparent; color: var(--slate-700); font-size: 13px; font-weight: 700; padding: 8px 16px; border-radius: 9px; cursor: pointer; transition: all 0.18s ease; }
+    .dim-tab:hover { color: var(--navy-900); }
+    .dim-tab.active { background: var(--white); color: var(--navy-900); box-shadow: 0 2px 6px rgba(15, 23, 42, 0.1); }
+    .dim-pane { display: block; margin-bottom: 28px; }
+    .dim-pane:last-child { margin-bottom: 0; }
+    .dim-banner { background: #F8FAFC; border: 1px solid var(--slate-200); border-left: 4px solid var(--blue-600); border-radius: 8px; padding: 11px 15px; margin-bottom: 14px; font-size: 13px; color: var(--slate-700); }
+
+    @media (max-width: 1080px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 18px; }
+      .kpi-grid, .dissect-grid { grid-template-columns: repeat(2, 1fr); }
+      .grid-3, .sop-flow, .score-bars { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 150px 1fr 85px; }
+    }
+    @media print {
+      .sidebar, .filter-bar, .btn-copy, .dim-switcher { display: none !important; }
+      .dim-pane { display: block !important; margin-bottom: 20px !important; }
+      .main { margin-left: 0 !important; padding: 0 !important; max-width: 100% !important; }
+      .section { break-inside: avoid; box-shadow: none; border: 1px solid #CBD5E1; }
+      .hero, .score-sim, .arch-layer { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- Left Grouped Sticky Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="tag">Competitor Intelligence V2.0</span>
+        <h1>知学云及行业竞品深度调研</h1>
+        <p>V3.5需求+21页原型+V2.1纯书面控标版</p>
+      </div>
+      <ul class="nav-list" id="toc">
+        <li class="nav-group-label">第一部分 · 决策总览</li>
+        <li><a href="#sec-summary" class="active"><span class="nav-num">00</span>执行摘要与百分制推演</a></li>
+
+        <li class="nav-group-label">第二部分 · 知学云穿透深研</li>
+        <li><a href="#sec-company"><span class="nav-num">01</span>企业画像与2025并购终止</a></li>
+        <li><a href="#sec-product"><span class="nav-num">02</span>产品矩阵与网院基因诊断</a></li>
+        <li><a href="#sec-tech"><span class="nav-num">03</span>AI/低代码/信创三员实底</a></li>
+        <li><a href="#sec-bidding"><span class="nav-num">04</span>近3年中标定价与1.5分口碑</a></li>
+
+        <li class="nav-group-label">第三部分 · 行业竞品与标讯</li>
+        <li><a href="#sec-landscape"><span class="nav-num">05</span>全行业8家竞品与明高预警</a></li>
+        <li><a href="#sec-market-bids"><span class="nav-num">06</span>24笔招投标库(知学云15笔)</a></li>
+
+        <li class="nav-group-label">第四部分 · 对标与控标决胜</li>
+        <li><a href="#sec-compare"><span class="nav-num">07</span>双维对标(16功能+13亮点)</a></li>
+        <li><a href="#sec-pressure"><span class="nav-num">08</span>无POC纯书面控标与双敌拦截</a></li>
+        <li><a href="#sec-battlecard"><span class="nav-num">09</span>述标实战 5 大攻防话术卡</a></li>
+
+        <li class="nav-group-label">第五部分 · 溯源档案</li>
+        <li><a href="#sec-resources"><span class="nav-num">10</span>公开产品资料与归档总索引</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <button class="btn-print" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ 顶部</button>
+        <button class="btn-print" onclick="window.print()">🖨️ 打印 / 导PDF</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Hero Banner -->
+      <header class="hero">
+        <div class="hero-meta">
+          <span class="pill pill-light">核心假想敌：知学云（智慧教学管理平台）</span>
+          <span class="pill pill-light">同基因强敌：合肥明高软件 / 道合云 等 8 家全景</span>
+          <span class="pill pill-warn">V2.0 终审优化版 · 双维同屏对标 + 无现场POC纯书面锁胜推演</span>
+        </div>
+        <h2>知学云及党政干院教务系统全行业竞品深度调研报告</h2>
+        <p class="hero-sub">
+          紧扣外交外事干部培训学院<strong>纯物理隔离内网、全栈信创、涉密三员分立与线下脱产办训教务中枢</strong>定位，融合<strong>知学云近 3 年 15 笔中标实证</strong>、<strong>我方 V3.5 需求 16 项功能与 21 页原型代码级双维对标</strong>及<strong>《控标策略 V2.0》四层 14 项条款推演</strong>，针对<strong>不设现场离线 POC 演示</strong>的实际评审环境，构建从竞品摸底到<strong>纯书面评标高分锁胜</strong>的完整作战沙盘。
+        </p>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">知学云宣称客户 / 央企率</div>
+            <div class="kpi-value">2,500+ / 60%+</div>
+            <div class="kpi-note">100–150人规模 · 2025.12并购终止</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">近3年平台中标价格带</div>
+            <div class="kpi-value">94–350 万</div>
+            <div class="kpi-note">年维保 10% · 大连高经院 1,591.9万</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">近3年线下干院教务中标</div>
+            <div class="kpi-value" style="color:#FDE68A;">0 例公开记录</div>
+            <div class="kpi-note">15笔中标清一色为在线网院/制课</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">App Store 真实评分</div>
+            <div class="kpi-value" style="color:#FCA5A5;">1.5–1.6 分</div>
+            <div class="kpi-note">满分5分 · 高峰白屏/定位活体报错</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">纯书面评标胜局推演</div>
+            <div class="kpi-value" style="color:#6EE7B7;">净胜 20+ 分</div>
+            <div class="kpi-note">不设现场POC · 靠20分标书界面实证锁胜</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Section 00: Executive Summary & 100-Point Score Simulation -->
+      <section class="section" id="sec-summary">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">00</span>执行摘要与 100 分制胜局推演（Executive Summary）</div>
+          <div>
+            <span class="src src-official">官方宣称</span>
+            <span class="src src-verified">公开实证</span>
+            <span class="src src-analysis">竞争研判</span>
+          </div>
+        </div>
+
+        <p>
+          <strong>核心研判结论</strong>：知学云是国内<strong>企业全员在线学习（e-Learning / LMS）赛道的第一梯队厂商</strong>，但在本项目聚焦的<strong>“外交外事干部学院纯离线涉密内网线下办训教务”</strong>战场上存在严重的基因错位。同时，全行业扫描揭示出另一条隐蔽战线——以<strong>合肥明高软件（CMMI5 + 全栈信创 + 井冈山干院案例）</strong>为代表的垂直智慧党校厂商才是同基因头号劲敌，鉴于采购人<strong>不采用现场离线 POC 演示</strong>，我方必须采取<strong>“双线设防、标书高清原型界面实证（书面准POC）+ 进场首周核验解约红线”</strong>策略：
+        </p>
+
+        <div class="grid-3">
+          <div class="callout callout-danger" style="margin:0;">
+            <div class="callout-title">🚨 双假想敌威胁画像</div>
+            <p style="font-size:13px;margin:0;">
+              <strong>外线·知学云</strong>：持 CMMI3/ISO/等保三级与 2026.06 大连高经院（1,591.9万）网院大单，擅长联合运营商/云大厂总包并用 AI/低代码概念包装。<br>
+              <strong>内线·明高软件</strong>：持 CMMI5、全栈信创、原生三权分立及上百所党校教务案例，常规党校条款无法拦截。
+            </p>
+          </div>
+          <div class="callout callout-success" style="margin:0;">
+            <div class="callout-title">🎯 知学云三大致命软肋（实证）</div>
+            <p style="font-size:13px;margin:0;">
+              1. <strong>近3年15笔中标 100% 为网院/制课</strong>，V3.5 16项功能中有 <strong>7 项核心模块原生缺失</strong>；<br>
+              2. <strong>AI+学习</strong>在零外网无外部 GPU 的涉密内网中直接瘫痪，ZPaaS 拖不出排课/排座算法；<br>
+              3. C端体验粗糙（App Store <strong>1.5分</strong>），年维保高达 <strong>10%</strong> 且频繁单一来源锁定。
+            </p>
+          </div>
+          <div class="callout callout-info" style="margin:0;">
+            <div class="callout-title">🛡️ 无现场 POC 下的纯书面锁胜闭环</div>
+            <p style="font-size:13px;margin:0;">
+              针对不设现场演示的规则，通过《控标策略 V2.1》<strong>压降通用认证至 2 分、剔除纯网院业绩</strong>，并在技术标单列 <strong>20 分「核心场景真实系统界面截图与院区点位深化实证」</strong>+<strong>首周内网核验解约承诺</strong>，让竞对在 20 天等标期内无图可贴、无路可蹭。
+            </p>
+          </div>
+        </div>
+
+        <!-- 100-Point Total Bid Simulation (No Live POC - Pure Written Evaluation) -->
+        <div class="score-sim">
+          <div class="score-sim-hd">
+            <strong style="color:var(--navy-900);font-size:14.5px;">📊 纯书面评标（不设现场离线 POC）100 分制胜局推演（假设双方报价接近，价格分均按 28 分计）</strong>
+            <span style="font-size:12px;color:var(--slate-600);">图例：⬛ 价格(30) ｜ 🟧 商务(15) ｜ 🟦 技术与算法方案(35) ｜ 🟩 标书真实界面与工程深化实证(20·书面准POC)</span>
+          </div>
+          <div class="score-bars">
+            <div class="score-party" style="border-color:#6EE7B7;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-weight:800;font-size:13.8px;color:#065F46;">
+                <span>🏆 我方方案（21页原型高清实证入标）</span>
+                <span style="background:#D1FAE5;color:#065F46;padding:2px 9px;border-radius:999px;font-size:12.5px;white-space:nowrap;">预估总分：90.5 – 94.5 分</span>
+              </div>
+              <div class="score-seg-bar">
+                <div class="seg-price" style="width:28%" title="价格分 28"></div>
+                <div class="seg-biz" style="width:14%" title="商务分 13.5-15"></div>
+                <div class="seg-tech" style="width:32%" title="技术架构与算法分 30.5-32.5"></div>
+                <div class="seg-poc" style="width:19%" title="标书界面与工程深化实证分 18.5-19.5"></div>
+              </div>
+              <div style="font-size:12px;color:var(--slate-600);">价格 ~28分 ｜ 商务 13.5–15分（线下业绩+4软著） ｜ 技术算法 30.5–32.5分 ｜ <strong>标书界面与点位实证 18.5–19.5分</strong></div>
+            </div>
+            <div class="score-party" style="border-color:#FECACA;">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-weight:800;font-size:13.8px;color:#991B1B;">
+                <span>⚠️ 知学云（仅能贴网院/低代码通用图）</span>
+                <span style="background:#FEE2E2;color:#991B1B;padding:2px 9px;border-radius:999px;font-size:12.5px;white-space:nowrap;">预估：66.0 – 73.5 分（落后20+分）</span>
+              </div>
+              <div class="score-seg-bar">
+                <div class="seg-price" style="width:28%" title="价格分 28"></div>
+                <div class="seg-biz" style="width:6.5%" title="商务分 5.5-7.5"></div>
+                <div class="seg-tech" style="width:24%" title="技术架构与算法分 23-25.5"></div>
+                <div class="seg-poc" style="width:7.5%" title="标书界面与工程深化实证分 6.5-8.5"></div>
+              </div>
+              <div style="font-size:12px;color:var(--slate-600);">价格 ~28分 ｜ 商务 5.5–7.5分（纯网院业绩被剔除） ｜ 技术算法 23–25.5分 ｜ <strong>标书界面与点位实证 6.5–8.5分</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 01: Company Profile -->
+      <section class="section" id="sec-company">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">01</span>知学云企业全景画像与 2025 并购终止动向</div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:180px;">维度</th>
+                <th>核心情报详情</th>
+                <th style="width:110px;">信源分级</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>核心法人主体</strong></td>
+                <td><strong>知学云（北京）科技股份有限公司</strong>（集团总部、招投标签约主体及资本运作主体）<br><strong>深圳市知学云科技有限公司</strong>（成立于 2016-11-09，官网 <code>www.zhixueyun.com</code> 运营备案主体，粤ICP备13078763号）</td>
+                <td><span class="src src-verified">公开实证</span></td>
+              </tr>
+              <tr>
+                <td><strong>创始人与核心高管</strong></td>
+                <td>董事长：<strong>潘斌</strong>；创始人/总裁：<strong>赵隽隽</strong>（中国科学技术大学毕业，国内早期 E-Learning 企业数字化学习开拓者）</td>
+                <td><span class="src src-verified">公开实证</span></td>
+              </tr>
+              <tr>
+                <td><strong>员工与组织规模</strong></td>
+                <td>核心体系员工约 <strong>100–150 人</strong>（典型技术+方案型专精特新企业；面对超大型政企项目时常借力运营商或集成商联合交付）</td>
+                <td><span class="src src-verified">公开实证</span></td>
+              </tr>
+              <tr>
+                <td><strong>权威荣誉与硬资质</strong></td>
+                <td>国家高新技术企业、双软认证、2022 北京市专精特新“小巨人”、2025 中国独角兽企业（自述）；持有<strong>等保三级、CMMI 3、ISO27001、ISO20000-1、CCRC、麒麟软件 NeoCertify 认证、方德产品认证</strong>及《知学云在线学习系统》（<code>2020SR1510736</code>）等软著专利。</td>
+                <td><span class="src src-official">官方宣称</span><span class="src src-verified">公开实证</span></td>
+              </tr>
+              <tr>
+                <td><strong>商业变现闭环</strong></td>
+                <td><strong>“平台底座切入 + 10%/年标准维保 + 按人天二开计费 + 单一来源续签 + 知学荟内容分成”</strong>（已由福建农信、信泰人寿、中国人保、国投集团党校中标公告交叉证实）。</td>
+                <td><span class="src src-verified">公开实证</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2025年重大资本事件：海泰发展筹划半年后正式终止收购控股权 <span class="src src-verified">公开实证</span></h3>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-date">2025年6月5日 · 筹划现金收购控股权（构成重大资产重组）</div>
+            <p style="margin:2px 0 0;">A股上市公司<strong>海泰发展（SH600082）</strong>公告拟以现金方式收购知学云（北京）控股权，试图跨界打造“AI+教育科技”第二增长曲线。</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2025年6月–11月 · 尽调评估拉锯与业绩问询沉默</div>
+            <p style="margin:2px 0 0;">历时半年审计评估；2025年11月三季度业绩说明会上投资者密集追问重组进展，高管未正面回应。</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-date">2025年12月5日 · 正式公告终止收购</div>
+            <p style="margin:2px 0 0;">海泰发展公告因<strong>“交易双方尚未就交易对价、交易方式等关键交易条款达成一致意见”</strong>正式终止收购，全程未披露知学云具体营收与利润。</p>
+          </div>
+        </div>
+        <div class="callout callout-info" style="margin-bottom:0;">
+          <div class="callout-title">战略重心研判 <span class="src src-analysis">竞争研判</span></div>
+          并购终止折射出股东方对高估值叙事的执着。2025–2026 年知学云将研发重心全面押注于<strong>“AI Agent 智能体 + 大型央企存量网院升级”</strong>，对纯物理隔离、禁外网、高定制算法的党政外事干院线下教务项目缺乏原生产品线沉淀。
+        </div>
+      </section>
+
+      <!-- Section 02: Product Matrix & DNA -->
+      <section class="section" id="sec-product">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">02</span>产品矩阵与「智慧教学管理平台」网院基因诊断</div>
+        </div>
+
+        <h3>知学云全栈产品矩阵全景 <span class="src src-official">官方宣称</span></h3>
+        <div class="arch-box">
+          <div class="arch-layer layer-ai">
+            <div class="arch-layer-title">
+              <span>L1 · AI+学习与技能训练层（2025–2026 主推溢价层，强依赖大模型算力/云端生态）</span>
+              <span style="font-size:11.5px;opacity:0.85;">在无外部 GPU 的涉密离线内网中无法开箱运行</span>
+            </div>
+            <div class="arch-chips">
+              <span class="chip">AI 伴学</span><span class="chip">AI 助手</span><span class="chip">AI 专家（私域知识库）</span>
+              <span class="chip">AI 学练 / 错题溯源</span><span class="chip">AI 陪练（语音/数字人）</span>
+              <span class="chip">AI 智课 / AI 创作</span><span class="chip">AI 智考 / 智能巡考</span><span class="chip">智能体教练 / 空间实训</span>
+            </div>
+          </div>
+          <div class="arch-layer layer-app">
+            <div class="arch-layer-title">
+              <span>L2 · 核心学习与管理平台层（业务应用层）</span>
+              <span style="font-size:11.5px;opacity:0.85;">红框为本次直接对标产品页 (zhixueyun.com/study/peixun/)</span>
+            </div>
+            <div class="arch-chips">
+              <span class="chip highlight">★ 培训管理平台 / 智慧教学管理平台（仅含12项轻量无纸化班务）</span>
+              <span class="chip">移动学习平台（知学云10 App / 总分院网院 / 万人并发网考）</span>
+              <span class="chip">悦课内容平台（员工自主选学）</span><span class="chip">知识纷享平台（企业知识库）</span>
+            </div>
+          </div>
+          <div class="arch-layer layer-paas">
+            <div class="arch-layer-title">
+              <span>L3 · ZPaaS 低代码技术底座（平台支撑层）</span>
+              <span style="font-size:11.5px;opacity:0.85;">100+ 表单/表格/流程轻组件，不支持复杂排课排座算法</span>
+            </div>
+            <div class="arch-chips">
+              <span class="chip">aPaaS 应用构建（对象/页面建模、流程与报表引擎）</span>
+              <span class="chip">iPaaS 基础服务（弹性伸缩、容器编排）</span>
+              <span class="chip">dPaaS 大数据（消息/规则/接口服务、BI 看板）</span>
+            </div>
+          </div>
+          <div class="arch-layer layer-eco">
+            <div class="arch-layer-title">
+              <span>L4 · 数字内容与伴随运营生态</span>
+              <span style="font-size:11.5px;opacity:0.85;">面向企业全员通识与商学院内容采购</span>
+            </div>
+            <div class="arch-chips">
+              <span class="chip">“知学荟”版权内容生态</span><span class="chip">混合式项目 / 1+N 专题</span>
+              <span class="chip">栋梁e学</span><span class="chip">驻场/远程运营服务</span>
+            </div>
+          </div>
+        </div>
+
+        <h3>「智慧教学管理平台」官网原文 12 项子模块与基因诊断</h3>
+        <div class="grid-3">
+          <div class="info-card">
+            <h4>培前场景（4项） <span class="src src-official">官网原文</span></h4>
+            <ul><li>通知公告</li><li>教学准备</li><li>教学资源</li><li>资料分发</li></ul>
+          </div>
+          <div class="info-card">
+            <h4>培中场景（4项） <span class="src src-official">官网原文</span></h4>
+            <ul><li>学籍管理</li><li>班务管理</li><li>成员管理</li><li>随堂花名册</li></ul>
+          </div>
+          <div class="info-card">
+            <h4>培后场景（4项） <span class="src src-official">官网原文</span></h4>
+            <ul><li>学情报告</li><li>作业管理</li><li>结算管理</li><li>问卷管理</li></ul>
+          </div>
+        </div>
+
+        <div class="callout callout-warn" style="margin-bottom:0;">
+          <div class="callout-title">🔍 产品基因铁证：企业网院（LMS）附属的轻量面授插件，绝非原生干院教务中枢 <span class="src src-analysis">竞争研判</span></div>
+          <p style="margin-bottom:5px;">1. <strong>企业 HR 岗位序列烙印极深</strong>：官网页面直接按“新员工、管培生、管理序列、技术序列（首席工程师~技术员）、技能序列”构建人才培养闭环，与外交外事干部调训办班体制完全不同。</p>
+          <p style="margin-bottom:0;">2. <strong>七大干院核心刚需空白</strong>：全站检索未见<strong>外事礼宾排座与桌签、四重防冲突拖拽排课与合班建议、5+2财政经费事中硬阻断规则库、标准教案段落级留痕比对、现场教学点库、红头呈批单撤回解锁场地、涉密离线摆渡包预检审计</strong>。</p>
+        </div>
+      </section>
+
+      <!-- Section 03: Tech Deep Dive -->
+      <section class="section" id="sec-tech">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">03</span>AI / ZPaaS 低代码 / 信创三员三大技术卖点实底核查</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="info-card">
+            <h4>① AI 能力实底与纯内网死穴 <span class="status st-danger">无GPU离线即瘫痪</span></h4>
+            <ul>
+              <li><strong>官方卖点</strong>：AI 伴学、AI 陪练（数字人/语音对话）、AI 智课、AI 专家、智能巡考。</li>
+              <li><strong>涉密内网核查</strong>：语音陪练、数字人合成与视觉巡考强依赖公网大模型 API 或百万级本地 GPU 推理集群。在我方《控标策略 V2.0》<strong>“零外网依赖 + 不得以额外采购外部 GPU 算力集群为前提”</strong>约束下，其 AI 王牌无法落地。</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>② ZPaaS 低代码能力边界 <span class="status st-warn">仅限表单/轻流程</span></h4>
+            <ul>
+              <li><strong>官网 17 类组件实底</strong>：表单、表格、数据、显示、容器、录入、阶段、日历、分部、部门、受众、目录、学员、标签、证书、排行榜、报表。</li>
+              <li><strong>算法盲区</strong>：本质是 CRUD 表单拼装器，<strong>无法拖拽生成</strong> <code>Math.abs(col-mid)</code> 礼宾居中交替辐射排座、多班并发四重防冲突排课及教案段落级 Diff 留痕，必退回高价人天二开。</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>③ 全栈信创与原生“三员分立”实底 <span class="status st-warn">缺三件套精确互认/三员</span></h4>
+            <ul>
+              <li><strong>信创缺口</strong>：官网仅公示<strong>麒麟 NeoCertify 与方德 OS 认证</strong>，且证书产品名多指向“在线学习系统”，难以同时拿齐针对“教务管理平台”的 <strong>OS+数据库+中间件原厂公章三件套</strong>。</li>
+              <li><strong>权限短板</strong>：底层为集团“总分院多级管理员（RBAC）”，无国家涉密标准要求的系统/保密/审计三员物理级互斥与双人复核专页。</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>④ 离线门禁硬件与涉密摆渡集成 <span class="status st-win">我方工程级占优</span></h4>
+            <ul>
+              <li><strong>实体门禁</strong>：知学云依赖手机端 GPS/二维码/线上活体签到，无五/六层教室门口实体人脸门禁本地 TCP/IP 特征库下发（<code>dvSend</code>）标准模块。</li>
+              <li><strong>离线验签与摆渡</strong>：无纯内网离线电子印章验真服务，亦无对接独立干部人事系统的三步法加密摆渡包预检与刻录审计模块。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 04: Zhixueyun Pricing Model, Updated Bar Chart & Reputation -->
+      <section class="section" id="sec-bidding">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">04</span>知学云近 3 年代表中标价格分布、TCO 锁定底牌与 1.5 分口碑</div>
+          <div><a class="ext" href="#sec-market-bids" style="font-size:12.5px;">↓ 跳转第06章查阅全部24条标讯明细</a></div>
+        </div>
+
+        <h3>知学云 2024–2026 代表性公开中标金额分布（单位：万元 · 绿柱为近两年新单） <span class="src src-verified">公开实证</span></h3>
+        <div class="chart-card">
+          <div class="bar-row">
+            <div class="bar-label" title="2026.06 中国大连高级经理学院：中国干部网络学院企业分院项目">2026.06 中国大连高级经理学院（干院网院）</div>
+            <div class="bar-track"><div class="bar-fill top" style="width:100%;"></div></div>
+            <div class="bar-val">1,591.90 万</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">2025年 南航数智科技（培训数字化转型）</div>
+            <div class="bar-track"><div class="bar-fill recent" style="width:22.0%;"></div></div>
+            <div class="bar-val">350.00 万</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">2026.11 中国环境监测总站（线上培训及制课）</div>
+            <div class="bar-track"><div class="bar-fill recent" style="width:19.6%;"></div></div>
+            <div class="bar-val">312.00 万</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">存量标杆 中国中信集团（线上学习平台升级）</div>
+            <div class="bar-track"><div class="bar-fill" style="width:18.2%;"></div></div>
+            <div class="bar-val">289.00 万</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">2024.07 中国证券业协会（远程培训课程制作）</div>
+            <div class="bar-track"><div class="bar-fill" style="width:9.7%;"></div></div>
+            <div class="bar-val">153.70 万</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">2026.09 信泰人寿（育成平台+维保+人天二开）</div>
+            <div class="bar-track"><div class="bar-fill recent" style="width:9.4%;"></div></div>
+            <div class="bar-val">148.86 万+</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">2025.04 中国国际广播出版社（安全在线平台）</div>
+            <div class="bar-track"><div class="bar-fill recent" style="width:8.2%;"></div></div>
+            <div class="bar-val">130.00 万</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">2025.06 西安开放大学（干部网络学院升级）</div>
+            <div class="bar-track"><div class="bar-fill recent" style="width:5.9%;"></div></div>
+            <div class="bar-val">94.00 万</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label">2024.07 福建农信（学习平台 · 年维保9.36万）</div>
+            <div class="bar-track"><div class="bar-fill" style="width:5.88%;"></div></div>
+            <div class="bar-val">93.60 万</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="info-card">
+            <h4>💰 商业底牌与高 TCO 锁定机制 <span class="src src-verified">招标公告实证</span></h4>
+            <ul>
+              <li><strong>标准维保费率 10%/年</strong>：福建农信公告明确披露平台报价 93.60 万、免费期后维保 <strong>9.36 万/年（精确 10%）</strong>。</li>
+              <li><strong>“低代码不够、人天来凑”</strong>：信泰人寿（2026.09）中标价 148.86 万之外，合同专门单列<strong>“按人天计算的系统功能开发费”</strong>。</li>
+              <li><strong>单一来源高频锁客</strong>：2025–2026 连续在<strong>中国人保、国投集团党校、智慧能源创新学院</strong>实现单一来源续签，联合华为云/运营商组队拿总包能力强。</li>
+            </ul>
+          </div>
+          <div class="info-card" style="background:#FFFBFB;border-color:#FECACA;">
+            <h4>📉 C 端真实口碑与一线体验痛点 <span class="src src-verified">App Store 实证</span></h4>
+            <ul>
+              <li><strong>评分长期垫底</strong>：“知学云 10”在苹果 App Store 评分仅 <strong>1.5 ~ 1.6 分（满分 5 分）</strong>。</li>
+              <li><strong>四大高频吐槽</strong>：① 答题不自动跳题、交互繁琐反人类；② 集中培训考核高峰期频繁白屏、无法交卷；③ 账号玄学掉线登录失败；④ <strong>绑定人脸活体检测与 GPS 定位签到时报错率极高</strong>。</li>
+              <li><strong>攻防启示</strong>：知学云“重高管售前概念、轻教务与学员日常体验”，恰被我方四区极简工作台与无感离线门禁克制。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 05: Full Industry 8 Competitors Landscape -->
+      <section class="section" id="sec-landscape">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">05</span>全行业 3 大阵营 8 家核心竞品全景图谱（含头号同基因强敌预警）</div>
+          <div><span class="src src-verified">官网产品手册与中标实证</span></div>
+        </div>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">🚨 战略级发现：除知学云外，真正的同基因头号劲敌是「合肥明高软件」！</div>
+          <p style="margin:0;">
+            全行业扫描证实：<strong>合肥明高软件（minggao.net）</strong>集齐了 <strong>CMMI 5 级</strong>、<strong>全栈信创三件套落地</strong>（达梦/金仓 + 东方通/金蝶 + 麒麟/统信）、<strong>官网明列的“三权分立”模型</strong>、<strong>智能拖曳式排课</strong>、<strong>外训管理系统</strong>及<strong>中国井冈山干部学院、聊城市委党校（691万）、镇江市委党校（2026信创改造）</strong>等上百所党校线下教务案例；<strong>成都道合云（daoheyun.com）</strong>亦拥有 28 个党校子系统与青海两弹一星干院“选员授课”分组排课创新。
+          </p>
+        </div>
+
+        <div class="filter-bar" id="campFilter">
+          <button class="filter-btn active" data-camp="all">全部核心竞品 (8)</button>
+          <button class="filter-btn" data-camp="campA">阵营A · 垂直干院/党校专家 (4)</button>
+          <button class="filter-btn" data-camp="campB">阵营B · 政务信创OA大厂 (1)</button>
+          <button class="filter-btn" data-camp="campC">阵营C · 企培网院/高教巨头 (3)</button>
+        </div>
+
+        <div class="table-wrap">
+          <table id="campTable">
+            <thead>
+              <tr>
+                <th style="width:140px;">竞品厂商</th>
+                <th style="width:115px;">所属阵营</th>
+                <th>核心产品架构、资质与标杆案例</th>
+                <th>核心短板 / 我方可打穿的命门</th>
+                <th style="width:115px;">威胁评级</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-camp="campA">
+                <td><strong>明高软件</strong><br><span style="font-size:11.5px;color:#64748B;">minggao.net</span></td>
+                <td><span class="status st-danger">垂直干院</span></td>
+                <td><strong>CMMI 5级</strong>、科创板挂牌、100+专利；Spring Cloud微服务 + <strong>13大党校子系统</strong>（含教务拖拽排课、外训管理、三权分立）；全栈信创真落地；案例含<strong>中国井冈山干院、聊城党校(691万)、镇江党校(2026信创改造)</strong>。</td>
+                <td>① 移动应用强绑定企微/钉钉/微信生态（涉密纯离线内网失效）；② <strong>无外事礼宾居中交替辐射排座算法</strong>；③ 缺乏按部委财政定额的四维经费硬拦截规则引擎与特定部委8套结班报告模板。</td>
+                <td><span class="status st-danger">★★★★★ 头号劲敌</span></td>
+              </tr>
+              <tr data-camp="campA">
+                <td><strong>道合云</strong><br><span style="font-size:11.5px;color:#64748B;">daoheyun.com</span></td>
+                <td><span class="status st-danger">垂直干院</span></td>
+                <td>高新企业、40+软著；<strong>28个党校专属子系统</strong>；2026年密集签约无锡/泸州/毕节/九寨沟党校及<strong>青海两弹一星干院</strong>；独创“选员授课”分组轮换排课与教室红点态势看板。</td>
+                <td>① <strong>极度依赖微信小程序“一码通”</strong>（纯离线政务内网完全失效）；② 缺乏 CMMI 及 ISO27001/20000 权威资质；③ 无外事礼宾排座与部委级涉密案例。</td>
+                <td><span class="status st-warn">★★★★☆ 强敌</span></td>
+              </tr>
+              <tr data-camp="campC">
+                <td><strong>知学云</strong><br><span style="font-size:11.5px;color:#64748B;">zhixueyun.com</span></td>
+                <td><span class="status st-comp">企培网院</span></td>
+                <td>CMMI 3、等保三级、麒麟/方德认证；60%+央企覆盖、<strong>大连高经院(1,591.9万)</strong>、南航(350万)；主打 AI 伴学/陪练 + ZPaaS 低代码 + 12项轻量无纸化班务。</td>
+                <td>① 企培 LMS 基因，线下干院教务颗粒度粗；② AI 卖点在无 GPU 纯离线内网水土不服；③ 非原生三员分立；④ App Store 评分仅 1.5 分。</td>
+                <td><span class="status st-warn">★★★★☆ 强敌</span></td>
+              </tr>
+              <tr data-camp="campB">
+                <td><strong>致远互联</strong><br><span style="font-size:11.5px;color:#64748B;">seeyon.com</span></td>
+                <td><span class="status st-win">政务OA</span></td>
+                <td>A股科创板上市、七层全栈信创；基于协同平台（COP）推出“县委/市委智慧党校方案”，强在两办无纸化公文、会议呈报、业财报销审批与异构集成。</td>
+                <td>底层为 OA 流程引擎基因，<strong>缺乏原生可视化拖拽排课引擎、四重防冲突算法、外事礼宾排座</strong>与深度干院教务模型，复杂教务高度依赖二开。</td>
+                <td><span class="status st-win">★★★☆☆ 中等</span></td>
+              </tr>
+              <tr data-camp="campC">
+                <td><strong>时代光华 / 绚星(原云学堂)</strong><br><span style="font-size:11.5px;color:#64748B;">21tb / yxt.com</span></td>
+                <td><span class="status st-comp">企培网院</span></td>
+                <td>企业数智化学习巨头；时代光华主打 BOLT 平台 + OMO 混合教务 + 版权课程库；绚星主打十万人并发网院与 AI 智能生产力；2026年同台竞标贵州农商行(100万级)。</td>
+                <td>产品重心在大型企业全员在线学习与内容生态，缺乏党政干院高保密离线教务、礼宾排座、四维财政经费硬控与独立涉密档案对接能力。</td>
+                <td><span class="status st-win">★★★☆☆ 中等</span></td>
+              </tr>
+              <tr data-camp="campC">
+                <td><strong>超星集团</strong><br><span style="font-size:11.5px;color:#64748B;">chaoxing.com</span></td>
+                <td><span class="status st-comp">高教/党校</span></td>
+                <td>泛雅网络教学平台 + 学习通 + 智慧党校；在高校与各级党校网络学院占有率极高，强在海量党政电子图书/微课资源库、学时互认与在线防作弊考试。</td>
+                <td>强依赖互联网端“学习通”移动生态，线下精细化干院办班教务（礼宾排座/财政经费硬控/纯离线门禁联动）定制深度偏弱。</td>
+                <td><span class="status st-win">★★★☆☆ 中等</span></td>
+              </tr>
+              <tr data-camp="campA">
+                <td><strong>北京云诺智训</strong><br><span style="font-size:11.5px;color:#64748B;">bjynzx.com</span></td>
+                <td><span class="status st-danger">垂直干院</span></td>
+                <td>专注国产化智慧党校、智慧干训与 30+ 子系统全业务闭环，强调后勤财务合规管控与一卡通集成。</td>
+                <td>公司体量与全国部委级标杆影响力有限，官网服务稳定性一般，外事礼宾专属算法与纯离线涉密架构无公开优势。</td>
+                <td><span class="status st-win">★★★☆☆ 区域</span></td>
+              </tr>
+              <tr data-camp="campA">
+                <td><strong>云南诺申科技</strong><br><span style="font-size:11.5px;color:#64748B;">eoasys.cn</span></td>
+                <td><span class="status st-danger">垂直干院</span></td>
+                <td>西南地区党校主力，承建<strong>杨善洲干部学院</strong>、昆明/曲靖/红河/腾冲市委党校及昆明市公务员学习积分系统。</td>
+                <td>明显区域化特征（集中于云南省内），缺乏中央部委级高密级项目经验与跨省大规模交付服务网络。</td>
+                <td><span class="status st-win">★★☆☆☆ 区域</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 06: 24 Real Bidding Cases Database (15 Zhixueyun 2024-2026) -->
+      <section class="section" id="sec-market-bids">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">06</span>2024–2026 行业招投标行情与近 3 年知学云 15 笔中标全景库（24 条）</div>
+          <div><span class="src src-verified">政采网与企采平台公开实证</span></div>
+        </div>
+
+        <div class="callout callout-warn">
+          <div class="callout-title">🔎 近 3 年（2024–2026）知学云 15 笔中标数据核心铁证</div>
+          <p style="margin:0;">
+            翻遍知学云 2024–2026 年全部 15 笔公开中标/单一来源项目——无论是 <strong>2026.06 大连高经院（1,591.90万，干部网络学院）</strong>、<strong>2026.11 中国环境监测总站（312.00万，线上培训及制课）</strong>，还是<strong>西安开大干院网院（94万）</strong>、<strong>国投集团党校（网上学习运维）</strong>——<strong>100% 集中于在线网络学院、远程课程制作与企培学习平台，无一例纯涉密离线干院“线下脱产办班教务中枢”公开业绩</strong>！这直接赋予我方《控标策略 V2.0》剔除纯网院业绩条款一锤定音的杀伤力。
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="info-card" style="background:#EFF6FF;border-color:#BFDBFE;">
+            <h4 style="color:#1E3A8A;">💰 党校/干院纯软件平台区间</h4>
+            <div style="font-size:21px;font-weight:800;color:#1D4ED8;margin:4px 0;">94–350 万元</div>
+            <p style="font-size:12.3px;margin:0;">知学云 93.6–350万（福建农信/西安开大/环境监测总站/南航）；其他干院如常州党校 121.3万、林草局干院 260万。</p>
+          </div>
+          <div class="info-card" style="background:#FEF2F2;border-color:#FECACA;">
+            <h4 style="color:#991B1B;">🏛️ 国家级/省部级大型总集区间</h4>
+            <div style="font-size:21px;font-weight:800;color:#B91C1C;margin:4px 0;">690–2,650 万元</div>
+            <p style="font-size:12.3px;margin:0;">知学云大连高经院(2026.06，1,591.9万)、明高聊城党校(691万)、西藏党校软硬总集(2,647万)。</p>
+          </div>
+          <div class="info-card" style="background:#ECFDF5;border-color:#A7F3D0;">
+            <h4 style="color:#065F46;">🔧 升级改造与同台竞标基准</h4>
+            <div style="font-size:21px;font-weight:800;color:#047857;margin:4px 0;">100万级 · 10%维保</div>
+            <p style="font-size:12.3px;margin:0;">2026.04 黔农e学四期三家同台曝光：<strong>绚星 100.0万 vs 时代光华 103.45万 vs 汇思 118.0万</strong>。</p>
+          </div>
+        </div>
+
+        <div class="filter-bar" style="align-items:center;justify-content:space-between;">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;" id="bidFilter">
+            <button class="filter-btn active" data-bid="all">全部标讯案例 (24)</button>
+            <button class="filter-btn" data-bid="zxy3y" style="border-color:#DC2626;color:#B91C1C;">★ 近3年知学云中标 (15)</button>
+            <button class="filter-btn" data-bid="party">其他党校 / 干部学院 (6)</button>
+            <button class="filter-btn" data-bid="ent">其他央国企 / 金融 (3)</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span id="bidCountHint" style="font-size:12px;color:var(--slate-500);">显示 24 条</span>
+            <input type="text" id="bidSearch" placeholder="🔍 搜索单位、年份、金额..." style="padding:6px 12px;border:1px solid var(--slate-300);border-radius:999px;font-size:12.5px;width:220px;outline:none;" />
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table id="bidTable">
+            <thead>
+              <tr>
+                <th style="width:76px;">时间</th>
+                <th style="width:205px;">采购单位</th>
+                <th>项目名称、采购方式与核心建设内容</th>
+                <th style="width:165px;">中标 / 候选供应商</th>
+                <th style="width:115px;text-align:right;">金额（万元）</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 2024-2026 知学云中标数据 (15条) -->
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2026.11</strong></td>
+                <td><strong>中国环境监测总站</strong></td>
+                <td>生态环境监测线上培训技术保障及课程制作服务委托合同（编号 0747-2661SCCZAB305）<br><span class="status st-comp" style="margin-top:3px;">线上培训技术保障+课程制作</span></td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;font-weight:800;color:#B91C1C;">312.00</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2026.09</strong></td>
+                <td><strong>信泰人寿保险股份有限公司</strong></td>
+                <td>业务渠道销售队伍育成发展平台项目（公开招标；另含后续维保年费及按人天二开费）<br><span class="status st-comp" style="margin-top:3px;">金融育成平台+人天二开</span></td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;font-weight:800;color:#B91C1C;">148.86+</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2026.09</strong></td>
+                <td><strong>中国人民保险集团（人保）</strong></td>
+                <td>“人保学堂”网训平台 2026 年功能开发建设项目（<strong>单一来源采购</strong>，存量老客户深度绑定）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;color:#64748B;">单一来源</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2026.06</strong></td>
+                <td><strong>中国大连高级经理学院</strong></td>
+                <td>中国干部网络学院企业分院相关培训及平台服务项目（国家级干院网院千万级重磅大单）<br><span class="status st-danger" style="margin-top:3px;">国家级干院网院标杆</span></td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;font-weight:800;color:#B91C1C;">1,591.90</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2025.12</strong></td>
+                <td><strong>智慧能源创新学院</strong></td>
+                <td>2026 年远程培训平台服务采购项目（<strong>单一来源采购</strong>）</td>
+                <td><strong style="color:#B91C1C;">知学云</strong></td>
+                <td style="text-align:right;color:#64748B;">单一来源</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2025.12</strong></td>
+                <td><strong>成都天府国际机场分公司</strong></td>
+                <td>2025 年度天府笃行平台相关项目（比选候选）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;color:#64748B;">比选候选</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2025.08</strong></td>
+                <td><strong>中国再保险（中国再保）</strong></td>
+                <td>“智慧党建”系统项目（竞争性磋商拟邀供应商）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;color:#64748B;">竞争性磋商</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2025.07</strong></td>
+                <td><strong>国投集团党校（研修院）</strong></td>
+                <td>网上学习系统 2025 年运维项目（平台账号服务、直播支持、日常运维与技术维保；<strong>单一来源</strong>）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;color:#64748B;">单一来源</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2025.06</strong></td>
+                <td><strong>西安开放大学</strong></td>
+                <td>2025 年干部网络学院平台升级及相关服务项目<br><span class="status st-comp" style="margin-top:3px;">干院网院升级</span></td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;font-weight:800;color:#B91C1C;">94.00</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2025.04</strong></td>
+                <td><strong>中国国际广播出版社</strong></td>
+                <td>中小学安全教育多媒体在线教育平台项目（第一中标候选人）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;font-weight:800;color:#B91C1C;">130.00</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2025.03</strong></td>
+                <td><strong>煤炭工业规划设计研究院</strong></td>
+                <td>2025–2028 课程采购短名单入围采购项目（短名单第一名，长周期框架结算）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;color:#64748B;">框架入围</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2025年</strong></td>
+                <td><strong>南航数智科技（广东）</strong></td>
+                <td>数科公司培训管理数字化转型（2025）采购项目（含税总价 350 万，不含税 330.19 万）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;font-weight:800;color:#B91C1C;">350.00</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2024.08</strong></td>
+                <td><strong>宝钛集团职工教育培训中心</strong></td>
+                <td>线上课程资源采购项目（通用类课程成交单位）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;color:#64748B;">课程成交</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2024.07</strong></td>
+                <td><strong>中国证券业协会培训中心</strong></td>
+                <td>远程培训课程制作服务项目（第一中标候选人）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;font-weight:800;color:#B91C1C;">153.70</td>
+              </tr>
+              <tr data-bid="zxy3y" style="background:#FFFBFB;">
+                <td><strong>2024.07</strong></td>
+                <td><strong>福建农信（省农信联社）</strong></td>
+                <td>福建农信学习平台系统项目（最高限价 120 万，报价 93.6 万，<strong>年维保 9.36 万 = 10%费率</strong>）</td>
+                <td><strong style="color:#B91C1C;">知学云（北京）</strong></td>
+                <td style="text-align:right;font-weight:800;color:#B91C1C;">93.60</td>
+              </tr>
+
+              <!-- 其他党校 / 干部学院标杆案例 (6条) -->
+              <tr data-bid="party">
+                <td>2026.10</td>
+                <td><strong>中共常州市委党校</strong></td>
+                <td>智慧校园一体化综合管理平台软件建设采购项目（破解干部培训碎片化与数据孤岛）</td>
+                <td>公开招标（预算价）</td>
+                <td style="text-align:right;font-weight:700;color:#1D4ED8;">121.30</td>
+              </tr>
+              <tr data-bid="party">
+                <td>2025.10</td>
+                <td><strong>国家林草局管理干部学院</strong></td>
+                <td>林草生态网络感知系统（林草网络学院）：统一管理“平台+学员+课程师资+质量+档案”五大要素与审批一网通办</td>
+                <td><strong>上海梦创双杨</strong></td>
+                <td style="text-align:right;font-weight:700;color:#1D4ED8;">260.00</td>
+              </tr>
+              <tr data-bid="party">
+                <td>2025.07</td>
+                <td><strong>中共亳州市委党校</strong></td>
+                <td>智慧党校教室显示屏项目（配套硬件采购参考）</td>
+                <td><strong>中国电信亳州分公司</strong></td>
+                <td style="text-align:right;font-weight:700;">64.40</td>
+              </tr>
+              <tr data-bid="party">
+                <td>2025.04</td>
+                <td><strong>新洲区委党校</strong></td>
+                <td>智慧党校智能化系统建设项目</td>
+                <td><strong>武汉新九科技</strong></td>
+                <td style="text-align:right;font-weight:700;">92.87</td>
+              </tr>
+              <tr data-bid="party">
+                <td>2024–25</td>
+                <td><strong>西藏自治区党校</strong></td>
+                <td>西藏自治区智慧党校项目（省级党校大型软硬件与信息化体系集成）</td>
+                <td>系统集成中标方</td>
+                <td style="text-align:right;font-weight:800;color:#1D4ED8;">2,647.01</td>
+              </tr>
+              <tr data-bid="party">
+                <td>历史标杆</td>
+                <td><strong>中共聊城市委党校</strong></td>
+                <td>“一校三馆”智慧校园项目（综合门户、教研、办公、党建、后勤、大数据全生态）</td>
+                <td><strong>合肥明高软件</strong></td>
+                <td style="text-align:right;font-weight:800;color:#1D4ED8;">691.00</td>
+              </tr>
+
+              <!-- 其他央国企 / 金融竞品案例 (3条) -->
+              <tr data-bid="ent">
+                <td>2026.04</td>
+                <td><strong>贵州农商联合银行</strong></td>
+                <td>培训管理系统（黔农e学）第四期（培训/课程/AI拓展+信创改造）<br><span style="font-size:12px;color:#047857;">★ 三家头部同台报价曝光：绚星 100.00万 vs 时代光华 103.45万 vs 汇思 118.00万</span></td>
+                <td><strong>绚星智慧科技</strong>（第一候选）</td>
+                <td style="text-align:right;font-weight:700;color:#047857;">100.00</td>
+              </tr>
+              <tr data-bid="ent">
+                <td>2025.02</td>
+                <td><strong>广州港数据科技</strong></td>
+                <td>培训与考评管理系统项目</td>
+                <td><strong>广州支点网络</strong></td>
+                <td style="text-align:right;font-weight:700;">141.50</td>
+              </tr>
+              <tr data-bid="ent">
+                <td>存量参考</td>
+                <td><strong>中国中信集团 / 东航</strong></td>
+                <td>中信集团线上学习平台升级改造（289万）；东方航空东航云课堂技改实施（73.6万）</td>
+                <td><strong>知学云（北京）</strong></td>
+                <td style="text-align:right;font-weight:700;">289.0 / 73.6</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 07: Dual-Dimension Comparison (16 V3.5 Functions + 13 Core Highlights) -->
+      <section class="section" id="sec-compare">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">07</span>我方系统 vs 知学云双维深度对标（功能对比 16 项 + 核心亮点对比 13 项）</div>
+          <div>
+            <span class="prd-tag">严格对齐 V3.5_优化版.docx</span>
+            <span class="proto-tag">代码级裂解 原型/ 21页组件</span>
+          </div>
+        </div>
+        <p>
+          通过对我方最新<strong>《教培系统建设项目需求说明书V3.5_优化版.docx》</strong>全文（含训前/训中/训后全流程规范总图、五/六层物理点位布线图、标准名词模型）及工作区<strong><code>原型/</code> 目录全部 21 个纯离线交互页面</strong>进行代码级裂解，我方系统在<strong>业务颗粒度、涉外礼宾算法、财政经费事中硬控、教案段落级留痕及涉密物理摆渡归档</strong>上已形成完整闭环，与知学云「智慧教学管理平台（12项轻量企业班务）」形成鲜明的代际与基因级反差：
+        </p>
+
+        <!-- Dissection Panorama Metrics -->
+        <div class="dissect-grid">
+          <div class="dissect-card">
+            <div class="dissect-num">15<span>个SOP节点</span></div>
+            <div class="dissect-lbl">办训全生命周期闭环</div>
+            <div class="dissect-sub">训前7步(年初计划→前1周礼宾处批) · 训中4步 · 训后4步(1周报告/2周会签/当月归档)</div>
+          </div>
+          <div class="dissect-card">
+            <div class="dissect-num">13<span>个班次子页签</span></div>
+            <div class="dissect-lbl">单班次全要素内聚管控</div>
+            <div class="dissect-sub">方案呈批·调训回执·师资邀约·课表·考勤·住宿联动·考务排座·经费·证书·结班报告·跟踪</div>
+          </div>
+          <div class="dissect-card">
+            <div class="dissect-num">5+2<span>条硬控规则</span></div>
+            <div class="dissect-lbl">财政经费实时拦截引擎</div>
+            <div class="dissect-sub">5类超标禁止提交硬阻断 + 2类超限特批分级（师资职级课酬/住宿/餐饮/交通四维核定）</div>
+          </div>
+          <div class="dissect-card">
+            <div class="dissect-num">32<span>工位</span> / 64<span>口</span></div>
+            <div class="dissect-lbl">纯物理隔离内网工程级落地</div>
+            <div class="dissect-sub">精准映射学院五层/六层多规格教室(40~144人)、备课室1-6、人脸门禁TCP/IP与离线摆渡</div>
+          </div>
+        </div>
+
+        <!-- V3.5 Standard Lifecycle Strip -->
+        <div class="sop-flow">
+          <div class="sop-stage" style="border-top:3px solid #1D4ED8;">
+            <div class="sop-stage-hd" style="color:#1E3A8A;"><span>PHASE 01 · 训前筹备规范化（7节点）</span><span>院批/处批/会签</span></div>
+            <p>年初录入重点班次计划 → 前6周推进会启动 → 前5周集体备课定方案、分场地、建档 → 前4周承办请示(预算草案/调训通知/师资邀请函) → 前3周发调训 → 前2周具体事项请示与分班 → 前1周入门/餐券/订车及<strong>礼宾座次处批</strong>。</p>
+          </div>
+          <div class="sop-stage" style="border-top:3px solid #059669;">
+            <div class="sop-stage-hd" style="color:#065F46;"><span>PHASE 02 · 训中组织精细化（4节点）</span><span>课时最小单元</span></div>
+            <p>正式开班建学籍与计划说明 → 教学实施（日历拖拽调停课、学员请假呈批、巡课与随堂考务排座） → 训中学情与<strong>门禁无感人脸考勤</strong>实时入库 → 结班式安排、学分自动核算、优秀学员评选与<strong>离线防伪电子证书</strong>生成。</p>
+          </div>
+          <div class="sop-stage" style="border-top:3px solid #D97706;">
+            <div class="sop-stage-hd" style="color:#92400E;"><span>PHASE 03 · 训后归档自动化（4节点）</span><span>闭环数据回流</span></div>
+            <p>结班1周内完成分章节审校《结班报告》报院批 → 结班2周内完成<strong>费用决算会签综合部</strong>及多维教学评估 → 结班当月完成训后岗位成效跟踪回访与<strong>涉密离线摆渡包刻录归档</strong> → 复盘数据回流支撑下年计划编制。</p>
+          </div>
+        </div>
+
+        
+        <!-- ==================== PANE 1: 方案B 功能对比 (严格对齐 V3.5 目录) ==================== -->
+        <div class="dim-pane" id="pane-func">
+          <h3 style="margin-top:6px;">维度一：全量功能逐项对比（严格按《需求说明书V3.5_优化版》第四章目录 · 16 项明细）</h3>
+          <div class="dim-banner">
+            <strong>【维度一说明 · 全量功能对比】</strong>严格遵循《教培系统建设项目需求说明书V3.5_优化版》第四章「应用系统设计要求」官方目录结构——<strong>（一）内网综合管理平台 1~11 项（其中第 2 项“培训全周期管理”按原文拆解为 (1)~(5) 五个子项）+（二）教务决策可视化大屏</strong>，共 <strong>16 个标准功能模块</strong>逐一核验我方原型实现度与知学云原生覆盖度。
+          </div>
+
+          <div class="filter-bar" id="funcFilter">
+            <button class="filter-btn active" data-func="all">全部 V3.5 功能模块 (16)</button>
+            <button class="filter-btn" data-func="gap">知学云缺失 / 需重度二开 (7)</button>
+            <button class="filter-btn" data-func="basic">知学云仅轻量通用覆盖 (8)</button>
+            <button class="filter-btn" data-func="diff">定位分化 (1)</button>
+          </div>
+
+          <div class="table-wrap">
+            <table id="funcTable">
+              <thead>
+                <tr>
+                  <th style="width:115px;">V3.5 章节号</th>
+                  <th style="width:180px;">V3.5 官方模块名称</th>
+                  <th style="width:37%;">我方 V3.5 功能范围与原型落地实证</th>
+                  <th style="width:27%;">知学云「智慧教学管理平台」对应功能</th>
+                  <th style="width:130px;">知学云覆盖度</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-func="basic">
+                  <td><strong>（一）1</strong></td>
+                  <td><strong>教学管理</strong><br><span class="proto-tag">teaching.html</span></td>
+                  <td>课程体系构建与分层分类、目录编目、教学方案维护、多维检索；确立<strong>“体系→课程→原子课时→排课单”</strong>标准底座及培训类别树配置。</td>
+                  <td>支持企业在线课程库、专题目录与标签分类；以音视频微课和岗位序列为主，无“线下原子课时”教务编目模型。</td>
+                  <td><span class="status cov-basic">⚠️ 仅通用基础版</span></td>
+                </tr>
+
+                <tr data-func="basic">
+                  <td><strong>（一）2.(1)</strong></td>
+                  <td><strong>培训全周期 · 班次与学员管理</strong><br><span class="proto-tag">training.html</span></td>
+                  <td>覆盖班次立项维护、<strong>调训通知富文本签发与回执催办</strong>、学员名单批量导入、报名录取审核、分组分班、请假呈批、优秀学员评定及动态更新。</td>
+                  <td>含通知公告、学籍管理、班务管理、成员管理、随堂花名册；面向企业内训班，无党政机关调训回执催办与处批流程。</td>
+                  <td><span class="status cov-basic">⚠️ 仅通用基础版</span></td>
+                </tr>
+
+                <tr data-func="gap">
+                  <td><strong>（一）2.(2)</strong></td>
+                  <td><strong>培训全周期 · 教学排程与调度</strong><br><span class="proto-tag">training-schedule.html</span></td>
+                  <td>原生<strong>日/周/月日历拖拽排课</strong>、全院并发透视、<strong>秒级四重防冲突校验（师/室/班/同类课）</strong>、排课审批单流转、<strong>跨班合班智能建议</strong>及自动生成师资邀请函。</td>
+                  <td>仅具备基础日历排期组件与简单时间冲突提示；<strong>无可视化拖拽四重动态校验，无跨班同类课合班整合算法</strong>。</td>
+                  <td><span class="status cov-none">❌ 核心算法缺失</span></td>
+                </tr>
+
+                <tr data-func="gap">
+                  <td><strong>（一）2.(3)</strong></td>
+                  <td><strong>培训全周期 · 考核与证书管理</strong><br><span class="proto-tag">training.html (考务/证书)</span></td>
+                  <td>支持线下/随堂考务编排与<strong>考场自动排座</strong>、成绩综合录入与统计、结业电子证书批量生成及<strong>纯内网无公网环境下的本地防伪签章验真</strong>。</td>
+                  <td>强于线上题库与万人在线网考，支持常规电子证书发放；<strong>缺乏线下考场排座管理及纯物理隔离内网离线防伪验签机制</strong>。</td>
+                  <td><span class="status cov-none">❌ 离线验签缺失</span></td>
+                </tr>
+
+                <tr data-func="basic">
+                  <td><strong>（一）2.(4)</strong></td>
+                  <td><strong>培训全周期 · 教学评估与跟踪</strong><br><span class="proto-tag">training.html (评估/跟踪)</span></td>
+                  <td>支持多方评价指标配置（督导/巡课/评学/评教）、<strong>纸质评教模板导入 + 第三方问卷数据导入</strong>、多维评估分析报告及<strong>训后岗位成效回访跟踪台账</strong>。</td>
+                  <td>提供线上问卷调查与课程星级评价；缺乏线下纸质评教批量导入通道及干部返岗后的长周期训后成效跟踪闭环。</td>
+                  <td><span class="status cov-basic">⚠️ 仅线上问卷版</span></td>
+                </tr>
+
+                <tr data-func="gap">
+                  <td><strong>（一）2.(5)</strong></td>
+                  <td><strong>培训全周期 · 经费与会务管理</strong><br><span class="proto-tag">training.html</span><span class="proto-tag">report.html</span></td>
+                  <td>集成三大硬核能力：① <strong>四维培训经费事中硬控制与扫描凭证链审计</strong>；② 住宿安排与住宿费预算实时联动；③ <strong>外事礼宾居中交替辐射排座与桌签批量联动打印</strong>；④ 分章节审校一键生成标准《结班报告》。</td>
+                  <td>仅有训后“结算管理”简单记账列表与线上“学情报告”；<strong>完全无外事礼宾排座桌签算法、无财政定额事中硬拦截、无部委规范结班报告审校合成器</strong>。</td>
+                  <td><span class="status cov-none">❌ 三大刚需缺失</span></td>
+                </tr>
+
+                <tr data-func="gap">
+                  <td><strong>（一）3</strong></td>
+                  <td><strong>教学资源管理</strong><br><span class="proto-tag">resource.html</span><span class="proto-tag">version-diff.html</span><span class="proto-tag">exam-paper.html</span></td>
+                  <td>教案/教材/案例/自他/题库试卷六库一体；独有<strong>标准教案段落级双视图修订留痕对比与一键回滚</strong>、涉密受控水印预览与权限申请矩阵、<strong>离线智能抽题组卷与仿真纸质试卷排版打印</strong>。</td>
+                  <td>侧重音视频微课、知识分享与线上题库；<strong>无集体备课教案段落级版本Diff留痕回滚，无细粒度涉密文档受控申请与纸质考卷排版工具</strong>。</td>
+                  <td><span class="status cov-none">❌ 备课留痕缺失</span></td>
+                </tr>
+
+                <tr data-func="basic">
+                  <td><strong>（一）4<br><span style="font-weight:400;font-size:11.5px;">含§3.1.3互通</span></strong></td>
+                  <td><strong>教务运行与综合调度（含归档互通）</strong><br><span class="proto-tag">edu.html</span><span class="proto-tag">archive.html</span></td>
+                  <td>全院年度计划编报与院领导快捷批示、全院周期大课表、<strong>组织员带班工作量自动核算</strong>、综合台账、结算模板维护；配齐与部人事/OA互通接口及<strong>三步法涉密离线归档摆渡包预检与刻录审计</strong>。</td>
+                  <td>提供企业培训计划与学时统计报表；缺乏全院大课表统筹、带班工作量核算，且<strong>无涉密网离线物理摆渡数据包预检与刻录审计机制</strong>。</td>
+                  <td><span class="status cov-basic">⚠️ 缺统筹与摆渡</span></td>
+                </tr>
+
+                <tr data-func="basic">
+                  <td><strong>（一）5</strong></td>
+                  <td><strong>师资库管理</strong><br><span class="proto-tag">teacher-lib.html</span><span class="proto-tag">teacher-report-view.html</span></td>
+                  <td>师资基础库、<strong>左右双树分级分类标签</strong>、职级课酬上限自动联动提示、授课履历沉淀、异常评价分过滤及一键输出独立<strong>《师资教学质量综合评价报告》</strong>。</td>
+                  <td>支持企业内训师/外聘讲师库、星级与课酬记录；缺乏党政干院职级课酬合规联动及独立规范的师资教学质量综合评价报告。</td>
+                  <td><span class="status cov-basic">⚠️ 仅常规讲师库</span></td>
+                </tr>
+
+                <tr data-func="basic">
+                  <td><strong>（一）6</strong></td>
+                  <td><strong>学员库管理</strong><br><span class="proto-tag">student-lib.html</span></td>
+                  <td>外交外事干部全生命周期参训档案（司局/驻外单位、<strong>职务职级礼宾权重属性</strong>）、多维检索、参训经历自动归集、分课程学时学分台账与证书穿透调阅。</td>
+                  <td>支持企业员工人才档案、学分积分与岗位能力模型；缺乏外事干部职级礼宾属性及与部委干部人事履历标准的原生对齐。</td>
+                  <td><span class="status cov-basic">⚠️ 企培员工模型</span></td>
+                </tr>
+
+                <tr data-func="gap">
+                  <td><strong>（一）7<br><span style="font-weight:400;font-size:11.5px;">含§7物理点位</span></strong></td>
+                  <td><strong>考勤与场地管理</strong><br><span class="proto-tag">room.html</span></td>
+                  <td>精准建模五/六层多规格教室(40~144人)与备课室、独立维护<strong>校外现场教学点库</strong>；支持<strong>学员照片一次导入 + 纯内网 TCP/IP 直连人脸门禁终端下发特征库与识别日志回传</strong>。</td>
+                  <td>仅有简单场地列表，无干院现场教学点基地库；考勤依赖手机端 GPS/二维码/线上活体，无纯内网实体门禁硬件特征库本地同步管控。</td>
+                  <td><span class="status cov-none">❌ 离线门禁缺失</span></td>
+                </tr>
+
+                <tr data-func="basic">
+                  <td><strong>（一）8</strong></td>
+                  <td><strong>业务审批管理</strong><br><span class="proto-tag">approve.html</span></td>
+                  <td>内置立项、教学方案、年度计划、排课单、预算决算、调停课、请假 <strong>7 类机关红头《审批呈批单》原貌流转与会签留痕</strong>，撤回/驳回时自动释放预锁定教室与师资。</td>
+                  <td>基于 ZPaaS 提供通用扁平工作流表单配置；无部委标准红头《呈批单》公文版式，无撤回审批自动释放排课场地锁的事务联动。</td>
+                  <td><span class="status cov-basic">⚠️ 仅通用表单流</span></td>
+                </tr>
+
+                <tr data-func="gap">
+                  <td><strong>（一）9</strong></td>
+                  <td><strong>组织与权限管理</strong><br><span class="proto-tag">org.html</span></td>
+                  <td>原生落实涉密<strong>“三员分立（系统/安全保密/安全审计）”物理级互斥制约与双人复核记录</strong>；叠加院领导(一级)/处领导(二级)/组织员(三级)业务角色及班次/档案级细粒度数据隔离。</td>
+                  <td>采用商业集团“总分院多级管理员（RBAC）”权限模型；<strong>非涉密级原生三员分立互斥架构</strong>，无三员互斥校验与安全复核专页。</td>
+                  <td><span class="status cov-none">❌ 非原生三员分立</span></td>
+                </tr>
+
+                <tr data-func="gap">
+                  <td><strong>（一）10</strong></td>
+                  <td><strong>系统基础设置</strong><br><span class="proto-tag">base.html</span></td>
+                  <td>维护字典、培训类别、课程分类，核心内置<strong>《培训经费管理办法实时校验规则库》（5类禁止提交+2类特批、额度分级、版本生效期）</strong>及全量不可篡改审计日志抽屉追溯。</td>
+                  <td>提供常规系统参数、角色菜单配置与基础操作日志；<strong>无面向财政审计标准的培训经费定额规则库引擎</strong>。</td>
+                  <td><span class="status cov-none">❌ 缺经费规则库</span></td>
+                </tr>
+
+                <tr data-func="basic">
+                  <td><strong>（一）11<br><span style="font-weight:400;font-size:11.5px;">含工作台底座</span></strong></td>
+                  <td><strong>教研工作台（及管理待办/检索）</strong><br><span class="proto-tag">workbench.html</span><span class="proto-tag">notice.html</span><span class="proto-tag">search.html</span></td>
+                  <td>为授课教员提供专属空间（在线备课草稿、课件管理、周课表、只读评教查阅、<strong>咨政材料提报</strong>）；配套管理四区待办台、离线短信待发导出队列与六域全局综合搜索。</td>
+                  <td>具备讲师个人中心（上传视频课、查看课酬与评分）及学员门户；缺乏干院教研人员集体备课草稿、咨政成果提报及内网离线短信导出能力。</td>
+                  <td><span class="status cov-basic">⚠️ 缺备课与咨政</span></td>
+                </tr>
+
+                <tr data-func="diff">
+                  <td><strong>（二）大屏</strong></td>
+                  <td><strong>教务决策与运营可视化大屏</strong><br><span class="proto-tag">screen.html</span><span class="proto-tag">screen.js</span></td>
+                  <td>纯离线三屏轮播指挥中心（办班总览/学情考勤/师资场地负荷），支持质量预警、资源瓶颈预警、<strong>调训应训缺口分析及全图表点击穿透下钻</strong>，预留内网 AI 接口。</td>
+                  <td>提供企业学习 BI 看板（在线人数/学时排行/考试通过率）及云端 AI 伴学/陪练生态；但缺乏外事干部调训应训缺口下钻与线下教室负荷瓶颈预警。</td>
+                  <td><span class="status cov-diff">🔄 线上BI vs 干院调度</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ==================== PANE 2: 核心亮点对比 (保留现有13大攻防专题) ==================== -->
+        <div class="dim-pane" id="pane-highlight" style="padding-top:18px;border-top:2px dashed var(--slate-200);">
+          <h3 style="margin-top:4px;">维度二：核心亮点与攻防壁垒对比（招投标拉分壁垒视角 · 13 大专题）</h3>
+          <div class="dim-banner" style="border-left-color:#047857;">
+            <strong>【维度二说明 · 核心亮点对比】</strong>从<strong>纯书面技术标拉分与标书真实界面实证（书面准 POC）</strong>视角，将我方最具差异化杀伤力的技术算法、涉密合规与教务体验聚合成 <strong>13 大核心亮点专题</strong>，与知学云进行穿透式优劣势对决。
+          </div>
+<div class="filter-bar" id="compareFilter">
+          <button class="filter-btn active" data-filter="all">全部核心模块 (13)</button>
+          <button class="filter-btn" data-filter="strong">我方绝对优势 · 独家壁垒 (6)</button>
+          <button class="filter-btn" data-filter="win">我方占优 · 深度契合 (6)</button>
+          <button class="filter-btn" data-filter="comp">场景分化 · 知学云强项 (1)</button>
+        </div>
+
+        <div class="table-wrap">
+          <table id="compareTable">
+            <thead>
+              <tr>
+                <th style="width:44px;">#</th>
+                <th style="width:195px;">V3.5 核心模块与原型映射</th>
+                <th style="width:39%;">我方系统深度裂解能力（V3.5 规范 + 原型实证）</th>
+                <th style="width:28%;">知学云「智慧教学管理平台」实底</th>
+                <th style="width:120px;">对标判定</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-cat="win">
+                <td><strong>01</strong></td>
+                <td>
+                  <strong>双态工作台与协同检索中枢</strong><br>
+                  <span class="prd-tag">V3.5 §3.1 / §4(一).11</span>
+                  <span class="proto-tag">workbench.html</span>
+                  <span class="proto-tag">notice.html</span>
+                  <span class="proto-tag">search.html</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>管理+教研双工作台无缝切换</strong>：管理端四区极简聚合（待办审批/今日课表与班次/风险预警/自定义快捷入口）；<strong>专属教研工作台</strong>覆盖在线备课草稿、课件管理、周课表、只读评教结果查阅与<strong>咨政材料提报</strong>。</li>
+                    <li><strong>五维协同通知与离线短信导出</strong>：区分待办审批/业务提醒/风险预警/系统公告，支持纯内网<strong>导出短信待发送队列</strong>；配齐跨班次/课程/师资/学员/审批/题库<strong>六域全局高亮检索</strong>。</li>
+                  </ul>
+                </td>
+                <td>偏向企业员工自主选学门户（学分/排行榜/推荐课）；缺乏授课教员备课与咨政提报专属空间，无内网离线短信待发导出机制，后台菜单层级较深。</td>
+                <td><span class="status st-win">我方占优</span></td>
+              </tr>
+
+              <tr data-cat="win">
+                <td><strong>02</strong></td>
+                <td>
+                  <strong>教学管理与原子课时模型</strong><br>
+                  <span class="prd-tag">V3.5 §3.4 / §4(一).1</span>
+                  <span class="proto-tag">teaching.html</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>严密教务五级标准模型</strong>：严格定义“顶层课程体系（如习近平新时代中国特色社会主义思想体系）→ 独立课程（预设总课时）→ <strong>课时（最小排课与资源审批原子单元）</strong>→ 排课申请单 → 班级/教师/教室三视图课表”。</li>
+                    <li>支持分层分类课程目录树、培训类别动态树配置、教学方案维护及课程批量启停控制。</li>
+                  </ul>
+                </td>
+                <td>按企业 HR 岗位序列（新员工/管培生/管理/技术/技能序列）挂载音视频课与线上专题，缺乏以“线下原子课时+排课申请单”驱动的严密教务底层模型。</td>
+                <td><span class="status st-win">我方更贴合</span></td>
+              </tr>
+
+              <tr data-cat="strong">
+                <td><strong>03</strong></td>
+                <td>
+                  <strong>培训班全周期闭环管理</strong><br>
+                  <span class="prd-tag">V3.5 §3.2 / §4(一).2</span>
+                  <span class="proto-tag">training.html (496KB)</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>完整承载 15 节点办训 SOP</strong>：单班次内聚 <strong>13 大全链路页签</strong>（教学方案呈批与撤回解锁场地、调训/报名富文本通知与回执催办、从排课一键生成师资邀请函、学员学籍/请假/评优/结业审核、课表、节次考勤、住宿分房与预算联动、随堂考务与考场自动排座、成绩单、纸质+第三方评估导入、预算决算、证书、结班报告、训后岗位成效回访）。</li>
+                  </ul>
+                </td>
+                <td>官网仅列培前/中/后 12 项轻量通用功能（通知、资料分发、随堂花名册、问卷等）；无外事干院多级请示会签 SOP、无调训回执催办、无师资邀请函与住宿预算联动。</td>
+                <td><span class="status st-win-strong">我方绝对优势</span></td>
+              </tr>
+
+              <tr data-cat="strong">
+                <td><strong>04</strong></td>
+                <td>
+                  <strong>可视化拖拽排课、合班优化与外事礼宾排座引擎</strong><br>
+                  <span class="prd-tag">V3.5 §4(一).2(2)(5)</span>
+                  <span class="proto-tag">training-schedule.html</span>
+                  <span class="proto-tag">room.html</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>多视图拖拽排课与四重防冲突</strong>：支持日/周/月视图与“全院占用/仅本班”切换、并发课程透视（<code>concurrentModal</code>）与撤销回退；秒级校验师/室/班时间冲突，并<strong>自动识别近期同类课程弹窗建议合班授课</strong>（<code>applyMergeWithCard</code>）。</li>
+                    <li><strong>外事礼宾排座与桌签联动算法</strong>：内置 <code>Math.abs(col-mid)</code> <strong>前排居中为主位、向左右两侧依序交替辐射</strong>算法，按干部职级自动排座（支持合班排座），拖拽微调后一键渲染外事标准<strong>桌签批量打印预览</strong>。</li>
+                  </ul>
+                </td>
+                <td>仅有基础日历组件与简单时间冲突提示；<strong>完全无跨班同类课合班建议算法、无外事礼宾居中交替辐射排座及桌签联动排版打印</strong>（ZPaaS 低代码无法拖拽拼出该交互与算法）。</td>
+                <td><span class="status st-win-strong">我方绝对优势</span></td>
+              </tr>
+
+              <tr data-cat="win">
+                <td><strong>05</strong></td>
+                <td>
+                  <strong>教学资源六库、教案留痕对比与智能组卷排版</strong><br>
+                  <span class="prd-tag">V3.5 §4(一).3</span>
+                  <span class="proto-tag">resource.html (314KB)</span>
+                  <span class="proto-tag">version-diff.html</span>
+                  <span class="proto-tag">exam-paper.html</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>六库统一与涉密受控授权</strong>：教案库、教材库、案例库、自他资源库、题库试卷库、标签库；内置资源成员权限矩阵、<strong>受控水印预览</strong>、在线权限申请与所有权移交。</li>
+                    <li><strong>集体备课教案段落级留痕审查</strong>：支持标准教案双栏对比（Split）与行内红绿增删留痕审查视图（Inline）及历史版本一键回滚。</li>
+                    <li><strong>离线智能组卷与仿真考卷打印</strong>：支持题型矩阵自动抽题、题序微调/乱序、答案显隐切换与内网纸质试卷标准排版打印。</li>
+                  </ul>
+                </td>
+                <td>强在音视频课程库、“知学荟”通用版权课与万人在线考试；<strong>缺乏党政干院集体备课急需的“教案段落级版本留痕对比回滚”、涉密文档受控申请矩阵与线下标准纸质试卷排版引擎</strong>。</td>
+                <td><span class="status st-win">我方更贴合</span></td>
+              </tr>
+
+              <tr data-cat="win">
+                <td><strong>06</strong></td>
+                <td>
+                  <strong>教务运行统筹与全院综合调度</strong><br>
+                  <span class="prd-tag">V3.5 §4(一).4</span>
+                  <span class="proto-tag">edu.html (189KB)</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>年度教学计划编报与院批闭环</strong>：支持年度/周期重点班次计划批量在线编辑、Excel 导入、指标自动重算、呈报院领导批示（含快捷审批意见填充）。</li>
+                    <li><strong>全院大课表与工作量核算</strong>：自动汇聚生成全院周期排程大课表、自动核算组织员/带班教师工作量、维护全院综合教务台账与结算报告标准模板。</li>
+                  </ul>
+                </td>
+                <td>侧重企业部门培训计划汇总与员工在线学时达标统计，缺乏干部学院教务处核心的“年度调训办班计划院批 → 全院大课表统筹 → 带班工作量自动核算”闭环。</td>
+                <td><span class="status st-win">我方占优</span></td>
+              </tr>
+
+              <tr data-cat="win">
+                <td><strong>07</strong></td>
+                <td>
+                  <strong>师资库分级分类与质量综合评价报告</strong><br>
+                  <span class="prd-tag">V3.5 §4(一).5</span>
+                  <span class="proto-tag">teacher-lib.html</span>
+                  <span class="proto-tag">teacher-report-view.html</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>双树分级分类标签 + 课酬合规联动</strong>：支持层级/专业分类多维标签筛选，选择师资职级时自动联动提示财政课酬标准上限。</li>
+                    <li><strong>邀约闭环与独立质量评价报告</strong>：沉淀历次授课履历与多方评教档案，内置异常极端分过滤，支持一键生成可独立打印的<strong>《师资教学质量综合评价报告》</strong>。</li>
+                  </ul>
+                </td>
+                <td>具备常规企业内训师/外聘讲师档案、等级与课酬记录，缺乏外事干院“职级课酬红线提示 + 授课邀请函公文追踪 + 独立规范师资质量评价报告”。</td>
+                <td><span class="status st-win">我方占优</span></td>
+              </tr>
+
+              <tr data-cat="win">
+                <td><strong>08</strong></td>
+                <td>
+                  <strong>外交外事干部学员库与参训画像</strong><br>
+                  <span class="prd-tag">V3.5 §3.3 / §4(一).6</span>
+                  <span class="proto-tag">student-lib.html</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>外事干部专属履历与人事互通</strong>：围绕司局/驻外单位、行政职务职级（直接驱动礼宾排座权重）、历次调训记录、分课程学时学分台账、请假频次与优秀学员记录构建精准画像，支持与<strong>部人事业务系统</strong>同步更新。</li>
+                  </ul>
+                </td>
+                <td>面向企业员工岗位胜任力模型与在线学习积分画像，缺乏外事干部职级礼宾权重属性及与部委干部人事系统的标准字段对齐。</td>
+                <td><span class="status st-win">我方更贴合</span></td>
+              </tr>
+
+              <tr data-cat="strong">
+                <td><strong>09</strong></td>
+                <td>
+                  <strong>多规格场地、现场教学点与离线人脸门禁联动</strong><br>
+                  <span class="prd-tag">V3.5 §4(一).7 / §7布线</span>
+                  <span class="proto-tag">room.html</span>
+                  <span class="proto-tag">report.html</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>五/六层真实空间建模 + 现场教学点库</strong>：1:1 映射学院 40/46/48/64+8/144人教室与备课室矩阵；独立建设校外<strong>现场教学点资源库</strong>（路线/承载力/基地评价）。</li>
+                    <li><strong>纯内网人脸门禁本地 TCP/IP 联动</strong>：内置考勤门禁终端台账与识别日志，支持<strong>学员照片一次导入、离线内网直连下发特征库（<code>dvSend</code>）与无感刷脸签到联动</strong>。</li>
+                  </ul>
+                </td>
+                <td>仅有基础“场地”字段，无干院现场教学点库；考勤强依赖手机 App GPS定位/扫码（App Store 高频吐槽定位漂移与活体识别报错），缺乏纯内网门禁硬件本地下发管控。</td>
+                <td><span class="status st-win-strong">我方绝对优势</span></td>
+              </tr>
+
+              <tr data-cat="strong">
+                <td><strong>10</strong></td>
+                <td>
+                  <strong>机关红头《审批呈批单》7 类公文流转引擎</strong><br>
+                  <span class="prd-tag">V3.5 §3.2 / §4(一).8</span>
+                  <span class="proto-tag">approve.html (109KB)</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>1:1 还原机关红头呈批件原貌</strong>：原生内置<strong>教学方案请示、年度计划呈批、排课申请、经费预决算会签、办班立项、调停课、学员请假</strong> 7 大红头呈批单模板渲染器。</li>
+                    <li><strong>资源锁联动</strong>：支持处批、跨部会签、院批全链路留痕；单据撤回或驳回时<strong>自动解除预锁定的教室场地与师资档期</strong>。</li>
+                  </ul>
+                </td>
+                <td>采用 ZPaaS 通用扁平化电子表单审批，缺乏党政部委标准红头《审批呈批单》版式及“撤回呈批单自动释放排课教室资源锁”的深度业务事务耦合。</td>
+                <td><span class="status st-win-strong">我方绝对优势</span></td>
+              </tr>
+
+              <tr data-cat="strong">
+                <td><strong>11</strong></td>
+                <td>
+                  <strong>原生涉密“三员分立”+ 三级业务管理员体系</strong><br>
+                  <span class="prd-tag">V3.5 §3.3 / §4(一).9</span>
+                  <span class="proto-tag">org.html (77KB)</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>涉密三员物理级互斥</strong>：原生实现系统管理员、安全保密管理员、安全审计员职责矩阵隔离、互斥校验与<strong>关键操作复核台账</strong>，落实全流程不可篡改日志（<code>base.html</code>）。</li>
+                    <li><strong>三级业务管理映射</strong>：精准落地院领导（一级全局）→ 处领导（二级分管监督）→ 组织员/带班老师（三级实操）及按班次/档案粒度的数据隔离。</li>
+                  </ul>
+                </td>
+                <td>以大型企业集团“总分院分级管理员（RBAC）”为核心，非国家涉密信息系统原生三员分立互斥架构（无三员互斥校验与安全复核专页，重构成本极高）。</td>
+                <td><span class="status st-win-strong">我方绝对优势</span></td>
+              </tr>
+
+              <tr data-cat="strong">
+                <td><strong>12</strong></td>
+                <td>
+                  <strong>四维经费硬控规则库、结班报告与涉密离线摆渡归档</strong><br>
+                  <span class="prd-tag">V3.5 §4(一).2(5)/§3.1.3</span>
+                  <span class="proto-tag">base.html</span>
+                  <span class="proto-tag">report.html</span>
+                  <span class="proto-tag">archive.html</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>实时预算规则库引擎</strong>：独立维护科目、计量标准、审批额度分级及版本生效期，内置 <strong>5 类超标禁止提交硬阻断 + 2 类特批</strong>，并与住宿分房、课酬及扫描凭证链强绑定。</li>
+                    <li><strong>分章节审校结班报告 + 离线摆渡三步闭环</strong>：支持结班报告分章编辑审校一键导出规范 PDF；归档模块原生具备<strong>① 档案完整性硬预检 → ② 生成独立干部系统标准加密摆渡包 → ③ 离线刻录与物理摆渡审计日志</strong>。</li>
+                  </ul>
+                </td>
+                <td>仅提供训后“结算管理”通用记账表，<strong>无财政定额规则库与事中禁止提交硬拦截</strong>；仅有线上学情统计无部委规范结班报告审校器，<strong>完全无涉密网离线物理摆渡包预检与刻录审计模块</strong>。</td>
+                <td><span class="status st-win-strong">我方绝对优势</span></td>
+              </tr>
+
+              <tr data-cat="comp">
+                <td><strong>13</strong></td>
+                <td>
+                  <strong>三屏下钻决策大屏 vs 云端 AI 大规模网院</strong><br>
+                  <span class="prd-tag">V3.5 §4(二) / §6</span>
+                  <span class="proto-tag">screen.html</span>
+                  <span class="proto-tag">screen.js</span>
+                </td>
+                <td>
+                  <ul class="bullet-tight">
+                    <li><strong>纯离线三屏轮播与下钻指挥舱</strong>：覆盖办班总览、学情考勤动态、师资与场地负荷三屏，原生提供质量预警、资源瓶颈预警及<strong>调训应训缺口分析与点击明细下钻</strong>，并预留未来内网 AI 接入扩展网关。</li>
+                    <li>注：一期聚焦纯内网线下脱产办训教务中枢，不设公网视频直播与数字人做课。</li>
+                  </ul>
+                </td>
+                <td><strong>知学云核心王牌</strong>：万人高并发在线网考、直播课堂、“知学荟”海量版权课及 AI 伴学/AI 陪练/AI 智课生态极强（但强依赖云端或昂贵本地 GPU 集群，在纯物理隔离涉密内网中难以开箱可用）。</td>
+                <td><span class="status st-comp">场景分化(线上AI知学云强)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        </div>
+      </section>
+
+      <!-- Section 08: V2.1 No-POC Pure Written Bidding Strategy Pressure Test -->
+      <section class="section" id="sec-pressure">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">08</span>无现场 POC 模式下《控标策略 V2.1》纯书面评标压力测试与双敌拦截</div>
+          <div>
+            <span class="prd-tag">同步 V2.1 无现场POC纯书面锁胜版</span>
+            <span class="src src-analysis">14 项条款 + 20 分标书界面实证 + 双敌矩阵</span>
+          </div>
+        </div>
+
+        <p>
+          针对采购人<strong>不组织开标现场离线 POC 演示</strong>的实际评审规则，为严防竞对靠“文字照搬标书 + ZPaaS 低代码万能口头承诺”混取技术分，《控标策略 V2.1》将原现场演示全面转化为<strong>“20 分标书内嵌真实系统界面截图与院区点位深化实证（书面准 POC）+ ★号进场首周内网核验无条件解约红线”</strong>：
+        </p>
+
+        <div class="dissect-grid">
+          <div class="dissect-card" style="background:#F8FAFC;border-color:#CBD5E1;">
+            <div class="dissect-num">30<span>分（法规底线）</span></div>
+            <div class="dissect-lbl">价格分 · 严控最低权重</div>
+            <div class="dissect-sub">按财政部87号令卡死最低30%比重，削弱恶意低价冲标。</div>
+          </div>
+          <div class="dissect-card" style="background:#FFFBEB;border-color:#FDE68A;">
+            <div class="dissect-num" style="color:#B45309;">15<span>分（↓5分止损）</span></div>
+            <div class="dissect-lbl">商务与精准业绩分 · 剥离网院</div>
+            <div class="dissect-sub">线下教务业绩6分(纯网院不计分) + 4项专有软著6分 + <strong>CMMI/ISO压至2分</strong> + 团队1分。</div>
+          </div>
+          <div class="dissect-card" style="background:#EFF6FF;border-color:#BFDBFE;">
+            <div class="dissect-num" style="color:#1D4ED8;">35<span>分（架构与算法）</span></div>
+            <div class="dissect-lbl">技术方案与专属算法逻辑分</div>
+            <div class="dissect-sub">四重排课6分 + 外事礼宾排座6分 + 四维经费硬控6分 + 教案留痕/红头/摆渡6分 + 信创三员6分 + 评价大屏5分。</div>
+          </div>
+          <div class="dissect-card" style="background:#ECFDF5;border-color:#6EE7B7;">
+            <div class="dissect-num" style="color:#047857;">20<span>分（书面准POC）</span></div>
+            <div class="dissect-lbl">标书真实界面实证与工程深化</div>
+            <div class="dissect-sub">6大复杂场景须附完整系统界面截图与五/六层点位图纸（无真实对应图得0~1分），<strong>预计净赢 11–13 分！</strong></div>
+          </div>
+        </div>
+
+        <div class="filter-bar" id="pressFilter">
+          <button class="filter-btn active" data-p="all">全部 V2.1 书面控标条款 (14)</button>
+          <button class="filter-btn" data-p="star" style="border-color:#DC2626;color:#B91C1C;">第一层 · ★实质性一票否决 (3)</button>
+          <button class="filter-btn" data-p="tech">第二层 · 技术与算法方案分 (7)</button>
+          <button class="filter-btn" data-p="biz">第三层 · 商务软著与精准业绩 (4)</button>
+        </div>
+
+        <div class="table-wrap">
+          <table id="pressTable">
+            <thead>
+              <tr>
+                <th style="width:95px;">所属层级</th>
+                <th style="width:240px;">V2.1 纯书面控标条款与证明口径</th>
+                <th style="width:210px;">知学云书面应标实底测试</th>
+                <th style="width:125px;">防御评级</th>
+                <th>无现场 POC 下的闭环锁定机制</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-p="star" style="background:#FFFBFB;">
+                <td><span class="status st-danger">★ 一票否决</span></td>
+                <td><strong>★1 全栈信创“三件套”精确原厂互认</strong><br><span style="font-size:12px;color:#64748B;">OS + 数据库 + 中间件原厂公章互认缺一不可</span></td>
+                <td>官网仅公示<strong>麒麟、方德 OS 认证</strong>，且证书产品多为“知学云在线学习系统”。</td>
+                <td><span class="status st-win-strong">🔒 书面硬拦截</span></td>
+                <td>要求标书<strong>同时附齐三类原厂公章证书</strong>，且产品名须对应“教务/干部培训管理”，禁拿网院证书混充。</td>
+              </tr>
+              <tr data-p="star" style="background:#FFFBFB;">
+                <td><span class="status st-danger">★ 一票否决</span></td>
+                <td><strong>★2 原生“三员分立”截图实证 + 首周核验承诺</strong><br><span style="font-size:12px;color:#64748B;">禁以常规多级 RBAC 分级授权替代</span></td>
+                <td>采用集团“总分院多级管理员”模型；无现成三员职责互斥与双人复核系统界面。</td>
+                <td><span class="status st-win-strong">🔒 书面+履约双锁</span></td>
+                <td>不设开标POC，改为<strong>标书必附三员互斥专页真实截图 + 盖章承诺签约5日内支持内网核验（不达标无条件解约没收保证金）</strong>。</td>
+              </tr>
+              <tr data-p="star" style="background:#FFFBFB;">
+                <td><span class="status st-danger">★ 一票否决</span></td>
+                <td><strong>★3 零外网离线组件清单 + 无外部GPU承诺</strong><br><span style="font-size:12px;color:#64748B;">严禁公网CDN/API/小程序及绑定GPU算力</span></td>
+                <td>AI 伴学/陪练/数字人强依赖云端或百万级 GPU；直播与部分前端资源存在外网依赖。</td>
+                <td><span class="status st-win-strong">🔒 书面+履约双锁</span></td>
+                <td>要求标书提供<strong>《离线组件部署版本清单》+ 零公网/无外部GPU实质性承诺函</strong>（纳入进场首周断网验收一票否决条款）。</td>
+              </tr>
+
+              <tr data-p="tech">
+                <td><span class="status st-comp">技术方案</span></td>
+                <td><strong>技1 多视图日历拖拽排课与四重防冲突+合班算法</strong></td>
+                <td>仅有基础排期组件与简单时间校验，写不出跨班同类课合班整合算法闭环。</td>
+                <td><span class="status st-win">🎯 高分差壁垒</span></td>
+                <td>明确静态表单录入方案扣减一半以上分数，要求提供四重动态校验与合班状态流转图。</td>
+              </tr>
+              <tr data-p="tech">
+                <td><span class="status st-comp">技术方案</span></td>
+                <td><strong>技2 外事礼宾居中交替辐射排座与桌签同步算法</strong></td>
+                <td><strong>完全无此原生功能</strong>；短期写标书极易遗漏奇偶列中轴辐射与合班排座细节。</td>
+                <td><span class="status st-win-strong">🏆 独家满分项</span></td>
+                <td>考察中轴辐射数学逻辑、拖拽微调与外事桌签排版联动机制，通用厂商仅得 0~2 分。</td>
+              </tr>
+              <tr data-p="tech">
+                <td><span class="status st-comp">技术方案</span></td>
+                <td><strong>技3 培训经费四维定额规则引擎与凭证链审计</strong></td>
+                <td>仅有训后“结算管理”记账列表，缺乏按专家职级课酬与住宿分房联动的事中阻断模型。</td>
+                <td><span class="status st-win-strong">🏆 独家满分项</span></td>
+                <td>严格区分“实时定额规则库事中硬阻断”与“普通台账记账”，拉开方案专业度分差。</td>
+              </tr>
+              <tr data-p="tech">
+                <td><span class="status st-comp">技术方案</span></td>
+                <td><strong>技4 电子证书纯内网离线防伪签章与本地验真</strong></td>
+                <td>常规电子证书依赖在线查验，缺乏纯物理隔离内网下的数字水印与本地验签架构。</td>
+                <td><span class="status st-win">🎯 高分差壁垒</span></td>
+                <td>紧扣涉密内网无公网 CA 痛点，凸显我方本地离线防伪验真架构设计。</td>
+              </tr>
+              <tr data-p="tech">
+                <td><span class="status st-comp">技术方案</span></td>
+                <td><strong>技5 标准教案段落留痕、红头呈批与涉密离线摆渡</strong></td>
+                <td>无集体备课教案段落 Diff 回滚、无机关红头呈批单解锁场地、无离线摆渡三步预检。</td>
+                <td><span class="status st-win-strong">🏆 独家满分项</span></td>
+                <td>直击外交干院集体备课、处批院批公文规制与部人事系统物理隔离摆渡核心刚需。</td>
+              </tr>
+              <tr data-p="tech">
+                <td><span class="status st-comp">技术方案</span></td>
+                <td><strong>技6 现场教学点库与离线 TCP/IP 人脸门禁联动</strong></td>
+                <td>无现场教学点基地库；考勤偏手机定位/扫码（App 1.5分），缺教室门禁特征本地下发方案。</td>
+                <td><span class="status st-win">🎯 高分差壁垒</span></td>
+                <td>以“照片一次导入 + 教室门口实体门禁本地直连无感考勤”压制移动端打卡方案。</td>
+              </tr>
+              <tr data-p="tech">
+                <td><span class="status st-comp">技术方案</span></td>
+                <td><strong>技7 五维督导评价建模与调训缺口三屏下钻分析</strong></td>
+                <td>侧重企业员工在线学时排行与线上星级问卷，缺纸质评教导入与干部调训缺口下钻模型。</td>
+                <td><span class="status st-win">✅ 稳健拉分项</span></td>
+                <td>强化领导督导/巡课/评学/评教/训后回访五维闭环与极值自动过滤。</td>
+              </tr>
+
+              <tr data-p="biz">
+                <td><span class="status st-warn">商务 6分</span></td>
+                <td><strong>商1 “线下教务管理”精准同类业绩（每项2分）</strong><br><span style="font-size:12px;color:#64748B;">须附含排课/线下考勤/经费的合同功能清单页</span></td>
+                <td>近3年15笔公开中标（含大连高经院1591万）<strong>100%为在线网院/制课</strong>，拿不出纯线下教务清单页。</td>
+                <td><span class="status st-win-strong">🛡️ 漏洞已封堵</span></td>
+                <td>明确规定<strong>“纯在线网络学院(LMS)/远程视频课制作/网院运维不予计分”</strong>，书面评审直接剥离其业绩分！</td>
+              </tr>
+              <tr data-p="biz">
+                <td><span class="status st-warn">商务 6分</span></td>
+                <td><strong>商2 4 项线下教务/排课/经费/档案专属软著</strong></td>
+                <td>软著集中于《在线学习系统》、aPaaS 与大模型交互，难凑齐排课防冲突、经费审计与人事交换软著。</td>
+                <td><span class="status st-win">🎯 有效拉分项</span></td>
+                <td>客观证书比对计分（每项 1.5 分），预计直接领先知学云 3–4.5 分。</td>
+              </tr>
+              <tr data-p="biz">
+                <td><span class="status st-warn">商务 2分</span></td>
+                <td><strong>商3 CMMI3+ 与三项 ISO 认证（降权至合计2分）</strong></td>
+                <td>知学云全套持有，拿满 2 分。</td>
+                <td><span class="status st-warn">⚖️ 已降权止损</span></td>
+                <td>由原 4 分压降至 2 分（每项 0.5 分），彻底锁死其通用商务认证优势上限。</td>
+              </tr>
+              <tr data-p="biz">
+                <td><span class="status st-warn">商务 1分</span></td>
+                <td><strong>商4 项目经理高项/PMP + 安全负责人 CISP</strong></td>
+                <td>双方均可常规配齐，拿满 1 分。</td>
+                <td><span class="status st-warn">⚖️ 基础持平项</span></td>
+                <td>合规准入保障。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>第四层级（替代现场 POC 的书面杀招）：20 分「标书真实界面实证与工程深化」6 项评分推演</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:45px;">序号</th>
+                <th style="width:255px;">标书书面实证评分项（无真实对应截图仅得0~1分）</th>
+                <th style="width:65px;">分值</th>
+                <th>我方技术标图册筹码（21页现成原型高清标注）</th>
+                <th>知学云 20 天等标期书面应标表现</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>01</strong></td>
+                <td><strong>外事礼宾居中交替辐射排座与桌签打印预览界面实证</strong></td>
+                <td><strong>4 分</strong></td>
+                <td>直接嵌入 <code>room.html</code> 与 <code>training-schedule.html</code> 职级色块居中辐射座次图及桌签打印图 · <strong style="color:#047857;">预估 4.0 分</strong></td>
+                <td>无此功能界面，仅能文字描述或放空白低代码画布图 · <strong style="color:#B91C1C;">预估 0.5–1.0 分</strong></td>
+              </tr>
+              <tr>
+                <td><strong>02</strong></td>
+                <td><strong>日/周/月拖拽排课、全院并发透视与合班建议弹窗界面实证</strong></td>
+                <td><strong>4 分</strong></td>
+                <td><code>training-schedule.html</code> 全套多视图、红框冲突拦截与合班弹窗实景图 · <strong style="color:#047857;">预估 4.0 分</strong></td>
+                <td>仅能提供基础排期表单或通用日历截图，无合班弹窗实证 · <strong style="color:#B91C1C;">预估 1.5–2.0 分</strong></td>
+              </tr>
+              <tr>
+                <td><strong>03</strong></td>
+                <td><strong>培训经费 5+2 实时校验规则库与 7 类机关红头《呈批单》界面</strong></td>
+                <td><strong>4 分</strong></td>
+                <td><code>base.html</code> 规则库（禁止提交/特批）+ <code>approve.html</code> 红头呈批单原貌图 · <strong style="color:#047857;">预估 3.8–4.0 分</strong></td>
+                <td>仅能贴普通课酬结算列表与通用扁平白板审批表单截图 · <strong style="color:#B91C1C;">预估 1.0–1.5 分</strong></td>
+              </tr>
+              <tr>
+                <td><strong>04</strong></td>
+                <td><strong>标准教案段落级留痕对比与分章节《结班报告》合成界面实证</strong></td>
+                <td><strong>3 分</strong></td>
+                <td><code>version-diff.html</code> 双栏/行内红绿留痕图 + <code>report.html</code> 8要素结班报告预览图 · <strong style="color:#047857;">预估 3.0 分</strong></td>
+                <td>仅能贴常规课件上传列表与线上学情饼图截图 · <strong style="color:#B91C1C;">预估 0.5–1.0 分</strong></td>
+              </tr>
+              <tr>
+                <td><strong>05</strong></td>
+                <td><strong>原生“三员分立”职责复核与涉密离线摆渡包三步预检界面实证</strong></td>
+                <td><strong>3 分</strong></td>
+                <td><code>org.html</code> 三员互斥与复核台账图 + <code>archive.html</code> 完整性预检/摆渡包/刻录日志图 · <strong style="color:#047857;">预估 3.0 分</strong></td>
+                <td>仅能贴集团总分院常规角色授权菜单截图，无离线摆渡界面 · <strong style="color:#B91C1C;">预估 0.5–1.0 分</strong></td>
+              </tr>
+              <tr>
+                <td><strong>06</strong></td>
+                <td><strong>学院五层/六层房间点位布线图纸与人脸门禁本地同步界面</strong></td>
+                <td><strong>2 分</strong></td>
+                <td>V3.5 内嵌五/六层 32工位64口深化布线图 + <code>room.html</code> 门禁特征下发截图 · <strong style="color:#047857;">预估 2.0 分</strong></td>
+                <td>未深入现场踏勘，仅能画通用概念网络拓扑图 · <strong style="color:#B91C1C;">预估 0.5–1.0 分</strong></td>
+              </tr>
+              <tr style="background:#ECFDF5;font-weight:700;">
+                <td colspan="2" style="color:#065F46;">📊 20 分「标书界面实证与工程深化」纯书面评审模拟对比</td>
+                <td style="color:#065F46;">20 分</td>
+                <td style="color:#047857;font-size:14.2px;">我方预计得分：18.5 – 19.5 分（实景竣工级图册）</td>
+                <td style="color:#B91C1C;font-size:14.2px;">知学云预计得分：6.5 – 8.5 分（单环节净输 11–13 分！）</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>双线作战校验：无现场 POC 体系对「知学云」与「明高软件」的交叉书面拦截</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:205px;">关键书面防线维度</th>
+                <th>对【知学云】（企培网院龙头）书面压制效果</th>
+                <th>对【明高软件 / 道合云】（垂直党校强敌）书面压制效果</th>
+                <th style="width:165px;">我方标书实证筹码</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>信创三件套原厂公章 + 线下教务合同清单页</strong></td>
+                <td><strong style="color:#047857;">★ 主力封杀线</strong>：剔除其 15 笔纯网院/制课业绩（商务立输6分），严卡三件套证书产品名。</td>
+                <td><span style="color:#B45309;">⚠️ 常规可过</span>：明高具备 CMMI5、全栈信创与井冈山干院等线下党校合同（道合云缺 CMMI）。</td>
+                <td>精准合同清单页 + 4项专属软著</td>
+              </tr>
+              <tr>
+                <td><strong>★零公网离线清单 + 首周核验无条件解约红线</strong></td>
+                <td><strong style="color:#047857;">★ 废除 AI 噱头牌</strong>：无外部 GPU 与公网 API 约束直接废掉其 AI 伴学/陪练标书包装。</td>
+                <td><strong style="color:#047857;">★ 废除微信一码通</strong>：严禁微信公众号/小程序/企微依赖，使其主打的“无卡一码通行”方案失分。</td>
+                <td>零CDN离线组件清单 + <code>room.html</code> 实体门禁同步图</td>
+              </tr>
+              <tr>
+                <td><strong>20 分标书高清专有界面截图 + 五/六层点位图纸</strong></td>
+                <td><strong style="color:#047857;">★ 视觉降维打击</strong>：20天等标期内拿不出礼宾排座、红头呈批、5+2规则库与摆渡包真实截图。</td>
+                <td><strong style="color:#047857;">★ 涉外精细度拉开分差</strong>：明高通用党校界面无外交居中交替辐射座次图、无教案段落 Diff 图、无五/六层64口深化图。</td>
+                <td>21页高保真原型红框引线标注图册 + 五/六层布线CAD图</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 09: Upgraded 5-Scenario Battlecards -->
+      <section class="section" id="sec-battlecard">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">09</span>售前交流与述标答辩 5 大高频攻防话术卡（Battlecards）</div>
+          <div><span class="src src-analysis">融合近3年标讯实证与V3.5原型筹码 · 点击一键复制</span></div>
+        </div>
+
+        <div class="battle-card">
+          <div class="battle-head">
+            <span class="battle-q">⚔️ 场景 1 · 破品牌背书：“知学云服务 60%+ 央企，2026年刚中标大连高经院 1,591 万大单，经验最丰富。”</span>
+            <button class="btn-copy" onclick="copyText(this, 'bc1')">复制反制话术</button>
+          </div>
+          <div class="battle-body" id="bc1">
+            <strong>【我方反制话术】</strong>知学云在<strong>企业全员在线网院（LMS）</strong>领域确实很优秀，但核查其 2024–2026 近 3 年全部 15 笔公开中标记录——包括 2026 年 6 月大连高经院（中国干部网络学院企业分院）、11 月中国环境监测总站（线上培训及课程制作 312 万）、西安开大干部网络学院（94 万）——<strong>100% 全部是线上视频网院与课程制作项目，没有一例纯涉密内网的线下脱产办班教务系统</strong>。贵院本次建设的是高保密、强礼宾、严审计的<strong>线下办训教务中枢</strong>（涵盖 15 节点处批院批 SOP、外事礼宾排座、四维财政经费硬控与涉密物理摆渡），用“企业线上网院”硬套“外交干院线下教务”，基因完全错位。
+          </div>
+        </div>
+
+        <div class="battle-card">
+          <div class="battle-head">
+            <span class="battle-q">⚔️ 场景 2 · 破 AI 概念牌：“知学云拥有 AI 伴学、AI 陪练、数字人智课，代表新一代 AI 原生方向。”</span>
+            <button class="btn-copy" onclick="copyText(this, 'bc2')">复制反制话术</button>
+          </div>
+          <div class="battle-body" id="bc2">
+            <strong>【我方反制话术】</strong>数字人做课和语音 AI 陪练在公有云互联网上演示效果确实吸睛，但贵院系统部署在<strong>五层/六层完全物理隔离的涉密政务内网（零外网依赖）</strong>。一旦拔掉外网网线，若不额外投入数百万采购本地高配 GPU 推理集群，这些重算力云端 AI 功能根本无法运行，且存在干部涉密学情数据合规风险。我方方案务实遵循“<strong>一期把排课防冲突、外事礼宾排座、经费红线硬拦截、教室人脸门禁无感考勤和结班摆渡归档做到 100% 离线零失误，同时在微服务网关预留标准内网 AI 接口</strong>”，不让贵院为内网跑不起来的云端噱头买单。
+          </div>
+        </div>
+
+        <div class="battle-card">
+          <div class="battle-head">
+            <span class="battle-q">⚔️ 场景 3 · 破低代码万能论：“知学云有 ZPaaS 低代码底座，100+ 组件拖拉拽就能快速定制所有教务需求。”</span>
+            <button class="btn-copy" onclick="copyText(this, 'bc3')">复制反制话术</button>
+          </div>
+          <div class="battle-body" id="bc3">
+            <strong>【我方反制话术】</strong>低代码适合拼装简单报名表单，但干院核心壁垒全是<strong>强交互与专属算法</strong>——比如<strong>日/周/月拖拽排课时的四重冲突秒级校验与跨班合班弹窗</strong>、<strong>按外交职级前排居中向左右交替辐射排座并联动打印桌签</strong>、<strong>集体备课教案段落级红绿留痕比对回滚</strong>、<strong>7类机关红头《呈批单》撤回自动释放教室锁</strong>，这些靠低代码根本拖不出来。从公开标讯看，知学云在信泰人寿等项目中仍需额外收取“按人天开发费”，标准年维保达 <strong>10%/年</strong>（福建农信实证），且其移动端 App Store 评分仅 <strong>1.5 分</strong>；不如直接对照标书实证图册，选用我方<strong>已完成 21 页全套真实界面闭环、进场首周即可内网核验的原生教务系统</strong>。
+          </div>
+        </div>
+
+        <div class="battle-card">
+          <div class="battle-head">
+            <span class="battle-q">⚔️ 场景 4 · 破大厂联合体借壳：“竞对联合运营商/头部云厂商总包投标，综合实力与商务保障更强。”</span>
+            <button class="btn-copy" onclick="copyText(this, 'bc4')">复制反制话术</button>
+          </div>
+          <div class="battle-body" id="bc4">
+            <strong>【我方反制话术】</strong>联合体总包模式常见于数千万级机房硬件大集成，但在纯教务核心业务软件项目中，层层转包反而会导致<strong>教务需求理解断层、涉密内网驻场响应迟缓，且后期极易形成单一来源技术锁定</strong>（知学云在人保、国投党校等项目均演变为单一来源续签）。即便不组织开标现场演示，建议在评标办法中严卡<strong>“20分核心复杂场景真实系统界面截图实证”</strong>与<strong>“签约5个工作日内物理隔离内网实机核验一票否决（虚假应标无条件解约）条款”</strong>——标书里贴不出真实外事辐射排座、7类红头呈批单、5+2经费规则库和涉密摆渡界面的直接扣分，彻底封死总包借壳与 PPT 承诺。
+          </div>
+        </div>
+
+        <div class="battle-card" style="margin-bottom:0;">
+          <div class="battle-head">
+            <span class="battle-q">⚔️ 场景 5 · 破传统智慧党校竞品（明高/道合云）：“垂直党校厂商已有上百个省市党校案例和微信一码通。”</span>
+            <button class="btn-copy" onclick="copyText(this, 'bc5')">复制反制话术</button>
+          </div>
+          <div class="battle-body" id="bc5">
+            <strong>【我方反制话术】</strong>传统地方党校厂商的“一码通行”重度依赖<strong>微信公众号、小程序、企业微信或钉钉公网生态</strong>，一旦进入贵院完全物理隔离的涉密政务内网，手机扫码通行体验立刻断链；而我方采用<strong>“照片一次导入 + 五/六层教室门口实体人脸门禁本地 TCP/IP 特征下发无感考勤”</strong>。同时，地方党校通用软件不具备<strong>外交外事礼宾居中交替辐射座次算法、部委培训费 5+2 实时硬阻断规则库以及对接部人事系统的三步法涉密离线摆渡包</strong>，我方在涉外属性与涉密纯内网深度上具备绝对优势。
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 10: Consolidated Master Resource & Archive Index -->
+      <section class="section" id="sec-resources">
+        <div class="section-header">
+          <div class="section-title"><span class="section-badge">10</span>公开产品手册原文与本地情报归档总索引（全量收口）</div>
+          <div><span class="src src-verified">知学云6份 + 垂直竞品4份 + 我方基准3套</span></div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:145px;">归属主体</th>
+                <th>资料 / 页面名称与核心价值</th>
+                <th style="width:245px;">官方来源 / 工作区路径</th>
+                <th style="width:220px;">本地原文归档文件</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>知学云（核心竞品）</strong></td>
+                <td>培训管理平台 / 智慧教学管理平台（培前/中/后 12 项无纸化教务与 HR 岗位序列原文）</td>
+                <td><a class="ext" href="https://www.zhixueyun.com/study/peixun/" target="_blank">zhixueyun.com/study/peixun/</a></td>
+                <td><code>知学云/资料附件/official_peixun.txt</code></td>
+              </tr>
+              <tr>
+                <td><strong>知学云（低代码）</strong></td>
+                <td>低代码 PaaS 平台（ZPaaS 三层架构与 17 类轻组件清单原文）</td>
+                <td><a class="ext" href="https://www.zhixueyun.com/study/paas/" target="_blank">zhixueyun.com/study/paas/</a></td>
+                <td><code>知学云/资料附件/official_paas.txt</code></td>
+              </tr>
+              <tr>
+                <td><strong>知学云（学习端）</strong></td>
+                <td>移动学习平台（知学云10、集团总分院网院、万人在线网考与直播原文）</td>
+                <td><a class="ext" href="https://www.zhixueyun.com/study/yidong/" target="_blank">zhixueyun.com/study/yidong/</a></td>
+                <td><code>知学云/资料附件/official_yidong.txt</code></td>
+              </tr>
+              <tr>
+                <td><strong>知学云（AI矩阵）</strong></td>
+                <td>AI+学习产品体系（AI 伴学/助手/专家/学练/陪练/智课/创作/智考 8 大模块原文）</td>
+                <td><a class="ext" href="https://www.zhixueyun.com/aifuwu/" target="_blank">zhixueyun.com/aifuwu/</a></td>
+                <td><code>知学云/资料附件/official_aifuwu.txt</code></td>
+              </tr>
+              <tr>
+                <td><strong>知学云（资质背书）</strong></td>
+                <td>公司介绍与荣誉资质（2500+客户、等保三级/CMMI3/ISO27001/麒麟/方德认证原文）</td>
+                <td><a class="ext" href="https://www.zhixueyun.com/about/intro/" target="_blank">zhixueyun.com/about/intro/</a></td>
+                <td><code>知学云/资料附件/official_intro.txt</code></td>
+              </tr>
+              <tr>
+                <td><strong>知学云（白皮书）</strong></td>
+                <td>《数智化学习指南》2024年第1/2期专栏说明（官网填表可下载 PDF）</td>
+                <td><a class="ext" href="https://www.zhixueyun.com/guide/" target="_blank">zhixueyun.com/guide/</a></td>
+                <td><code>知学云/资料附件/official_guide.txt</code></td>
+              </tr>
+              <tr style="background:#FFFBFB;">
+                <td><strong>明高软件（头号同基因劲敌）</strong></td>
+                <td>智慧党校平台产品手册级全文（4层架构、全栈信创清单、三权分立、13大子系统详解）</td>
+                <td><a class="ext" href="http://www.minggao.net/list-10021001-index.htm" target="_blank">minggao.net/list-10021001</a></td>
+                <td><code>其他竞品/资料附件/minggao_zhihuidangxiao.txt</code><br><code>其他竞品/资料附件/site_minggao.txt</code></td>
+              </tr>
+              <tr style="background:#FFFBFB;">
+                <td><strong>道合云（垂直党校劲敌）</strong></td>
+                <td>28 个党校子系统完整清单 + 青海两弹一星干院“选员授课”分组轮换排课方案全文</td>
+                <td><a class="ext" href="https://www.daoheyun.com/" target="_blank">daoheyun.com</a></td>
+                <td><code>其他竞品/资料附件/site_daoheyun.txt</code><br><code>其他竞品/资料附件/daoheyun_paike_case.txt</code></td>
+              </tr>
+              <tr style="background:#F0FDF4;">
+                <td><strong>我方项目基准资产</strong></td>
+                <td>《需求说明书V3.5_优化版.docx》+《招标技术门槛与控标策略建议 V2.0》+ 21 页纯离线原型</td>
+                <td>工作区 <code>需求/</code> 与 <code>原型/</code> 目录</td>
+                <td><code>原型/home.html</code> 等 21 个实操页面</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // 2. Functional Comparison Filter (16 items)
+    const funcBtns = document.querySelectorAll('#funcFilter .filter-btn');
+    const funcRows = document.querySelectorAll('#funcTable tbody tr');
+    funcBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        funcBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.getAttribute('data-func');
+        funcRows.forEach(r => {
+          r.style.display = (f === 'all' || r.getAttribute('data-func') === f) ? '' : 'none';
+        });
+      });
+    });
+
+    // 3. Highlight Comparison Filter (13 items)
+    const filterBtns = document.querySelectorAll('#compareFilter .filter-btn');
+    const rows = document.querySelectorAll('#compareTable tbody tr');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+        rows.forEach(r => {
+          r.style.display = (filter === 'all' || r.getAttribute('data-cat') === filter) ? '' : 'none';
+        });
+      });
+    });
+
+    // 4. V2.0 Bidding Pressure Test Filter (14 clauses)
+    const pressBtns = document.querySelectorAll('#pressFilter .filter-btn');
+    const pressRows = document.querySelectorAll('#pressTable tbody tr');
+    pressBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        pressBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const p = btn.getAttribute('data-p');
+        pressRows.forEach(r => {
+          r.style.display = (p === 'all' || r.getAttribute('data-p') === p) ? '' : 'none';
+        });
+      });
+    });
+
+    // 5. Competitor Camp Filter (8 competitors)
+    const campBtns = document.querySelectorAll('#campFilter .filter-btn');
+    const campRows = document.querySelectorAll('#campTable tbody tr');
+    campBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        campBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const c = btn.getAttribute('data-camp');
+        campRows.forEach(r => {
+          r.style.display = (c === 'all' || r.getAttribute('data-camp') === c) ? '' : 'none';
+        });
+      });
+    });
+
+    // 6. Bidding Database Filter + Live Search + Dynamic Count Hint (24 bids)
+    const bidBtns = document.querySelectorAll('#bidFilter .filter-btn');
+    const bidRows = document.querySelectorAll('#bidTable tbody tr');
+    const bidSearch = document.getElementById('bidSearch');
+    const bidCountHint = document.getElementById('bidCountHint');
+    let currentBidCat = 'all';
+    function applyBidFilter() {
+      const q = (bidSearch ? bidSearch.value.trim().toLowerCase() : '');
+      let visible = 0;
+      bidRows.forEach(r => {
+        const catOk = (currentBidCat === 'all' || r.getAttribute('data-bid') === currentBidCat);
+        const textOk = (!q || r.innerText.toLowerCase().includes(q));
+        const show = (catOk && textOk);
+        r.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      if (bidCountHint) bidCountHint.textContent = '显示 ' + visible + ' 条';
+    }
+    bidBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        bidBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentBidCat = btn.getAttribute('data-bid');
+        applyBidFilter();
+      });
+    });
+    if (bidSearch) bidSearch.addEventListener('input', applyBidFilter);
+
+    // 7. One-Click Copy Battlecard
+    function copyText(btn, id) {
+      const text = document.getElementById(id).innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          const orig = btn.innerText;
+          btn.innerText = '已复制 ✓';
+          setTimeout(() => { btn.innerText = orig; }, 1600);
+        });
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        const orig = btn.innerText;
+        btn.innerText = '已复制 ✓';
+        setTimeout(() => { btn.innerText = orig; }, 1600);
+      }
+    }
+
+    // 8. Scrollspy for Grouped Sidebar TOC
+    const sections = document.querySelectorAll('section.section');
+    const navLinks = document.querySelectorAll('#toc a');
+    window.addEventListener('scroll', () => {
+      let current = sections[0].id;
+      sections.forEach(sec => {
+        if (window.scrollY >= sec.offsetTop - 95) current = sec.id;
+      });
+      navLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    }, { passive: true });
+  </script>
+</body>
+</html>
